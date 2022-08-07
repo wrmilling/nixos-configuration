@@ -1,0 +1,31 @@
+{ config, lib, pkgs, ... }:
+
+{
+  imports =
+    [ 
+      ../../hardware/pine64/pinebook-pro.nix
+      ../../hardware/profiles/laptop.nix
+      ./hardware.nix
+      ../../modules/zram.nix
+      ../../profiles/desktop.nix
+      ../../profiles/i3wm.nix
+      ../../modules/audio.nix
+      ../../modules/k8s.nix
+    ];
+  
+  networking.hostName = "serenity";
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = false;
+  boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+
+  boot.initrd.luks.devices = {
+    cryptroot = {
+      device = "/dev/disk/by-uuid/f9618ef7-0e79-4181-8a05-d95c300bb10f";
+      allowDiscards = true;
+      preLVM = true;
+    };
+  };
+  
+  system.stateVersion = "22.11"; 
+}

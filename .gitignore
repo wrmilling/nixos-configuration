@@ -1,0 +1,13 @@
+# Will be an import.
+configuration.nix
+
+# Local clone
+nixpkgs
+
+# Private stuff (keys, passwords, as needed)
+private
+
+machines/*/secrets.nix
+
+# In case you nixos-rebuild bulid
+result
