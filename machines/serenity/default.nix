@@ -3,7 +3,7 @@
 {
   imports =
     [ 
-      ../../hardware/pine64/pinebook-pro.nix
+      ../../hardware/pine64/pinebook-pro
       ../../hardware/profiles/laptop.nix
       ./hardware.nix
       ../../modules/zram.nix
