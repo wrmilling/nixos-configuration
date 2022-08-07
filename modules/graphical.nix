@@ -8,4 +8,5 @@
     firefox
     flameshot
     element-desktop
+  ];
 }
