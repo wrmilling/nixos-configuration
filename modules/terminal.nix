@@ -9,5 +9,6 @@
     zsh
     wget
     chezmoi
+    silver-searcher
   ];
 }

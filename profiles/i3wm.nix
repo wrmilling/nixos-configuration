@@ -27,6 +27,7 @@
       extraPackages = with pkgs; [
         dmenu
         i3lock
+        xautolock
         i3status-rust
         feh
       ];
