@@ -27,7 +27,7 @@
     };
   };
 
-  environment.etc ] {
+  environment.etc = {
     crypttab = {
       text = ''
         nvmecrypt /dev/disk/by-uuid/92cf1e12-72a6-48fd-911f-5249183e5c64 /home/luks/nvme.key luks
