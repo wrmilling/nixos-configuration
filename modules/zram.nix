@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  boot.kernelModules = lib.mkAfter [ "zram" ];
+  # boot.kernelModules = lib.mkAfter [ "zram" ];
 
   zramSwap = {
     enable = true;
