@@ -2,6 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
+    file
     vim
     htop
     tmux

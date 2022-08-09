@@ -9,6 +9,7 @@
     ../modules/fonts.nix
     ../modules/graphical.nix
     ../modules/network.nix
+    ../modules/kvm.nix
   ];
 
   services.xserver.enable = true;
