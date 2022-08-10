@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
-{
-  let private = import ./private.nix
-  
+let private = import ./private.nix; in 
+
+{  
   imports =
     [ 
       ../../hardware/pine64/pinebook-pro
@@ -17,7 +17,7 @@
   
   networking = {
     hostName = "serenity";
-    domain: private.DOMAIN;
+    domain = private.DOMAIN;
   };
 
   boot.loader.systemd-boot.enable = true;
