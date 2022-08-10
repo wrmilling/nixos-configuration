@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-let private = import ./private.nix; in 
+let secrets = import ./secrets.nix; in 
 
 {  
   imports =
@@ -17,7 +17,7 @@ let private = import ./private.nix; in
   
   networking = {
     hostName = "serenity";
-    domain = private.DOMAIN;
+    domain = secrets.DOMAIN;
   };
 
   boot.loader.systemd-boot.enable = true;
