@@ -5,4 +5,6 @@
     tailscale
     barrier
   ];
+
+  services.tailscale.enable = true;
 }
