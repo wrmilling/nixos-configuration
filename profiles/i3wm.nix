@@ -44,5 +44,8 @@
     enable = true;
     backend = "glx";
     inactiveOpacity = 0.8;
+    opacityRule = [
+      "100:name *= 'i3lock'"
+    ];
   };
 }
