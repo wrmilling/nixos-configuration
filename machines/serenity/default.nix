@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  let private = import ./private.nix
+  
   imports =
     [ 
       ../../hardware/pine64/pinebook-pro
@@ -13,7 +15,10 @@
       ../../modules/k8s.nix
     ];
   
-  networking.hostName = "serenity";
+  networking = {
+    hostName = "serenity";
+    domain: private.DOMAIN;
+  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
