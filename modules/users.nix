@@ -12,6 +12,7 @@
       "networkmanager"
       "audio"
       "uucp"
+      "dialout"
     ];
   };
 }
