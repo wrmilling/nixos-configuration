@@ -3,6 +3,7 @@
 {
   environment.systemPackages = with pkgs; [
     file
+    bc
     vim
     htop
     tmux
