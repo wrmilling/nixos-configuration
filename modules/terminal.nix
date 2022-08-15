@@ -12,5 +12,6 @@
     wget
     chezmoi
     silver-searcher
+    viddy
   ];
 }
