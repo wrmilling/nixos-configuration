@@ -8,5 +8,6 @@
     firefox
     flameshot
     element-desktop
+    gparted
   ];
 }

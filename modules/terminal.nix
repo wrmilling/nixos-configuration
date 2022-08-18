@@ -16,5 +16,6 @@
     p7zip
     rsync
     rclone
+    exfat
   ];
 }
