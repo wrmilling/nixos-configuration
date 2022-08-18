@@ -13,5 +13,8 @@
     chezmoi
     silver-searcher
     viddy
+    p7zip
+    rsync
+    rclone
   ];
 }
