@@ -4,7 +4,7 @@
   environment.systemPackages = with pkgs; [
     kubectl
     fluxcd
-    helm
+    kubernetes-helm-wrapped
     stern
     sops
     k9s
