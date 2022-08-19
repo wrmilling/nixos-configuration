@@ -8,6 +8,7 @@
     firefox
     flameshot
     element-desktop
+    armcord
     gparted
   ];
 }
