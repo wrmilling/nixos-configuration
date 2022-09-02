@@ -13,6 +13,7 @@ let secrets = import ./secrets.nix; in
       ../../profiles/i3wm.nix
       ../../modules/audio.nix
       ../../modules/k8s.nix
+      ../../modules/virtualization.nix
     ];
   
   networking = {
