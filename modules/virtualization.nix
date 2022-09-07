@@ -4,6 +4,5 @@
   environment.systemPackages = with pkgs; [
     qemu
     qemu-utils
-    OVMFFull    
   ];
 }
