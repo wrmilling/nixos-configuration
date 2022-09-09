@@ -10,5 +10,6 @@
     element-desktop
     armcord
     gparted
+    gramps
   ];
 }
