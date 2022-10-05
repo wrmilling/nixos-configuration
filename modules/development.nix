@@ -4,5 +4,6 @@
   environment.systemPackages = with pkgs; [
     vscode
     dtc
+    inkscape
   ];
 }
