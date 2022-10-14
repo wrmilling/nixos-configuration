@@ -11,5 +11,6 @@
     armcord
     gparted
     gramps
+    volumeicon
   ];
 }
