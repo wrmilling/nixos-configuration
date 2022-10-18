@@ -14,6 +14,7 @@ let secrets = import ./secrets.nix; in
       ../../modules/audio.nix
       ../../modules/k8s.nix
       ../../modules/virtualization.nix
+      ../../modules/brave-arm.nix
     ];
   
   networking = {
