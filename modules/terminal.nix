@@ -5,7 +5,7 @@
     file
     bc
     vim
-    htop
+    btop
     tmux
     git
     zsh
