@@ -1,5 +1,4 @@
-{
-  config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   networking.useDHCP = lib.mkDefault true;
@@ -7,6 +6,4 @@
 
   networking.networkmanager.enable = true;
   programs.nm-applet.enable = true; 
-
-  boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
 }
