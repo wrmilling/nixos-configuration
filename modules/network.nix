@@ -8,5 +8,5 @@
   programs.nm-applet.enable = true; 
 
   # reverse filtering fix for wireguard / tailscale
-  networking.firewall.checkReversePath = 'loose';
+  networking.firewall.checkReversePath = "loose";
 }
