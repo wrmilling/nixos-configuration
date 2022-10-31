@@ -14,7 +14,7 @@
   networking = {
     hostName = "hermes"; # Define your hostname.
     domain = secrets.DOMAIN;
-  }
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
