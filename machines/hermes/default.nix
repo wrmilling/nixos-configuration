@@ -13,6 +13,9 @@ let secrets = import ./secrets.nix; in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Use latest kernel
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+
   networking = {
     hostName = "hermes"; # Define your hostname.
     domain = secrets.DOMAIN;
