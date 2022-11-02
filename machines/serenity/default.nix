@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-let secrets = import ./secrets.nix; in 
+let secrets = import ../../secrets.nix; in 
 
 {  
   imports =
@@ -14,6 +14,7 @@ let secrets = import ./secrets.nix; in
       ../../modules/audio.nix
       ../../modules/k8s.nix
       ../../modules/virtualization.nix
+      ../../modules/nixbuild-client.nix
     ];
   
   networking = {

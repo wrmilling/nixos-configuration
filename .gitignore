@@ -8,6 +8,7 @@ nixpkgs
 private
 
 machines/*/secrets.nix
+secrets.nix
 
 # In case you nixos-rebuild bulid
 result

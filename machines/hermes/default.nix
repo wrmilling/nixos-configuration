@@ -1,6 +1,6 @@
 { lib, config, pkgs, ... }:
 
-let secrets = import ./secrets.nix; in
+let secrets = import ../../secrets.nix; in
 
 {
   imports =
