@@ -4,7 +4,8 @@ let secrets = import ../secrets.nix; in
 
 {
   programs.ssh.extraConfig = ''
-    Host hermes.${secrets.DOMAIN}
+    Host nixbuild.${secrets.DOMAIN}
+      HostName hermes.${secrets.DOMAIN}
       User nixbuild
       PubkeyAcceptedKeyTypes ssh-ed25519
       IdentityFile /etc/nixbuild/nixbuild-client
