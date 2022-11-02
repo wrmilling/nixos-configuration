@@ -5,5 +5,6 @@
 
   imports = [
     ./default.nix
+    ../modules/nixbuild-host.nix
   ];
 }
