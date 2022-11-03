@@ -10,18 +10,18 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-  boot.kernelPatches = [
-    {
-      # Undervolt and Overclock for Pinebook Pro RK3399
-      name = "pbp-undervolt-overclock";
-      patch = ./patches/0001-RK3399-Undervolt-and-Overclock-dtb-for-Pinebook-Pro.patch;
-    }
-    {
-      # All of https://github.com/megous/linux patches in one
-      name = "megous-all";
-      patch = ./patches/0002-megous-6.0.x-all.patch;
-    }
-  ];
+  # boot.kernelPatches = [
+  #   {
+  #     # Undervolt and Overclock for Pinebook Pro RK3399
+  #     name = "pbp-undervolt-overclock";
+  #     patch = ./patches/0001-RK3399-Undervolt-and-Overclock-dtb-for-Pinebook-Pro.patch;
+  #   }
+  #   {
+  #     # All of https://github.com/megous/linux patches in one
+  #     name = "megous-all";
+  #     patch = ./patches/0002-megous-6.0.x-all.patch;
+  #   }
+  # ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/34035012-4604-43ed-8df5-0a0294857c5e";
