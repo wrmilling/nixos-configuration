@@ -6,7 +6,8 @@
     (import ./overlay.nix)
   ];
 
-  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+  # Defined in Serenity machine config now. 
+  # boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
   # This list of modules is not entirely minified, but represents
   # a set of modules that is required for the display to work in stage-1.
