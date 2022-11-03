@@ -9,7 +9,7 @@
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
-  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_5_19;
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
   boot.kernelPatches = [
     {
       # Undervolt and Overclock for Pinebook Pro RK3399
@@ -19,7 +19,7 @@
     {
       # All of https://github.com/megous/linux patches in one
       name = "megous-all";
-      patch = ./patches/0002-megous-5.19-all.patch;
+      patch = ./patches/0002-megous-6.0.x-all.patch;
     }
   ];
 
