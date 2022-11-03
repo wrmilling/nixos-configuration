@@ -7,6 +7,7 @@ let secrets = import ../../secrets.nix; in
     [ # Include the results of the hardware scan.
       ./hardware.nix
       ../../profiles/server.nix
+      ../../modules/webserver.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
