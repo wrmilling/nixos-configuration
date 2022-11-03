@@ -9,7 +9,7 @@
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
-  boot.kernelPackages = lib.mkDefault pkgs.linux_5_19;
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_5_19;
   boot.kernelPatches = [
     {
       # Undervolt and Overclock for Pinebook Pro RK3399
