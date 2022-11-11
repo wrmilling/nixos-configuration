@@ -20,4 +20,7 @@
     dnsutils
     keybase
   ];
+
+  services.keybase.enable = true;
+
 }
