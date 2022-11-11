@@ -18,5 +18,6 @@
     rclone
     exfat
     dnsutils
+    keybase
   ];
 }
