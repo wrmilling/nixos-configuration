@@ -17,5 +17,6 @@
     rsync
     rclone
     exfat
+    dnsutils
   ];
 }

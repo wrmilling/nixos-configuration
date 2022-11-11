@@ -12,5 +12,6 @@
     gparted
     gramps
     volumeicon
+    keybase
   ];
 }
