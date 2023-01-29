@@ -41,17 +41,7 @@ Generate a config based on the currently detected hardware and disks.
 sudo nixos-generate-config --root /mnt
 ```
 
-I then opened the config to clean out comments and ensure the options I wanted were in place, the initial edits looked like this: 
-
-```
-<Copy File When Ready>
-```
-
-Then I did a little cleanup in the hardware-configuration as well: 
-
-```
-<Copy File When Ready>
-```
+Next I will normally open the hardware and configuration nix files to clean out comments and set basic information like hostname. Most of my other items are set by my profiles or modules so I will take care of those later. 
 
 Now, lets install: 
 
@@ -68,4 +58,33 @@ Here is where I will normally try and setup all the hardware and import the prof
 
 ```
 nix-shell -p git vim
+cd /etc/nixos
+git clone https://github.com/wrmilling/nixos-configuration.git
 ```
+
+I will then copy in the new machine basic config into a new machine folder and setup the configuration.nix in root. I will then replace the generated config with the new setup. 
+
+```
+cd nixos-configuration
+mkdir -p machines/donnager
+mv ../configuration.nix machines/donnager/default.nix
+mv ../hardware-configuration.nix machines/donnager/hardware.nix
+vim machines/donnager/default.nix
+> Update the link to hardware.nix and add all modules/profiles as required.
+mv ./* ..
+mv ./.* ..
+cd ../
+rm -rf nixos-configuration
+```
+
+I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine. 
+
+```
+sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch"
+```
+
+The above is aliased to `nrs` on my machines. 
+
+## Outro
+
+Good luck!
