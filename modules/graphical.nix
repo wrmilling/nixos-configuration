@@ -7,7 +7,7 @@
     alacritty
     (vivaldi.override {
       proprietaryCodecs = true;
-      enaableWidevine = false;
+      enableWidevine = false;
     }) # Won't work on ARM64, but I am ignoring that for now.
     flameshot
     element-desktop
