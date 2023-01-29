@@ -9,6 +9,7 @@
       ../../profiles/desktop.nix
       ../../profiles/i3wm.nix
       ../../modules/k8s.nix
+      ../../modules/gaming.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
