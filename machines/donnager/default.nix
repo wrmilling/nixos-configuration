@@ -5,6 +5,7 @@
     [ # Include the results of the hardware scan.
       ../../hardware/lenovo/legion/15ich
       ./hardware.nix
+      ../../modules/zram.nix
       ../../profiles/desktop.nix
       ../../profiles/i3wm.nix
       ../../modules/k8s.nix
