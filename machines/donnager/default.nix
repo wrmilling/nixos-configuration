@@ -7,6 +7,7 @@
       ./hardware.nix
       ../../profiles/desktop.nix
       ../../profiles/i3wm.nix
+      ../../modules/k8s.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
