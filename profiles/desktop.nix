@@ -10,6 +10,7 @@
     ../modules/graphical.nix
     ../modules/network.nix
     ../modules/kvm.nix
+    ../modules/audio.nix
   ];
 
   services.xserver.enable = true;

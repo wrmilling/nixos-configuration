@@ -10,7 +10,6 @@ let secrets = import ../../secrets.nix; in
       ../../modules/zram.nix
       ../../profiles/desktop.nix
       ../../profiles/i3wm.nix
-      ../../modules/audio.nix
       ../../modules/k8s.nix
       ../../modules/virtualization.nix
       ../../modules/nixbuild-client.nix
