@@ -5,5 +5,6 @@
     vscode
     dtc
     inkscape
+    nixpkgs-review
   ];
 }
