@@ -12,6 +12,7 @@
     flameshot
     element-desktop
     discord
+    slack
     gparted
     gramps
     volumeicon

@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    steam
-  ];
+  program.steam.enable = true;
 }
