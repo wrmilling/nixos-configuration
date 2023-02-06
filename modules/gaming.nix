@@ -1,5 +1,5 @@
 { config, lib, pkgs, ... }:
 
 {
-  program.steam.enable = true;
+  programs.steam.enable = true;
 }
