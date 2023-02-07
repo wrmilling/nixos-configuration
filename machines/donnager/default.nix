@@ -3,7 +3,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ../../hardware/lenovo/legion/15ich
+      <nixos-hardware/lenovo/thinkpad/x220>
       ./hardware.nix
       ../../modules/zram.nix
       ../../profiles/desktop.nix

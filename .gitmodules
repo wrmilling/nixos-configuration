@@ -1,3 +1,0 @@
-[submodule "hardware"]
-	path = hardware
-	url = https://github.com/NixOS/nixos-hardware.git

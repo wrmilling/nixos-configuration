@@ -5,7 +5,7 @@ let secrets = import ../../secrets.nix; in
 {  
   imports =
     [ 
-      ../../hardware/pine64/pinebook-pro
+      <nixos-hardware/pine64/pinebook-pro>
       ./hardware.nix
       ../../modules/zram.nix
       ../../profiles/desktop.nix
