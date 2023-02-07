@@ -6,7 +6,7 @@
       <nixos-hardware/lenovo/thinkpad/x220>
       ./hardware.nix
       ../../modules/zram.nix
-      ../../profiles/desktop.nix
+      ../../profiles/laptop.nix
       ../../profiles/i3wm.nix
       ../../modules/k8s.nix
       ../../modules/gaming.nix
