@@ -4,5 +4,6 @@
   fonts.fonts = with pkgs; [
     source-code-pro
     font-awesome_4
+    corefonts
   ];
 }
