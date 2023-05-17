@@ -1,0 +1,15 @@
+image: alpine/edge
+secrets:
+- 7738de25-04dd-4b8b-b119-9200fe9026e5 
+sources:
+- https://git.sr.ht/~wrmilling/nixos-configuration
+tasks:
+- push: |
+    # Ensure we are on the main branch, exit build if not
+    cd nixos-configuration
+    git diff --exit-code origin/main || complete-build
+
+    # Push copy of code to GitHub
+    ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+    git remote add github git@github.com:wrmilling/nixos-configuration.git
+    git push github main
