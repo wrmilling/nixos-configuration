@@ -7,7 +7,7 @@ tasks:
 - push: |
     # Ensure we are on the main branch, exit build if not
     cd nixos-configuration
-    git diff --exit-code origin/main || complete-build
+    git diff -s --exit-code origin/main || complete-build
 
     # Push copy of code to GitHub
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts
