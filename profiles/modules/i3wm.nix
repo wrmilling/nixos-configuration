@@ -31,11 +31,10 @@
         xautolock
         i3status-rust
         feh
+        brightnessctl
       ];
     }; 
   };
-
-  programs.light.enable = true;
 
   services.logind.extraConfig = ''
     HandleLidSwitch=ignore
