@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  programs.zsh.enable = true;
+
   users.users.w4cbe = {
     uid = 1000;
     shell = pkgs.zsh;

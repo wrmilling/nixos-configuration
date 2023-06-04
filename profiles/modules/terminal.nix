@@ -8,7 +8,6 @@
     btop
     tmux
     git
-    zsh
     wget
     chezmoi
     silver-searcher
