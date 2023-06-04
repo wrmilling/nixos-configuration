@@ -34,7 +34,9 @@
       ];
     }; 
   };
- 
+
+  programs.light.enable = true;
+
   services.logind.extraConfig = ''
     HandleLidSwitch=ignore
     HandlePowerKey=ignore
