@@ -12,7 +12,6 @@
       ../../addons/tailscale.nix
       ../../addons/virtualization.nix
       ../../addons/zram.nix
-
     ];
 
   boot.loader.systemd-boot.enable = true;
