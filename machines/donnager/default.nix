@@ -5,11 +5,14 @@
     [ # Include the results of the hardware scan.
       <nixos-hardware/lenovo/legion/15ich>
       ./hardware.nix
-      ../../modules/zram.nix
       ../../profiles/laptop.nix
-      ../../profiles/i3wm.nix
-      ../../modules/k8s.nix
-      ../../modules/gaming.nix
+      ../../addons/development.nix
+      ../../addons/gaming.nix
+      ../../addons/k8s-utils.nix
+      ../../addons/tailscale.nix
+      ../../addons/virtualization.nix
+      ../../addons/zram.nix
+
     ];
 
   boot.loader.systemd-boot.enable = true;

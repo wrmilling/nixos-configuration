@@ -7,12 +7,13 @@ let secrets = import ../../secrets.nix; in
     [ 
       <nixos-hardware/pine64/pinebook-pro>
       ./hardware.nix
-      ../../modules/zram.nix
-      ../../profiles/desktop.nix
-      ../../profiles/i3wm.nix
-      ../../modules/k8s.nix
-      ../../modules/virtualization.nix
-      ../../modules/nixbuild-client.nix
+      ../../profiles/laptop.nix
+      ../../addons/development.nix
+      ../../addons/k8s-utils.nix
+      ../../addons/nixbuild-client.nix
+      ../../addons/tailscale.nix
+      ../../addons/virtualization.nix
+      ../../addons/zram.nix
     ];
   
   networking = {

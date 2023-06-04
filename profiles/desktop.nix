@@ -5,19 +5,12 @@
 
   imports = [
     ./default.nix
-    ../modules/development.nix
-    ../modules/fonts.nix
-    ../modules/graphical.nix
-    ../modules/network.nix
-    ../modules/kvm.nix
-    ../modules/audio.nix
+    ./modules/audio.nix
+    ./modules/fonts.nix
+    ./modules/graphical.nix
+    ./modules/i3wm.nix
+    ./modules/network.nix
   ];
 
   services.xserver.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    gnupg
-    pinentry-curses
-    minicom
-  ];
 }

@@ -3,8 +3,8 @@
 {
   imports =
     [
-      ../modules/terminal.nix
-      ../modules/users.nix
+      ./modules/users.nix
+      ./modules/terminal.nix
     ];
 
   # Basic environment.

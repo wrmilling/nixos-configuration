@@ -18,9 +18,9 @@
     rclone
     exfat
     dnsutils
-    keybase
+    gnupg
+    pinentry-curses
+    minicom
   ];
-
-  services.keybase.enable = true;
 
 }
