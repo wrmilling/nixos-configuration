@@ -32,6 +32,7 @@
         i3status-rust
         feh
         brightnessctl
+        playerctl
       ];
     }; 
   };
