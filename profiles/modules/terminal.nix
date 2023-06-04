@@ -20,6 +20,7 @@
     gnupg
     pinentry-curses
     minicom
+    hut
   ];
 
 }
