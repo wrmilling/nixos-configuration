@@ -7,6 +7,7 @@
     vim
     btop
     tmux
+    zellij
     git
     wget
     chezmoi
