@@ -16,5 +16,6 @@
     gparted
     gramps
     volumeicon
+    pinentry-rofi
   ];
 }

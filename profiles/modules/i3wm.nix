@@ -26,6 +26,7 @@
 
       extraPackages = with pkgs; [
         dmenu
+        rofi
         i3lock
         imagemagick
         xautolock
