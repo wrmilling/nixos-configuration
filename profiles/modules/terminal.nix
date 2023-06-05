@@ -22,6 +22,7 @@
     pinentry-curses
     minicom
     hut
+    atuin
   ];
 
 }
