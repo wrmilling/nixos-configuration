@@ -23,6 +23,7 @@
     minicom
     hut
     atuin
+    shellclear
   ];
 
 }
