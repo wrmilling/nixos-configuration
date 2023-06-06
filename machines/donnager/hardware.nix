@@ -25,7 +25,7 @@
   environment.etc = {
     crypttab = {
       text = ''
-        nvmecrypt /dev/disk/by-uuid/a2bd6fb1-8a45-4da2-822f-ff07d818782f /home/luks/firecuda.key luks
+        firecudacrypt /dev/disk/by-uuid/a2bd6fb1-8a45-4da2-822f-ff07d818782f /home/luks/firecuda.key luks
       '';
       mode = "0440";
     };
