@@ -22,6 +22,20 @@
       fsType = "vfat";
     };
 
+  environment.etc = {
+    crypttab = {
+      text = ''
+        nvmecrypt /dev/disk/by-uuid/a2bd6fb1-8a45-4da2-822f-ff07d818782f /home/luks/firecuda.key luks
+      '';
+      mode = "0440";
+    };
+  };
+
+  fileSystems."/mnt/Media" = {
+    device = "/dev/disk/by-uuid/2352844f-cb1f-49f8-9d09-aea0db2577d3";
+    fsType = "ext4";
+  };
+
   swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
