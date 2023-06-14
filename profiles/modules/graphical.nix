@@ -17,5 +17,6 @@
     gramps
     volumeicon
     pinentry-rofi
+    cura
   ];
 }
