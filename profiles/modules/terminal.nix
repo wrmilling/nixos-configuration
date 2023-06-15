@@ -24,6 +24,7 @@
     hut
     atuin
     shellclear
+    lynx
   ];
 
 }
