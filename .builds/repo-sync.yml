@@ -17,4 +17,4 @@ tasks:
     # Push copy of code to Codeberg
     ssh-keyscan -H codeberg.org >> ~/.ssh/known_hosts
     git remote add codeberg git@codeberg.org:wrmilling/nixos-configuration.git
-    git push codeberg master
+    git push codeberg main
