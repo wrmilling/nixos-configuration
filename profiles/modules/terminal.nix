@@ -19,6 +19,7 @@
     exfat
     dnsutils
     gnupg
+    pass
     pinentry-curses
     minicom
     hut
