@@ -3,7 +3,9 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      inputs.hardware.nixosModules.lenovo-legion-y530-15ich      ./hardware.nix
+      inputs.hardware.nixosModules.lenovo-legion-y530-15ich
+      inputs.home-manager.nixosModules.home-manager    
+      ./hardware.nix
       ../common/laptop.nix
       ../common/addons/development.nix
       ../common/addons/gaming.nix
@@ -18,6 +20,13 @@
   # boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
   networking.hostName = "donnager";
+
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; };
+    users = {
+      w4cbe = import ../../home-manager/donnager.nix;
+    };
+  };
   
   system.stateVersion = "23.05"; # Did you read the comment?
 }
