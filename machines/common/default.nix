@@ -16,8 +16,6 @@
   # Misc settings
   # -------------
   #
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   i18n = {
     defaultLocale = "en_US.UTF-8";
   };
@@ -30,7 +28,7 @@
 
   nix = {
     extraOptions = ''
-      experimental-features = nix-command
+      experimental-features = nix-command flakes
     '';
   };
 
