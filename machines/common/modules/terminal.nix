@@ -6,7 +6,6 @@
     bc
     vim
     btop
-    tmux
     zellij
     git
     wget
