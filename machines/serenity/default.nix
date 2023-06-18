@@ -7,18 +7,18 @@ let secrets = import ../../secrets.nix; in
     [ 
       <nixos-hardware/pine64/pinebook-pro>
       ./hardware.nix
-      ../../profiles/laptop.nix
-      ../../addons/development.nix
-      ../../addons/k8s-utils.nix
-      ../../addons/nixbuild-client.nix
-      ../../addons/tailscale.nix
-      ../../addons/virtualization.nix
-      ../../addons/zram.nix
+      ../common/laptop.nix
+      ../common/addons/development.nix
+      ../common/addons/k8s-utils.nix
+      ../common/addons/nixbuild-client.nix
+      ../common/addons/tailscale.nix
+      ../common/addons/virtualization.nix
+      ../common/addons/zram.nix
     ];
   
   networking = {
     hostName = "serenity";
-    domain = secrets.DOMAIN;
+    # domain = secrets.DOMAIN;
   };
 
   boot.loader.systemd-boot.enable = true;
