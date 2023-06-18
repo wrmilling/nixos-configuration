@@ -23,6 +23,5 @@
     flameshot
     gparted
     volumeicon
-    pinentry-rofi
   ];
 }
