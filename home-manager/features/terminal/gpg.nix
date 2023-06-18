@@ -65,8 +65,10 @@
     enableSshSupport = true;
     defaultCacheTtl = 60;
     maxCacheTtl = 120;
+    pinentryFlavor = null;
     extraConfig = ''
-      pinentry-program ${pkgs.pinentry-rofi}}/bin/pinentry-rofi
+      ttyname $GPG_TTY
+      pinentry-program ${pkgs.pinentry-rofi}/bin/pinentry-rofi
     '';
   };
 }
