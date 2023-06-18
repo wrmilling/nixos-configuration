@@ -1,11 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
 
 let secrets = import ../../secrets.nix; in 
 
 {  
   imports =
     [ 
-      <nixos-hardware/pine64/pinebook-pro>
+      inputs.hardware.nixosModules.git pine64-pinebook-pro
       ./hardware.nix
       ../common/laptop.nix
       ../common/addons/development.nix

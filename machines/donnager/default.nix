@@ -1,10 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, inputs, pkgs, lib, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
-      <nixos-hardware/lenovo/legion/15ich>
-      ./hardware.nix
+      inputs.hardware.nixosModules.lenovo-legion-y530-15ich      ./hardware.nix
       ../common/laptop.nix
       ../common/addons/development.nix
       ../common/addons/gaming.nix
