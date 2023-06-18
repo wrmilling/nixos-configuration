@@ -6,7 +6,6 @@
     bc
     vim
     btop
-    zellij
     git
     wget
     chezmoi
@@ -22,7 +21,6 @@
     pinentry-curses
     minicom
     hut
-    atuin
     shellclear
     lynx
   ];
