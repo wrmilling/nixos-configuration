@@ -87,7 +87,8 @@
 
     set -g @prevent-scroll-for-fullscreen-alternate-buffer 'on'
     set -g @scroll-speed-num-lines-per-scroll '3'
-    run-shell $HOME/.config/tmux/plugins/tmux-better-mouse-mode/scroll_copy_mode.tmux
+    run-shell ${pkgs.tmuxPlugins.better-mouse-mode}/share/tmux-plugins/better-mouse-mode/scroll_copy_mode.tmux
+
 
     #
     # Powerline Cyan Block - Tmux Theme
