@@ -8,9 +8,7 @@
     btop
     git
     wget
-    chezmoi
     silver-searcher
-    viddy
     p7zip
     rsync
     rclone
@@ -20,9 +18,6 @@
     pass
     pinentry-curses
     minicom
-    hut
-    shellclear
-    lynx
   ];
 
 }

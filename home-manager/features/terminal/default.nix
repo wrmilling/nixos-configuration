@@ -7,6 +7,11 @@
     ./tmux.nix
   ];
   home.packages = with pkgs; [
-    
+    hut
+    shellclear
+    lynx
+    viddy
+    silver-searcher
+    gnupg
   ];
 }
