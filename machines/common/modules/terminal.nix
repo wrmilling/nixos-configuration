@@ -4,7 +4,6 @@
   environment.systemPackages = with pkgs; [
     file
     bc
-    vim
     btop
     git
     wget
