@@ -1,6 +1,14 @@
 { pkgs, config, lib, ... }:
 
-{
+let
+  pinentryRofi = pkgs.writeShellApplication {
+    name= "pinentry-rofi-with-env";
+    text = ''
+      PATH="$PATH:${pkgs.coreutils}/bin:${pkgs.rofi}/bin"
+      "${pkgs.pinentry-rofi}/bin/pinentry-rofi" "$@"
+    '';
+  };
+in {
   home.packages = with pkgs; [ pinentry-rofi ];
 
   programs.gpg = {
@@ -68,7 +76,7 @@
     pinentryFlavor = null;
     extraConfig = ''
       ttyname $GPG_TTY
-      pinentry-program ${pkgs.pinentry-rofi}/bin/pinentry-rofi
+      pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env 
     '';
   };
 }
