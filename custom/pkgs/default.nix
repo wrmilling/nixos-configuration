@@ -3,4 +3,5 @@
 
 { pkgs ? (import ../nixpkgs.nix) { } }: {
   git-credential-manager = pkgs.callPackage ./git-credential-manager { };
+  w4cbe-scripts = pkgs.callPackage ./w4cbe-scripts { };
 }

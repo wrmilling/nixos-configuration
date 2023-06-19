@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -eu
+
+# lock the screen
+i3lock -i $HOME/.local/share/wallpapers/bsod.png -e $@
+    
+# sleep 1 adds a small delay to prevent possible race conditions with suspend
+#sleep 1
+
+exit 0
+

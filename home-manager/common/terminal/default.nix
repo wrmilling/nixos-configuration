@@ -14,5 +14,6 @@
     lynx
     viddy
     silver-searcher
+    w4cbe-scripts
   ];
 }
