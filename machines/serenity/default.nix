@@ -41,6 +41,13 @@ let secrets = import ../../secrets.nix; in
       mode = "0440";
     };
   };
-  
+	
+	home-manager = {
+    extraSpecialArgs = { inherit inputs outputs; };
+    users = {
+      w4cbe = import ../../home-manager/serenity;
+    };
+  };
+
   system.stateVersion = "23.05"; 
 }

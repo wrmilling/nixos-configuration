@@ -4,8 +4,8 @@
 { inputs, outputs, lib, config, pkgs, ... }: {
   # You can import other home-manager modules here
   imports = [
-    ./features/terminal
-    ./features/graphical
+    ../features/terminal
+    ../features/graphical
 
     # If you want to use modules your own flake exports (from modules/home-manager):
     # outputs.homeManagerModules.example

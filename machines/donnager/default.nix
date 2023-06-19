@@ -34,7 +34,7 @@
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };
     users = {
-      w4cbe = import ../../home-manager/donnager.nix;
+      w4cbe = import ../../home-manager/donnager;
     };
   };
   
