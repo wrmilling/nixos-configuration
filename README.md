@@ -8,7 +8,10 @@ Rough layout thoughts currently, still working on what feels natural.
 
 ```
 flake.nix (Entrypoint for rebuilding via nixos-rebuild or home-manager)
-|-- home-manager (user level configuration per machine via home-manager)
+|-- custom (Custom packages, modules, and overlays for my configuration)
+  |-- overlays (Custom overlays, primarily used for packages currently)
+  |-- pkgs (Custom Packages, mainly items not yet in official nixpkgs)
+|-- home-manager (User level configuration per machine via home-manager)
   |-- features (Re-usable configurations for users in home-manager)
 |-- machines (Definition of physical/virutal hosts)
   |-- common (Role definitions [Desktop, Laptop, Server])
