@@ -3,7 +3,7 @@
 {
   programs.atuin = {
     enable = true;
-    package = pkgs.atuin;
+    package = pkgs.unstable.atuin;
 
     flags = [
       "--disable-up-arrow"
