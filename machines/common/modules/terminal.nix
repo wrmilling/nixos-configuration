@@ -5,6 +5,7 @@
     file
     bc
     btop
+    vim
     git
     wget
     silver-searcher
