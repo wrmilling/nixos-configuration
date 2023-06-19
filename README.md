@@ -6,18 +6,17 @@ A work in progress, attempting to make it handle multiple machines and share bet
 
 Rough layout thoughts currently, still working on what feels natural. 
 
-```
-flake.nix (Entrypoint for rebuilding via nixos-rebuild or home-manager)
-|-- custom (Custom packages, modules, and overlays for my configuration)
-  |-- overlays (Custom overlays, primarily used for packages currently)
-  |-- pkgs (Custom Packages, mainly items not yet in official nixpkgs)
-|-- home-manager (User level configuration per machine via home-manager)
-  |-- features (Re-usable configurations for users in home-manager)
-|-- machines (Definition of physical/virutal hosts)
-  |-- common (Role definitions [Desktop, Laptop, Server])
-    |-- addons (Optional configurations not used in a role)
-    |-- modules (Shared configuration items used by the Roles)
-  |-- donnager (Primary NixOS Laptop, Lenovo Legion Y530)
-  |-- hermes (Oracle Cloud ARM64 instance)
-  |-- serenity (Pinebook Pro Laptop)
-```
+- [flake.nix](flake.nix) (Entrypoint for rebuilding via nixos-rebuild or home-manager)
+  - [custom](custom/README.md) (Custom packages, modules, and overlays for my configuration)
+    - [overlays](custom/overlays) (Custom overlays, primarily used for packages currently)
+    - [pkgs](custom/pkgs) (Custom Packages, mainly items not yet in official nixpkgs) 
+  - [home-manager](home-manager/README.md) (User level configuration per machine via home-manager)
+    - [features](home-manager/features) (Re-usable configurations for users in home-manager)
+    - [donnager](home-manager/donnager) (Specific home-manager configuration for donnager)
+    - [serenity](home-manager/serenity) (Specific home-manager configuration for serenity)
+  - [machines](machines/README.md) - (Definition of physical/virutal hosts)
+    - [common](machines/common) (Role definitions [Desktop, Laptop, Server])
+    - [donnager](machines/donnager) (NixOS Laptop, Lenovo Legion Y530)
+    - [hermes](machines/hermes) (NixOS Server, Oracle ARM64)
+    - [serenity](machines/serenity) (NixOS Laptop, Pinebook Pro)
+
