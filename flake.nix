@@ -27,10 +27,10 @@
     in
     rec {
       # Custom Packages
-      # packages = forAllSystems (system:
-      #   let pkgs = nixpkgs.legacyPackages.${system};
-      #   in import ./pkgs { inherit pkgs; }
-      # );
+      packages = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in import ./custom/pkgs { inherit pkgs; }
+      );
 
       # Devshell for bootstrapping
       # Acessible through 'nix develop' or 'nix-shell' (legacy)
@@ -40,7 +40,7 @@
       );
 
       # Overlays
-      # overlays = import ./overlays { inherit inputs; };
+      overlays = import ./custom/overlays { inherit inputs; };
 
       # Reusable nixos modules you might want to export
       # These are usually stuff you would upstream into nixpkgs
@@ -54,13 +54,13 @@
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
         donnager = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
+          specialArgs = { inherit inputs outputs packages; };
           modules = [
             ./machines/donnager
           ];
         };
         serenity = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
+          specialArgs = { inherit inputs outputs packages; };
           modules = [
             ./machines/serenity
           ];

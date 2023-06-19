@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, lib, ... }:
+{ config, inputs, outputs, pkgs, lib, ... }:
 
 {
   imports =
@@ -15,6 +15,16 @@
       ../common/addons/zram.nix
     ];
 
+  nixpkgs = {
+    overlays = [
+      outputs.overlays.additions
+      outputs.overlays.unstable-packages
+    ];
+    config = {
+      allowUnfree = true;
+    };
+  };
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   # boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
@@ -22,7 +32,7 @@
   networking.hostName = "donnager";
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = { inherit inputs outputs; };
     users = {
       w4cbe = import ../../home-manager/donnager.nix;
     };
