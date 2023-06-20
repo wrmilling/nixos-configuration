@@ -15,4 +15,8 @@ let
 in
 {
   home.packages = [ bsodlock ];
+  home.file."bsod.png" = {
+    source = ./bsod.png;
+    target = ".local/share/wallpapers/bsod.png";
+  };
 }
