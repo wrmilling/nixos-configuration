@@ -111,8 +111,8 @@ in
       kx = "kubectx";
       kn = "kubens";
       ks = "kubeseal";
-      kgn = "k get nodes -o wide --sort-by=.metadata.name";
-      kge = "k get events -A -w | grep -v \"61m\"";
+      kgn = "kubectl get nodes -o wide --sort-by=.metadata.name";
+      kge = "kubectl get events -A -w | grep -v \"61m\"";
 
       # other
       df = "df -h";
