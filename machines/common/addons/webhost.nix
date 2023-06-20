@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-let secrets = import ../secrets.nix; in
+let secrets = import ../../../secrets.nix; in
 
 {
   networking.firewall.allowedTCPPorts = [ 80 443 ];
