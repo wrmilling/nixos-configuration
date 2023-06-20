@@ -25,4 +25,12 @@ in {
     discord-name
     discord-game
   ];
+  home.file.".discord-name-keep" = {
+    text = " ";
+    target = ".config/discord-name/tmp/.keep";
+  };
+  home.file.".discord-game-keep" = {
+    text = " ";
+    target = ".config/discord-game/tmp/.keep";
+  };
 }
