@@ -3,6 +3,7 @@
 {
   imports = [
     ./alacritty.nix
+    ./discord.nix
     ./xresources.nix
   ];
   home.packages = with pkgs; [
@@ -14,7 +15,6 @@
 
     # Comms
     element-desktop
-    discord
     slack
 
     # 3-D Printing
