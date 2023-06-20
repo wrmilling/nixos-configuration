@@ -1,11 +1,18 @@
 { config, lib, pkgs, ... }:
 
 {
-  programs.zsh.enable = true;
+  programs.fish = {
+    enable = true;
+    vendor = {
+      completions.enable = true;
+      config.enable = true;
+      functions.enable = true;
+    };
+  };
 
   users.users.w4cbe = {
     uid = 1000;
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     isNormalUser = true;
     home = "/home/w4cbe";
     description = "Winston R. Milling";

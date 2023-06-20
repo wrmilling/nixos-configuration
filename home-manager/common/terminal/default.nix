@@ -3,8 +3,10 @@
 {
   imports = [
     ./atuin.nix
+    ./fish.nix
     ./git.nix
     ./gpg.nix
+    ./starship.nix
     ./tmux.nix
     ./vim.nix
   ];
