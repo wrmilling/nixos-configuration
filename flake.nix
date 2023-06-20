@@ -59,6 +59,12 @@
             ./machines/donnager
           ];
         };
+        hermes = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs packages; };
+          modules = [
+            ./machines/hermes
+          ];
+        };
         serenity = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs packages; };
           modules = [
