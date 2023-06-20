@@ -4,6 +4,9 @@
   imports = [
     ./alacritty.nix
     ./discord.nix
+    ./i3status-rust.nix
+    ./i3wm.nix
+    ./rofi.nix
     ./xresources.nix
   ];
   home.packages = with pkgs; [
