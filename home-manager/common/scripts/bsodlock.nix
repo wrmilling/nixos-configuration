@@ -2,7 +2,6 @@
 
 let
   bsodlock = pkgs.writeShellScriptBin "bsodlock" ''
-    #!${pkgs.bashInteractive}/bin/sh
     set -eu
 
     # lock the screen
