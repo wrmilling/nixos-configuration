@@ -1,9 +1,11 @@
 { lib, config, inputs, outputs, pkgs, ... }:
 
+let secrets = import ../../secrets.nix; in
+
 {
   imports =
     [ # Include the results of the hardware scan.
-      inputs.sops-nix.nixosModules.sops
+      inputs.sops-nix.modules.sops
       ./hardware.nix
       ../common/server.nix
       ../common/addons/webhost.nix
@@ -16,12 +18,9 @@
   # Use latest kernel
   # boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
-  sops.defaultSopsFile = ../../secrets/hermes.sops.yaml
-  sops.secrets.domain = { };
-
   networking = {
     hostName = "hermes"; # Define your hostname.
-    domain = builtins.readFile config.sops.secrets.domain.path;
+    domain = secrets.DOMAIN;
   };
 
   # Enable the OpenSSH daemon.
