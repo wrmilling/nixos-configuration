@@ -1,15 +1,15 @@
 { config, lib, pkgs, ... }:
 
-let secrets = import ../../../secrets.nix; in
-
-{
+let
+  domain = builtins.readFile config.sops.secrets.domain.path;
+in {
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   services.nginx.enable = true;
   security.acme.acceptTerms = true;
-  security.acme.defaults.email = "Winston@${secrets.DOMAIN}";
-  services.nginx.virtualHosts."${secrets.DOMAIN}" = {
+  security.acme.defaults.email = "Winston@${domain}";
+  services.nginx.virtualHosts."${domain}" = {
     forceSSL = true;
     enableACME = true;
-    root = "/var/www/${secrets.DOMAIN}";
+    root = "/var/www/${domain}";
   };
 }
