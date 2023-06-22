@@ -12,9 +12,13 @@
 
     # Hardware
     hardware.url = "github:nixos/nixos-hardware";
+
+    # SOPS Nix
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, sops-nix, ... }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -57,6 +61,7 @@
           specialArgs = { inherit inputs outputs packages; };
           modules = [
             ./machines/donnager
+            sops-nix.nixosModules.sops
           ];
         };
         hermes = nixpkgs.lib.nixosSystem {
