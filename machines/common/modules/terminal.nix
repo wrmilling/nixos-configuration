@@ -8,6 +8,7 @@
     vim
     git
     wget
+    sops
     silver-searcher
     p7zip
     rsync

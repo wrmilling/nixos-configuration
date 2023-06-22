@@ -1,10 +1,11 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, inputs, outputs, pkgs, ... }:
 
 let secrets = import ../../secrets.nix; in
 
 {
   imports =
     [ # Include the results of the hardware scan.
+      inputs.sops-nix.modules.sops
       ./hardware.nix
       ../common/server.nix
       ../common/addons/webhost.nix

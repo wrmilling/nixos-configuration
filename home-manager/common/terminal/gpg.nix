@@ -15,10 +15,20 @@ in {
     enable = true;
     mutableKeys = true;
     mutableTrust = true;
-    publicKeys = [{
-      source = ../../../pgp.asc;
-      trust = 5;
-    }];
+    publicKeys = [
+      {
+        source = ../../../secrets/gpg/w4cbe.asc;
+        trust = 5;
+      }
+      {
+        source = ../../../secrets/gpg/donnager.asc;
+        trust = 4;
+      }
+      {
+        source = ../../../secrets/gpg/hermes.asc;
+        trust = 4;
+      }
+    ];
     settings = {
       # https://github.com/drduh/config/blob/master/gpg.conf
       # https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration-Options.html
