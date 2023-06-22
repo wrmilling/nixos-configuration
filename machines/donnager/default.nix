@@ -1,4 +1,4 @@
-{ config, inputs, outputs, pkgs, lib, ... }:
+{ config, inputs, outputs, pkgs, lib, secrets, ... }:
 
 {
   imports =
@@ -29,7 +29,10 @@
   boot.loader.efi.canTouchEfiVariables = true;
   # boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
-  networking.hostName = "donnager";
+  networking = {
+    hostName = "donnager";
+    domain = secrets.machines.donnager.domain;
+  };
 
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };

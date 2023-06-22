@@ -7,6 +7,7 @@
     btop
     vim
     git
+    git-crypt
     wget
     silver-searcher
     p7zip

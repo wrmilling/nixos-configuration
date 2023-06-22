@@ -24,6 +24,7 @@
         "aarch64-darwin"
         "x86_64-darwin"
       ];
+      secrets = import ./secrets.nix;
     in
     rec {
       # Custom Packages
@@ -54,13 +55,13 @@
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
         donnager = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs packages; };
+          specialArgs = { inherit inputs outputs packages secrets; };
           modules = [
             ./machines/donnager
           ];
         };
         hermes = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs packages; };
+          specialArgs = { inherit inputs outputs packages secrets; };
           modules = [
             ./machines/hermes
           ];

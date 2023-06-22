@@ -1,6 +1,4 @@
-{ lib, config, pkgs, ... }:
-
-let secrets = import ../../secrets.nix; in
+{ lib, config, pkgs, secrets, ... }:
 
 {
   imports =
@@ -19,7 +17,7 @@ let secrets = import ../../secrets.nix; in
 
   networking = {
     hostName = "hermes"; # Define your hostname.
-    domain = secrets.DOMAIN;
+    domain = secrets.machines.hermes.domain;
   };
 
   # Enable the OpenSSH daemon.
