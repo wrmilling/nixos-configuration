@@ -27,7 +27,11 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # Visual boot
+  boot.initrd.systemd.enable = true;
   boot.plymouth.enable = true;
+  boot.kernelParams = [ "quiet" ];
   # boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
   networking = {
