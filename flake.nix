@@ -12,9 +12,13 @@
 
     # Hardware
     hardware.url = "github:nixos/nixos-hardware";
+
+    # Darwin
+    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, darwin, ... }@inputs:
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
@@ -67,9 +71,19 @@
           ];
         };
         serenity = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs packages; };
+          specialArgs = { inherit inputs outputs packages secrets; };
           modules = [
             ./machines/serenity
+          ];
+        };
+      };
+
+      darwinConfigurations = {
+        "${secrets.machines.work-mac.hostname}" = darwin.lib.darwinSystem{
+          system = "aarch64-darwin";
+          specialArgs = { inherit inputs outputs packages secrets; };
+          modules = [
+            ./machines/darwin
           ];
         };
       };
