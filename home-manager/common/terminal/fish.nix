@@ -11,15 +11,12 @@ in
   programs.fish = {
     enable = true;
     plugins = [
-      {
-        name = "autopairs";
-        src = pkgs.fetchFromGitHub {
-          owner = "jorgebucaran";
-          repo = "autopair.fish";
-          rev = "4d1752ff5b39819ab58d7337c69220342e9de0e2";
-          sha256 = "qt3t1iKRRNuiLWiVoiAYOu+9E7jsyECyIqZJ/oRIT1A=";
-        };
-      }
+      { name = "autopair"; src = pkgs.fishPlugins.autopair.src; }
+      { name = "bass"; src = pkgs.fishPlugins.bass.src; }
+      { name = "puffer"; src = pkgs.fishPlugins.puffer.src; }
+      { name = "humantime-fish"; src = pkgs.fishPlugins.humantime-fish.src; }
+      { name = "done"; src = pkgs.fishPlugins.done.src; }
+      { name = "colored-man-pages"; src = pkgs.fishPlugins.colored-man-pages.src; }
       {
         name = "fzf";
         src = pkgs.fetchFromGitHub {
@@ -30,30 +27,12 @@ in
         };
       }
       {
-        name = "puffer-fish";
-        src = pkgs.fetchFromGitHub {
-          owner = "nickeb96";
-          repo = "puffer-fish";
-          rev = "41721259f16b9695d582a8de8d656d4e429d7eea";
-          sha256 = "TdGyrAlL7aMxNtemxzOwTaOI+bbQ4zML2N2tV300FM8=";
-        };
-      }
-      {
         name = "abbreviation-tips";
         src = pkgs.fetchFromGitHub {
           owner = "gazorby";
           repo = "fish-abbreviation-tips";
           rev = "v0.6.0";
           sha256 = "fveTvR+T6IiX8Zk5m6zToo1OtZc1VyrCHfOG63e9b64=";
-        };
-      }
-      {
-        name = "z";
-        src = pkgs.fetchFromGitHub {
-          owner = "jethrokuan";
-          repo = "z";
-          rev = "85f863f20f24faf675827fb00f3a4e15c7838d76";
-          sha256 = "sha256-+FUBM7CodtZrYKqU542fQD+ZDGrd2438trKM0tIESs0=";
         };
       }
     ];
@@ -122,7 +101,6 @@ in
       dps = "docker ps --format \"table {{.Names}}\t{{.Status}}\"";
       dc = "docker compose";
       watch = "viddy";
-
     };
     shellAliases = {
       # Clear screen and scrollback
