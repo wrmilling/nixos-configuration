@@ -22,6 +22,7 @@
       "obs"
       "alacritty"
       "barrier"
+      "vivaldi"
     ];
     masApps = {
       Tailscale = 1475387142;
