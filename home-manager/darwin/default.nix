@@ -25,6 +25,21 @@
     homeDirectory = lib.mkDefault "/Users/${secrets.machines.work-mac.username}";
   };
 
+  programs.git = {
+    userEmail = ${secrets.machines.work-mac.email.long};
+    signing.signByDefault = false;
+    includes = [
+      {
+        condition = "gitdir:~/.nixos-configuration/";
+        contents = {
+          user = {
+            email = "Winston@Milli.ng";
+          };
+        };
+      }
+    ];
+  }
+
   # Enable home-manager
   programs.home-manager.enable = true;
 
