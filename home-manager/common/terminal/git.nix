@@ -27,10 +27,10 @@
       pom = "push origin master";
       poh = "push origin HEAD";
     };
-    userName = "Winston R. Milling";
-    userEmail = "Winston@Milli.ng";
-    signing.key = "0xA44A3B1758373973";
-    signing.signByDefault = true;
+    userName = lib.mkDefault "Winston R. Milling";
+    userEmail = lib.mkDefault "Winston@Milli.ng";
+    signing.key = lib.mkDefault "0xA44A3B1758373973";
+    signing.signByDefault = lib.mkDefault true;
     extraConfig = {
       credential.credentialStore = "gpg";
       credential.helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
