@@ -3,6 +3,7 @@
 {
   imports = [
     ../common/terminal/default-darwin.nix
+    ../common/graphical/default-darwin.nix
   ];
 
   nixpkgs = {
