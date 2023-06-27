@@ -27,7 +27,7 @@
         program = "/bin/sh";
         args = [
           "-c"
-          "tmux"
+          "${pkgs.tmux}/bin/tmux"
         ];
       };
     };
