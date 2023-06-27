@@ -26,7 +26,7 @@
   };
 
   programs.git = {
-    userEmail = ${secrets.machines.work-mac.email.long};
+    userEmail = secrets.machines.work-mac.email.long;
     signing.signByDefault = false;
     includes = [
       {
