@@ -16,5 +16,6 @@
     lynx
     viddy
     silver-searcher
+    git-credential-manager
   ];
 }

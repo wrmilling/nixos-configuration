@@ -2,9 +2,7 @@
 
 {
   imports = [
-    # ../common/terminal
-    # ../common/graphical
-    # ../common/scripts
+    ../common/terminal
   ];
 
   nixpkgs = {

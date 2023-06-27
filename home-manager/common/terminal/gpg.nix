@@ -1,6 +1,7 @@
 { pkgs, config, lib, ... }:
 
 let
+
   pinentryRofi = pkgs.writeShellApplication {
     name= "pinentry-rofi-with-env";
     text = ''
@@ -8,6 +9,9 @@ let
       "${pkgs.pinentry-rofi}/bin/pinentry-rofi" "$@"
     '';
   };
+  pinentryConfig = if (config.home.username == "WRM6768")
+    then "pinentry-program ${pkgs.pinentry_mac}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"
+    else "pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env";
 in {
   home.packages = with pkgs; [ pinentry-rofi ];
 
@@ -76,7 +80,7 @@ in {
     pinentryFlavor = null;
     extraConfig = ''
       ttyname $GPG_TTY
-      pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env 
+      ${pinentryConfig} 
     '';
   };
 }
