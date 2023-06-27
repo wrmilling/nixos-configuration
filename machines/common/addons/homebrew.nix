@@ -21,6 +21,10 @@
       "microsoft-remote-desktop"
       "obs"
       "alacritty"
+      "barrier"
     ];
+    masApps = {
+      Tailscale = 1475387142;
+    };
   };
 }
