@@ -20,6 +20,7 @@
       "flameshot"
       "microsoft-remote-desktop"
       "obs"
+      "alacritty"
     ];
   };
 }
