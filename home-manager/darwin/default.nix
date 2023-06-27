@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../common/terminal
+    ../common/terminal/default-darwin.nix
   ];
 
   nixpkgs = {

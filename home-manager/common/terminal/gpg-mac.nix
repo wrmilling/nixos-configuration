@@ -1,15 +1,6 @@
 { pkgs, config, lib, ... }:
 
-let
-  pinentryRofi = pkgs.writeShellApplication {
-    name= "pinentry-rofi-with-env";
-    text = ''
-      PATH="$PATH:${pkgs.coreutils}/bin:${pkgs.rofi}/bin"
-      "${pkgs.pinentry-rofi}/bin/pinentry-rofi" "$@"
-    '';
-  };
-  pinentryProgram = "pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env";
-in {
+{
   home.packages = with pkgs; [ pinentry-rofi ];
 
   programs.gpg = {
@@ -68,17 +59,24 @@ in {
     };
   };
 
-  services.gpg-agent = {
-    enable = true;
-    enableScDaemon = true;
-    enableSshSupport = true;
-    defaultCacheTtl = 60;
-    maxCacheTtl = 120;
-    pinentryFlavor = null;
-    extraConfig = ''
+  home.file."gpg-agent.conf" = {
+    target = ".gpg/gpg-agent.conf";
+    text = ''
+      # https://github.com/drduh/config/blob/master/gpg-agent.conf
+      # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
+      enable-ssh-support
       ttyname $GPG_TTY
-      ${pinentryProgram} 
+      default-cache-ttl 60
+      max-cache-ttl 120
+      pinentry-program ${pkgs.pinentry_mac}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac
     '';
   };
+
+  home.sessionVariablesExtra = ''
+    if [[ -z "$SSH_AUTH_SOCK" ]]; then
+      export SSH_AUTH_SOCK="$(${config.programs.gpg.package}/bin/gpgconf --list-dirs agent-ssh-socket)"
+    fi
+  '';
+
   
 }
