@@ -10,7 +10,7 @@
 
   # home-manager = {
   #   extraSpecialArgs = { inherit inputs outputs secrets; };
-  #   users.WRM6768 = import ../../home-manager/darwin;
+  #   users."${secrets.machines.work-mac.username}" = import ../../home-manager/darwin;
   # };
 
   #package config

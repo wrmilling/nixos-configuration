@@ -22,8 +22,8 @@
   };
 
   home = {
-    username = lib.mkDefault "WRM6768";
-    homeDirectory = lib.mkDefault "/Users/WRM6768";
+    username = lib.mkDefault "${secrets.machines.work-mac.username}";
+    homeDirectory = lib.mkDefault "/Users/${secrets.machines.work-mac.username}";
   };
 
   # Enable home-manager
