@@ -53,6 +53,15 @@
       '';
   };
 
+  # Alacritty Font Fixes
+  programs.alacritty.settings.font = {
+    normal.family = "Source Code Pro";
+    bold.family = "Source Code Pro";
+    italic.family = "Source Code Pro";
+    bold_italic.family = "Source Code Pro";
+    size = 16;
+  }
+
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "23.05";
 }

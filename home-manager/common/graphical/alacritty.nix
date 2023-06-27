@@ -6,22 +6,22 @@
     settings = {
       font = {
         normal = {
-          family = "SourceCodePro";
-          style = "Regular";
+          family = lib.mkDefault "SourceCodePro";
+          style = lib.mkDefault "Regular";
         };
         bold = {
-          family = "SourceCodePro";
-          style = "Bold";
+          family = lib.mkDefault "SourceCodePro";
+          style = lib.mkDefault "Bold";
         };
         italic = {
-          family = "SourceCodePro";
+          family = lib.mkDefault "SourceCodePro";
           style = "Italic";
         };
         bold_italic = {
-          family = "SourceCodePro";
-          style = "Bold Italic";
+          family = lib.mkDefault "SourceCodePro";
+          style = lib.mkDefault "Bold Italic";
         };
-        size = 11;
+        size = lib.mkDefault 11;
       };
       shell = {
         program = "/bin/sh";

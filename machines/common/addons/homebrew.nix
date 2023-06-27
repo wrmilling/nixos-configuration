@@ -23,6 +23,7 @@
       "alacritty"
       "barrier"
       "vivaldi"
+      "font-source-code-pro"
     ];
     masApps = {
       Tailscale = 1475387142;
