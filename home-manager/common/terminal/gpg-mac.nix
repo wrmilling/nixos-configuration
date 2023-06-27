@@ -1,7 +1,7 @@
 { pkgs, config, lib, ... }:
 
 {
-  home.packages = with pkgs; [ pinentry-rofi ];
+  home.packages = with pkgs; [ pinentry_mac ];
 
   programs.gpg = {
     enable = true;
