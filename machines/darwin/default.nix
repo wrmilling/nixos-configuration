@@ -5,6 +5,7 @@
   [
     ../common/modules/terminal.nix
     ../common/modules/fonts.nix
+    ../common/addons/homebrew.nix
   ];
 
   security.pki.certificateFiles = [ "/etc/ssl/thd_combined.pem" ];
