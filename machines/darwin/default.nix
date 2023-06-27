@@ -3,15 +3,14 @@
 {
   imports = 
   [
-    inputs.home-manager.darwinModules.home-manager
+    ../common/modules/terminal.nix
+    ../common/modules/fonts.nix
   ];
 
   security.pki.certificateFiles = [ "/etc/ssl/thd_combined.pem" ];
-
-  # home-manager = {
-  #   extraSpecialArgs = { inherit inputs outputs secrets; };
-  #   users."${secrets.machines.work-mac.username}" = import ../../home-manager/darwin;
-  # };
+  services.activate-system.enable = true;
+  services.nix-daemon.enable = true;
+  programs.nix-index.enable = true;
 
   #package config
   nixpkgs = {
@@ -31,17 +30,8 @@
     };
 
     configureBuildUsers = true;
-
-    gc = {
-      automatic = true;
-      interval = { Weekday = 0; Hour = 2; Minute = 0; };
-      options = "--delete-older-than 30d";
-    };
   };
 
-  services.activate-system.enable = true;
-  services.nix-daemon.enable = true;
-  programs.nix-index.enable = true;
 
   environment = {
     systemPackages = [
