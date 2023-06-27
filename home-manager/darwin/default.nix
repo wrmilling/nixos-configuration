@@ -35,15 +35,6 @@
       # fix brew path (should not be needed but somehow is?)
       ''
       eval (/opt/homebrew/bin/brew shellenv)
-      '' +
-      # handle gcloud CLI
-      ''
-      bass source ~/google-cloud-sdk/path.bash.inc
-      bass source ~/google-cloud-sdk/completion.bash.inc
-      '' +
-      # add custom localized paths
-      ''
-      fish_add_path $HOME/.rd/bin
       '';
   };
 
