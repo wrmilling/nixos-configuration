@@ -73,7 +73,7 @@ in
       nbn = "nix build nixpkgs#";
       nf = "nix flake";
       nrs = "sudo sh -c \"cd /etc/nixos && git pull && nixos-rebuild switch --flake .\"";
-      drs = "darwin-rebuils switch --flake ~/.nixos-configuration/ && home-manager switch ~/.nixos-configuration/";
+      drs = "darwin-rebuild switch --flake ~/.nixos-configuration/ && home-manager switch --flake ~/.nixos-configuration/";
       ncg = "sudo nix-collect-garbage";
       ncgd = "sudo nix-collect-garbage -d";
 
