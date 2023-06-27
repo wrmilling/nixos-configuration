@@ -32,7 +32,6 @@
     configureBuildUsers = true;
   };
 
-
   environment = {
     systemPackages = [
         pkgs.coreutils
@@ -45,6 +44,11 @@
     variables.EDITOR = "${lib.getBin pkgs.vim}/bin/vim";
   };
 
+  fonts.fonts = with pkgs; [
+    source-code-pro
+    font-awesome_4
+  ];
+  
   programs = {
     bash.enable = true;
     fish.enable = true;
