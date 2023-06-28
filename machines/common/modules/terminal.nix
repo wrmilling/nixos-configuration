@@ -19,6 +19,7 @@
     pass
     pinentry-curses
     minicom
+    neofetch
   ];
 
 }
