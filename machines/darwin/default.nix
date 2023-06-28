@@ -4,7 +4,7 @@
   imports = 
   [
     ../common/modules/terminal.nix
-    ../common/addons/homebrew.nix
+    ./homebrew.nix
   ];
 
   security.pki.certificateFiles = [ "/etc/ssl/thd_combined.pem" ];
