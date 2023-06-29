@@ -33,7 +33,24 @@
       "aarch64-darwin"
       "x86_64-darwin"
     ];
+
     secrets = import ./secrets.nix;
+  
+    mkNixos = modules: nixpkgs.lib.nixosSystem {
+      inherit modules;
+      specialArgs = { inherit inputs outputs secrets; };
+    };
+
+    mkDarwin = system: modules: darwin.lib.darwinSystem{
+      inherit modules;
+      system = system;
+      specialArgs = { inherit inputs outputs secrets; };
+    };
+
+    mkHome = modules: pkgs: home-manager.lib.homeManagerConfiguration {
+      inherit modules pkgs;
+      extraSpecialArgs = { inherit inputs outputs secrets; };
+    };
   in rec {
     # Custom Packages
     packages = forAllSystems (system:
@@ -54,38 +71,23 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild switch --flake .#your-hostname'
     nixosConfigurations = {
-      donnager = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs outputs packages secrets; };
-        modules = [ ./hosts/donnager ];
-      };
-      hermes = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs outputs packages secrets; };
-        modules = [ ./hosts/hermes ];
-      };
-      serenity = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs outputs packages secrets; };
-        modules = [ ./hosts/serenity ];
-      };
+      donnager = mkNixos [ ./hosts/donnager ];
+      hermes = mkNixos [ ./hosts/hermes ];
+      serenity = mkNixos [ ./hosts/serenity ];
     };
 
     # nix-darwin configuration entrypoint
     # Available through 'darwin-rebuild switch --flake .#your-hostname'
     darwinConfigurations = {
-      "${secrets.hosts.work-mac.hostname}" = darwin.lib.darwinSystem{
-        system = "aarch64-darwin";
-        specialArgs = { inherit inputs outputs packages secrets; };
-        modules = [ ./hosts/darwin ];
-      };
+      "${secrets.hosts.work-mac.hostname}" = 
+        mkDarwin "aarch64-darwin" [ ./hosts/darwin ];
     };
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager switch --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "${secrets.hosts.work-mac.username}@${secrets.hosts.work-mac.hostname}" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-darwin; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = { inherit inputs outputs secrets; };
-        modules = [ ./home-manager/darwin ];
-      };
+      "${secrets.hosts.work-mac.username}@${secrets.hosts.work-mac.hostname}" = 
+        mkHome nixpkgs.legacyPackages.aarch64-darwin [ ./home-manager/darwin ];
     };
   };
 }
