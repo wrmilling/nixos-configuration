@@ -17,5 +17,6 @@
     viddy
     silver-searcher
     git-credential-manager
+    magic-wormhole
   ];
 }
