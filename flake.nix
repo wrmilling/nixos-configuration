@@ -47,8 +47,8 @@
       specialArgs = { inherit inputs outputs secrets; };
     };
 
-    mkHome = modules: pkgs: home-manager.lib.homeManagerConfiguration {
-      inherit modules pkgs;
+    mkHome = pkgs: modules: home-manager.lib.homeManagerConfiguration {
+      inherit pkgs modules;
       extraSpecialArgs = { inherit inputs outputs secrets; };
     };
   in rec {
