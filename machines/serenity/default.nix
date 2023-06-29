@@ -1,6 +1,4 @@
-{ config, inputs, outputs, lib, pkgs, ... }:
-
-let secrets = import ../../secrets.nix; in 
+{ config, inputs, outputs, secrets, lib, pkgs, ... }:
 
 {  
   imports =
@@ -18,7 +16,7 @@ let secrets = import ../../secrets.nix; in
   
   networking = {
     hostName = "serenity";
-    # domain = secrets.DOMAIN;
+    domain = secrets.machines.serenity.domain;
   };
 
   boot.loader.systemd-boot.enable = true;

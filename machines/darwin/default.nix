@@ -1,5 +1,5 @@
-# hosts/YourHostName/default.nix
 { pkgs, config, inputs, outputs, lib, secrets, ... }:
+
 {
   imports = 
   [

@@ -56,7 +56,7 @@
       # homeManagerModules = import ./modules/home-manager;
 
       # NixOS configuration entrypoint
-      # Available through 'nixos-rebuild --flake .#your-hostname'
+      # Available through 'nixos-rebuild switch --flake .#your-hostname'
       nixosConfigurations = {
         donnager = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs packages secrets; };
@@ -78,6 +78,8 @@
         };
       };
 
+      # nix-darwin configuration entrypoint
+      # Available through 'darwin-rebuild switch --flake .#your-hostname'
       darwinConfigurations = {
         "${secrets.machines.work-mac.hostname}" = darwin.lib.darwinSystem{
           system = "aarch64-darwin";
@@ -89,13 +91,12 @@
       };
 
       # Standalone home-manager configuration entrypoint
-      # Available through 'home-manager --flake .#your-username@your-hostname'
+      # Available through 'home-manager switch --flake .#your-username@your-hostname'
       homeConfigurations = {
         "${secrets.machines.work-mac.username}@${secrets.machines.work-mac.hostname}" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.aarch64-darwin; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs secrets; };
           modules = [
-            # > Our main home-manager configuration file <
             ./home-manager/darwin
           ];
         };

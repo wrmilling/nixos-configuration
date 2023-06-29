@@ -8,9 +8,7 @@
 
   nixpkgs = {
     overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
-      # outputs.overlays.modifications
       outputs.overlays.unstable-packages
     ];
     config = {
@@ -40,7 +38,6 @@
     ];
   };
 
-  # Enable home-manager
   programs.home-manager.enable = true;
 
   # Fish Additions

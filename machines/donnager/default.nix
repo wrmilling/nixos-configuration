@@ -2,7 +2,7 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       inputs.hardware.nixosModules.lenovo-legion-y530-15ich
       inputs.home-manager.nixosModules.home-manager    
       ./hardware.nix
@@ -32,7 +32,6 @@
   boot.initrd.systemd.enable = true;
   boot.plymouth.enable = true;
   boot.kernelParams = [ "quiet" ];
-  # boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
   networking = {
     hostName = "donnager";
@@ -46,6 +45,6 @@
     };
   };
   
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.05";
 }
 
