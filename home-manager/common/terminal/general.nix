@@ -7,7 +7,7 @@
     lynx
     viddy
     silver-searcher
-    git-credential-manager
+    unstable.git-credential-manager
     magic-wormhole
   ];
 }
