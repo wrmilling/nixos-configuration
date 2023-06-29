@@ -14,7 +14,7 @@
 
   networking = {
     hostName = "hermes"; # Define your hostname.
-    domain = secrets.machines.hermes.domain;
+    domain = secrets.hosts.hermes.domain;
   };
 
   # Enable the OpenSSH daemon.

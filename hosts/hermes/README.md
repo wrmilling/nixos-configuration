@@ -152,7 +152,7 @@ Make sure the disk UUIDs are correct in `hardware.nix` from the machine generate
 
 ```
 {
-  machines: {
+  hosts: {
     hermes: {
       domain: <DOMAIN_NAME>;
     };

@@ -16,7 +16,7 @@
   
   networking = {
     hostName = "serenity";
-    domain = secrets.machines.serenity.domain;
+    domain = secrets.hosts.serenity.domain;
   };
 
   boot.loader.systemd-boot.enable = true;

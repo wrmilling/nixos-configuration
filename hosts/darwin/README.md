@@ -42,7 +42,7 @@ You will also need to define your own secrets file which includes the following 
 
 ```
 {
-  machines = {
+  hosts = {
     work-mac = {
       username = "XXXXX";
       hostname = "XXXXX";

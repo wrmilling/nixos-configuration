@@ -69,10 +69,10 @@ $ git clone https://github.com/wrmilling/nixos-configuration.git .
 I will then copy in the new machine basic config into a new machine folder and setup the configuration.nix in root. I will then replace the generated config with the new setup. 
 
 ```
-$ mkdir -p machines/donnager
-$ mv ../configuration.nix machines/donnager/default.nix
-$ mv ../hardware-configuration.nix machines/donnager/hardware.nix
-$ vim machines/donnager/default.nix
+$ mkdir -p hosts/donnager
+$ mv ../configuration.nix hosts/donnager/default.nix
+$ mv ../hardware-configuration.nix hosts/donnager/hardware.nix
+$ vim hosts/donnager/default.nix
 # Update the link to hardware.nix and add all modules/profiles as required.
 ```
 

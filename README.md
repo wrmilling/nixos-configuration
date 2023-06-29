@@ -1,6 +1,6 @@
 # NixOS Configuration
 
-A work in progress, attempting to make it handle multiple machines and share between them.
+A work in progress, attempting to make it handle multiple hosts and share between them.
 
 ## General Layout
 
@@ -15,10 +15,10 @@ Rough layout thoughts currently, still working on what feels natural.
     - [darwin](home-manager/darwin) (Specific home-manager configuration for darwin)
     - [donnager](home-manager/donnager) (Specific home-manager configuration for donnager)
     - [serenity](home-manager/serenity) (Specific home-manager configuration for serenity)
-  - [machines](machines/README.md) - (Definition of physical/virutal hosts)
-    - [common](machines/common) (Role definitions [Desktop, Laptop, Server])
-    - [darwin](machines/darwin) (nix-darwin Laptop, Apple M1 Macbook Pro 16")
-    - [donnager](machines/donnager) (NixOS Laptop, Lenovo Legion Y530)
-    - [hermes](machines/hermes) (NixOS Server, Oracle ARM64)
-    - [serenity](machines/serenity) (NixOS Laptop, Pinebook Pro)
+  - [hosts](hosts/README.md) - (Definition of physical/virutal hosts)
+    - [common](hosts/common) (Role definitions [Desktop, Laptop, Server])
+    - [darwin](hosts/darwin) (nix-darwin Laptop, Apple M1 Macbook Pro 16")
+    - [donnager](hosts/donnager) (NixOS Laptop, Lenovo Legion Y530)
+    - [hermes](hosts/hermes) (NixOS Server, Oracle ARM64)
+    - [serenity](hosts/serenity) (NixOS Laptop, Pinebook Pro)
 

@@ -19,12 +19,12 @@
   };
 
   home = {
-    username = lib.mkDefault "${secrets.machines.work-mac.username}";
-    homeDirectory = lib.mkDefault "/Users/${secrets.machines.work-mac.username}";
+    username = lib.mkDefault "${secrets.hosts.work-mac.username}";
+    homeDirectory = lib.mkDefault "/Users/${secrets.hosts.work-mac.username}";
   };
 
   programs.git = {
-    userEmail = secrets.machines.work-mac.email.long;
+    userEmail = secrets.hosts.work-mac.email.long;
     signing.signByDefault = false;
     includes = [
       {

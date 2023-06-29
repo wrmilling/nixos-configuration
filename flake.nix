@@ -61,19 +61,19 @@
         donnager = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs packages secrets; };
           modules = [
-            ./machines/donnager
+            ./hosts/donnager
           ];
         };
         hermes = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs packages secrets; };
           modules = [
-            ./machines/hermes
+            ./hosts/hermes
           ];
         };
         serenity = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs packages secrets; };
           modules = [
-            ./machines/serenity
+            ./hosts/serenity
           ];
         };
       };
@@ -81,11 +81,11 @@
       # nix-darwin configuration entrypoint
       # Available through 'darwin-rebuild switch --flake .#your-hostname'
       darwinConfigurations = {
-        "${secrets.machines.work-mac.hostname}" = darwin.lib.darwinSystem{
+        "${secrets.hosts.work-mac.hostname}" = darwin.lib.darwinSystem{
           system = "aarch64-darwin";
           specialArgs = { inherit inputs outputs packages secrets; };
           modules = [
-            ./machines/darwin
+            ./hosts/darwin
           ];
         };
       };
@@ -93,7 +93,7 @@
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager switch --flake .#your-username@your-hostname'
       homeConfigurations = {
-        "${secrets.machines.work-mac.username}@${secrets.machines.work-mac.hostname}" = home-manager.lib.homeManagerConfiguration {
+        "${secrets.hosts.work-mac.username}@${secrets.hosts.work-mac.hostname}" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.aarch64-darwin; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs secrets; };
           modules = [
