@@ -74,6 +74,7 @@
       donnager = mkNixos [ ./hosts/donnager ];
       hermes = mkNixos [ ./hosts/hermes ];
       serenity = mkNixos [ ./hosts/serenity ];
+      bob = mkNixos [ ./hosts/bob ];
     };
 
     # nix-darwin configuration entrypoint
