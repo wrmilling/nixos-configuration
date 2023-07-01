@@ -3,6 +3,7 @@
 {
   imports =
     [
+      inputs.home-manager.nixosModules.home-manager
       ./hardware.nix
       ../common/server.nix
       ../common/addons/webhost.nix
@@ -23,6 +24,13 @@
     settings = {
       PermitRootLogin = "no";
       PasswordAuthentication = false;
+    };
+  };
+
+  home-manager = {
+    extraSpecialArgs = { inherit inputs outputs; };
+    users = {
+      w4cbe = import ../../home-manager/server;
     };
   };
 
