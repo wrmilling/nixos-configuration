@@ -1,14 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
-  programs.fish = {
-    enable = true;
-    vendor = {
-      completions.enable = true;
-      config.enable = true;
-      functions.enable = true;
-    };
-  };
+  sops.secrets."users/w4cbe/passwd" = {};
+  sops.secrets."users/w4cbe/passwd".neededForUsers = true;
 
   users.users.w4cbe = {
     uid = 1000;
@@ -16,6 +10,7 @@
     isNormalUser = true;
     home = "/home/w4cbe";
     description = "Winston R. Milling";
+    passwordFile = config.sops.secrets."users/w4cbe/passwd".path;
     extraGroups = [
       "wheel"
       "networkmanager"

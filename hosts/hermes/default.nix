@@ -4,6 +4,7 @@
   imports =
     [
       inputs.home-manager.nixosModules.home-manager
+      inputs.sops-nix.nixosModules.sops
       ./hardware.nix
       ../common/server.nix
       ../common/addons/webhost.nix
@@ -26,6 +27,9 @@
       PasswordAuthentication = false;
     };
   };
+
+  sops.defaultSopsFile = ../../secrets/hermes.yaml;
+  sops.gnupg.sshKeyPaths = [ "/etc/ssh/ssh_host_rsa_key" ];
 
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };

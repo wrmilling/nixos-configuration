@@ -12,6 +12,16 @@
 
   ];
 
+  # Ensure I always have fish for default user
+  programs.fish = {
+    enable = true;
+    vendor = {
+      completions.enable = true;
+      config.enable = true;
+      functions.enable = true;
+    };
+  };
+
   #
   # Misc settings
   # -------------

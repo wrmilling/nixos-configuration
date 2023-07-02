@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
-let secrets = import ../../../secrets.nix; in 
+# This file needs to be re-worked
+
+# let secrets = import ../../../secrets.nix; in
 
 {
   programs.ssh.extraConfig = ''

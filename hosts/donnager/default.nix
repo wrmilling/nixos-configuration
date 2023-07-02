@@ -39,6 +39,9 @@
     domain = secrets.hosts.donnager.domain;
   };
 
+  sops.defaultSopsFile = ../../secrets/donnager.yaml;
+  sops.gnupg.sshKeyPaths = [ "/etc/ssh/ssh_host_rsa_key" ];
+
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };
     users = {
