@@ -14,8 +14,8 @@ in {
 
   programs.gpg = {
     enable = true;
-    mutableKeys = true;
-    mutableTrust = true;
+    mutableKeys = false;
+    mutableTrust = false;
     publicKeys = [
       { source = ../../../secrets/keys/w4cbe.asc; trust = 5; }
       { source = ../../../secrets/keys/donnager.asc; trust = 4; }
