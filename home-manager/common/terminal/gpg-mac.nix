@@ -7,10 +7,9 @@
     enable = true;
     mutableKeys = true;
     mutableTrust = true;
-    publicKeys = [{
-      source = ../../../pgp.asc;
-      trust = 5;
-    }];
+    publicKeys = [
+      { source = ../../../secrets/keys/w4cbe.asc; trust = 5; }
+    ];
     settings = {
       # https://github.com/drduh/config/blob/master/gpg.conf
       # https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration-Options.html
@@ -78,5 +77,5 @@
     fi
   '';
 
-  
+
 }

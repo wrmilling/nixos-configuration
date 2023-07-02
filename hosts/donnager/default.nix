@@ -4,7 +4,8 @@
   imports =
     [
       inputs.hardware.nixosModules.lenovo-legion-y530-15ich
-      inputs.home-manager.nixosModules.home-manager    
+      inputs.home-manager.nixosModules.home-manager
+      inputs.sops-nix.nixosModules.sops
       ./hardware.nix
       ../common/laptop.nix
       ../common/addons/development.nix
@@ -44,7 +45,7 @@
       w4cbe = import ../../home-manager/donnager;
     };
   };
-  
+
   system.stateVersion = "23.05";
 }
 
