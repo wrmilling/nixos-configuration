@@ -1,7 +1,7 @@
 keys:
   - &admin_w4cbe 21E16B8D2EE875306A6C9968D83077B99F8C6643
   - &host_donnager 896b4788b80f66b7e7e889bf325e26456917a994
-  - &host_hermes 5ECCF726C3412DF9EE29CBCB0E579DA7B919B794
+  - &host_hermes age17l9awkletg9m57n2nz43l4rzz6n5cfa3xqv5j3khaxue3wasgsssya5lkm
 creation_rules:
   - path_regex: secrets/donnager.yaml$
     key_groups:
@@ -12,4 +12,5 @@ creation_rules:
     key_groups:
     - pgp:
       - *admin_w4cbe
+      age:
       - *host_hermes

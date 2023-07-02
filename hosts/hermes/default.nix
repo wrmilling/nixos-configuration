@@ -29,7 +29,7 @@
   };
 
   sops.defaultSopsFile = ../../secrets/hermes.yaml;
-  sops.gnupg.sshKeyPaths = [ "/etc/ssh/ssh_host_rsa_key" ];
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };
