@@ -18,8 +18,6 @@ in {
     mutableTrust = false;
     publicKeys = [
       { source = ../../../secrets/keys/w4cbe.asc; trust = 5; }
-      { source = ../../../secrets/keys/donnager.asc; trust = 4; }
-      { source = ../../../secrets/keys/hermes.asc; trust = 4; }
     ];
     settings = {
       # https://github.com/drduh/config/blob/master/gpg.conf
