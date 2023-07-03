@@ -4,6 +4,15 @@
   sops.secrets."users/w4cbe/passwd" = {};
   sops.secrets."users/w4cbe/passwd".neededForUsers = true;
 
+  programs.fish = {
+    enable = true;
+    vendor = {
+      completions.enable = true;
+      config.enable = true;
+      functions.enable = true;
+    };
+  };
+
   users.users.w4cbe = {
     uid = 1000;
     shell = pkgs.fish;
