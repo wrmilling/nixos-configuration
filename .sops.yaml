@@ -2,7 +2,7 @@ keys:
   - &admin_w4cbe 21E16B8D2EE875306A6C9968D83077B99F8C6643
   - &host_donnager age1jmj0p55rffz43a3jae2c56nyc7zv5jcp5g65073gr45xzt7vqsjqguxcvm
   - &host_hermes age17l9awkletg9m57n2nz43l4rzz6n5cfa3xqv5j3khaxue3wasgsssya5lkm
-  - &host_bob age1e6u0x30yc43zx5jdn99f9e7gmwey3c9cvxgz39pkwm24s7ztd9ssn5mvrs
+  - &host_bob age1d3jfsvwhzgve9adldaf36jfxuyyc0ep7q839u2t4yfs4egsdkq4sfwspfr
 creation_rules:
   - path_regex: secrets/donnager.yaml$
     key_groups:
