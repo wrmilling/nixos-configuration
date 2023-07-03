@@ -21,6 +21,7 @@
     description = "Winston R. Milling";
     passwordFile = config.sops.secrets."users/w4cbe/passwd".path;
     extraGroups = [
+      "trusted-users"
       "wheel"
       "networkmanager"
       "audio"
