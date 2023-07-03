@@ -19,9 +19,8 @@
     isNormalUser = true;
     home = "/home/w4cbe";
     description = "Winston R. Milling";
-    passwordFile = config.sops.secrets."users/w4cbe/passwd".path;
+    passwordFile = lib.mkDefault config.sops.secrets."users/w4cbe/passwd".path;
     extraGroups = [
-      "trusted-users"
       "wheel"
       "networkmanager"
       "audio"
