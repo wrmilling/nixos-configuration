@@ -57,6 +57,7 @@
 
   sops.defaultSopsFile = ../../secrets/bob.yaml;
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  sops.useTmpfs = true;
 
   # While I Debug
   users.users.root.openssh.authorizedKeys.keys = [
