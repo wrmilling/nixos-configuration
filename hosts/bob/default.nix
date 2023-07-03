@@ -53,6 +53,9 @@
     };
   };
 
+  sops.defaultSopsFile = ../../secrets/bob.yaml;
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };
     users = {

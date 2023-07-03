@@ -3,13 +3,13 @@
 {
   # Enable the OpenSSH daemon.
   services.openssh = {
-    enable = true;
+    enable = lib.mkDefault true;
     settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
+      PermitRootLogin = lib.mkDefault "no";
+      PasswordAuthentication = lib.mkDefault false;
     };
   };
 
   # Enable Fail2Ban
-  services.fail2ban.enable = true; 
+  services.fail2ban.enable = lib.mkDefault true;
 }
