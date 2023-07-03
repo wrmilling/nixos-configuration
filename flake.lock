@@ -123,11 +123,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1688417108,
-        "narHash": "sha256-hrfiCCFHP8zpIzt2ThAtK/8qd5M+lTDdqtadaYfLe0k=",
+        "lastModified": 1688417783,
+        "narHash": "sha256-a24S1HOVOH/Yr4Dkt4aIivUexh5dPzNJ9SQNu9+ahBA=",
         "owner": "wrmilling",
         "repo": "sops-nix",
-        "rev": "ee42c9d20d35da97f43b3f67745fca33dbaf8153",
+        "rev": "ac1d14b25288c0fc27e8677b8c6b032e0ad752b9",
         "type": "github"
       },
       "original": {
