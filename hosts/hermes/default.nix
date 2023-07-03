@@ -19,10 +19,10 @@
     domain = secrets.hosts.hermes.domain;
   };
 
-  services.nginx.virtualHosts."${domain}" = {
+  services.nginx.virtualHosts."${secrets.hosts.hermes.domain}" = {
     forceSSL = true;
     enableACME = true;
-    root = "/var/www/${domain}";
+    root = "/var/www/${secrets.hosts.hermes.domain}";
   };
 
   sops.defaultSopsFile = ../../secrets/hermes.yaml;

@@ -7,6 +7,7 @@
       inputs.sops-nix.nixosModules.sops
       ./openvz.nix
       ../common/server.nix
+      ../common/addons/webhost.nix
     ];
 
   nixpkgs = {
