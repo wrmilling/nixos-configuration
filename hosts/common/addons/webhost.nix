@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  hostname = config.networking.hostname;
+  hostname = config.networking.hostName;
   domain = config.networking.domain;
 in {
   networking.firewall.allowedTCPPorts = [ 80 443 ];
