@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }: 
+{ pkgs, lib, config, ... }:
 
 {
   home.packages = with pkgs; [
@@ -7,7 +7,6 @@
     lynx
     viddy
     silver-searcher
-    unstable.git-credential-manager
     magic-wormhole
   ];
 }
