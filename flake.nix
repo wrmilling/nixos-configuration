@@ -18,7 +18,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # sops-nix
-    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.url = "github:wrmilling/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
