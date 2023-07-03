@@ -19,6 +19,12 @@
     domain = secrets.hosts.hermes.domain;
   };
 
+  services.nginx.virtualHosts."${domain}" = {
+    forceSSL = true;
+    enableACME = true;
+    root = "/var/www/${domain}";
+  };
+
   sops.defaultSopsFile = ../../secrets/hermes.yaml;
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 

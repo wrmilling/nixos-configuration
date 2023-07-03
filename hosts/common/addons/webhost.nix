@@ -1,15 +1,16 @@
 { config, lib, pkgs, ... }:
 
-let 
+let
+  hostname = config.networking.hostname;
   domain = config.networking.domain;
 in {
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   services.nginx.enable = true;
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "Winston@${domain}";
-  services.nginx.virtualHosts."${domain}" = {
+  services.nginx.virtualHosts."${hostname}.${domain}" = {
     forceSSL = true;
     enableACME = true;
-    root = "/var/www/${domain}";
+    root = "/var/www/${hostname}.${domain}";
   };
 }
