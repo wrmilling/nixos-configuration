@@ -23,6 +23,7 @@
       "alacritty"
       "barrier"
       "vivaldi"
+      "visual-studio-code"
       "font-source-code-pro"
     ];
     masApps = {
