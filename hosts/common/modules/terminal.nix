@@ -20,6 +20,7 @@
     pinentry-curses
     minicom
     neofetch
+    nfs-utils
   ];
 
 }
