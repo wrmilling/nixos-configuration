@@ -1,1 +1,2 @@
 secrets/obscurity.nix filter=git-crypt diff=git-crypt
+secrets/certs/cert.pem filter=git-crypt diff=git-crypt

@@ -7,7 +7,7 @@
     ./homebrew.nix
   ];
 
-  security.pki.certificateFiles = [ "/etc/ssl/thd_combined.pem" ];
+  security.pki.certificateFiles = [ ../../secrets/certs/cert.pem ];
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   programs.nix-index.enable = true;
