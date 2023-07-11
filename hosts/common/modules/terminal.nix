@@ -13,14 +13,12 @@
     p7zip
     rsync
     rclone
-    exfat
     dnsutils
     gnupg
     pass
     pinentry-curses
     minicom
     neofetch
-    nfs-utils
   ];
 
 }

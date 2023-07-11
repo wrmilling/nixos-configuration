@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: 
+{ config, lib, pkgs, ... }:
 
 {
   environment.pathsToLink = [ "/libexec" ];
@@ -7,6 +7,7 @@
     ./default.nix
     ./modules/audio.nix
     ./modules/bluetooth.nix
+    ./modules/filesystem.nix
     ./modules/fonts.nix
     ./modules/graphical.nix
     ./modules/i3wm.nix
