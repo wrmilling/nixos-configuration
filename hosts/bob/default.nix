@@ -27,8 +27,15 @@
     nameservers = [ "8.8.8.8" "8.8.4.4" ];
   };
 
+  # Disable resolved for now, issue on OpenVZ
   services.resolved = {
+    enable = false;
     dnssec = "false";
+  };
+
+  # Manually set resolv.conf for now
+  environment.etc = {
+    "resolv.conf".text = "nameserver 8.8.8.8\n";
   };
 
   systemd.network.networks.venet0 = {
