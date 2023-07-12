@@ -52,5 +52,5 @@
     ];
   };
 
-  services.autorandr.enable;
+  services.autorandr.enable = true;
 }
