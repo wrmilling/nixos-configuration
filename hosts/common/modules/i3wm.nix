@@ -51,4 +51,6 @@
       "100:name *= 'i3lock'"
     ];
   };
+
+  services.autorandr.enable;
 }
