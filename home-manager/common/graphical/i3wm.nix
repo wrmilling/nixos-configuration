@@ -57,19 +57,19 @@
       ################################################################################################
 
       # Screen brightness controls
-      bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl s 10%-
-      bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl s +10%
+      #bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl s 10%-
+      #bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl s +10%
 
       # Audio Controls
-      bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
-      bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
-      bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
+      #bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
+      #bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
+      #bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
 
       # Media player controls
-      bindsym XF86AudioPlay exec playerctl play-pause
-      bindsym XF86AudioPause exec playerctl play-pause
-      bindsym XF86AudioNext exec playerctl next
-      bindsym XF86AudioPrev exec playerctl previous
+      #bindsym XF86AudioPlay exec playerctl play-pause
+      #bindsym XF86AudioPause exec playerctl play-pause
+      #bindsym XF86AudioNext exec playerctl next
+      #bindsym XF86AudioPrev exec playerctl previous
 
       bindsym Print exec --no-startup-id i3-scrot
       bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
