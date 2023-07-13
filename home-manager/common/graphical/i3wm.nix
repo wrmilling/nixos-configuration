@@ -231,7 +231,7 @@
       bindsym $mod+Shift+r restart
 
       # exit i3 (logs you out of your X session)
-      bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+      bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'xfce4-session-logout'"
 
       # Set shut down, restart and locking features
       bindsym $mod+0 mode "$mode_system"

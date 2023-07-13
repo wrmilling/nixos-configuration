@@ -13,11 +13,17 @@
 
     desktopManager = {
       xterm.enable = false;
+      xfce = {
+        enable = true;
+        noDesktop = true;
+        enableXfwm = false;
+      };
     };
 
     displayManager = {
       lightdm.enable = true;
-      defaultSession = "none+i3";  
+      #defaultSession = "none+i3";
+      defaultSession = "xfce+i3";  
     };
 
     windowManager.i3 = {
