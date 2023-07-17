@@ -5,6 +5,7 @@
     ../common/terminal
     ../common/graphical
     ../common/scripts
+    ../common/optional/amateur_radio
   ];
 
   nixpkgs = {
