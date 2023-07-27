@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }: 
+{ pkgs, lib, config, ... }:
 
 {
   home.packages = with pkgs; [  ];
@@ -278,20 +278,20 @@
       bindsym $mod+9 exec --no-startup-id $HOME/.scripts/linux-bin/bsodlock
 
       # Autostart applications
-      #exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-      #exec --no-startup-id nitrogen --restore; sleep 1; picom -b
-      #exec --no-startup-id manjaro-hello
-      exec --no-startup-id nm-applet
-      #exec --no-startup-id xfce4-power-manager
-      #exec --no-startup-id pamac-tray
-      #exec --no-startup-id clipit
-      exec --no-startup-id blueman-applet
+      # exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+      # exec --no-startup-id nitrogen --restore; sleep 1; picom -b
+      # exec --no-startup-id manjaro-hello
+      # exec --no-startup-id nm-applet
+      # exec --no-startup-id xfce4-power-manager
+      # exec --no-startup-id pamac-tray
+      # exec --no-startup-id clipit
+      # exec --no-startup-id blueman-applet
       # exec_always --no-startup-id sbxkb
       # exec --no-startup-id start_conky_maia
       # exec --no-startup-id start_conky_green
-      exec --no-startup-id xautolock -time 15 -locker $HOME/.scripts/linux-bin/bsodlock
-      #exec_always --no-startup-id ff-theme-util
-      #exec_always --no-startup-id fix_xcursor
+      # exec --no-startup-id xautolock -time 15 -locker $HOME/.scripts/linux-bin/bsodlock
+      # exec_always --no-startup-id ff-theme-util
+      # exec_always --no-startup-id fix_xcursor
       # set touchpad acceleration (PinebookPro)
       # exec --no-startup-id xinput -set-prop 'Pine64 Pinebook Pro Touchpad' 'libinput Natural Scrolling Enabled' 1
 
