@@ -33,9 +33,8 @@
       extraPackages = with pkgs; [
         dmenu
         rofi
-        i3lock
+        lightlocker
         imagemagick
-        xautolock
         i3status-rust
         feh
         brightnessctl
