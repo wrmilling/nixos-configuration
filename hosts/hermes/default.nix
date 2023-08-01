@@ -10,6 +10,17 @@
       ../common/addons/webhost.nix
     ];
 
+  nixpkgs = {
+    overlays = [
+      outputs.overlays.unstable-packages
+    ];
+  };
+
+  # https://github.com/NixOS/nixpkgs/issues/229450
+  environment.systemPackages = [
+    unstable.e2fsprogs
+  ];
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
