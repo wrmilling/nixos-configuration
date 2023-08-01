@@ -10,6 +10,8 @@
       ../common/addons/webhost.nix
     ];
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   nixpkgs = {
     overlays = [
       outputs.overlays.unstable-packages
