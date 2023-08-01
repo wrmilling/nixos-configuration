@@ -20,6 +20,11 @@
       fsType = "vfat";
     };
 
+  # https://github.com/NixOS/nixpkgs/issues/229450
+  environment.systemPackages = with pkgs; [
+    unstable.e2fsprogs
+  ];
+
   swapDevices = [ ];
 
   networking.useDHCP = lib.mkDefault true;
