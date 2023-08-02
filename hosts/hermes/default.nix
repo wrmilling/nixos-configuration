@@ -11,18 +11,7 @@
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  nixpkgs = {
-    overlays = [
-      outputs.overlays.unstable-packages
-    ];
-  };
-
-  # https://github.com/NixOS/nixpkgs/issues/229450
-  environment.systemPackages = with pkgs; [
-    unstable.e2fsprogs
-  ];
-
+  
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
