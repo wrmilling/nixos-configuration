@@ -76,10 +76,13 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild switch --flake .#your-hostname'
     nixosConfigurations = {
+      # Desktop/Laptop
       donnager = mkNixos [ ./hosts/donnager ];
-      hermes = mkNixos [ ./hosts/hermes ];
       serenity = mkNixos [ ./hosts/serenity ];
+
+      # Servers
       bob = mkNixos [ ./hosts/bob ];
+      hermes = mkNixos [ ./hosts/hermes ];
     };
 
     # nix-darwin configuration entrypoint
