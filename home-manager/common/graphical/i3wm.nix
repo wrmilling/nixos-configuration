@@ -289,7 +289,7 @@
       # exec_always --no-startup-id sbxkb
       # exec --no-startup-id start_conky_maia
       # exec --no-startup-id start_conky_green
-      # exec --no-startup-id xautolock -time 15 -locker $HOME/.scripts/linux-bin/bsodlock
+      exec --no-startup-id xautolock -time 15 -locker $HOME/.scripts/linux-bin/bsodlock
       # exec_always --no-startup-id ff-theme-util
       # exec_always --no-startup-id fix_xcursor
       # set touchpad acceleration (PinebookPro)
