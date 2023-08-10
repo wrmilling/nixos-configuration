@@ -1,10 +1,11 @@
-{ inputs, outputs, lib, config, pkgs, ... }: 
+{ inputs, outputs, lib, config, pkgs, ... }:
 
 {
   imports = [
     ../common/terminal
     ../common/graphical
     ../common/scripts
+    ../common/optional/keybase.nix
   ];
 
   nixpkgs = {
@@ -15,7 +16,7 @@
     config = {
       allowUnfree = true;
       # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = (_: true); 
+      allowUnfreePredicate = (_: true);
     };
   };
 
