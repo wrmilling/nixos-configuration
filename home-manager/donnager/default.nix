@@ -1,4 +1,4 @@
-{ inputs, outputs, lib, config, pkgs, ... }: 
+{ inputs, outputs, lib, config, pkgs, ... }:
 
 {
   imports = [
@@ -6,6 +6,7 @@
     ../common/graphical
     ../common/scripts
     ../common/optional/amateur-radio.nix
+    ../common/optional/keybase.nix
   ];
 
   nixpkgs = {
