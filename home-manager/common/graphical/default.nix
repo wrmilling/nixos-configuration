@@ -29,5 +29,10 @@
     flameshot
     gparted
     volumeicon
+
+    # Keybase
+    keybase
+    keybase-gui
+    kbfs
   ];
 }
