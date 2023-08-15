@@ -7,7 +7,7 @@
     ../common/scripts
     ../common/optional/amateur-radio.nix
     ../common/optional/keybase.nix
-    ../common/optional/minecraft.nix
+    ../common/optional/minecraft-client.nix
   ];
 
   nixpkgs = {
