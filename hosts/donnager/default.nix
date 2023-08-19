@@ -11,6 +11,7 @@
       ../common/addons/development.nix
       ../common/addons/gaming.nix
       ../common/addons/k8s-utils.nix
+      ../common/addons/printing.nix
       ../common/addons/tailscale.nix
       ../common/addons/virtualization.nix
       ../common/addons/zram.nix
