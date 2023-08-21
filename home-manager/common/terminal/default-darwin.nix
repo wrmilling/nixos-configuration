@@ -1,4 +1,4 @@
-{ pkgs, ... }: 
+{ pkgs, ... }:
 
 {
   imports = [
@@ -11,7 +11,8 @@
     ./tmux.nix
     ./vim.nix
   ];
-  home.packages = with pkgs; [ 
+  home.packages = with pkgs; [
     cloudfoundry-cli
+    google-cloud-sdk
   ];
 }
