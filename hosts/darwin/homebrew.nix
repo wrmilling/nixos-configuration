@@ -25,6 +25,7 @@
       "vivaldi"
       "visual-studio-code"
       "font-source-code-pro"
+      "datagrip"
     ];
     masApps = {
       Tailscale = 1475387142;
