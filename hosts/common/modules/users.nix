@@ -1,9 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  sops.secrets."users/w4cbe/passwd" = {};
-  sops.secrets."users/w4cbe/passwd".neededForUsers = true;
-
   programs.fish = {
     enable = true;
     vendor = {
@@ -19,7 +16,6 @@
     isNormalUser = true;
     home = "/home/w4cbe";
     description = "Winston R. Milling";
-    passwordFile = lib.mkDefault config.sops.secrets."users/w4cbe/passwd".path;
     extraGroups = [
       "wheel"
       "networkmanager"

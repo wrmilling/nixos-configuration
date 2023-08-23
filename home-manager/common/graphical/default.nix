@@ -3,7 +3,6 @@
 {
   imports = [
     ./alacritty.nix
-    ./discord.nix
     ./firefox.nix
     ./i3status-rust.nix
     ./i3wm.nix
@@ -11,23 +10,20 @@
     ./xresources.nix
   ];
 
-  home.packages = with pkgs; [
-    # Web
-    (vivaldi.override {
-      proprietaryCodecs = true;
-      enableWidevine = false;
-    })
-
-    # Comms
-    element-desktop
-    slack
-
-    # 3-D Printing
-    cura
-
-    # Utils
-    flameshot
-    gparted
-    volumeicon
+  home.packages = with pkgs; lib.mkMerge [
+    (lib.mkIf stdenv.isx86_64 [
+      (vivaldi.override {
+        proprietaryCodecs = true;
+        enableWidevine = false;
+      })
+      slack
+    ])
+    ([
+      element-desktop
+      cura
+      flameshot
+      gparted
+      volumeicon
+    ])  
   ];
 }
