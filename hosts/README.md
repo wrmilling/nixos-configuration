@@ -8,5 +8,9 @@ These configurations generally reference a [home-manager](../home-manager) confi
 
 ##  Configurations
 
+- [bob](bob) (Server, OpenVZ Test-instance)
+- [darwin](darwin) (Laptop, M1 Macbook Pro)
 - [donnager](donnager) (Laptop, Lenovo Legion Y530)
+- [hermes](hermes) (Server, Oracle Free-tier ARM)
+- [riker](riker) (Laptop, Pine64 Pinebook Pro, Cracked Screen)
 - [serenity](serenity) (Laptop, Pine64 Pinebook Pro)
