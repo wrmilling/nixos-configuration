@@ -25,22 +25,14 @@
 
   boot.initrd.luks.devices = {
     cryptroot = {
-      device = "/dev/disk/by-uuid/f9618ef7-0e79-4181-8a05-d95c300bb10f";
+      device = "/dev/disk/by-uuid/54c4fcbf-feb8-4029-958f-0cb12b8e2e59";
       allowDiscards = true;
       preLVM = true;
     };
   };
 
-  environment.etc = {
-    crypttab = {
-      text = ''
-        nvmecrypt /dev/disk/by-uuid/92cf1e12-72a6-48fd-911f-5249183e5c64 /home/luks/nvme.key luks
-      '';
-      mode = "0440";
-    };
-  };
 	
-	home-manager = {
+  home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };
     users = {
       w4cbe = import ../../home-manager/serenity;
