@@ -41,7 +41,7 @@
 
       [[block]]
       block = "battery"
-      device = "BAT0"
+      device = "cw2015-battery"
       interval = 10
 
       [[block]]
