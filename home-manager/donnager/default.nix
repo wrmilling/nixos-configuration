@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./i3status-rust.nix
     ../common/terminal
     ../common/graphical
     ../common/scripts

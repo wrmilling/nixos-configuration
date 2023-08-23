@@ -1,8 +1,6 @@
 { pkgs, lib, config, ... }: 
 
 {
-  # This assumes Donnager host for now, will be updating to handle multi-host
-  # at some point in the future. 
   home.packages = with pkgs; [ i3status-rust ];
   home.file."i3status-rust-config" = {
     target = ".config/i3status-rust/config.toml";
