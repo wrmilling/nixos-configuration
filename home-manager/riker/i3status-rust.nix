@@ -40,6 +40,14 @@
       format = " $icon $available.eng(p:G,w:3) "
 
       [[block]]
+      block = "disk_space"
+      path = "/mnt/NVMe"
+      interval = 20
+      warning = 20.0
+      alert = 10.0
+      format = " $icon $available.eng(p:G,w:3) "
+
+      [[block]]
       block = "battery"
       device = "cw2015-battery"
       interval = 10
