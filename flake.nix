@@ -77,12 +77,13 @@
     # Available through 'nixos-rebuild switch --flake .#your-hostname'
     nixosConfigurations = {
       # Desktop/Laptop
-      donnager = mkNixos [ ./hosts/donnager ];
-      serenity = mkNixos [ ./hosts/serenity ];
+      donnager  = mkNixos [ ./hosts/donnager ];
+      riker     = mkNixos [ ./hosts/riker ];
+      serenity  = mkNixos [ ./hosts/serenity ];
 
       # Servers
-      bob = mkNixos [ ./hosts/bob ];
-      hermes = mkNixos [ ./hosts/hermes ];
+      bob       = mkNixos [ ./hosts/bob ];
+      hermes    = mkNixos [ ./hosts/hermes ];
     };
 
     # nix-darwin configuration entrypoint
