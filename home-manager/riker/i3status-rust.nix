@@ -64,6 +64,7 @@ in
       [[block]]
       block = "custom"
       command = "${bat-draw}/bin/bat-draw"
+      format = " ${text}W "
       interval = 10
 
       [[block]]
