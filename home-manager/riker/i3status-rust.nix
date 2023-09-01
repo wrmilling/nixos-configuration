@@ -62,7 +62,7 @@ in
 
       [[block]]
       block = "custom"
-      command = "bat-draw"
+      command = "${bat-draw}"
       interval = 10
 
       [[block]]
