@@ -6,7 +6,7 @@ let
     bat_current_now=$(${pkgs.coreutils-full}/bin/cat /sys/class/power_supply/cw2015-battery/current_now)
     bat_voltage_now=$(${pkgs.coreutils-full}/bin/cat /sys/class/power_supply/cw2015-battery/voltage_now)
     bat_power_now=$(echo "scale=2;$bat_current_now * $bat_voltage_now / $power_divisor" | bc -l)
-    echo $bat_power_now
+    printf "%sW" $bat_power_now
   '';
 in
 {
@@ -64,7 +64,6 @@ in
       [[block]]
       block = "custom"
       command = "${bat-draw}/bin/bat-draw"
-      format = " ${text}W "
       interval = 10
 
       [[block]]
