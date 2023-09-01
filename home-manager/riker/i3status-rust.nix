@@ -2,6 +2,7 @@
 
 let 
   bat-draw = pkgs.writeShellScriptBin "bat-draw" ''
+    power_divisor=1000000000000
     bat_current_now=$(${pkgs.coreutils-full}/bin/cat /sys/class/power_supply/cw2015-battery/current_now)
     bat_voltage_now=$(${pkgs.coreutils-full}/bin/cat /sys/class/power_supply/cw2015-battery/voltage_now)
     bat_power_now=$(echo "scale=2;$bat_current_now * $bat_voltage_now / $power_divisor" | bc -l)
