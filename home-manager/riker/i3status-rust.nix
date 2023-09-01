@@ -9,7 +9,7 @@ let
   '';
 in
 {
-  home.packages = with pkgs; [ i3status-rust ];
+  home.packages = with pkgs; [ i3status-rust bat-draw ];
   home.file."i3status-rust-config" = {
     target = ".config/i3status-rust/config.toml";
     text = ''
@@ -62,7 +62,7 @@ in
 
       [[block]]
       block = "custom"
-      command = "${bat-draw}"
+      command = "${bat-draw}/bin/bat-draw"
       interval = 10
 
       [[block]]
