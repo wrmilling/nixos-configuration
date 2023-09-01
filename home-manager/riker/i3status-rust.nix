@@ -1,5 +1,13 @@
 { pkgs, lib, config, ... }: 
 
+let 
+  bat-draw = pkgs.writeShellScriptBin "bat-draw" ''
+    bat_current_now=$(${pkgs.coreutils-full}/bin/cat /sys/class/power_supply/cw2015-battery/current_now)
+    bat_voltage_now=$(${pkgs.coreutils-full}/bin/cat /sys/class/power_supply/cw2015-battery/voltage_now)
+    bat_power_now=$(echo "scale=2;$bat_current_now * $bat_voltage_now / $power_divisor" | bc -l)
+    echo $bat_power_now
+  '';
+in
 {
   home.packages = with pkgs; [ i3status-rust ];
   home.file."i3status-rust-config" = {
@@ -53,9 +61,15 @@
       interval = 10
 
       [[block]]
+      block = "custom"
+      command = "bat-draw"
+      interval = 10
+
+      [[block]]
       block = "time"
       interval = 5
       format = " $icon $timestamp.datetime() "
     '';
   };
 }
+
