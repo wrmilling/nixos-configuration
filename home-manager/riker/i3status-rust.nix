@@ -63,8 +63,7 @@ in
 
       [[block]]
       block = "custom"
-      command = "${bat-draw}/bin/bat-draw"
-      icon = ""
+      command = "echo '\uf0e7' `${bat-draw}/bin/bat-draw`"
       interval = 10
 
       [[block]]
