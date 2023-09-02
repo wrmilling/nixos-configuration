@@ -29,6 +29,11 @@
 
   programs.home-manager.enable = true;
 
+  # Trying out some power management to reduce idle watts
+  services.tlp = {
+    enable = true;
+  };
+
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
