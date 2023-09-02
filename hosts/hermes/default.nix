@@ -7,6 +7,7 @@
       inputs.sops-nix.nixosModules.sops
       ./hardware.nix
       ../common/server.nix
+      ../common/addons/nixbuild-host.nix
       ../common/addons/webhost.nix
     ];
 
