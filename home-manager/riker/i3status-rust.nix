@@ -64,7 +64,7 @@ in
       [[block]]
       block = "custom"
       command = "${bat-draw}/bin/bat-draw"
-      icon = "bolt"
+      icon = ""
       interval = 10
 
       [[block]]
