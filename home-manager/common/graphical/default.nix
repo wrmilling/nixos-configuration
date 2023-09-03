@@ -23,6 +23,7 @@
       flameshot
       gparted
       volumeicon
+      brave-multiarch
     ])  
   ];
 }
