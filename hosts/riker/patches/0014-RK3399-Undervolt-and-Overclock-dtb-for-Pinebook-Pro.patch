@@ -1,0 +1,156 @@
+From 33e813275d75ad5f4bd4b6e38fcdf7cd682ca5dd Mon Sep 17 00:00:00 2001
+From: "Winston R. Milling" <Winston@Milli.ng>
+Date: Fri, 27 Aug 2021 16:19:07 -0500
+Subject: [PATCH] PinebookPro: Undervolt and Overclock
+
+---
+ arch/arm64/boot/dts/rockchip/rk3399-opp.dtsi  | 34 +++++++++----------
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts | 30 ++++++++++++++++
+ 2 files changed, 47 insertions(+), 17 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-opp.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-opp.dtsi
+index da41cd81ebb7..8dedc7e4c5fa 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-opp.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-opp.dtsi
+@@ -10,28 +10,28 @@ cluster0_opp: opp-table0 {
+ 
+ 		opp00 {
+ 			opp-hz = /bits/ 64 <408000000>;
+-			opp-microvolt = <825000 825000 1250000>;
++			opp-microvolt = <825000 825000 1200000>;
+ 			clock-latency-ns = <40000>;
+ 		};
+ 		opp01 {
+ 			opp-hz = /bits/ 64 <600000000>;
+-			opp-microvolt = <825000 825000 1250000>;
++			opp-microvolt = <825000 825000 1200000>;
+ 		};
+ 		opp02 {
+ 			opp-hz = /bits/ 64 <816000000>;
+-			opp-microvolt = <850000 850000 1250000>;
++			opp-microvolt = <850000 850000 1200000>;
+ 		};
+ 		opp03 {
+ 			opp-hz = /bits/ 64 <1008000000>;
+-			opp-microvolt = <925000 925000 1250000>;
++			opp-microvolt = <900000 900000 1200000>;
+ 		};
+ 		opp04 {
+ 			opp-hz = /bits/ 64 <1200000000>;
+-			opp-microvolt = <1000000 1000000 1250000>;
++			opp-microvolt = <975000 975000 1200000>;
+ 		};
+ 		opp05 {
+ 			opp-hz = /bits/ 64 <1416000000>;
+-			opp-microvolt = <1125000 1125000 1250000>;
++			opp-microvolt = <1100000 1100000 1200000>;
+ 		};
+ 	};
+ 
+@@ -54,23 +54,23 @@ opp02 {
+ 		};
+ 		opp03 {
+ 			opp-hz = /bits/ 64 <1008000000>;
+-			opp-microvolt = <875000 875000 1250000>;
++			opp-microvolt = <850000 850000 1250000>;
+ 		};
+ 		opp04 {
+ 			opp-hz = /bits/ 64 <1200000000>;
+-			opp-microvolt = <950000 950000 1250000>;
++			opp-microvolt = <900000 900000 1250000>;
+ 		};
+ 		opp05 {
+ 			opp-hz = /bits/ 64 <1416000000>;
+-			opp-microvolt = <1025000 1025000 1250000>;
++			opp-microvolt = <975000 975000 1250000>;
+ 		};
+ 		opp06 {
+ 			opp-hz = /bits/ 64 <1608000000>;
+-			opp-microvolt = <1100000 1100000 1250000>;
++			opp-microvolt = <1050000 1050000 1250000>;
+ 		};
+ 		opp07 {
+ 			opp-hz = /bits/ 64 <1800000000>;
+-			opp-microvolt = <1200000 1200000 1250000>;
++			opp-microvolt = <1150000 1150000 1250000>;
+ 		};
+ 	};
+ 
+@@ -79,27 +79,27 @@ gpu_opp_table: opp-table2 {
+ 
+ 		opp00 {
+ 			opp-hz = /bits/ 64 <200000000>;
+-			opp-microvolt = <825000 825000 1150000>;
++			opp-microvolt = <825000 825000 1200000>;
+ 		};
+ 		opp01 {
+ 			opp-hz = /bits/ 64 <297000000>;
+-			opp-microvolt = <825000 825000 1150000>;
++			opp-microvolt = <825000 825000 1200000>;
+ 		};
+ 		opp02 {
+ 			opp-hz = /bits/ 64 <400000000>;
+-			opp-microvolt = <825000 825000 1150000>;
++			opp-microvolt = <825000 825000 1200000>;
+ 		};
+ 		opp03 {
+ 			opp-hz = /bits/ 64 <500000000>;
+-			opp-microvolt = <875000 875000 1150000>;
++			opp-microvolt = <850000 850000 1200000>;
+ 		};
+ 		opp04 {
+ 			opp-hz = /bits/ 64 <600000000>;
+-			opp-microvolt = <925000 925000 1150000>;
++			opp-microvolt = <925000 925000 1200000>;
+ 		};
+ 		opp05 {
+ 			opp-hz = /bits/ 64 <800000000>;
+-			opp-microvolt = <1100000 1100000 1150000>;
++			opp-microvolt = <1075000 1075000 1200000>;
+ 		};
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+index 2b5f001ff4a6..5e9c066317ea 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+@@ -385,6 +385,36 @@ mains_charger: dc-charger {
+ 	};
+ };
+ 
++&cluster0_opp {
++  opp06 {
++    opp-hz = /bits/ 64 <1512000000>;
++    opp-microvolt = <1150000 1150000 1200000>;
++  };
++  opp07 {
++    opp-hz = /bits/ 64 <1608000000>;
++    opp-microvolt = <1200000 1200000 1200000>;
++  };
++};
++
++&cluster1_opp {
++  opp08 {
++    opp-hz = /bits/ 64 <2016000000>;
++    opp-microvolt = <1250000 1250000 1250000>;
++  };
++  opp09 {
++    opp-hz = /bits/ 64 <2088000000>;
++    opp-microvolt = <1250000 1250000 1250000>;
++  };
++};
++
++&gpu_opp_table {
++  opp06 {
++    opp-hz = /bits/ 64 <950000000>;
++    opp-microvolt = <1200000 1200000 1200000>;
++  };
++};
++
++
+ &cpu_b0 {
+   cpu-supply = <&vdd_cpu_b>;
+ };
+-- 
+2.33.0
+
