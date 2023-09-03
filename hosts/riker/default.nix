@@ -22,7 +22,7 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
-  #boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+  boot.kernelParams = lib.mkAfter [ "console=tty0" ];
 
   boot.initrd.luks.devices = {
     cryptroot = {
