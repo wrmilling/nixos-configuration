@@ -10,7 +10,6 @@
     ./modules/filesystem.nix
     ./modules/fonts.nix
     ./modules/graphical.nix
-    ./modules/i3wm.nix
     ./modules/network.nix
   ];
 
