@@ -91,7 +91,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.57.57";
+  version = "1.57.62";
 
   src = 
     let
