@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       };
       aarch64-linux = fetchurl {
         url = "${base}_arm64.deb";
-        hash = "sha256-ZRaGqzVThOTanib8GjJMKRDVvWzX2eaL645d+VfNLVA=";
+        hash = "sha256-ACvVG70Qp9bb4cKEh23+LSRF1D6Z/Cs7JpsFP2QTihE=";
       };
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
