@@ -20,13 +20,20 @@
 
       fonts = {
         names = ["Public Sans"];
-        size = 9.0;
+        size = 10.0;
         style = "SemiBold";
       };
 
-      gaps.inner = 2;
-      gaps.smartGaps = true;
-      window.hideEdgeBorders = "smart";
+      gaps = {
+        inner = 10;
+        outer = -2;
+        smartGaps = true;
+      };
+      
+      window = {
+        hideEdgeBorders = "smart";
+        titlebar = false;
+      };
 
       keybindings = lib.mkOptionDefault {
         "XF86MonBrightnessDown" = "exec light -U 5 && light -G | cut -d'.' -f1 > $WOBSOCK";
@@ -35,6 +42,7 @@
         "XF86AudioLowerVolume" = "exec ${pactl} set-sink-volume @DEFAULT_SINK@ -4% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n1 | awk '{print substr($5, 1, length($5) - 1)}' > $WOBSOCK";
         "XF86AudioMute" = "exec ${pactl} set-sink-mute @DEFAULT_SINK@ toggle && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n1 | awk '{print substr($5, 1, length($5) - 1)}' > $WOBSOCK";
 
+        "${mod}+space" = "exec --no-startup-id ${menu}";
         "Print" = "exec ${pkgs.grim}/bin/grim";
         "Shift+Print" = "exec ${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\"";
       };
@@ -44,13 +52,51 @@
       };
 
       input."type:touchpad" = {
-        click_method = "clickfinger";
+        click_method = "button_areas";
+        tap = "enabled";
         middle_emulation = "disabled";
         natural_scroll = "enabled";
       };
 
       bars = [
-        {command = "${pkgs.i3status-rust}/bin/i3status-rs";}
+        {
+          statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs";
+          position = "top";
+          trayOutput = "eDP-1";
+          fonts = {
+            size = 11.0;
+          };
+          colors = {
+            background = "#222D31";
+            statusline = "#F9FAF9";
+            separator  = "#454947";
+            focusedWorkspace  = {
+              border = "#F9FAF9";
+              background = "#16a085";
+              text = "#292F34";
+            };
+            activeWorkspace = {
+              border = "#595B5B";
+              background = "#353836";
+              text = "#FDF6E3";
+            };
+            inactiveWorkspace = {
+              border = "#595B5B";
+              background = "#222D31";
+              text = "#EEE8D5";
+            };
+            bindingMode = {
+              border = "#16a085";
+              background = "#2C2C2C";
+              text = "#F9FAF9";
+            };
+            urgentWorkspace = {
+              border = "#16a085";
+              background = "#FDF6E3";
+              text = "#E5201D";
+            };
+          };
+        }
       ];
 
       startup = [

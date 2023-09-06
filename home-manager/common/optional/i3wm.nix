@@ -353,6 +353,7 @@
               binding_mode       #16a085 #2C2C2C #F9FAF9
               urgent_workspace   #16a085 #FDF6E3 #E5201D
           }
+          
       }
 
       # hide/unhide i3status bar

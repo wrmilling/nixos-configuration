@@ -10,7 +10,7 @@
       ../common/modules/sway.nix
       ../common/addons/development.nix
       ../common/addons/k8s-utils.nix
-      ../common/addons/nixbuild-client.nix
+      # ../common/addons/nixbuild-client.nix
       ../common/addons/tailscale.nix
       ../common/addons/virtualization.nix
       ../common/addons/zram.nix
