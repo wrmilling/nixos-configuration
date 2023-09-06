@@ -23,7 +23,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "sway";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
         user = "w4cbe";
       };
     };
