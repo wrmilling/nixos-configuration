@@ -23,6 +23,7 @@
   time.timeZone = "America/Chicago";
 
   security.sudo.enable = true;
+  security.polkit.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 

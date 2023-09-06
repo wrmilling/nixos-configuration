@@ -9,6 +9,7 @@
     ../common/optional/armcord.nix
     ../common/optional/gaming-arm.nix
     ../common/optional/keybase.nix
+    ../common/optional/sway.nix
   ];
 
   nixpkgs = {

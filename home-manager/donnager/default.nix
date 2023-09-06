@@ -8,6 +8,7 @@
     ../common/scripts
     ../common/optional/amateur-radio.nix
     ../common/optional/discord.nix
+    ../common/optional/i3wm.nix
     ../common/optional/keybase.nix
     ../common/optional/minecraft-client.nix
   ];

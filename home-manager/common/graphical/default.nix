@@ -4,7 +4,6 @@
   imports = [
     ./alacritty.nix
     ./firefox.nix
-    ./i3wm.nix
     ./rofi.nix
     ./xresources.nix
   ];
