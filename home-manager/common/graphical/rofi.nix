@@ -6,7 +6,7 @@
     target = ".config/rofi/config.rasi";
     text = ''
       configuration {
-        modes: "window,drun,run,ssh,combi";
+        modes: "drun,run,ssh,combi";
         timeout {
             action: "kb-cancel";
             delay:  0;
