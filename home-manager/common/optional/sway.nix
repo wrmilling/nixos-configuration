@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     swaybg
+    glib
   ];
 
   wayland.windowManager.sway = {
@@ -100,7 +101,7 @@
       ];
 
       startup = [
-        {command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";}
+        { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; }
       ];
     };
   };
@@ -171,6 +172,17 @@
       Type = "simple";
     };
     Install.WantedBy = ["sway-session.target"];
+  };
+
+  gtk = {
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome.gnome-themes-extra
+    };
+    iconTheme = {
+      name = "Adwaita";
+      package = pkgs.gnome.adwaita-icon-theme
+    };
   };
 
   services.clipman.enable = true;
