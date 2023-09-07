@@ -7,7 +7,7 @@
       inputs.home-manager.nixosModules.home-manager
       ./hardware.nix
       ../common/laptop.nix
-      ../common/modules/sway.nix
+      ../common/modules/i3wm.nix
       ../common/addons/development.nix
       ../common/addons/k8s-utils.nix
       # ../common/addons/nixbuild-client.nix
