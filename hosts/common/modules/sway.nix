@@ -23,7 +23,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet -r -t -g 'There are four lights! -Picard' -c sway";
         user = "w4cbe";
       };
     };
