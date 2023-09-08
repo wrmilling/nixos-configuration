@@ -72,6 +72,8 @@ in
       nb = "nix build";
       nbn = "nix build nixpkgs#";
       nf = "nix flake";
+      nrb = "sudo sh -c \"cd /etc/nixos && git pull && nixos-rebuild boot --flake .\"";
+      nrd = "sudo sh -c \"cd /etc/nixos && git pull && nixos-rebuild dry-run --flake .\"";
       nrs = "sudo sh -c \"cd /etc/nixos && git pull && nixos-rebuild switch --flake .\"";
       drs = "cd ~/.nixos-configuration && git pull && darwin-rebuild switch --flake . && home-manager switch --flake . && cd -";
       ncg = "sudo nix-collect-garbage";
