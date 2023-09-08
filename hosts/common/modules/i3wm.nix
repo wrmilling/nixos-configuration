@@ -25,7 +25,7 @@
         lightlocker
         imagemagick
         i3status-rust
-        i3lock`
+        i3lock
         feh
         brightnessctl
         playerctl
