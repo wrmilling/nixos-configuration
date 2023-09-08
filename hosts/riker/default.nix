@@ -26,7 +26,7 @@
 
   boot.initrd.luks.devices = {
     cryptroot = {
-      device = "/dev/disk/by-uuid/f9618ef7-0e79-4181-8a05-d95c300bb10f";
+      device = "/dev/disk/by-uuid/ddce2ffe-beb7-4e54-a2ff-f0759d15d55d";
       allowDiscards = true;
       preLVM = true;
     };
@@ -41,7 +41,7 @@
     };
   };
 	
-	home-manager = {
+  home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };
     users = {
       w4cbe = import ../../home-manager/riker;
