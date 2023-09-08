@@ -20,13 +20,11 @@
       package = pkgs.i3-gaps;
 
       extraPackages = with pkgs; [
-        dmenu
-        rofi
-        lightlocker
-        imagemagick
         i3status-rust
         i3lock
         feh
+        rofi
+        imagemagick
         brightnessctl
         playerctl
         pavucontrol
