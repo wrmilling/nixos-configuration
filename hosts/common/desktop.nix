@@ -9,6 +9,8 @@
     ./modules/filesystem.nix
     ./modules/fonts.nix
     ./modules/graphical.nix
+    ./modules/i3wm.nix
+    ./modules/lightdm.nix
     ./modules/network.nix
   ];
 

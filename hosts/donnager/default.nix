@@ -8,7 +8,6 @@
       inputs.sops-nix.nixosModules.sops
       ./hardware.nix
       ../common/laptop.nix
-      ../common/modules/i3wm.nix
       ../common/addons/development.nix
       ../common/addons/gaming.nix
       ../common/addons/k8s-utils.nix

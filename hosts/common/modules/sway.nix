@@ -19,18 +19,10 @@
     wrapperFeatures.gtk = true;
   };
 
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet -r -t -g 'There are four lights! -Picard' -c sway";
-        user = "w4cbe";
-      };
-    };
-  };
-
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.greetd.enableGnomeKeyring = true;
+  services.udisks2.enable = true;
+  security.rtkit.enable = true;
+  programs.light.enable = true;
+  programs.thunar.enable = true;
 
   fonts = {
     fonts = with pkgs; [
@@ -51,21 +43,8 @@
     };
   };
 
-  programs.light.enable = true;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-  services.udisks2.enable = true;
-
   services.gvfs = {
     enable = true;
     package = lib.mkForce pkgs.gnome3.gvfs;
   };
-  programs.thunar.enable = true;
-
-  programs.kdeconnect.enable = true;
 }

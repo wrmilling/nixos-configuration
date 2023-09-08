@@ -20,12 +20,6 @@
       };
     };
 
-    displayManager = {
-      lightdm.enable = true;
-      #defaultSession = "none+i3";
-      defaultSession = "xfce+i3";  
-    };
-
     windowManager.i3 = {
       enable = true;
       package = pkgs.i3-gaps;
@@ -56,10 +50,6 @@
       "100:name *= 'i3lock'"
     ];
   };
-
-  # Audio configuration
-  hardware.pulseaudio.enable = true;
-  hardware.pulseaudio.package = pkgs.pulseaudioFull; # Full for bluetooth audio support.
 
   services.autorandr.enable = true;
 }
