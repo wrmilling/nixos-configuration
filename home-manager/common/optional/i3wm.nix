@@ -47,7 +47,7 @@
       # launch categorized menu
       bindsym $mod+z exec --no-startup-id morc_menu
 
-      exec --no-startup-id start-pulseaudio-x11
+      #  exec --no-startup-id start-pulseaudio-x11
       exec --no-startup-id volumeicon
       bindsym $mod+Ctrl+m exec pavucontrol
 

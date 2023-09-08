@@ -13,11 +13,11 @@
 
     desktopManager = {
       xterm.enable = false;
-      xfce = {
-        enable = true;
-        noDesktop = true;
-        enableXfwm = false;
-      };
+      # xfce = {
+      #   enable = true;
+      #   noDesktop = true;
+      #   enableXfwm = false;
+      # };
     };
 
     windowManager.i3 = {
@@ -33,6 +33,7 @@
         feh
         brightnessctl
         playerctl
+        pavucontrol
       ];
     }; 
   };
