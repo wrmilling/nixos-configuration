@@ -2,6 +2,16 @@
 
 {
   home.packages = with pkgs; [  ];
+
+  services.picom = {
+    enable = true;
+    backend = "glx";
+    inactiveOpacity = 0.95;
+    opacityRules = [
+      "100:name *= 'i3lock'"
+    ];
+  };
+
   home.file."i3wm-config" = {
     target = ".config/i3/config";
     text = ''

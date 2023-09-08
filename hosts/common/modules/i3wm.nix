@@ -36,15 +36,6 @@
     HandleLidSwitch=ignore
     HandlePowerKey=ignore
   '';
- 
-  services.picom = {
-    enable = true;
-    backend = "glx";
-    inactiveOpacity = 0.95;
-    opacityRules = [
-      "100:name *= 'i3lock'"
-    ];
-  };
 
   services.autorandr.enable = true;
 }
