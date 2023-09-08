@@ -13,6 +13,11 @@
 
     desktopManager = {
       xterm.enable = false;
+      xfce = {
+        enable = true;
+        noDesktop = true;
+        enableXfwm = false;
+      };
     };
 
     windowManager.i3 = {
@@ -20,14 +25,14 @@
       package = pkgs.i3-gaps;
 
       extraPackages = with pkgs; [
-        i3status-rust
-        i3lock
-        feh
+        dmenu
         rofi
+        lightlocker
         imagemagick
+        i3status-rust
+        feh
         brightnessctl
         playerctl
-        pavucontrol
       ];
     }; 
   };
@@ -36,6 +41,15 @@
     HandleLidSwitch=ignore
     HandlePowerKey=ignore
   '';
+ 
+  services.picom = {
+    enable = true;
+    backend = "glx";
+    inactiveOpacity = 0.95;
+    opacityRules = [
+      "100:name *= 'i3lock'"
+    ];
+  };
 
   services.autorandr.enable = true;
 }
