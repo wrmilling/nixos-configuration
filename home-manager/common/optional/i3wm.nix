@@ -58,7 +58,6 @@
       bindsym $mod+z exec --no-startup-id morc_menu
 
       # exec --no-startup-id start-pulseaudio-x11
-      exec --no-startup-id volumeicon
       bindsym $mod+Ctrl+m exec pavucontrol
 
       ################################################################################################
@@ -286,8 +285,10 @@
 
       # Autostart applications
       exec --no-startup-id xautolock -time 15 -locker $HOME/.scripts/linux-bin/bsodlock
-      # set touchpad acceleration (PinebookPro)
-      # exec --no-startup-id xinput -set-prop 'Pine64 Pinebook Pro Touchpad' 'libinput Natural Scrolling Enabled' 1
+      exec --no-startup-id systemctl --user set-environment PAN_MESA_DEBUG=gl3
+      exec --no-startup-id blueman-applet
+      exec --no-startup-id volumeicon
+
 
       # Color palette used for the terminal ( ~/.Xresources file )
       # Colors are gathered based on the documentation:
