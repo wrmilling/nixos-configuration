@@ -13,11 +13,6 @@
 
     desktopManager = {
       xterm.enable = false;
-      # xfce = {
-      #   enable = true;
-      #   noDesktop = true;
-      #   enableXfwm = false;
-      # };
     };
 
     windowManager.i3 = {
@@ -30,6 +25,7 @@
         lightlocker
         imagemagick
         i3status-rust
+        i3lock`
         feh
         brightnessctl
         playerctl

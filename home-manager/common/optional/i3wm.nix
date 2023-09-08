@@ -47,29 +47,26 @@
       # launch categorized menu
       bindsym $mod+z exec --no-startup-id morc_menu
 
-      #  exec --no-startup-id start-pulseaudio-x11
+      # exec --no-startup-id start-pulseaudio-x11
       exec --no-startup-id volumeicon
       bindsym $mod+Ctrl+m exec pavucontrol
-
-      # Start wallpaper
-      # exec --no-startup-id feh --bg-scale ~/.local/share/wallpapers/starlink-sky.jpg
 
       ################################################################################################
 
       # Screen brightness controls
-      #bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl s 10%-
-      #bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl s +10%
+      bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl s 5%-
+      bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl s +5%
 
       # Audio Controls
-      #bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
-      #bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
-      #bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
+      bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
+      bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
+      bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
 
       # Media player controls
-      #bindsym XF86AudioPlay exec playerctl play-pause
-      #bindsym XF86AudioPause exec playerctl play-pause
-      #bindsym XF86AudioNext exec playerctl next
-      #bindsym XF86AudioPrev exec playerctl previous
+      bindsym XF86AudioPlay exec playerctl play-pause
+      bindsym XF86AudioPause exec playerctl play-pause
+      bindsym XF86AudioNext exec playerctl next
+      bindsym XF86AudioPrev exec playerctl previous
 
       bindsym Print exec --no-startup-id i3-scrot
       bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
@@ -278,20 +275,7 @@
       bindsym $mod+9 exec --no-startup-id $HOME/.scripts/linux-bin/bsodlock
 
       # Autostart applications
-      # exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-      # exec --no-startup-id nitrogen --restore; sleep 1; picom -b
-      # exec --no-startup-id manjaro-hello
-      # exec --no-startup-id nm-applet
-      # exec --no-startup-id xfce4-power-manager
-      # exec --no-startup-id pamac-tray
-      # exec --no-startup-id clipit
-      # exec --no-startup-id blueman-applet
-      # exec_always --no-startup-id sbxkb
-      # exec --no-startup-id start_conky_maia
-      # exec --no-startup-id start_conky_green
       exec --no-startup-id xautolock -time 15 -locker $HOME/.scripts/linux-bin/bsodlock
-      # exec_always --no-startup-id ff-theme-util
-      # exec_always --no-startup-id fix_xcursor
       # set touchpad acceleration (PinebookPro)
       # exec --no-startup-id xinput -set-prop 'Pine64 Pinebook Pro Touchpad' 'libinput Natural Scrolling Enabled' 1
 
@@ -328,46 +312,38 @@
 
       # Start i3bar to display a workspace bar (plus the system information i3status if available)
       bar {
-              i3bar_command i3bar
-              status_command i3status-rs
-              position top
+        i3bar_command i3bar
+        status_command i3status-rs
+        position top
         tray_output eDP-1
-      ## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
-      #       tray_output primary
-      #       tray_output eDP1
+        bindsym button4 nop
+        bindsym button5 nop
+        strip_workspace_numbers yes
+        colors {
+          background #222D31
+          statusline #F9FAF9
+          separator  #454947
 
-              bindsym button4 nop
-              bindsym button5 nop
-      #   font xft:URWGothic-Book 11
-              strip_workspace_numbers yes
-
-          colors {
-              background #222D31
-              statusline #F9FAF9
-              separator  #454947
-
-      #                      border  backgr. text
-              focused_workspace  #F9FAF9 #16a085 #292F34
-              active_workspace   #595B5B #353836 #FDF6E3
-              inactive_workspace #595B5B #222D31 #EEE8D5
-              binding_mode       #16a085 #2C2C2C #F9FAF9
-              urgent_workspace   #16a085 #FDF6E3 #E5201D
-          }
-          
+          #                  border  backgr. text
+          focused_workspace  #F9FAF9 #16a085 #292F34
+          active_workspace   #595B5B #353836 #FDF6E3
+          inactive_workspace #595B5B #222D31 #EEE8D5
+          binding_mode       #16a085 #2C2C2C #F9FAF9
+          urgent_workspace   #16a085 #FDF6E3 #E5201D
+        }    
       }
 
       # hide/unhide i3status bar
       bindsym $mod+m bar mode toggle
 
       # Theme colors
-      # class                   border  backgr. text    indic.   child_border
-        client.focused          #556064 #556064 #80FFF9 #FDF6E3
-        client.focused_inactive #2F3D44 #2F3D44 #1ABC9C #454948
-        client.unfocused        #2F3D44 #2F3D44 #1ABC9C #454948
-        client.urgent           #CB4B16 #FDF6E3 #1ABC9C #268BD2
-        client.placeholder      #000000 #0c0c0c #ffffff #000000
-
-        client.background       #2B2C2B
+      # class                 border  backgr. text    indic.   child_border
+      client.focused          #556064 #556064 #80FFF9 #FDF6E3
+      client.focused_inactive #2F3D44 #2F3D44 #1ABC9C #454948
+      client.unfocused        #2F3D44 #2F3D44 #1ABC9C #454948
+      client.urgent           #CB4B16 #FDF6E3 #1ABC9C #268BD2
+      client.placeholder      #000000 #0c0c0c #ffffff #000000
+      client.background       #2B2C2B
 
       #############################
       ### settings for i3-gaps: ###
@@ -425,7 +401,6 @@
               bindsym Return mode "default"
               bindsym Escape mode "default"
       }
-
     '';
   };
 }
