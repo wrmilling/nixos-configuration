@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 {
-  home.packages = with pkgs; [  ];
+  home.packages = with pkgs; [ xautolock ];
 
   services.picom = {
     enable = true;
@@ -284,7 +284,7 @@
       bindsym $mod+9 exec --no-startup-id $HOME/.scripts/linux-bin/bsodlock
 
       # Autostart applications
-      exec --no-startup-id xautolock -time 15 -locker $HOME/.scripts/linux-bin/bsodlock
+      exec --no-startup-id xautolock -time 15 -locker bsodlock
       exec --no-startup-id systemctl --user set-environment PAN_MESA_DEBUG=gl3
       exec --no-startup-id blueman-applet
       exec --no-startup-id volumeicon
