@@ -24,7 +24,7 @@ let
             systemctl poweroff
             ;;
         *)
-            echo "Usage: $0 {lock|logout|suspend|hibernate|reboot|shutdown}
+            echo "Usage: $0 {lock|logout|suspend|hibernate|reboot|shutdown}"
             exit 2
     esac
 
