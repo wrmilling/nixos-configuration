@@ -4,18 +4,22 @@ let
   i3exit = pkgs.writeShellScriptBin "i3exit" ''
     set -eu
 
+    lock() {
+        bsodlock
+    }
+
     case "$1" in
         lock)
-            bsodlock
+            lock
             ;;
         logout)
             i3-msg exit
             ;;
         suspend)
-            bsodlock && systemctl suspend
+            lock && systemctl suspend
             ;;
         hibernate)
-            bsodlock && systemctl hibernate
+            lock && systemctl hibernate
             ;;
         reboot)
             systemctl reboot
