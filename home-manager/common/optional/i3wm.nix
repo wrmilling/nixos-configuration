@@ -281,10 +281,10 @@
       }
 
       # Lock screen
-      bindsym $mod+9 exec --no-startup-id $HOME/.scripts/linux-bin/bsodlock
+      bindsym $mod+9 exec --no-startup-id i3exit lock
 
       # Autostart applications
-      exec --no-startup-id xautolock -time 15 -locker bsodlock
+      exec --no-startup-id xautolock -time 15 -locker "i3exit lock"
       exec --no-startup-id systemctl --user set-environment PAN_MESA_DEBUG=gl3
       exec --no-startup-id blueman-applet
       exec --no-startup-id volumeicon
