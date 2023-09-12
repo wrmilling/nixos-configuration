@@ -48,16 +48,16 @@ in
         symbol = " ";
         style = "bold red";
       };
-      custom = {
-        nix_inspect = {
-          disabled = false;
-          when = "test -z $IN_NIX_SHELL";
-          command = "${nix-inspect}/bin/nix-inspect kitty imagemagick ncurses user-environment";
-          format = "[($output <- )$symbol]($style) ";
-          symbol = " ";
-          style = "bold blue";
-        };
-      };
+      # custom = {
+      #   nix_inspect = {
+      #     disabled = false;
+      #     when = "test -z $IN_NIX_SHELL";
+      #     command = "${nix-inspect}/bin/nix-inspect kitty imagemagick ncurses user-environment";
+      #     format = "[($output <- )$symbol]($style) ";
+      #     symbol = " ";
+      #     style = "bold blue";
+      #   };
+      # };
 
       # Cloud
       gcloud = {
