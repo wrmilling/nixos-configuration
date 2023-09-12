@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  environment.systemPackages = with pkgs; [
+    pw-volume
+  ];
+
   sound.enable = true;
 
   services.pipewire = {

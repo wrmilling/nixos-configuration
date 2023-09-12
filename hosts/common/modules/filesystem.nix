@@ -5,5 +5,4 @@
     exfat
     nfs-utils
   ];
-
 }
