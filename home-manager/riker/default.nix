@@ -7,6 +7,7 @@
     ../common/graphical
     ../common/scripts
     ../common/optional/armcord.nix
+    ../common/optional/dunst.nix
     ../common/optional/gaming-arm.nix
     ../common/optional/keybase.nix
     ../common/optional/i3wm.nix
