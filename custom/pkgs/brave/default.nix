@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     in {
       x86_64-linux = fetchurl {
         url = "${base}_amd64.deb";
-        hash = "sha256-B1V4BsGWBOhWgW4loY12OLLiwlqkIO3y2P6/h0WF71Y=";
+        hash = "sha256-98zhLxlV/pe5fownqQ3k165YfcoLLxz2vBM/4FEq8ug=";
       };
       aarch64-linux = fetchurl {
         url = "${base}_arm64.deb";
