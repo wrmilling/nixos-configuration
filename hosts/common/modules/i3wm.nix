@@ -37,5 +37,6 @@
     HandlePowerKey=ignore
   '';
 
+  programs.dconf.enable = true;
   services.autorandr.enable = true;
 }

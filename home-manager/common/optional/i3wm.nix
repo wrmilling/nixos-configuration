@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 {
-  home.packages = with pkgs; [ xautolock dconf ];
+  home.packages = with pkgs; [ xautolock ];
 
   services.picom = {
     enable = true;
