@@ -39,7 +39,7 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [
+    extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
     ];
   };
