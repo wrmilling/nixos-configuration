@@ -37,6 +37,13 @@
     HandlePowerKey=ignore
   '';
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      xdg-desktop-portal-gtk
+    ]
+  };
+
   programs.dconf.enable = true;
   services.autorandr.enable = true;
 }
