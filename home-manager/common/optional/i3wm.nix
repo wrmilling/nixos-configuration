@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 {
-  home.packages = with pkgs; [ xautolock ];
+  home.packages = with pkgs; [ xautolock dconf ];
 
   services.picom = {
     enable = true;
@@ -10,6 +10,18 @@
     opacityRules = [
       "100:name *= 'i3lock'"
     ];
+  };
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome.gnome-themes-extra;
+    };
+    iconTheme = {
+      name = "Adwaita";
+      package = pkgs.gnome.adwaita-icon-theme;
+    };
   };
 
   home.file."i3wm-config" = {
