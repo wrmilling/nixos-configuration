@@ -41,7 +41,7 @@
     enable = true;
     extraPortals = [
       xdg-desktop-portal-gtk
-    ]
+    ];
   };
 
   programs.dconf.enable = true;
