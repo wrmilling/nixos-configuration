@@ -16,6 +16,9 @@
       })
       slack
     ])
+    (lib.mkIf stdenv.isAarch64 [
+      vivaldi
+    ])
     ([
       (element-desktop.override {electron = electron_24;}) #Wayland fix
       cura
