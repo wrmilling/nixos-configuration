@@ -56,17 +56,6 @@ $ sudo nixos-install
 $ sudo reboot
 ```
 
-### First Run Prep
-
-These are assumed steps due to the fact that I have only done this after the fact:
-
-```
-$ ssh-keygen -t ed25519 -N '' -C "ED25519 Host Key" -f ssh_host_ed25519_key
-$ nix-shell -p ssh-to-age --run 'cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age'
-```
-
-Take the output of ssh-to-age and re-encrypt the [machine specific secrets](/secrets/donnager.yaml) with the new key. Check [sops-nix](https://github.com/Mic92/sops-nix)
-
 ### First Run
 
 Here is where I will normally try and setup all the hardware and import the profiles/modules I want from this repo. Since I use the minimal install, I will kick things off like so:

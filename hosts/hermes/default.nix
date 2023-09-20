@@ -4,15 +4,14 @@
   imports =
     [
       inputs.home-manager.nixosModules.home-manager
-      inputs.sops-nix.nixosModules.sops
       ./hardware.nix
       ../common/server.nix
-      ../common/addons/nixbuild-host.nix
-      ../common/addons/webhost.nix
+      ../common/optional/nixbuild-host.nix
+      ../common/optional/webhost.nix
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -27,9 +26,6 @@
     enableACME = true;
     root = "/var/www/${secrets.hosts.hermes.domain}";
   };
-
-  sops.defaultSopsFile = ../../secrets/hermes.yaml;
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };

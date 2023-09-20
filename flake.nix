@@ -16,10 +16,6 @@
     # Darwin
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
-
-    # sops-nix
-    sops-nix.url = "github:wrmilling/sops-nix";
-    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -27,7 +23,6 @@
     nixpkgs,
     home-manager,
     darwin,
-    sops-nix,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -39,7 +34,7 @@
       "x86_64-darwin"
     ];
 
-    secrets = import ./secrets/obscurity.nix;
+    secrets = import ./secrets/secrets.nix;
 
     mkNixos = modules: nixpkgs.lib.nixosSystem {
       inherit modules;

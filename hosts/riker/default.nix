@@ -1,20 +1,20 @@
 { config, inputs, outputs, secrets, lib, pkgs, ... }:
 
-{  
+{
   imports =
-    [ 
+    [
       inputs.hardware.nixosModules.pine64-pinebook-pro
       inputs.home-manager.nixosModules.home-manager
       ./hardware.nix
       ../common/laptop.nix
-      ../common/addons/development.nix
-      ../common/addons/k8s-utils.nix
-      # ../common/addons/nixbuild-client.nix
-      ../common/addons/tailscale.nix
-      ../common/addons/virtualization.nix
-      ../common/addons/zram.nix
+      ../common/optional/development.nix
+      ../common/optional/k8s-utils.nix
+      # ../common/optional/nixbuild-client.nix
+      ../common/optional/tailscale.nix
+      ../common/optional/virtualization.nix
+      ../common/optional/zram.nix
     ];
-  
+
   networking = {
     hostName = "riker";
     domain = secrets.hosts.riker.domain;
@@ -40,7 +40,7 @@
       mode = "0440";
     };
   };
-	
+
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };
     users = {
@@ -53,5 +53,5 @@
     enable = true;
   };
 
-  system.stateVersion = "23.05"; 
+  system.stateVersion = "23.05";
 }

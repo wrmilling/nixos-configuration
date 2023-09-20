@@ -5,16 +5,15 @@
     [
       inputs.hardware.nixosModules.lenovo-legion-y530-15ich
       inputs.home-manager.nixosModules.home-manager
-      inputs.sops-nix.nixosModules.sops
       ./hardware.nix
       ../common/laptop.nix
-      ../common/addons/development.nix
-      ../common/addons/gaming.nix
-      ../common/addons/k8s-utils.nix
-      ../common/addons/printing.nix
-      ../common/addons/tailscale.nix
-      ../common/addons/virtualization.nix
-      ../common/addons/zram.nix
+      ../common/optional/development.nix
+      ../common/optional/gaming.nix
+      ../common/optional/k8s-utils.nix
+      ../common/optional/printing.nix
+      ../common/optional/tailscale.nix
+      ../common/optional/virtualization.nix
+      ../common/optional/zram.nix
     ];
 
   nixpkgs = {
@@ -39,9 +38,6 @@
     hostName = "donnager";
     domain = secrets.hosts.donnager.domain;
   };
-
-  sops.defaultSopsFile = ../../secrets/donnager.yaml;
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };

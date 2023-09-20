@@ -1,19 +1,19 @@
 { config, inputs, outputs, secrets, lib, pkgs, ... }:
 
-{  
+{
   imports =
-    [ 
+    [
       inputs.hardware.nixosModules.pine64-pinebook-pro
       inputs.home-manager.nixosModules.home-manager
       ./hardware.nix
       ../common/laptop.nix
-      ../common/addons/development.nix
-      ../common/addons/k8s-utils.nix
-      ../common/addons/tailscale.nix
-      ../common/addons/virtualization.nix
-      ../common/addons/zram.nix
+      ../common/optional/development.nix
+      ../common/optional/k8s-utils.nix
+      ../common/optional/tailscale.nix
+      ../common/optional/virtualization.nix
+      ../common/optional/zram.nix
     ];
-  
+
   networking = {
     hostName = "serenity";
     domain = secrets.hosts.serenity.domain;
@@ -31,7 +31,7 @@
     };
   };
 
-	
+
   home-manager = {
     extraSpecialArgs = { inherit inputs outputs; };
     users = {
@@ -39,5 +39,5 @@
     };
   };
 
-  system.stateVersion = "23.05"; 
+  system.stateVersion = "23.05";
 }

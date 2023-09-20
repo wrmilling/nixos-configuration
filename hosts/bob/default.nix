@@ -4,10 +4,9 @@
   imports =
     [
       inputs.home-manager.nixosModules.home-manager
-      inputs.sops-nix.nixosModules.sops
       ./openvz.nix
       ../common/server.nix
-      ../common/addons/webhost.nix
+      ../common/optional/webhost.nix
     ];
 
   nixpkgs = {
@@ -61,10 +60,6 @@
       ConfigureWithoutCarrier = "yes";
     };
   };
-
-  sops.defaultSopsFile = ../../secrets/bob.yaml;
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  sops.useTmpfs = true;
 
   # While I Debug
   users.users.root.openssh.authorizedKeys.keys = [
