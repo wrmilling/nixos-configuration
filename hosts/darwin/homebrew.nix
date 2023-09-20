@@ -26,6 +26,7 @@
       "visual-studio-code"
       "font-source-code-pro"
       "datagrip"
+      "miro"
     ];
     masApps = {
       Tailscale = 1475387142;

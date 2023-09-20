@@ -14,5 +14,6 @@
   home.packages = with pkgs; [
     cloudfoundry-cli
     google-cloud-sdk
+    present
   ];
 }
