@@ -3,12 +3,11 @@ secrets:
 - 77fed647-474b-42fb-8693-a61317505286
 sources:
 - https://git.sr.ht/~wrmilling/nixos-configuration
+environment:
+  REPO: nixos-configuration
+  BRANCH: main
 tasks:
 - push: |
-    # Set Repo Name
-    REPO=nixos-configuration
-    BRANCH=main
-
     # Ensure we are on the main branch, exit build if not
     cd $REPO
     git diff -s --exit-code origin/${BRANCH} || complete-build
@@ -27,4 +26,3 @@ tasks:
     # Push copy of code to GitLab
     git remote add gitlab git@gitlab.com:WRMilling/${REPO}.git
     git push gitlab $BRANCH
-
