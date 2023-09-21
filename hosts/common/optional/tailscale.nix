@@ -1,10 +1,15 @@
 { config, lib, pkgs, ... }:
 
+let
+  tailscale-package = pkgs.unstable.tailscale;
+in
 {
   environment.systemPackages = with pkgs; [
-    unstable.tailscale
     barrier
   ];
 
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    package = tailscale-package;
+  };
 }
