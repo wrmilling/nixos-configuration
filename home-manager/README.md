@@ -1,10 +1,13 @@
 # Home Manager
 
-Home of my Home Manager configurations. Still working on getting everything imported and working, then I will focus more on re-use of code to prevent duplication. 
+Home of my Home Manager configurations. Still working on getting everything imported and working, then I will focus more on re-use of code to prevent duplication.
 
-The current layout just assumes each machine will have nuances in their named directory with shared functionality being in the common directory. 
+The current layout just assumes each machine will have nuances in their named directory with shared functionality being in the common directory.
 
 ##  Configurations
 
-- [donnager](donnager)
-- [serenity](serenity)
+- [darwin](darwin) (MacOS Specific Configuration)
+- [donnager](donnager) (Donnager Specific Cofiguration)
+- [riker](riker) (Riker Specific Configuration)
+- [serenity](serenity) (Serenity Specific Configuration)
+- [server](server) (Generic Server Configuration)

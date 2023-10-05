@@ -1,7 +1,7 @@
 # Custom Packages
 
-Definition of custom packages which are generally not yet available in upstream nixpkgs. 
+Definition of custom packages which are generally not yet available in upstream nixpkgs.
 
 ## Current Packages
 
-N/A
+- [brave](pkgs/brave) ARM64 enabled version of the official brave package
