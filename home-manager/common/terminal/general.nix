@@ -8,5 +8,6 @@
     viddy
     silver-searcher
     magic-wormhole
+    hugo
   ];
 }
