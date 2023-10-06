@@ -2,8 +2,8 @@
 
 {
   environment.systemPackages = with pkgs; [
-    kubectl
-    fluxcd
+    unstable.kubectl
+    unstable.fluxcd
     unstable.kubernetes-helm-wrapped
     stern
     sops
