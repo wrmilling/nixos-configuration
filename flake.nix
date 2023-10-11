@@ -72,13 +72,18 @@
     # Available through 'nixos-rebuild switch --flake .#your-hostname'
     nixosConfigurations = {
       # Desktop/Laptop
-      donnager  = mkNixos [ ./hosts/donnager ];
-      riker     = mkNixos [ ./hosts/riker ];
-      serenity  = mkNixos [ ./hosts/serenity ];
+      donnager      = mkNixos [ ./hosts/donnager ];
+      riker         = mkNixos [ ./hosts/riker ];
+      serenity      = mkNixos [ ./hosts/serenity ];
 
       # Servers
-      bob       = mkNixos [ ./hosts/bob ];
-      hermes    = mkNixos [ ./hosts/hermes ];
+      bob           = mkNixos [ ./hosts/bob ];
+      hermes        = mkNixos [ ./hosts/hermes ];
+
+      # k3s Hosts
+      nk3s-amd64-a  = mkNixos [ ./hosts/nk3s-amd64-a ];
+      nk3s-amd64-b  = mkNixos [ ./hosts/nk3s-amd64-b ];
+      nk3s-amd64-c  = mkNixos [ ./hosts/nk3s-amd64-c ];
     };
 
     # nix-darwin configuration entrypoint
