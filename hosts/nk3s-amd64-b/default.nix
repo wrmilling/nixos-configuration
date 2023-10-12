@@ -15,9 +15,18 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking = {
-    hostName = "nk3s-amd64-b"; # Define your hostname.
+    hostName = "nk3s-amd64-b";
     domain = secrets.hosts.nk3s-amd64-b.domain;
-    networkmanager.enable = true;
+    useDHCP = lib.mkDefault true;
+    interfaces = {
+      enp2s0.ipv4.addresses = [
+        {
+          address = secrets.hosts.nk3s-amd64-b.address;
+          prefixLength = 24;
+        }
+      ];
+      enp3s0.useDHCP = lib.mkDefault true;
+    };
  };
 
   home-manager = {

@@ -47,8 +47,8 @@
       }
       {
         addressConfig = {
-          Address = "${secrets.hosts.bob.ipAddress}/32";
-          Broadcast = "${secrets.hosts.bob.ipAddress}";
+          Address = "${secrets.hosts.bob.address}/32";
+          Broadcast = "${secrets.hosts.bob.address}";
           Scope = "global";
         };
       }
