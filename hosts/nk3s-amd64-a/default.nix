@@ -18,6 +18,7 @@
   networking = {
     hostName = "nk3s-amd64-a";
     domain = secrets.hosts.nk3s-amd64-a.domain;
+    firewall.enable = false;
     useDHCP = lib.mkDefault true;
     interfaces = {
       enp2s0.ipv4.addresses = [

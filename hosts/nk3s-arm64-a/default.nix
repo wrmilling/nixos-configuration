@@ -3,10 +3,12 @@
 {
   imports =
     [
+      inputs.hardware.nixosModules.raspberry-pi-4
       inputs.home-manager.nixosModules.home-manager
       ./hardware.nix
+      ../common/raspberry-pi-4.nix
       ../common/server.nix
-      ../common/optional/k3s-agent.nix
+      # ../common/optional/k3s-agent.nix
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -16,21 +18,20 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking = {
-    hostName = "nk3s-amd64-b";
-    domain = secrets.hosts.nk3s-amd64-b.domain;
-    firewall.enable = false;
+    hostName = "nk3s-arm64-a";
+    domain = secrets.hosts.nk3s-arm64-a.domain;
     useDHCP = lib.mkDefault true;
     interfaces = {
       enp2s0.ipv4.addresses = [
         {
-          address = secrets.hosts.nk3s-amd64-b.address;
+          address = secrets.hosts.nk3s-arm64-a.address;
           prefixLength = 24;
         }
       ];
       enp3s0.useDHCP = lib.mkDefault true;
     };
-    defaultGateway = secrets.hosts.nk3s-amd64-b.defaultGateway;
-    nameservers = secrets.hosts.nk3s-amd64-b.nameservers;
+    defaultGateway = secrets.hosts.nk3s-arm64-a.defaultGateway;
+    nameservers = secrets.hosts.nk3s-arm64-a.nameservers;
  };
 
   home-manager = {
