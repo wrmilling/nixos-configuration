@@ -9,16 +9,6 @@
       ../common/optional/webhost.nix
     ];
 
-  nixpkgs = {
-    overlays = [
-      outputs.overlays.additions
-      outputs.overlays.unstable-packages
-    ];
-    config = {
-      allowUnfree = true;
-    };
-  };
-
   networking = {
     hostName = "bob";
     domain = secrets.hosts.bob.domain;

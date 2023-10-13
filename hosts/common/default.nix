@@ -7,6 +7,18 @@
       ./modules/terminal.nix
     ];
 
+
+  # NixPackage Setup
+  nixpkgs = {
+    overlays = [
+      outputs.overlays.additions
+      outputs.overlays.unstable-packages
+    ];
+    config = {
+      allowUnfree = true;
+    };
+  };
+
   # Basic environment.
   environment.systemPackages = with pkgs; [
 
@@ -24,8 +36,6 @@
 
   security.sudo.enable = true;
   security.polkit.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
 
   nix = {
     extraOptions = ''
