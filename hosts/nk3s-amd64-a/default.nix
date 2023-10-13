@@ -6,6 +6,7 @@
       inputs.home-manager.nixosModules.home-manager
       ./hardware.nix
       ../common/server.nix
+      ../common/optional/k3s-agent.nix
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

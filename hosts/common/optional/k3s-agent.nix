@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  secrets = import ../../../secrets/secrets.nix
+  secrets = import ../../../secrets/secrets.nix;
   k3s-package = pkgs.unstable.k3s;
 in
 {
