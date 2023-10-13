@@ -4,8 +4,8 @@ let
   k3s-package = pkgs.unstable.k3s;
 in
 {
-  # This is required so that pod can reach the API server (running on port 6443 by default)
-  networking.firewall.allowedTCPPorts = [ 6443 ];
+  # This is required so that pod can reach the API server (running on port 6443 by default) and Metrics (10250)
+  networking.firewall.allowedTCPPorts = [ 6443 10250 ];
   services.k3s = {
     enable = true;
     package = k3s-package;
