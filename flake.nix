@@ -81,6 +81,7 @@
       hermes        = mkNixos [ ./hosts/hermes ];
 
       # k3s Hosts
+      nk3s-amd64-0  = mkNixos [ ./hosts/nk3s-amd64-0 ];
       nk3s-amd64-a  = mkNixos [ ./hosts/nk3s-amd64-a ];
       nk3s-amd64-b  = mkNixos [ ./hosts/nk3s-amd64-b ];
       nk3s-amd64-c  = mkNixos [ ./hosts/nk3s-amd64-c ];
