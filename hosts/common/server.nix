@@ -5,7 +5,7 @@
 
   imports = [
     ./default.nix
-    ./modules/filesystems.nix
+    ./modules/filesystem.nix
     ./modules/sshd.nix
   ];
 }
