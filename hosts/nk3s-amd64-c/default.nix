@@ -27,6 +27,8 @@
       ];
       enp3s0.useDHCP = lib.mkDefault true;
     };
+    defaultGateway = secrets.hosts.nk3s-amd64-0.defaultGateway;
+    nameservers = secrets.hosts.nk3s-amd64-0.nameservers;
  };
 
   home-manager = {
