@@ -15,6 +15,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  services.qemuGuest.enable = true;
+
   networking = {
     hostName = "nk3s-amd64-0";
     domain = secrets.hosts.nk3s-amd64-0.domain;
