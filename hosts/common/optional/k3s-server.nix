@@ -6,7 +6,14 @@ let
   k3s-package = pkgs.unstable.k3s;
 in
 {
-  # This is required so that pod can reach the API server (running on port 6443 by default) and Metrics (10250)
+  # Port Requirements:
+  # 443 - Nginx Ingress (TCP)
+  # 5353 - Home Assistant Multicast (TCP+UDP)
+  # 6443 - KubeApi (TCP)
+  # 7472 - MetalLB (TCP+UDP)
+  # 7946 - MetalLB (TCP+UDP)
+  # 8123 - Home Assistant (TCP+UDP)
+  # 10250 - Metrics Server (TCP)
   networking.firewall.allowedTCPPorts = [ 443 5353 6443 7472 7946 8123 10250 ];
   networking.firewall.allowedUDPPorts = [ 5353 7472 7946 8123 ];
   services.k3s = {
