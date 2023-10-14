@@ -19,8 +19,9 @@ in
   # 9100 - Node Exporter Metrics (TCP)
   # 9617 - PiHole Metrics Exporter
   # 10250 - Metrics Server (TCP)
+  # 10254 - MetalLB Metrics (TCP)
   # 12321 - HASS VSCode (TCP)
-  networking.firewall.allowedTCPPorts = [ 53 443 1883 5353 6443 7472 7946 8083 8084 8123 8883 9100 9617 10250 12321 ];
+  networking.firewall.allowedTCPPorts = [ 53 443 1883 5353 6443 7472 7946 8083 8084 8123 8883 9100 9617 10250 10254 12321 ];
   networking.firewall.allowedUDPPorts = [ 53 5353 7472 7946 8123 ];
   services.k3s = {
     enable = true;
