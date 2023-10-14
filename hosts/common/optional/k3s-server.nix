@@ -18,9 +18,10 @@ in
   # 8084 - EMQX WSS (TCP)
   # 8123 - Home Assistant (TCP+UDP)
   # 8883 - EMQX SSL/TLS (TCP)
+  # 9100 - Node Exporter Metrics (TCP)
   # 9617 - PiHole Metrics Exporter
   # 10250 - Metrics Server (TCP)
-  networking.firewall.allowedTCPPorts = [ 53 443 1883 5353 6443 7472 7946 8083 8084 8123 8883 9617 10250 ];
+  networking.firewall.allowedTCPPorts = [ 53 443 1883 5353 6443 7472 7946 8083 8084 8123 8883 9100 9617 10250 ];
   networking.firewall.allowedUDPPorts = [ 53 5353 7472 7946 8123 ];
   services.k3s = {
     enable = true;
