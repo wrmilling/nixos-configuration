@@ -5,7 +5,8 @@ let
 in
 {
   # This is required so that pod can reach the API server (running on port 6443 by default) and Metrics (10250)
-  networking.firewall.allowedTCPPorts = [ 443 6443 10250 ];
+  networking.firewall.allowedTCPPorts = [ 443 6443 7472 7946 10250 ];
+  networking.firewall.allowedUDPPorts = [ 7472 7946 ];
   services.k3s = {
     enable = true;
     package = k3s-package;
