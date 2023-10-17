@@ -10,7 +10,7 @@
     7472 # MetalLB (TCP+UDP)
     7473 # MetalLB FRR (TCP+UDP)
     7946 # MetalLB (TCP+UDP)
-    # 8080 # CSI RBD Plugin Metrics (TCP)
+    8080 # CSI RBD Plugin Metrics (TCP)
     # 8081 # CSI RBD Plugin Metrics (TCP)
     8083 # EMQX WS (TCP)
     8084 # EMQX WSS (TCP)
