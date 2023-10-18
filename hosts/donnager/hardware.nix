@@ -10,6 +10,8 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
+  hardware.opengl.driSupport32Bit = true;
+
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/b0fdc274-87f9-45e1-b670-ffa940554969";
       fsType = "ext4";
