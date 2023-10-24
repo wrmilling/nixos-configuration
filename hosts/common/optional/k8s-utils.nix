@@ -2,12 +2,20 @@
 
 {
   environment.systemPackages = with pkgs; [
-    unstable.kubectl
-    unstable.fluxcd
-    unstable.kubernetes-helm-wrapped
-    kubectx
-    stern
-    sops
-    k9s
+    unstable.fluxcd # flux CLI
+    go-task # task runner
+    k9s # kubernetes viewer tool
+    kail # kubernetes tail
+    ktop # kubernetes top
+    unstable.kubectl # kubernetes CLI
+    kubectl-doctor # kubernetes doctor
+    kubectl-example # output example kubernetes types
+    kubectl-view-allocations # view kubernetes allocations
+    kubectl-view-secret # view kubernetes secrets without piping and decoding
+    kubecolor # colorize kubectl output
+    unstable.kubernetes-helm # helm CLI
+    kustomize # kustomize CLI for sadists
+    kubectx # kubectx/kubens for switching namespaces/clusters
+    sops # Secrets!
   ];
 }
