@@ -5,6 +5,7 @@
     53 # PiHole (TCP+UDP)
     443 # Nginx Ingress (TCP)
     1883 # EMQX Listener (TCP)
+    2222 # Forgejo SSH (TCP)
     5353 # Home Assistant Multicast (TCP+UDP)
     6443 # KubeApi (TCP)
     7472 # MetalLB (TCP+UDP)
