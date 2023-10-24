@@ -24,5 +24,9 @@ tasks:
     git push codeberg $BRANCH
 
     # Push copy of code to GitLab
-    git remote add gitlab git@gitlab.com:WRMilling/${REPO}.git
+    git remote add gitlab git@gitlab.com:wrmilling/${REPO}.git
+    git push gitlab $BRANCH
+
+    # Push copy of code to Homelab
+    git remote add gitlab git@git.homelab.tokyo:wrmilling/${REPO}.git
     git push gitlab $BRANCH
