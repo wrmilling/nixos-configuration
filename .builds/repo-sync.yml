@@ -28,5 +28,5 @@ tasks:
     git push gitlab $BRANCH
 
     # Push copy of code to Homelab
-    git remote add gitlab git@git.homelab.tokyo:wrmilling/${REPO}.git
-    git push gitlab $BRANCH
+    git remote add homelab git@git.homelab.tokyo:wrmilling/${REPO}.git
+    git push homelab $BRANCH
