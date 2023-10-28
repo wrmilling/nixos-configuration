@@ -7,9 +7,9 @@
       inputs.home-manager.nixosModules.home-manager
       ./hardware.nix
       ../common/server.nix
-      # ../common/optional/k3s-agent.nix
+      ../common/optional/k3s-agent.nix
     ];
-    
+
   hardware.raspberry-pi."4".poe-hat.enable = true;
 
   networking = {
