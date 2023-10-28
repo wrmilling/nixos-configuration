@@ -12,6 +12,11 @@
 
   hardware.raspberry-pi."4".poe-hat.enable = true;
 
+  boot.kernelParams = [
+    "cgroup_memory=1"
+    "cgroup_enable=memory"
+  ];
+
   networking = {
     hostName = "nk3s-arm64-c";
     domain = secrets.hosts.nk3s-arm64-c.domain;
