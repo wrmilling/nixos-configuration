@@ -1,4 +1,4 @@
-# nk3s-arm64-a
+# nk3s-arm64-b
 
 Rough documentation on my install process for NixOS on a Raspberry Pi 4B 8GB with the PoE Hat.
 

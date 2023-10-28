@@ -85,6 +85,9 @@
       nk3s-amd64-a  = mkNixos [ ./hosts/nk3s-amd64-a ];
       nk3s-amd64-b  = mkNixos [ ./hosts/nk3s-amd64-b ];
       nk3s-amd64-c  = mkNixos [ ./hosts/nk3s-amd64-c ];
+      nk3s-arm64-a  = mkNixos [ ./hosts/nk3s-arm64-a ];
+      nk3s-arm64-b  = mkNixos [ ./hosts/nk3s-arm64-b ];
+      nk3s-arm64-c  = mkNixos [ ./hosts/nk3s-arm64-c ];
     };
 
     # nix-darwin configuration entrypoint
