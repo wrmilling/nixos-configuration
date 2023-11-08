@@ -6,7 +6,7 @@
 
   home.packages = with pkgs; lib.mkMerge [
     ( lib.mkIf stdenv.isx86_64 [
-      keybase-gui
+      #keybase-gui
     ])
     ([
       keybase
