@@ -8,6 +8,7 @@
       ./hardware.nix
       ../common/server.nix
       ../common/optional/k3s-agent-arm.nix
+      ../common/optional/reboot-required.nix
     ];
 
   hardware.raspberry-pi."4".poe-hat.enable = true;

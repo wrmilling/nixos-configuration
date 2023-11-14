@@ -7,6 +7,7 @@
       ./hardware.nix
       ../common/server.nix
       ../common/optional/k3s-server.nix
+      ../common/optional/reboot-required.nix
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
