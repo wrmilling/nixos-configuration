@@ -5,5 +5,6 @@
     source-code-pro
     font-awesome_4
     corefonts
+    monaspace
   ];
 }
