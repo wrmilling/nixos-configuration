@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }: 
+{ pkgs, lib, config, ... }:
 
 {
   programs.alacritty = {
@@ -6,19 +6,19 @@
     settings = {
       font = {
         normal = {
-          family = lib.mkDefault "SourceCodePro";
+          family = lib.mkDefault "Monaspace Neon";
           style = lib.mkDefault "Regular";
         };
         bold = {
-          family = lib.mkDefault "SourceCodePro";
+          family = lib.mkDefault "Monaspace Neon";
           style = lib.mkDefault "Bold";
         };
         italic = {
-          family = lib.mkDefault "SourceCodePro";
+          family = lib.mkDefault "Monaspace Neon";
           style = "Italic";
         };
         bold_italic = {
-          family = lib.mkDefault "SourceCodePro";
+          family = lib.mkDefault "Monaspace Neon";
           style = lib.mkDefault "Bold Italic";
         };
         size = lib.mkDefault 11;
