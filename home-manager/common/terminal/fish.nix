@@ -84,6 +84,7 @@ in
       hplp = "hut lists patchset list | grep proposed";
       hpa = "hut lists patchset apply";
       hpu = "hut lists patchset update";
+      hps = "hut lists patchset show";
       hpua = "hut lists patchset update --status APPLIED";
       hpus = "hut lists patchset update --status SUPERSEDED";
       hpur = "hut lists patchset update --status REJECTED";
