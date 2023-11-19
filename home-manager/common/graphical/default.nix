@@ -20,12 +20,12 @@
       vivaldi
     ])
     ([
-      (element-desktop.override {electron = electron_24;}) #Wayland fix
+      element-desktop
       cura
       flameshot
       gparted
       volumeicon
       brave-multiarch
-    ])  
+    ])
   ];
 }
