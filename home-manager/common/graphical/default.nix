@@ -10,14 +10,10 @@
 
   home.packages = with pkgs; lib.mkMerge [
     (lib.mkIf stdenv.isx86_64 [
-      (vivaldi.override {
-        proprietaryCodecs = true;
-        enableWidevine = false;
-      })
       slack
     ])
     (lib.mkIf stdenv.isAarch64 [
-      vivaldi
+
     ])
     ([
       element-desktop
@@ -25,7 +21,6 @@
       flameshot
       gparted
       volumeicon
-      brave-multiarch
     ])
   ];
 }
