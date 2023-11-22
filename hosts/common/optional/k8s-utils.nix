@@ -4,7 +4,7 @@
   environment.systemPackages = with pkgs; [
     unstable.fluxcd # flux CLI
     go-task # task runner
-    k9s # kubernetes viewer tool
+    unstable.k9s # kubernetes viewer tool
     kail # kubernetes tail
     ktop # kubernetes top
     unstable.kubectl # kubernetes CLI
