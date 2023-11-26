@@ -11,5 +11,7 @@
     ./tmux.nix
     ./vim.nix
   ];
-  home.packages = with pkgs; [  ];
+  home.packages = with pkgs; [
+    onedrive
+  ];
 }
