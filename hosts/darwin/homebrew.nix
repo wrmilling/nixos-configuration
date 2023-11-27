@@ -22,6 +22,7 @@
       "obs"
       "alacritty"
       "barrier"
+      "firefox"
       "vivaldi"
       "visual-studio-code"
       "font-source-code-pro"
