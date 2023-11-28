@@ -12,6 +12,6 @@
     ./vim.nix
   ];
   home.packages = with pkgs; [
-    onedrive
+    unstable.onedrive
   ];
 }
