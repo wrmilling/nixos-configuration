@@ -9,7 +9,7 @@
     description = "NixOS Builder";
     extraGroups = [];
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIrbzUeLjwiQIRcvlojBpdza702AIl1ne5upGVzKBE1n Hermes.BuildHost"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE/hRd7PJ/Qby/nB34LNkOPkwyTsc2eJAyaL0ANH1V+h Hermes.BuildHost"
     ];
   };
 }
