@@ -8,6 +8,7 @@
       ../common/server.nix
       ../common/optional/k3s-server.nix
       ../common/optional/reboot-required.nix
+      ../common/optional/ssh-sudo.nix
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

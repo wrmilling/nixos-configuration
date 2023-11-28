@@ -35,7 +35,6 @@
   time.timeZone = "America/Chicago";
 
   security.sudo.enable = true;
-  security.pam.enableSSHAgentAuth = true;
   security.polkit.enable = true;
 
   nix = {
