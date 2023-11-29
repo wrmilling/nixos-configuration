@@ -1,7 +1,7 @@
 { pkgs, config, inputs, outputs, lib, secrets, ... }:
 
 {
-  imports = 
+  imports =
   [
     ../common/modules/terminal.nix
     ./homebrew.nix
@@ -44,11 +44,11 @@
     variables.EDITOR = "${lib.getBin pkgs.vim}/bin/vim";
   };
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     source-code-pro
     font-awesome_4
   ];
-  
+
   programs = {
     bash.enable = true;
     fish.enable = true;

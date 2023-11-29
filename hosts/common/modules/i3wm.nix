@@ -1,8 +1,8 @@
-{ config, pkgs, lib, callPackage, ... }: 
+{ config, pkgs, lib, callPackage, ... }:
 
 {
   services.xserver = {
-    autorun = true; 
+    autorun = true;
     layout = "us";
     libinput = {
       enable = true;
@@ -29,7 +29,7 @@
         playerctl
         pavucontrol
       ];
-    }; 
+    };
   };
 
   services.logind.extraConfig = ''
@@ -39,6 +39,7 @@
 
   xdg.portal = {
     enable = true;
+    config.common.default = "*";
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
     ];
