@@ -3,7 +3,7 @@ let
   secrets = import ../../../secrets/secrets.nix;
   hostname = config.networking.hostName;
   domain = config.networking.domain;
-  k3s-package = pkgs.unstable.k3s;
+  k3s-package = pkgs.unstable.k3s_1_28;
 in
 {
   imports =
