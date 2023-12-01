@@ -5,5 +5,6 @@
     vscode
     dtc
     nixpkgs-review
+    go
   ];
 }
