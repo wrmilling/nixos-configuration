@@ -8,7 +8,6 @@
       ./hardware.nix
       ../common/laptop.nix
       ../common/optional/development.nix
-      ../common/optional/ffmpeg.nix
       ../common/optional/k8s-utils.nix
       # ../common/optional/nixbuild-client.nix
       ../common/optional/tailscale.nix
