@@ -48,10 +48,5 @@
     };
   };
 
-  # Testing out power managemnet for idle watts
-  services.tlp = {
-    enable = true;
-  };
-
   system.stateVersion = "23.11";
 }
