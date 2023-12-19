@@ -41,6 +41,7 @@
         pkgs.home-manager
         ];
     shells = [ pkgs.bashInteractive pkgs.fish ];
+    shellAliases = { git = "/usr/bin/git"; };
     variables.EDITOR = "${lib.getBin pkgs.vim}/bin/vim";
   };
 
