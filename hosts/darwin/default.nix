@@ -45,9 +45,10 @@
     variables.EDITOR = "${lib.getBin pkgs.vim}/bin/vim";
   };
 
-  fonts.packages = with pkgs; [
+  fonts.fonts = with pkgs; [
     source-code-pro
     font-awesome_4
+    unstable.monaspace
   ];
 
   programs = {
