@@ -73,6 +73,7 @@
     nixosConfigurations = {
       # Desktop/Laptop
       donnager      = mkNixos [ ./hosts/donnager ];
+      enterprise    = mkNixos [ ./hosts/enterprise ];
       riker         = mkNixos [ ./hosts/riker ];
       serenity      = mkNixos [ ./hosts/serenity ];
 

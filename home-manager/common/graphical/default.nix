@@ -20,7 +20,7 @@
       cura
       flameshot
       gparted
-      volumeicon
+      # volumeicon
     ])
   ];
 }
