@@ -3,11 +3,12 @@
 {
   services.xserver = {
     enable = true;
-    sddm = {
+    desktopManager.plasma5 = {
       enable = true;
+      runUsingSystemd = true;
     };
-    plasma5 = {
-      enable = true;
+    displayManager.sddm = {
+     enable = true;
     };
-  }
+  };
 }
