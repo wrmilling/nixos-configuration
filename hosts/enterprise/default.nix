@@ -6,6 +6,7 @@
       inputs.home-manager.nixosModules.home-manager
       ./hardware.nix
       ../common/desktop.nix
+      ../common/optional/appimage.nix
       ../common/optional/development.nix
       ../common/optional/gaming.nix
       ../common/optional/k8s-utils.nix
