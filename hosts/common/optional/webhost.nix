@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   hostname = config.networking.hostName;
   domain = config.networking.domain;
 in {
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [80 443];
   services.nginx.enable = true;
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "Winston@${domain}";

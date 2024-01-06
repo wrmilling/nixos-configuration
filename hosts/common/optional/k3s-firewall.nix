@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   networking.firewall.allowedTCPPorts = [
     53 # PiHole (TCP+UDP)
     443 # Nginx Ingress (TCP)

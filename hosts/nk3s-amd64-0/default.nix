@@ -1,15 +1,20 @@
-{ config, inputs, outputs, pkgs, lib, secrets, ... }:
-
 {
-  imports =
-    [
-      inputs.home-manager.nixosModules.home-manager
-      ./hardware.nix
-      ../common/server.nix
-      ../common/optional/k3s-server.nix
-      ../common/optional/reboot-required.nix
-      ../common/optional/ssh-sudo.nix
-    ];
+  config,
+  inputs,
+  outputs,
+  pkgs,
+  lib,
+  secrets,
+  ...
+}: {
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+    ./hardware.nix
+    ../common/server.nix
+    ../common/optional/k3s-server.nix
+    ../common/optional/reboot-required.nix
+    ../common/optional/ssh-sudo.nix
+  ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -36,7 +41,7 @@
   };
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = {inherit inputs outputs;};
     users = {
       w4cbe = import ../../home-manager/server;
     };

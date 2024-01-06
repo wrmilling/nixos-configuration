@@ -1,14 +1,18 @@
-{ config, lib, pkgs, modulesPath, ... }:
-
 {
-  imports = [ 
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}: {
+  imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "usbhid" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+  boot.initrd.availableKernelModules = ["nvme" "usbhid"];
+  boot.initrd.kernelModules = ["dm-snapshot"];
+  boot.kernelModules = [];
+  boot.extraModulePackages = [];
 
   # boot.kernelPatches = [
   #   {
@@ -23,17 +27,17 @@
   #   }
   # ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/8cf3381e-ef78-480a-a6a4-b5dc3cf62af4";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/8cf3381e-ef78-480a-a6a4-b5dc3cf62af4";
+    fsType = "ext4";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/2B37-1659";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/2B37-1659";
+    fsType = "vfat";
+  };
 
-  swapDevices = [ ];
+  swapDevices = [];
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";

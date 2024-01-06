@@ -1,13 +1,15 @@
-{ config, pkgs, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   secrets = import ../../../secrets/secrets.nix;
   k3s-package = pkgs.unstable.k3s_1_28;
-in
-{
-  imports =
-    [
-      ./k3s-firewall.nix
-    ];
+in {
+  imports = [
+    ./k3s-firewall.nix
+  ];
 
   services.k3s = {
     enable = true;
@@ -18,5 +20,5 @@ in
     extraFlags = "--node-label \"k3s-upgrade=false\""; # Optionally add additional args to k3s
   };
 
-  environment.systemPackages = [ k3s-package ];
+  environment.systemPackages = [k3s-package];
 }

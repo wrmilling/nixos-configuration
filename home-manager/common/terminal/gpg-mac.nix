@@ -1,14 +1,20 @@
-{ pkgs, config, lib, ... }:
-
 {
-  home.packages = with pkgs; [ pinentry_mac ];
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
+  home.packages = with pkgs; [pinentry_mac];
 
   programs.gpg = {
     enable = true;
     mutableKeys = true;
     mutableTrust = true;
     publicKeys = [
-      { source = ../../../secrets/keys/w4cbe.asc; trust = 5; }
+      {
+        source = ../../../secrets/keys/w4cbe.asc;
+        trust = 5;
+      }
     ];
     settings = {
       # https://github.com/drduh/config/blob/master/gpg.conf
@@ -76,6 +82,4 @@
       export SSH_AUTH_SOCK="$(${config.programs.gpg.package}/bin/gpgconf --list-dirs agent-ssh-socket)"
     fi
   '';
-
-
 }

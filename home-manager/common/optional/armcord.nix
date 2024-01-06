@@ -1,13 +1,16 @@
-{ pkgs, lib, config, ... }: 
-
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   discord-name = pkgs.makeDesktopItem {
     name = "discord-name";
     desktopName = "Discord (Name)";
     genericName = "Discord";
     comment = "All-in-one voice and text chat for gamers that's free, secure, and works on both your desktop and phone. (Armcord)";
     icon = "discord";
-    categories = [ "Network" "InstantMessaging" ];
+    categories = ["Network" "InstantMessaging"];
     exec = "${pkgs.bashInteractive}/bin/bash -c \"export XDG_CONFIG_HOME=~/.config/discord-name\; export TMPDIR=~/.config/discord-name/tmp\; ${pkgs.armcord}/bin/armcord\"";
   };
   discord-game = pkgs.makeDesktopItem {
@@ -16,7 +19,7 @@ let
     genericName = "Discord";
     comment = "All-in-one voice and text chat for gamers that's free, secure, and works on both your desktop and phone. (Armcord)";
     icon = "discord";
-    categories = [ "Network" "InstantMessaging" ];
+    categories = ["Network" "InstantMessaging"];
     exec = "${pkgs.bashInteractive}/bin/bash -c \"export XDG_CONFIG_HOME=~/.config/discord-game\; export TMPDIR=~/.config/discord-game/tmp\; ${pkgs.armcord}/bin/armcord\"";
   };
 in {

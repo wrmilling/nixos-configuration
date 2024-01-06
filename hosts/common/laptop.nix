@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-
 {
-  environment.pathsToLink = [ "/libexec" ];
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  environment.pathsToLink = ["/libexec"];
 
   imports = [
     ./default.nix
@@ -17,5 +20,5 @@
 
   services.xserver.enable = true;
   networking.networkmanager.enable = true;
-  programs.nm-applet.enable = true; 
+  programs.nm-applet.enable = true;
 }

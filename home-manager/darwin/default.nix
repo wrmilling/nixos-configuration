@@ -1,6 +1,12 @@
-{ inputs, outputs, secrets, lib, config, pkgs, ... }:
-
 {
+  inputs,
+  outputs,
+  secrets,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ../common/terminal/default-darwin.nix
     ../common/graphical/default-darwin.nix
@@ -14,7 +20,7 @@
     config = {
       allowUnfree = true;
       # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = (_: true);
+      allowUnfreePredicate = _: true;
     };
   };
 
@@ -46,7 +52,7 @@
     interactiveShellInit =
       # fix brew path (should not be needed but somehow is?)
       ''
-      eval (/opt/homebrew/bin/brew shellenv)
+        eval (/opt/homebrew/bin/brew shellenv)
       '';
   };
 

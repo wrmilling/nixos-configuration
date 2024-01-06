@@ -1,7 +1,10 @@
-{ pkgs, lib, config, ... }:
-
 {
-  home.packages = with pkgs; [ xautolock ];
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
+  home.packages = with pkgs; [xautolock];
 
   services.picom = {
     enable = true;
@@ -353,7 +356,7 @@
           inactive_workspace #595B5B #222D31 #EEE8D5
           binding_mode       #16a085 #2C2C2C #F9FAF9
           urgent_workspace   #16a085 #FDF6E3 #E5201D
-        }    
+        }
       }
 
       # hide/unhide i3status bar

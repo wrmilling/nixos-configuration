@@ -1,15 +1,20 @@
-{ config, inputs, outputs, pkgs, lib, secrets, ... }:
-
 {
-  imports =
-    [
-      inputs.hardware.nixosModules.raspberry-pi-4
-      inputs.home-manager.nixosModules.home-manager
-      ./hardware.nix
-      ../common/server.nix
-      ../common/optional/k3s-agent-arm.nix
-      ../common/optional/reboot-required.nix
-    ];
+  config,
+  inputs,
+  outputs,
+  pkgs,
+  lib,
+  secrets,
+  ...
+}: {
+  imports = [
+    inputs.hardware.nixosModules.raspberry-pi-4
+    inputs.home-manager.nixosModules.home-manager
+    ./hardware.nix
+    ../common/server.nix
+    ../common/optional/k3s-agent-arm.nix
+    ../common/optional/reboot-required.nix
+  ];
 
   hardware.raspberry-pi."4".poe-hat.enable = true;
 
@@ -35,7 +40,7 @@
   };
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = {inherit inputs outputs;};
     users = {
       w4cbe = import ../../home-manager/server;
     };

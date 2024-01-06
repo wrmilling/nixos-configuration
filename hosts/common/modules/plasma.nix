@@ -1,6 +1,10 @@
-{ config, pkgs, lib, callPackage, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  callPackage,
+  ...
+}: {
   services.xserver = {
     enable = true;
     desktopManager.plasma5 = {
@@ -8,7 +12,7 @@
       runUsingSystemd = true;
     };
     displayManager.sddm = {
-     enable = true;
+      enable = true;
     };
   };
 }

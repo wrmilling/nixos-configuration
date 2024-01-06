@@ -1,9 +1,11 @@
-{ config, lib, pkgs, ... }:
-
-let
-  tailscale-package = pkgs.unstable.tailscale;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  tailscale-package = pkgs.unstable.tailscale;
+in {
   environment.systemPackages = with pkgs; [
     barrier
   ];

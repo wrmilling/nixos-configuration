@@ -1,19 +1,24 @@
-{ config, inputs, outputs, pkgs, lib, secrets, ... }:
-
 {
-  imports =
-    [
-      inputs.home-manager.nixosModules.home-manager
-      ./openvz.nix
-      ../common/server.nix
-      ../common/optional/webhost.nix
-    ];
+  config,
+  inputs,
+  outputs,
+  pkgs,
+  lib,
+  secrets,
+  ...
+}: {
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+    ./openvz.nix
+    ../common/server.nix
+    ../common/optional/webhost.nix
+  ];
 
   networking = {
     hostName = "bob";
     domain = secrets.hosts.bob.domain;
     useNetworkd = true;
-    nameservers = [ "8.8.8.8" "8.8.4.4" ];
+    nameservers = ["8.8.8.8" "8.8.4.4"];
   };
 
   # Disable resolved for now, issue on OpenVZ
@@ -30,7 +35,8 @@
   systemd.network.networks.venet0 = {
     name = "venet0";
     addresses = [
-      { addressConfig = {
+      {
+        addressConfig = {
           Address = "127.0.0.1/32";
           Scope = "host";
         };
@@ -57,10 +63,10 @@
   ];
   services.openssh.settings.PermitRootLogin = lib.mkForce "prohibit-password";
   users.users.w4cbe.passwordFile = lib.mkForce null;
-  nix.settings.trusted-users = [ "root" "@wheel" ];
+  nix.settings.trusted-users = ["root" "@wheel"];
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = {inherit inputs outputs;};
     users = {
       w4cbe = import ../../home-manager/server;
     };
@@ -68,4 +74,3 @@
 
   system.stateVersion = "23.11";
 }
-

@@ -1,12 +1,15 @@
-{ pkgs, lib, config, ... }: 
-
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   home.packages = with pkgs; [
     tmux
     tmuxPlugins.better-mouse-mode
   ];
   home.file.".tmux.conf".text = ''
-    # Mouse options 
+    # Mouse options
     set -g mouse on
 
     ## Start counting windows from 1
@@ -54,7 +57,7 @@
     # Reload tmux config
     bind r source-file ~/.tmux.conf
 
-    set -g pane-active-border-style fg=cyan 
+    set -g pane-active-border-style fg=cyan
     setw -g aggressive-resize on
 
     # ----------------------

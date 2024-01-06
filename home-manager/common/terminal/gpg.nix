@@ -1,8 +1,11 @@
-{ pkgs, config, lib, ... }:
-
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   pinentryRofi = pkgs.writeShellApplication {
-    name= "pinentry-rofi-with-env";
+    name = "pinentry-rofi-with-env";
     text = ''
       PATH="$PATH:${pkgs.coreutils}/bin:${pkgs.rofi}/bin"
       "${pkgs.pinentry-rofi}/bin/pinentry-rofi" "$@"
@@ -10,14 +13,17 @@ let
   };
   pinentryProgram = "pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env";
 in {
-  home.packages = with pkgs; [ pinentry-rofi ];
+  home.packages = with pkgs; [pinentry-rofi];
 
   programs.gpg = {
     enable = true;
     mutableKeys = false;
     mutableTrust = false;
     publicKeys = [
-      { source = ../../../secrets/keys/w4cbe.asc; trust = 5; }
+      {
+        source = ../../../secrets/keys/w4cbe.asc;
+        trust = 5;
+      }
     ];
     settings = {
       # https://github.com/drduh/config/blob/master/gpg.conf
@@ -79,5 +85,4 @@ in {
       ${pinentryProgram}
     '';
   };
-
 }

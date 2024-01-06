@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     file
     bc
@@ -20,5 +23,4 @@
     minicom
     neofetch
   ];
-
 }

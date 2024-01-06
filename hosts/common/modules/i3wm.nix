@@ -1,6 +1,10 @@
-{ config, pkgs, lib, callPackage, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  callPackage,
+  ...
+}: {
   services.xserver = {
     autorun = true;
     layout = "us";

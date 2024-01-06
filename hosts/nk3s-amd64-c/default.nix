@@ -1,14 +1,19 @@
-{ config, inputs, outputs, pkgs, lib, secrets, ... }:
-
 {
-  imports =
-    [
-      inputs.home-manager.nixosModules.home-manager
-      ./hardware.nix
-      ../common/server.nix
-      ../common/optional/k3s-agent.nix
-      ../common/optional/reboot-required.nix
-    ];
+  config,
+  inputs,
+  outputs,
+  pkgs,
+  lib,
+  secrets,
+  ...
+}: {
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+    ./hardware.nix
+    ../common/server.nix
+    ../common/optional/k3s-agent.nix
+    ../common/optional/reboot-required.nix
+  ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -31,10 +36,10 @@
     };
     defaultGateway = secrets.hosts.nk3s-amd64-c.defaultGateway;
     nameservers = secrets.hosts.nk3s-amd64-c.nameservers;
- };
+  };
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = {inherit inputs outputs;};
     users = {
       w4cbe = import ../../home-manager/server;
     };

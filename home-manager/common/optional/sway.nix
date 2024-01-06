@@ -1,6 +1,9 @@
-{ pkgs, lib, config, ... }:
-
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   home.packages = with pkgs; [
     swaybg
     glib
@@ -30,7 +33,7 @@
         outer = -2;
         smartGaps = true;
       };
-      
+
       window = {
         hideEdgeBorders = "smart";
         titlebar = false;
@@ -70,8 +73,8 @@
           colors = {
             background = "#222D31";
             statusline = "#F9FAF9";
-            separator  = "#454947";
-            focusedWorkspace  = {
+            separator = "#454947";
+            focusedWorkspace = {
               border = "#F9FAF9";
               background = "#16a085";
               text = "#292F34";
@@ -101,7 +104,7 @@
       ];
 
       startup = [
-        { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; }
+        {command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";}
       ];
     };
   };

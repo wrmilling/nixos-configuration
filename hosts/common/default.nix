@@ -1,12 +1,13 @@
-{ config, pkgs, outputs, ... }:
-
 {
-  imports =
-    [
-      ./modules/users.nix
-      ./modules/terminal.nix
-    ];
-
+  config,
+  pkgs,
+  outputs,
+  ...
+}: {
+  imports = [
+    ./modules/users.nix
+    ./modules/terminal.nix
+  ];
 
   # NixPackage Setup
   nixpkgs = {
@@ -21,7 +22,6 @@
 
   # Basic environment.
   environment.systemPackages = with pkgs; [
-
   ];
 
   #
@@ -41,7 +41,6 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    settings.trusted-users = [ "root" "@wheel" ];
+    settings.trusted-users = ["root" "@wheel"];
   };
-
 }

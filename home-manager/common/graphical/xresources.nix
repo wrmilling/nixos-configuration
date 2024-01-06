@@ -1,7 +1,9 @@
-
-{ pkgs, lib, config, ... }: 
-
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   xresources.extraConfig = ''
     Xft.dpi:       96
     Xft.antialias: true

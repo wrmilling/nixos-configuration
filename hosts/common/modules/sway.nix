@@ -1,6 +1,10 @@
-{ config, pkgs, lib, callPackage, ... }: 
-
 {
+  config,
+  pkgs,
+  lib,
+  callPackage,
+  ...
+}: {
   programs.sway = {
     enable = true;
     extraSessionCommands = ''
@@ -12,8 +16,8 @@
     extraPackages = with pkgs; [
       swaylock
       swayidle
-      rofi-wayland 
-      xwayland 
+      rofi-wayland
+      xwayland
       qt5.qtwayland
     ];
     wrapperFeatures.gtk = true;

@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
-let
+{
+  config,
+  pkgs,
+  ...
+}: let
   procinfo = pkgs.writeShellScriptBin "procinfo" ''
     # Provides useful information for the Pine64 Pinebook Pro
     # CPU Core Frequencies
@@ -44,7 +46,6 @@ let
       echo Charging via Barrel Plug
     fi
   '';
-in
-{
-  home.packages = [ procinfo ];
+in {
+  home.packages = [procinfo];
 }

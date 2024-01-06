@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
-let
+{
+  config,
+  pkgs,
+  ...
+}: let
   i3exit = pkgs.writeShellScriptBin "i3exit" ''
     set -eu
 
@@ -34,7 +36,6 @@ let
 
     exit 0
   '';
-in
-{
-  home.packages = [ i3exit ];
+in {
+  home.packages = [i3exit];
 }

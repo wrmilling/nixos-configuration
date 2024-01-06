@@ -1,19 +1,24 @@
-{ config, inputs, outputs, secrets, lib, pkgs, ... }:
-
 {
-  imports =
-    [
-      inputs.hardware.nixosModules.pine64-pinebook-pro
-      inputs.home-manager.nixosModules.home-manager
-      ./hardware.nix
-      ../common/laptop.nix
-      ../common/optional/development.nix
-      ../common/optional/k8s-utils.nix
-      # ../common/optional/nixbuild-client.nix
-      ../common/optional/tailscale.nix
-      ../common/optional/virtualization.nix
-      ../common/optional/zram.nix
-    ];
+  config,
+  inputs,
+  outputs,
+  secrets,
+  lib,
+  pkgs,
+  ...
+}: {
+  imports = [
+    inputs.hardware.nixosModules.pine64-pinebook-pro
+    inputs.home-manager.nixosModules.home-manager
+    ./hardware.nix
+    ../common/laptop.nix
+    ../common/optional/development.nix
+    ../common/optional/k8s-utils.nix
+    # ../common/optional/nixbuild-client.nix
+    ../common/optional/tailscale.nix
+    ../common/optional/virtualization.nix
+    ../common/optional/zram.nix
+  ];
 
   networking = {
     hostName = "riker";
@@ -22,7 +27,7 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
-  boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+  boot.kernelParams = lib.mkAfter ["console=tty0"];
 
   boot.initrd.luks.devices = {
     cryptroot = {
@@ -42,7 +47,7 @@
   };
 
   home-manager = {
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = {inherit inputs outputs;};
     users = {
       w4cbe = import ../../home-manager/riker;
     };

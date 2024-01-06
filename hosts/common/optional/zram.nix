@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   # boot.kernelModules = lib.mkAfter [ "zram" ];
 
   zramSwap = {

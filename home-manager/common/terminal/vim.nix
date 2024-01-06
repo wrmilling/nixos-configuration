@@ -1,13 +1,16 @@
-{ pkgs, lib, config, ... }: 
-
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   programs.vim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [ 
+    plugins = with pkgs.vimPlugins; [
       # Theme
       vim-monokai
       lightline-vim
-      
+
       # General
       vim-multiple-cursors
       tabular
@@ -24,7 +27,7 @@
       vim-gitgutter
       vim-fugitive
     ];
-    settings = { 
+    settings = {
       expandtab = true;
       number = true;
       shiftwidth = 2;
@@ -33,7 +36,7 @@
     extraConfig = ''
       " NerdTree Toggle
       map <C-o> :NERDTreeToggle<CR>
-      
+
       " Status Bar Color Scheme
       let g:lightline = {
             \ 'colorscheme': 'seoul256',
@@ -46,12 +49,12 @@
       set numberwidth=4
       set backspace=indent,eol,start
       set nofoldenable " Disable folding in the editor, may re-enable later
-      
+
       " Enable spell checking by file type
       autocmd BufRead,BufNewFile *.md setlocal spell spelllang=en_us
-      
+
       " Force proper colors (Disable Background Color Erase).
-      set t_ut= 
+      set t_ut=
     '';
   };
 }
