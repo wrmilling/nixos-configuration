@@ -7,7 +7,7 @@
   secrets = import ../../../secrets/secrets.nix;
   hostname = config.networking.hostName;
   domain = config.networking.domain;
-  k3s-package = pkgs.unstable.k3s_1_28;
+  k3s-package = pkgs.unstable.k3s_1_29;
 in {
   imports = [
     ./k3s-firewall.nix
