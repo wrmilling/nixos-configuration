@@ -21,5 +21,6 @@
     kustomize # kustomize CLI for sadists
     kubectx # kubectx/kubens for switching namespaces/clusters
     sops # Secrets!
+    kubefetch # neofetch, but k8s
   ];
 }
