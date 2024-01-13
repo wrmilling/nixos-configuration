@@ -19,6 +19,7 @@
         flameshot
         gparted
         # volumeicon
+        cosmic-term
       ]
     ];
 }
