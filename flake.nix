@@ -90,6 +90,7 @@
 
       # Servers
       bob = mkNixos [./hosts/bob];
+      goku = mkNixos [./hosts/goku];
       hermes = mkNixos [./hosts/hermes];
 
       # k3s Hosts
