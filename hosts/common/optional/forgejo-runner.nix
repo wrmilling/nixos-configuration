@@ -184,7 +184,7 @@ in {
       mkRunnerService = name: instance: let
         wantsContainerRuntime = hasDockerScheme instance;
         wantsHost = hasHostScheme instance;
-        wantsDocker = wantsContainerRuntime && (config.virtualisation.docker.enable || config.virutalisation.docker.rootless.enable);
+        wantsDocker = wantsContainerRuntime && (config.virtualisation.docker.enable || config.virtualisation.docker.rootless.enable);
         wantsPodman = wantsContainerRuntime && config.virtualisation.podman.enable;
         configFile = settingsFormat.generate "config.yaml" instance.settings;
       in
