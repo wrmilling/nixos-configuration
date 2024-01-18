@@ -36,7 +36,7 @@
         "debian-bullseye:docker://debian:bullseye"
         "debian-bookworm:docker://debian:bookworm"
         "debian-latest:docker://debian:latest"
-        "ubuntu-latest:docker://ubuntu:latest"
+        "ubuntu-latest:docker://node:18-bullseye"
         "docker:docker://alpine:3.19.0"
       ];
       url = secrets.forgejo.domain;
