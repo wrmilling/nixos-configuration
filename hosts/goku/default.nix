@@ -26,10 +26,14 @@
     domain = secrets.hosts.goku.domain;
   };
 
-  services.nginx.virtualHosts."${secrets.hosts.goku.domain}" = {
-    forceSSL = true;
-    enableACME = true;
-    root = "/var/www/${secrets.hosts.goku.domain}";
+  services.gitea-actions-runner = {
+    package = pkgs.unstable.forgejo-actions-runner;
+    instances.goku = {
+      enable = true;
+      name = "goku";
+      url = secrets.forgejo.domain;
+      token = secrets.forgejo.runnerToken;
+    };
   };
 
   home-manager = {
