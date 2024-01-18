@@ -22,6 +22,8 @@
   networking = {
     hostName = "goku"; # Define your hostname.
     domain = secrets.hosts.goku.domain;
+    nameservers = [ "208.67.222.222" "208.67.220.220" ];
+    dhcpcd.extraConfig = "nohook resolv.conf";
   };
 
   virtualisation.docker.enable = true;
