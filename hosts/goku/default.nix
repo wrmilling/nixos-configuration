@@ -11,8 +11,6 @@
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
     ../common/server.nix
-    ../common/optional/docker.nix
-    ../common/optional/forgejo-runner.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -26,7 +24,8 @@
     domain = secrets.hosts.goku.domain;
   };
 
-  services.forgejo-actions-runner = {
+  virtualisation.docker.enable = true;
+  services.gitea-actions-runner = {
     package = pkgs.unstable.forgejo-actions-runner;
     instances.goku = {
       enable = true;
