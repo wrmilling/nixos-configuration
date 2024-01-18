@@ -30,6 +30,7 @@
     instances.goku = {
       enable = true;
       name = "goku";
+      labels = [];
       url = secrets.forgejo.domain;
       token = secrets.forgejo.runnerToken;
     };
