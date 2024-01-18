@@ -30,7 +30,15 @@
     instances.goku = {
       enable = true;
       name = "goku";
-      labels = [];
+      labels = [
+        "alpine:docker://alpine:3.19.0"
+        "alpine-latest:docker://alpine:latest"
+        "debian-bullseye:docker://debian:bullseye"
+        "debian-bookworm:docker://debian:bookworm"
+        "debian-latest:docker://debian:latest"
+        "ubuntu-latest:docker://ubuntu:latest"
+        "docker:docker://alpine:3.19.0"
+      ];
       url = secrets.forgejo.domain;
       token = secrets.forgejo.runnerToken;
     };
