@@ -11,6 +11,8 @@
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
     ../common/server.nix
+    ../common/optional/docker.nix
+    ../common/optional/forgejo-actions.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
