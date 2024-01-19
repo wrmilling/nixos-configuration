@@ -20,6 +20,7 @@
         gparted
         # volumeicon
         unstable.cosmic-term
+        keepassxc
       ]
     ];
 }
