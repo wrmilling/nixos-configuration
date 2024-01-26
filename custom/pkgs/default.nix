@@ -2,4 +2,5 @@
 # You can build them using 'nix build .#example' or (legacy) 'nix-build -A example'
 {pkgs ? (import ../nixpkgs.nix) {}}: {
   kubefetch = pkgs.callPackage ./kubefetch {};
+  calibre6 = pkgs.callPackage ./calibre6 {};
 }
