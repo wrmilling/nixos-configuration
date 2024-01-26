@@ -21,6 +21,7 @@
         # volumeicon
         unstable.cosmic-term
         keepassxc
+        calibre
       ]
     ];
 }
