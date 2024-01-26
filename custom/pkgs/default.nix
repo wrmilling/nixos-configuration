@@ -2,7 +2,4 @@
 # You can build them using 'nix build .#example' or (legacy) 'nix-build -A example'
 {pkgs ? (import ../nixpkgs.nix) {}}: {
   kubefetch = pkgs.callPackage ./kubefetch {};
-  calibre6 = qt6Packages.callPackage ./calibre6 {
-    podofo = podofo010;
-  };
 }
