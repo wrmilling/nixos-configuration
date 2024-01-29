@@ -21,5 +21,5 @@ in {
     extraFlags = "--tls-san ${hostname}.${domain} --disable servicelb --disable traefik --disable local-storage --flannel-backend=host-gw --node-taint \"node-role.kubernetes.io/master=true:NoSchedule\" --node-label \"k3s-upgrade=false\"";
   };
 
-  environment.systemPackages = [k3s-package kubectl];
+  environment.systemPackages = with pkgs; [k3s-package unstable.kubectl];
 }
