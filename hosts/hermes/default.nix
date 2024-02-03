@@ -42,14 +42,14 @@
         root = "/var/www/${secrets.hosts.hermes.domain}";
       };
 
-      # "status.${secrets.hosts.hermes.domain}" = {
-      #   forceSSL = true;
-      #   enableACME = true;
-      #   locations."/" = {
-      #     proxyPass = "http://localhost:3001/";
-      #     proxyWebsockets = true;
-      #   }
-      # };
+      "status.${secrets.hosts.hermes.domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://localhost:3001/";
+          proxyWebsockets = true;
+        }
+      };
     };
   };
 
