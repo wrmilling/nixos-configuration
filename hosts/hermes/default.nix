@@ -48,7 +48,7 @@
         locations."/" = {
           proxyPass = "http://localhost:3001/";
           proxyWebsockets = true;
-        }
+        };
       };
     };
   };
