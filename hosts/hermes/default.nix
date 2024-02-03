@@ -26,10 +26,31 @@
     domain = secrets.hosts.hermes.domain;
   };
 
-  services.nginx.virtualHosts."${secrets.hosts.hermes.domain}" = {
-    forceSSL = true;
-    enableACME = true;
-    root = "/var/www/${secrets.hosts.hermes.domain}";
+  services.uptime-kuma = {
+    enable = true;
+    package = pkgs.unstable.uptime-kuma;
+  };
+
+  services.nginx = {
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+
+    virtualHosts = {
+      "${secrets.hosts.hermes.domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.hermes.domain}";
+      };
+
+      # "status.${secrets.hosts.hermes.domain}" = {
+      #   forceSSL = true;
+      #   enableACME = true;
+      #   locations."/" = {
+      #     proxyPass = "http://localhost:3001/";
+      #     proxyWebsockets = true;
+      #   }
+      # };
+    };
   };
 
   home-manager = {
