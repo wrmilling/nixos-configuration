@@ -22,5 +22,6 @@
     pinentry-curses
     minicom
     neofetch
+    home-manager
   ];
 }
