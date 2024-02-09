@@ -23,7 +23,7 @@ $ nix-env -iE "_: with import <nixpkgs/nixos> { configuration = {}; }; with conf
 $ sudo `which nixos-generate-config` --root /
 # Update /etc/nixos/configuration.nix and hardware-configuration.nix
 # Be sure to specify mount efi partition to /boot directly rather than /boot/efi
-# In this case, I specify a heafty swap partition to ensure things can build
+# In this case, I specify a hefty swap partition to ensure things can build
 $ nix-env -p /nix/var/nix/profiles/system -f '<nixpkgs/nixos>' -I nixos-config=/etc/nixos/configuration.nix -iA system
 $ sudo chown -R 0.0 /nix
 $ sudo touch /etc/NIXOS /etc/NIXOS_LUSTRATE

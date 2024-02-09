@@ -89,6 +89,7 @@
       serenity = mkNixos [./hosts/serenity];
 
       # Servers
+      bill = mkNixos [./hosts/bill];
       bob = mkNixos [./hosts/bob];
       goku = mkNixos [./hosts/goku];
       hermes = mkNixos [./hosts/hermes];
