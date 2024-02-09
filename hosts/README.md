@@ -8,10 +8,13 @@ These configurations generally reference a [home-manager](../home-manager) confi
 
 ##  Configurations
 
+- [bill](bill) (Server, KVM Test-instance)
 - [bob](bob) (Server, OpenVZ Test-instance)
 - [darwin](darwin) (Laptop, M1 Macbook Pro)
 - [donnager](donnager) (Laptop, Lenovo Legion Y530)
-- [hermes](hermes) (Server, Oracle Free-tier ARM)
+- [enterprise](enterprise) (Desktop, Custom Built)
+- [goku](goku) (Server, Oracle Free-tier x86_64)
+- [hermes](hermes) (Server, Oracle Free-tier ARM64)
 - [nk3s-amd64-0](nk3s-amd64-0) (Server, Virtual on NAS)
 - [nk3s-amd64-a](nk3s-amd64-a) (Server, Minisforum UN100C)
 - [nk3s-amd64-b](nk3s-amd64-b) (Server, Minisforum UN100C)
