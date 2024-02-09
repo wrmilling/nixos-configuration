@@ -8,6 +8,7 @@ The current layout just assumes each machine will have nuances in their named di
 
 - [darwin](darwin) (MacOS Specific Configuration)
 - [donnager](donnager) (Donnager Specific Cofiguration)
+- [enterprise](enterprise) (Enterprise Specific Cofiguration)
 - [riker](riker) (Riker Specific Configuration)
 - [serenity](serenity) (Serenity Specific Configuration)
 - [server](server) (Generic Server Configuration)

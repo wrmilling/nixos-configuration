@@ -15,6 +15,7 @@ A work in progress [NixOS]() configuration that can handle NixOS and nix-darwin 
   - [common](home-manager/common) (Re-usable configurations for users in home-manager)
   - [darwin](home-manager/darwin) (Specific home-manager configuration for darwin)
   - [donnager](home-manager/donnager) (Specific home-manager configuration for donnager)
+  - [enterprise](home-manager/enterprise) (Specific home-manager configuration for enterprise)
   - [riker](home-manager/riker) (Specific home-manager configuration for riker)
   - [serenity](home-manager/serenity) (Specific home-manager configuration for serenity)
   - [server](home-manager/server) (Basic home-manager configuration for generic servers)
