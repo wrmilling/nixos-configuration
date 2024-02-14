@@ -24,6 +24,10 @@ in {
         source = ../../../secrets/keys/w4cbe.asc;
         trust = 5;
       }
+      {
+        source = ../../../secrets/keys/cluster.asc;
+        trust = 4;
+      }
     ];
     settings = {
       # https://github.com/drduh/config/blob/master/gpg.conf
