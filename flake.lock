@@ -73,29 +73,13 @@
         "type": "github"
       }
     },
-    "nixpkgs-lilyinstarlight": {
-      "locked": {
-        "lastModified": 1708135131,
-        "narHash": "sha256-YUicgi3S1XfdJ65397W6uX98Cw7fSHd9qs8mE3L5h4A=",
-        "owner": "lilyinstarlight",
-        "repo": "nixpkgs",
-        "rev": "836b4c6fb8c23733f39d30ad051b327c453c9e51",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lilyinstarlight",
-        "ref": "tmp/cosmic",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1708118438,
-        "narHash": "sha256-kk9/0nuVgA220FcqH/D2xaN6uGyHp/zoxPNUmPCMmEE=",
+        "lastModified": 1708296515,
+        "narHash": "sha256-FyF489fYNAUy7b6dkYV6rGPyzp+4tThhr80KNAaF/yY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "5863c27340ba4de8f83e7e3c023b9599c3cb3c80",
+        "rev": "b98a4e1746acceb92c509bc496ef3d0e5ad8d4aa",
         "type": "github"
       },
       "original": {
@@ -111,7 +95,6 @@
         "hardware": "hardware",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-lilyinstarlight": "nixpkgs-lilyinstarlight",
         "nixpkgs-unstable": "nixpkgs-unstable"
       }
     }
