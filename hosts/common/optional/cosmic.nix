@@ -23,7 +23,6 @@
     unstable.cosmic-randr
     unstable.cosmic-screenshot
     lilyinstarlight.cosmic-settings
-    lilyinstarlight.cosmic-settings-daemon
     unstable.cosmic-term
     unstable.cosmic-workspaces-epoch
   ];
@@ -32,7 +31,7 @@
     enable = true;
     extraPortals = with pkgs; [
       lilyinstarlight.xdg-desktop-portal-cosmic
-      unstable.xdg-desktop-portal-gtk
+      xdg-desktop-portal-gtk
     ];
     configPackages = with pkgs; [
       lilyinstarlight.xdg-desktop-portal-cosmic

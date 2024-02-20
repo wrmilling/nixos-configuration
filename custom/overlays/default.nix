@@ -23,10 +23,10 @@
 
   # When applied, the lilyinstarlight nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.lilyinstarlight'
-  lilyinstarlight-packages = final: _prev: {
-    lilyinstarlight = import inputs.nixpkgs-lilyinstarlight {
-      system = final.system;
-      config.allowUnfree = true;
-    };
-  };
+  # lilyinstarlight-packages = final: _prev: {
+  #   lilyinstarlight = import inputs.nixpkgs-lilyinstarlight {
+  #     system = final.system;
+  #     config.allowUnfree = true;
+  #   };
+  # };
 }
