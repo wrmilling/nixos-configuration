@@ -14,7 +14,7 @@
     overlays = [
       outputs.overlays.additions
       outputs.overlays.unstable-packages
-      # outputs.overlays.lilyinstarlight-packages
+      outputs.overlays.lilyinstarlight-packages
     ];
     config = {
       allowUnfree = true;
