@@ -73,6 +73,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-lilyinstarlight": {
+      "locked": {
+        "lastModified": 1708403697,
+        "narHash": "sha256-YPFWZUpAts+fkRt08GgBTQTgPfZLVhxS31VUKMT9G/0=",
+        "owner": "lilyinstarlight",
+        "repo": "nixpkgs",
+        "rev": "559e9648c4cb509b6fd2df585f7bed2a0de3d981",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lilyinstarlight",
+        "ref": "tmp/cosmic",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1708296515,
@@ -95,6 +111,7 @@
         "hardware": "hardware",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-lilyinstarlight": "nixpkgs-lilyinstarlight",
         "nixpkgs-unstable": "nixpkgs-unstable"
       }
     }
