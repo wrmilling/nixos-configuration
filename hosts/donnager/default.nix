@@ -13,7 +13,6 @@
     ./hardware.nix
     ../common/laptop.nix
     ../common/optional/appimage.nix
-    # ../common/optional/cosmic.nix
     ../common/optional/development.nix
     ../common/optional/docker.nix
     ../common/optional/gaming.nix
