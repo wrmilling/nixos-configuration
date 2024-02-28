@@ -28,9 +28,9 @@
   virtualisation.docker.enable = true;
   services.gitea-actions-runner = {
     package = pkgs.unstable.forgejo-actions-runner;
-    instances.goku = {
+    instances.bill = {
       enable = true;
-      name = "goku";
+      name = "bill";
       labels = [
         "alpine:docker://alpine:3.19.0"
         "alpine-latest:docker://alpine:latest"
