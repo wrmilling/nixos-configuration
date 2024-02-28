@@ -13,7 +13,7 @@
     ./modules/fonts.nix
     ./modules/graphical.nix
     ./modules/network.nix
-    ./modules/plasma.nix
+    # ./modules/plasma.nix
   ];
 
   services.xserver.enable = true;

@@ -13,7 +13,9 @@
     ./hardware.nix
     ../common/laptop.nix
     ../common/optional/development.nix
+    ../common/optional/i3wm.nix
     ../common/optional/k8s-utils.nix
+    ../common/optional/lightdm.nix
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
     ../common/optional/zram.nix
