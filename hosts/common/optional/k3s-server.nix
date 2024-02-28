@@ -7,7 +7,7 @@
   secrets = import ../../../secrets/secrets.nix;
   hostname = config.networking.hostName;
   domain = config.networking.domain;
-  k3s-package = pkgs.unstable.k3s_1_29;
+  k3s-package = pkgs.k3s_1_29;
 in {
   imports = [
     ./k3s-firewall.nix
@@ -21,5 +21,5 @@ in {
     extraFlags = "--tls-san ${hostname}.${domain} --disable servicelb --disable traefik --disable local-storage --flannel-backend=host-gw --node-taint \"node-role.kubernetes.io/master=true:NoSchedule\" --node-label \"k3s-upgrade=false\"";
   };
 
-  environment.systemPackages = with pkgs; [k3s-package unstable.kubectl];
+  environment.systemPackages = with pkgs; [k3s-package kubectl];
 }

@@ -10,6 +10,6 @@
     ./vim.nix
   ];
   home.packages = with pkgs; [
-    unstable.onedrive
+    onedrive
   ];
 }

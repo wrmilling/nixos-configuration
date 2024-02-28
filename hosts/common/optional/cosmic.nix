@@ -8,23 +8,23 @@
   environment.pathsToLink = [ "/share/cosmic" ];
 
   environment.systemPackages = with pkgs; [
-    unstable.cosmic-applibrary
-    unstable.cosmic-applets
-    unstable.cosmic-bg
+    cosmic-applibrary
+    cosmic-applets
+    cosmic-bg
     lilyinstarlight.cosmic-comp
-    unstable.cosmic-edit
-    unstable.cosmic-files
+    cosmic-edit
+    cosmic-files
     lilyinstarlight.cosmic-greeter
-    unstable.cosmic-icons
-    unstable.cosmic-launcher
-    unstable.cosmic-notifications
-    unstable.cosmic-osd
+    cosmic-icons
+    cosmic-launcher
+    cosmic-notifications
+    cosmic-osd
     lilyinstarlight.cosmic-panel
-    unstable.cosmic-randr
-    unstable.cosmic-screenshot
+    cosmic-randr
+    cosmic-screenshot
     lilyinstarlight.cosmic-settings
-    unstable.cosmic-term
-    unstable.cosmic-workspaces-epoch
+    cosmic-term
+    cosmic-workspaces-epoch
   ];
 
   xdg.portal = {
@@ -43,8 +43,8 @@
 
   security.polkit.enable = true;
 
-  services.xserver.displayManager.sessionPackages = with pkgs; [ unstable.cosmic-session ];
-  systemd.packages = with pkgs; [ unstable.cosmic-session ];
+  services.xserver.displayManager.sessionPackages = with pkgs; [ cosmic-session ];
+  systemd.packages = with pkgs; [ cosmic-session ];
 
   # services.xserver.displayManager.cosmic-greeter.enable = lib.mkDefault true;
   # In-lining the above as I am not pulling in the lilyinstarlight nixpkgs fully

@@ -28,7 +28,7 @@
 
   services.uptime-kuma = {
     enable = true;
-    package = pkgs.unstable.uptime-kuma;
+    package = pkgs.uptime-kuma;
   };
 
   services.nginx = {

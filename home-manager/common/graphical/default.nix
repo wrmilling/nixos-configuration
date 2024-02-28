@@ -19,7 +19,7 @@
         flameshot
         gparted
         # volumeicon
-        unstable.cosmic-term
+        cosmic-term
         keepassxc
       ]
     ];

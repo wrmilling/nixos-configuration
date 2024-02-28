@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  tailscale-package = pkgs.unstable.tailscale;
+  tailscale-package = pkgs.tailscale;
 in {
   environment.systemPackages = with pkgs; [
     barrier

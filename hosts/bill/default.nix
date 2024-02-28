@@ -27,7 +27,7 @@
 
   virtualisation.docker.enable = true;
   services.gitea-actions-runner = {
-    package = pkgs.unstable.forgejo-actions-runner;
+    package = pkgs.forgejo-actions-runner;
     instances.bill = {
       enable = true;
       name = "bill";
