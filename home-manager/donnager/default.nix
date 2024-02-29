@@ -7,14 +7,11 @@
   ...
 }: {
   imports = [
-    ./i3status-rust.nix
     ../common/terminal
     ../common/graphical
     ../common/scripts
     ../common/optional/amateur-radio.nix
     ../common/optional/discord.nix
-    ../common/optional/dunst.nix
-    ../common/optional/i3wm.nix
     ../common/optional/keybase.nix
     ../common/optional/minecraft-client.nix
   ];
