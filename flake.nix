@@ -6,6 +6,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
 
+    # Testing out POP_OS' COSMIC DE/WM
+    nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
+    nixos-cosmic.inputs.nixpkgs.follows = "nixpkgs";
+
     # Home manager
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -23,6 +27,7 @@
     nixpkgs,
     home-manager,
     darwin,
+    nixos-cosmic,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -83,7 +88,16 @@
     # Available through 'nixos-rebuild switch --flake .#your-hostname'
     nixosConfigurations = {
       # Desktop/Laptop
-      donnager = mkNixos [./hosts/donnager];
+      donnager = mkNixos [
+        {
+          nix.settings = {
+            substituters = [ "https://cosmic.cachix.org/" ];
+            trusted-public-keys = [ "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE=" ];
+          };
+        }
+        nixos-cosmic.nixosModules.default
+        ./hosts/donnager
+      ];
       enterprise = mkNixos [./hosts/enterprise];
       riker = mkNixos [./hosts/riker];
       serenity = mkNixos [./hosts/serenity];
