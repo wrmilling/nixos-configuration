@@ -3,8 +3,17 @@
   lib,
   config,
   ...
-}: {
-  home.packages = with pkgs; [xautolock];
+}: let
+  pinentryRofi = pkgs.writeShellApplication {
+    name = "pinentry-rofi-with-env";
+    text = ''
+      PATH="$PATH:${pkgs.coreutils}/bin:${pkgs.rofi}/bin"
+      "${pkgs.pinentry-rofi}/bin/pinentry-rofi" "$@"
+    '';
+  };
+  pinentryProgram = "pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env";
+in {
+  home.packages = with pkgs; [xautolock pinentry-rofi];
 
   services.picom = {
     enable = true;
@@ -13,6 +22,14 @@
     opacityRules = [
       "100:name *= 'i3lock'"
     ];
+  };
+
+  services.gpg-agent = {
+    pinentryFlavor = null;
+    extraConfig = ''
+      ttyname $GPG_TTY
+      ${pinentryProgram}
+    '';
   };
 
   gtk = {

@@ -3,18 +3,7 @@
   config,
   lib,
   ...
-}: let
-  pinentryRofi = pkgs.writeShellApplication {
-    name = "pinentry-rofi-with-env";
-    text = ''
-      PATH="$PATH:${pkgs.coreutils}/bin:${pkgs.rofi}/bin"
-      "${pkgs.pinentry-rofi}/bin/pinentry-rofi" "$@"
-    '';
-  };
-  pinentryProgram = "pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env";
-in {
-  home.packages = with pkgs; [pinentry-rofi];
-
+}: {
   programs.gpg = {
     enable = true;
     mutableKeys = false;
@@ -83,10 +72,9 @@ in {
     enableSshSupport = true;
     defaultCacheTtl = 60;
     maxCacheTtl = 120;
-    pinentryFlavor = null;
+    pinentryFlavor = "qt";
     extraConfig = ''
       ttyname $GPG_TTY
-      ${pinentryProgram}
     '';
   };
 }
