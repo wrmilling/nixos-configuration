@@ -15,6 +15,7 @@
     ../common/optional/development.nix
     ../common/optional/gaming.nix
     ../common/optional/k8s-utils.nix
+    ../common/optional/nvidia.nix
     ../common/optional/plasma6.nix
     ../common/optional/printing.nix
     ../common/optional/tailscale.nix
