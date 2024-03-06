@@ -33,11 +33,12 @@
   boot.plymouth.enable = true;
   boot.kernelParams = ["quiet"];
 
-  # Cosmic Test
+  # Cosmic Test (This time with SDDM and PipeWire enabled)
   # services.xserver.displayManager.sddm.enable = lib.mkForce false;
-  # services.pipewire.enable = lib.mkForce false;
-  # services.xserver.desktopManager.cosmic.enable = true;
   # services.xserver.displayManager.cosmic-greeter.enable = true;
+  # services.pipewire.enable = lib.mkForce false;
+  hardware.pulseaudio.enable = lib.mkForce false;
+  services.xserver.desktopManager.cosmic.enable = true;
 
   networking = {
     hostName = "donnager";
