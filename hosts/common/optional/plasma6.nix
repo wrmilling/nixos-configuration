@@ -11,7 +11,7 @@
     };
     displayManager.sddm = {
       enable = true;
+      wayland.enable = true;
     };
   };
-  services.xserver.displayManager.sddm.wayland.enable = true;
 }
