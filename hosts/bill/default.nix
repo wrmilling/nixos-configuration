@@ -34,11 +34,8 @@
       labels = [
         "alpine:docker://alpine:3.19.0"
         "alpine-latest:docker://alpine:latest"
-        "debian-bullseye:docker://debian:bullseye"
-        "debian-bookworm:docker://debian:bookworm"
-        "debian-latest:docker://debian:latest"
+        "alpine-tokyo:docker://${secrets.forgejo.domain}:latest"
         "ubuntu-latest:docker://node:18-bullseye"
-        "docker:docker://alpine:3.19.0"
       ];
       url = secrets.forgejo.domain;
       token = secrets.forgejo.runnerToken;
