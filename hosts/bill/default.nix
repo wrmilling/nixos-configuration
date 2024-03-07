@@ -37,7 +37,7 @@
         "alpine-tokyo:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:latest"
         "ubuntu-latest:docker://node:18-bullseye"
       ];
-      url = secrets.forgejo.domain;
+      url = "https://${secrets.forgejo.domain}";
       token = secrets.forgejo.runnerToken;
     };
   };
