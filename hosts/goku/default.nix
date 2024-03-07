@@ -35,7 +35,7 @@
       labels = [
         "alpine:docker://alpine:3.19.0"
         "alpine-latest:docker://alpine:latest"
-        "alpine-tokyo:docker://${secrets.forgejo.domain}:latest"
+        "alpine-tokyo:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:latest"
         "ubuntu-latest:docker://node:18-bullseye"
       ];
       url = secrets.forgejo.domain;
