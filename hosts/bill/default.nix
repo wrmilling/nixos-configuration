@@ -32,9 +32,10 @@
       enable = true;
       name = "bill";
       labels = [
-        "alpine:docker://alpine:3.19.0"
+        "alpine:docker://alpine:3.19.1"
         "alpine-latest:docker://alpine:latest"
-        "alpine-tokyo:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:latest"
+        "alpine-tokyo:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:3.19.1-1"
+        "alpine-tokyo-latest:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:latest"
         "ubuntu-latest:docker://node:18-bullseye"
       ];
       url = "https://${secrets.forgejo.domain}";
