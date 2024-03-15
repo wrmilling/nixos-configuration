@@ -25,7 +25,7 @@ in {
   };
 
   services.gpg-agent = {
-    pinentryFlavor = lib.mkForce null;
+    pinentryPackage = lib.mkForce null;
     extraConfig = lib.mkForce ''
       ttyname $GPG_TTY
       ${pinentryProgram}
