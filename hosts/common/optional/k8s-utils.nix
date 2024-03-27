@@ -13,7 +13,7 @@
     kubectl # kubernetes CLI
     kubectl-doctor # kubernetes doctor
     kubectl-example # output example kubernetes types
-    kubectl-view-allocations # view kubernetes allocations
+    # kubectl-view-allocations # view kubernetes allocations
     kubectl-view-secret # view kubernetes secrets without piping and decoding
     kubectl-cnpg # CNPG Plugin for kubectl
     kubecolor # colorize kubectl output
