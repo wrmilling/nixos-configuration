@@ -42,6 +42,18 @@
         root = "/var/www/${secrets.hosts.bob.domain}";
       };
 
+      "${secrets.hosts.bob.alt1Domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.bob.domain}"
+      };
+
+      "${secrets.hosts.bob.alt2Domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.bob.domain}"
+      };
+
       "status.${secrets.hosts.bob.domain}" = {
         forceSSL = true;
         enableACME = true;
