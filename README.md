@@ -1,6 +1,6 @@
 # NixOS Configuration
 
-A work in progress [NixOS]() configuration that can handle NixOS and nix-darwin on multiple hosts.
+A work in progress [NixOS](https://nixos.org/) configuration that can handle NixOS and nix-darwin on multiple hosts.
 
 ![neofetch screenshot](https://i.imgur.com/Hh16z3T.png)
 
