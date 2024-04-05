@@ -37,8 +37,8 @@
   # services.xserver.displayManager.sddm.enable = lib.mkForce false;
   # services.xserver.displayManager.cosmic-greeter.enable = true;
   # services.pipewire.enable = lib.mkForce false;
-  hardware.pulseaudio.enable = lib.mkForce false;
-  services.desktopManager.cosmic.enable = true;
+  # hardware.pulseaudio.enable = lib.mkForce false;
+  # services.desktopManager.cosmic.enable = true;
 
   networking = {
     hostName = "donnager";
