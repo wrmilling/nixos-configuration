@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   outputs,
   ...
@@ -39,6 +40,9 @@
   security.polkit.enable = true;
 
   nix = {
+    settings = {
+      auto-optimise-store = lib.mkDefault true;
+    };
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
