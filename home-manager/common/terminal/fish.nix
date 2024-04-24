@@ -98,6 +98,7 @@ in {
       drs = "cd ~/.nixos-configuration && git pull && darwin-rebuild switch --flake . && home-manager switch --flake . && cd -";
       ncg = "sudo nix-collect-garbage";
       ncgd = "sudo nix-collect-garbage -d";
+      ncl = "home-manager expire-generations \"$(date +%m/%d/%Y)\" && sudo nix-collect-garbage -d";
 
       # hut
       hpl = "hut lists patchset list";
