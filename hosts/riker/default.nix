@@ -49,12 +49,6 @@
     };
   };
 
-  # Cosmic Test
-  #services.xserver.displayManager.sddm.enable = lib.mkForce false;
-  #services.pipewire.enable = lib.mkForce false;
-  #services.desktopManager.cosmic.enable = true;
-  #services.displayManager.cosmic-greeter.enable = true;
-
   home-manager = {
     extraSpecialArgs = {inherit inputs outputs;};
     users = {
