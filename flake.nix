@@ -20,6 +20,10 @@
     # Darwin
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Jovian (Steam Deck)
+    jovian.url = "github:Jovian-Experiments/Jovian-NixOS/development";
+    jovian.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
