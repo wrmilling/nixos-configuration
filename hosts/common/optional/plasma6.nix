@@ -9,7 +9,7 @@
     desktopManager.plasma6 = {
       enable = true;
     };
-    xserver.displayManager.sddm = {
+    displayManager.sddm = {
       enable = true;
       wayland.enable = true;
     };
