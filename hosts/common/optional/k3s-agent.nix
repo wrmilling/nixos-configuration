@@ -20,5 +20,7 @@ in {
     extraFlags = "--node-label \"k3s-upgrade=false\""; # Optionally add additional args to k3s
   };
 
+    programs.nbd.enable = true;
+
   environment.systemPackages = [k3s-package];
 }
