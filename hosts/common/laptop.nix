@@ -18,5 +18,5 @@
 
   services.xserver.enable = true;
   networking.networkmanager.enable = true;
-  programs.nm-applet.enable = true;
+  # programs.nm-applet.enable = true;
 }
