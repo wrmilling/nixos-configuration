@@ -26,8 +26,7 @@
   };
 
   nix = {
-    # package = lib.mkDefault pkgs.nix;
-    package = pkgs.nixVersions.nix_2_16;
+    package = lib.mkDefault pkgs.nix;
     settings = {
       experimental-features = ["nix-command" "flakes" "repl-flake"];
       warn-dirty = false;
