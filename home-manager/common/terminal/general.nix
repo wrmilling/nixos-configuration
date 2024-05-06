@@ -10,7 +10,7 @@
     lynx
     viddy
     silver-searcher
-    magic-wormhole
+    magic-wormhole-rs
     hugo
   ];
 }
