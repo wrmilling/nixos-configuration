@@ -18,6 +18,5 @@
 
   services.xserver.enable = true;
   networking.networkmanager.enable = true;
-  services.tlp.enable = true;
   # programs.nm-applet.enable = true;
 }
