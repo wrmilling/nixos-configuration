@@ -28,6 +28,7 @@
       "font-source-code-pro"
       "datagrip"
       "miro"
+      "gather"
     ];
     masApps = {
       Tailscale = 1475387142;
