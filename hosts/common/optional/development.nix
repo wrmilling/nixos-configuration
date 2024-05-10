@@ -10,5 +10,6 @@
     dtc
     nixpkgs-review
     go
+    pre-commit
   ];
 }
