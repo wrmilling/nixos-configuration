@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   environment.systemPackages = with pkgs; [
     fluxcd # flux CLI
     go-task # task runner

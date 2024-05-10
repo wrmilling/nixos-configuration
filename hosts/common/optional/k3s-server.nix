@@ -3,15 +3,15 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   secrets = import ../../../secrets/secrets.nix;
   hostname = config.networking.hostName;
   domain = config.networking.domain;
   k3s-package = pkgs.k3s_1_29;
-in {
-  imports = [
-    ./k3s-firewall.nix
-  ];
+in
+{
+  imports = [ ./k3s-firewall.nix ];
 
   services.k3s = {
     enable = true;
@@ -23,5 +23,8 @@ in {
 
   programs.nbd.enable = true;
 
-  environment.systemPackages = with pkgs; [k3s-package kubectl];
+  environment.systemPackages = with pkgs; [
+    k3s-package
+    kubectl
+  ];
 }

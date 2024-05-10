@@ -6,7 +6,8 @@
   lib,
   secrets,
   ...
-}: {
+}:
+{
   imports = [
     inputs.hardware.nixosModules.lenovo-legion-y530-15ich
     inputs.home-manager.nixosModules.home-manager
@@ -31,7 +32,7 @@
   # Visual boot
   boot.initrd.systemd.enable = true;
   boot.plymouth.enable = true;
-  boot.kernelParams = ["quiet"];
+  boot.kernelParams = [ "quiet" ];
 
   networking = {
     hostName = "donnager";
@@ -39,7 +40,9 @@
   };
 
   home-manager = {
-    extraSpecialArgs = {inherit inputs outputs;};
+    extraSpecialArgs = {
+      inherit inputs outputs;
+    };
     users = {
       w4cbe = import ../../home-manager/donnager;
     };

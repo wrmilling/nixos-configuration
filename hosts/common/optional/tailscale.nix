@@ -3,12 +3,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   tailscale-package = pkgs.tailscale;
-in {
-  environment.systemPackages = with pkgs; [
-    barrier
-  ];
+in
+{
+  environment.systemPackages = with pkgs; [ barrier ];
 
   services.tailscale = {
     enable = true;

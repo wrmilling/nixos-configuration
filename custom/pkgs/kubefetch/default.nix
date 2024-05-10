@@ -24,6 +24,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jkulzer/kubefetch";
     license = licenses.gpl3;
-    maintainers = with maintainers; [wrmilling];
+    maintainers = with maintainers; [ wrmilling ];
   };
 }

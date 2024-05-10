@@ -4,7 +4,8 @@
   lib,
   callPackage,
   ...
-}: {
+}:
+{
   services = {
     desktopManager.plasma6 = {
       enable = true;

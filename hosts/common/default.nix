@@ -4,7 +4,8 @@
   pkgs,
   outputs,
   ...
-}: {
+}:
+{
   imports = [
     ./modules/users.nix
     ./modules/terminal.nix
@@ -23,8 +24,7 @@
   };
 
   # Basic environment.
-  environment.systemPackages = with pkgs; [
-  ];
+  environment.systemPackages = with pkgs; [ ];
 
   #
   # Misc settings
@@ -46,6 +46,9 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    settings.trusted-users = ["root" "@wheel"];
+    settings.trusted-users = [
+      "root"
+      "@wheel"
+    ];
   };
 }

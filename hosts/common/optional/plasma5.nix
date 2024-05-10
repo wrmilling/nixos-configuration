@@ -4,7 +4,8 @@
   lib,
   callPackage,
   ...
-}: {
+}:
+{
   services.xserver = {
     enable = true;
     desktopManager.plasma5 = {

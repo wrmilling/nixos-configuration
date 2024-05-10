@@ -3,13 +3,13 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   secrets = import ../../../secrets/secrets.nix;
   k3s-package = pkgs.k3s_1_29;
-in {
-  imports = [
-    ./k3s-firewall.nix
-  ];
+in
+{
+  imports = [ ./k3s-firewall.nix ];
 
   services.k3s = {
     enable = true;
@@ -20,7 +20,7 @@ in {
     extraFlags = "--node-label \"k3s-upgrade=false\""; # Optionally add additional args to k3s
   };
 
-    programs.nbd.enable = true;
+  programs.nbd.enable = true;
 
-  environment.systemPackages = [k3s-package];
+  environment.systemPackages = [ k3s-package ];
 }

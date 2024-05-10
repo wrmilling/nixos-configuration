@@ -3,8 +3,9 @@
   lib,
   config,
   ...
-}: {
-  home.packages = with pkgs; [i3status-rust];
+}:
+{
+  home.packages = with pkgs; [ i3status-rust ];
   home.file."i3status-rust-config" = {
     target = ".config/i3status-rust/config.toml";
     text = ''

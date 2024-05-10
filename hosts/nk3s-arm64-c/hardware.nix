@@ -4,11 +4,12 @@
   pkgs,
   modulesPath,
   ...
-}: {
-  boot.initrd.availableKernelModules = ["xhci_pci"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = ["rbd"];
-  boot.extraModulePackages = [];
+}:
+{
+  boot.initrd.availableKernelModules = [ "xhci_pci" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "rbd" ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/NIXOS_SD";

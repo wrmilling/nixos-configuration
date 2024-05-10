@@ -4,7 +4,8 @@
   lib,
   callPackage,
   ...
-}: {
+}:
+{
   programs.sway = {
     enable = true;
     extraSessionCommands = ''
@@ -34,15 +35,19 @@
       open-sans
       noto-fonts
       noto-fonts-emoji
-      (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
       font-awesome
     ];
 
     fontconfig = {
       defaultFonts = {
-        monospace = ["Noto Sans Mono"];
-        sansSerif = ["Public Sans" "Open Sans" "Noto Sans"];
-        serif = ["Noto Serif"];
+        monospace = [ "Noto Sans Mono" ];
+        sansSerif = [
+          "Public Sans"
+          "Open Sans"
+          "Noto Sans"
+        ];
+        serif = [ "Noto Serif" ];
       };
     };
   };

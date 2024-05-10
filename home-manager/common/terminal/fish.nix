@@ -3,13 +3,15 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
   hasPackage = pname: lib.any (p: p ? pname && p.pname == pname) config.home.packages;
   hasRipgrep = hasPackage "ripgrep";
   hasExa = hasPackage "exa";
   hasNeovim = config.programs.neovim.enable;
-in {
+in
+{
   programs.fish = {
     enable = true;
     plugins = [
@@ -179,20 +181,20 @@ in {
         #bind \ee edit_command_buffer
       ''
       +
-      # Use vim bindings and cursors
-      ''
-        #fish_vi_key_bindings
-        set fish_cursor_default     block      blink
-        set fish_cursor_insert      line       blink
-        set fish_cursor_replace_one underscore blink
-        set fish_cursor_visual      block
-      ''
+        # Use vim bindings and cursors
+        ''
+          #fish_vi_key_bindings
+          set fish_cursor_default     block      blink
+          set fish_cursor_insert      line       blink
+          set fish_cursor_replace_one underscore blink
+          set fish_cursor_visual      block
+        ''
       +
-      # fzf
-      ''
-        set fzf_preview_dir_cmd exa --all --color=always
-        set -x FZF_DEFAULT_OPTS '--cycle --layout=reverse --border --height=90% --preview-window=wrap --marker="*" --color=fg:white,bg:black,hl:red,fg+:white,hl+:red,info:yellow,prompt:blue,pointer:magenta,marker:magenta,spinner:green,header:blue,border:white'
-        set fzf_fd_opts --hidden --exclude=.git --exclude=.github --exclude=.cache
-      '';
+        # fzf
+        ''
+          set fzf_preview_dir_cmd exa --all --color=always
+          set -x FZF_DEFAULT_OPTS '--cycle --layout=reverse --border --height=90% --preview-window=wrap --marker="*" --color=fg:white,bg:black,hl:red,fg+:white,hl+:red,info:yellow,prompt:blue,pointer:magenta,marker:magenta,spinner:green,header:blue,border:white'
+          set fzf_fd_opts --hidden --exclude=.git --exclude=.github --exclude=.cache
+        '';
   };
 }

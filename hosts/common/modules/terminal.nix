@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   environment.systemPackages = with pkgs; [
     file
     bc

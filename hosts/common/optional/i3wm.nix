@@ -4,7 +4,8 @@
   lib,
   callPackage,
   ...
-}: {
+}:
+{
   services.xserver = {
     autorun = true;
     xkb.layout = "us";
@@ -44,9 +45,7 @@
   xdg.portal = {
     enable = true;
     config.common.default = "*";
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-    ];
+    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
   };
 
   programs.dconf.enable = true;

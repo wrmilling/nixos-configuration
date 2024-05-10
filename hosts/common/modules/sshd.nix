@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = lib.mkDefault true;

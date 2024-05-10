@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{ config, pkgs, ... }:
+let
   bsodlock = pkgs.writeShellScriptBin "bsodlock" ''
     set -eu
 
@@ -14,8 +11,9 @@
 
     exit 0
   '';
-in {
-  home.packages = [bsodlock];
+in
+{
+  home.packages = [ bsodlock ];
   home.file."bsod.png" = {
     source = ./bsod.png;
     target = ".local/share/wallpapers/bsod.png";

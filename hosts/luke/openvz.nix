@@ -3,7 +3,8 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   # With most out-of-box templates, OpenVZ automatically runs a set of bash scripts
   # in the guest container every boot to customize the system (setting hostname, IP
   # addresses, etc.). We can't run them in NixOS, but they have to be successfully
@@ -19,7 +20,8 @@
 
     exec ${pkgs.bashInteractive}/bin/bash "$@"
   '';
-in {
+in
+{
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   boot.isContainer = true;
   boot.loader.initScript.enable = true;
@@ -58,9 +60,12 @@ in {
   # conflict.
   systemd.services.systemd-udev-trigger-ovz = {
     description = "Coldplug All udev Devices";
-    after = ["systemd-udevd-kernel.socket" "systemd-udevd-control.socket"];
-    wants = ["systemd-udevd.service"];
-    wantedBy = ["sysinit.target"];
+    after = [
+      "systemd-udevd-kernel.socket"
+      "systemd-udevd-control.socket"
+    ];
+    wants = [ "systemd-udevd.service" ];
+    wantedBy = [ "sysinit.target" ];
     unitConfig = {
       DefaultDependencies = "no";
     };

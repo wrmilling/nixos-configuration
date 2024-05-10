@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   programs.gpg = {
     enable = true;
     mutableKeys = false;

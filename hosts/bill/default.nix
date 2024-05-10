@@ -6,7 +6,8 @@
   lib,
   secrets,
   ...
-}: {
+}:
+{
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
@@ -44,7 +45,9 @@
   };
 
   home-manager = {
-    extraSpecialArgs = {inherit inputs outputs;};
+    extraSpecialArgs = {
+      inherit inputs outputs;
+    };
     users = {
       w4cbe = import ../../home-manager/server;
     };

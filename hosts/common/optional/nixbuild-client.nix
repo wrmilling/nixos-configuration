@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   programs.ssh.extraConfig = ''
     Host nixbuild.${config.networking.domain}
       HostName hermes.${config.networking.domain}
@@ -14,7 +15,7 @@
 
   programs.ssh.knownHosts = {
     nixbuild = {
-      hostNames = ["hermes.${config.networking.domain}"];
+      hostNames = [ "hermes.${config.networking.domain}" ];
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE/hRd7PJ/Qby/nB34LNkOPkwyTsc2eJAyaL0ANH1V+h Hermes.BuildHost";
     };
   };
@@ -26,7 +27,7 @@
         hostName = "hermes.${config.networking.domain}";
         system = "aarch64-linux";
         maxJobs = 4;
-        supportedFeatures = [];
+        supportedFeatures = [ ];
       }
     ];
   };

@@ -3,8 +3,9 @@
   lib,
   pkgs,
   ...
-}: {
-  environment.pathsToLink = ["/libexec"];
+}:
+{
+  environment.pathsToLink = [ "/libexec" ];
 
   imports = [
     ./default.nix

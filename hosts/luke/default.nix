@@ -6,7 +6,8 @@
   lib,
   secrets,
   ...
-}: {
+}:
+{
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./openvz.nix
@@ -18,7 +19,10 @@
     hostName = "luke";
     domain = secrets.hosts.luke.domain;
     useNetworkd = true;
-    nameservers = ["8.8.8.8" "8.8.4.4"];
+    nameservers = [
+      "8.8.8.8"
+      "8.8.4.4"
+    ];
   };
 
   # Disable resolved for now, issue on OpenVZ
@@ -63,10 +67,15 @@
   ];
   services.openssh.settings.PermitRootLogin = lib.mkForce "prohibit-password";
   users.users.w4cbe.passwordFile = lib.mkForce null;
-  nix.settings.trusted-users = ["root" "@wheel"];
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+  ];
 
   home-manager = {
-    extraSpecialArgs = {inherit inputs outputs;};
+    extraSpecialArgs = {
+      inherit inputs outputs;
+    };
     users = {
       w4cbe = import ../../home-manager/server;
     };

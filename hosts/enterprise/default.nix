@@ -6,7 +6,8 @@
   lib,
   secrets,
   ...
-}: {
+}:
+{
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
@@ -28,7 +29,7 @@
   # Visual boot
   boot.initrd.systemd.enable = true;
   boot.plymouth.enable = true;
-  boot.kernelParams = ["quiet"];
+  boot.kernelParams = [ "quiet" ];
 
   networking = {
     hostName = "enterprise";
@@ -36,7 +37,9 @@
   };
 
   home-manager = {
-    extraSpecialArgs = {inherit inputs outputs;};
+    extraSpecialArgs = {
+      inherit inputs outputs;
+    };
     users = {
       w4cbe = import ../../home-manager/enterprise;
     };

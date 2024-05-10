@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   services.chrony = {
     enable = true;
     enableNTS = true;

@@ -3,8 +3,7 @@
   lib,
   config,
   ...
-}: {
-  home.packages = with pkgs; [
-    box64
-  ];
+}:
+{
+  home.packages = with pkgs; [ box64 ];
 }

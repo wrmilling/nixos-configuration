@@ -6,7 +6,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     inputs.hardware.nixosModules.pine64-pinebook-pro
     inputs.home-manager.nixosModules.home-manager
@@ -30,7 +31,7 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
-  boot.kernelParams = lib.mkAfter ["console=tty0"];
+  boot.kernelParams = lib.mkAfter [ "console=tty0" ];
 
   boot.initrd.luks.devices = {
     cryptroot = {
@@ -50,7 +51,9 @@
   };
 
   home-manager = {
-    extraSpecialArgs = {inherit inputs outputs;};
+    extraSpecialArgs = {
+      inherit inputs outputs;
+    };
     users = {
       w4cbe = import ../../home-manager/riker;
     };

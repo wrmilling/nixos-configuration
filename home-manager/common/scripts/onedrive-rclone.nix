@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{ config, pkgs, ... }:
+let
   onedrive-rclone = pkgs.writeShellScriptBin "onedrive-rclone" ''
     print_help () {
       ${pkgs.coreutils-full}/bin/cat <<- "EOF"
@@ -43,6 +40,7 @@
       ;;
     esac
   '';
-in {
-  home.packages = [onedrive-rclone];
+in
+{
+  home.packages = [ onedrive-rclone ];
 }

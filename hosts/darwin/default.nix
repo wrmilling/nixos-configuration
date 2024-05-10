@@ -6,13 +6,14 @@
   lib,
   secrets,
   ...
-}: {
+}:
+{
   imports = [
     ../common/modules/terminal.nix
     ./homebrew.nix
   ];
 
-  security.pki.certificateFiles = [../../secrets/certs/cert.pem];
+  security.pki.certificateFiles = [ ../../secrets/certs/cert.pem ];
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   programs.nix-index.enable = true;
@@ -28,7 +29,11 @@
   nix = {
     package = lib.mkDefault pkgs.nix;
     settings = {
-      experimental-features = ["nix-command" "flakes" "repl-flake"];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+        "repl-flake"
+      ];
       warn-dirty = false;
       sandbox = "relaxed";
     };
@@ -44,8 +49,13 @@
       pkgs.vim
       pkgs.home-manager
     ];
-    shells = [pkgs.bashInteractive pkgs.fish];
-    shellAliases = {git = "/usr/bin/git";};
+    shells = [
+      pkgs.bashInteractive
+      pkgs.fish
+    ];
+    shellAliases = {
+      git = "/usr/bin/git";
+    };
     variables.EDITOR = "${lib.getBin pkgs.vim}/bin/vim";
   };
 

@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     ./atuin.nix
     ./fish.nix
@@ -9,7 +10,5 @@
     ./tmux.nix
     ./vim.nix
   ];
-  home.packages = with pkgs; [
-    onedrive
-  ];
+  home.packages = with pkgs; [ onedrive ];
 }

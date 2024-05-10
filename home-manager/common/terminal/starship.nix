@@ -1,4 +1,5 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   nix-inspect = pkgs.writeShellScriptBin "nix-inspect" ''
     read -ra EXCLUDED <<< "$@"
     EXCLUDED+=(''${NIX_INSPECT_EXCLUDE[@]:-})
@@ -16,7 +17,8 @@
     read -ra PROGRAMS <<< "''${PROGRAMS[@]}"
     echo "''${PROGRAMS[@]}"
   '';
-in {
+in
+{
   programs.starship = {
     enable = true;
     settings = {

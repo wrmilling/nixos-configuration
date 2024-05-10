@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   programs.git = {
     enable = true;
     package = pkgs.gitAndTools.gitFull;
@@ -42,6 +43,9 @@
       sendemail.smtpencryption = "tls";
       sendemail.smtpserverport = 587;
     };
-    ignores = [".direnv" "result"];
+    ignores = [
+      ".direnv"
+      "result"
+    ];
   };
 }

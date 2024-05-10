@@ -4,14 +4,13 @@
   config,
   inputs,
   ...
-}: {
+}:
+{
   programs.atuin = {
     enable = true;
     package = pkgs.atuin;
 
-    flags = [
-      "--disable-up-arrow"
-    ];
+    flags = [ "--disable-up-arrow" ];
 
     settings = {
       auto_sync = true;

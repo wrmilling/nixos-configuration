@@ -3,8 +3,9 @@
   config,
   lib,
   ...
-}: {
-  home.packages = with pkgs; [pinentry_mac];
+}:
+{
+  home.packages = with pkgs; [ pinentry_mac ];
 
   programs.gpg = {
     enable = true;

@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{ config, pkgs, ... }:
+let
   procinfo = pkgs.writeShellScriptBin "procinfo" ''
     # Provides useful information for the Pine64 Pinebook Pro
     # CPU Core Frequencies
@@ -32,8 +29,8 @@
     bat_current_level=$(${pkgs.coreutils-full}/bin/cat /sys/class/power_supply/cw2015-battery/capacity)
 
     # Print everything out
-    echo CPU Temp: ${cpu::2}C '|' A53 Freq: $a53freq Ghz '|' A72 Freq: $a72freq Ghz
-    echo GPU Temp: ${gpu::2}C '|' GPU Freq: $gpufreq Mhz
+    echo CPU Temp: ${"cpu::2"}C '|' A53 Freq: $a53freq Ghz '|' A72 Freq: $a72freq Ghz
+    echo GPU Temp: ${"gpu::2"}C '|' GPU Freq: $gpufreq Mhz
     echo Battery Charge Level is $bat_current_level %
 
     if [[ "$bat_power_now" != "0" ]]; then
@@ -46,6 +43,7 @@
       echo Charging via Barrel Plug
     fi
   '';
-in {
-  home.packages = [procinfo];
+in
+{
+  home.packages = [ procinfo ];
 }

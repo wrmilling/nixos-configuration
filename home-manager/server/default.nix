@@ -5,7 +5,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     ../common/terminal/fish.nix
     ../common/terminal/general.nix
