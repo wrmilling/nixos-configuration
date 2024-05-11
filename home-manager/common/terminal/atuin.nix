@@ -18,4 +18,6 @@
       search_mode = "fuzzy";
     };
   };
+
+  home.packages = with pkgs; [ fzf ];
 }
