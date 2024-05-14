@@ -22,7 +22,8 @@
     pass
     pinentry-curses
     minicom
-    neofetch
+    fastfetch
+    hydra-check
     home-manager
   ];
 }
