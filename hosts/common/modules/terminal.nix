@@ -25,5 +25,7 @@
     fastfetch
     hydra-check
     home-manager
+    ipinfo
+    ipcalc
   ];
 }
