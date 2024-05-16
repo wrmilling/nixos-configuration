@@ -6,7 +6,7 @@
 }:
 let
   secrets = import ../../../secrets/secrets.nix;
-  k3s-package = pkgs.k3s_1_29;
+  k3s-package = pkgs.k3s_1_30;
 in
 {
   imports = [ ./k3s-firewall.nix ];
