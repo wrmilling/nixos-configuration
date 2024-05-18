@@ -40,7 +40,7 @@ $ cd /mnt
 $ mkdir -p etc/nixos
 $ cd etc/nixos
 $ nix-shell -p git git-crypt magic-wormhole vim
-$ git clone https://git.sr.ht/~wrmilling/nixos-configuration .
+$ git clone https://github.com/wrmilling/nixos-configuration.git .
 $ <Unlock git-crypt using static key, can be transferred from existing install with magic wormhole>
 $ nixos-install --flake .#nk3s-amd64-a
 $ shutdown -r now

@@ -86,7 +86,7 @@ This will be combined into the install step as soon as I have a stable/complete 
 ```
 cd /etc/nixos
 rm ./*
-git clone https://git.sr.ht/~wrmilling/nixos-configuration .
+git clone https://github.com/wrmilling/nixos-configuration.git .
 nixos-rebuild switch --flake .
 passwd w4cbe
 shutdown -r now

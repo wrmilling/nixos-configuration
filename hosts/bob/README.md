@@ -145,7 +145,7 @@ Once logged back into the fresh system as root, I will normally do the following
 
 ```
 $ cd /etc/nixos/
-$ nix-shell -p git --run "git clone https://git.sr.ht/~wrmilling/nixos-configuration .
+$ nix-shell -p git --run "git clone https://github.com/wrmilling/nixos-configuration.git .
 ```
 
 Make sure the disk UUIDs are correct in `hardware.nix` from the machine generated `configuration.nix` before proceeding, they will change after a rebuild. Also, my config currently assumes a secrets file in `/etc/nixos` with the following contents for this machine:
