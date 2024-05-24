@@ -10,7 +10,10 @@
     # nativeBuildInputs = with pkgs; [ nix home-manager git ];
     nativeBuildInputs = with pkgs; [
       nix
+      vim
       git
+      git-crypt
+      magic-wormhole-rs
     ];
   };
 }
