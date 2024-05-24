@@ -13,5 +13,6 @@
     silver-searcher
     magic-wormhole-rs
     hugo
+    any-nix-shell
   ];
 }
