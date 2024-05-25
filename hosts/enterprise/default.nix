@@ -31,6 +31,8 @@
   boot.plymouth.enable = true;
   boot.kernelParams = [ "quiet" ];
 
+  services.displayManager.sddm.wayland.enable = lib.mkForce false;
+
   networking = {
     hostName = "enterprise";
     domain = secrets.hosts.enterprise.domain;
