@@ -18,21 +18,16 @@
     ../common/optional/docker.nix
     ../common/optional/gaming.nix
     ../common/optional/k8s-utils.nix
-    # ../common/optional/nixbuild-client.nix
     ../common/optional/plasma6.nix
     ../common/optional/printing.nix
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
+    ../common/optional/visual-boot.nix
     ../common/optional/zram.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # Visual boot
-  boot.initrd.systemd.enable = true;
-  boot.plymouth.enable = true;
-  boot.kernelParams = [ "quiet" ];
 
   networking = {
     hostName = "donnager";

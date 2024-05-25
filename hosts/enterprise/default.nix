@@ -21,18 +21,14 @@
     ../common/optional/printing.nix
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
+    ../common/optional/visual-boot.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Visual boot
-  boot.initrd.systemd.enable = true;
-  boot.plymouth.enable = true;
-  boot.kernelParams = [ "quiet" ];
-
   services.displayManager.sddm.wayland.enable = lib.mkForce false;
-
+  
   networking = {
     hostName = "enterprise";
     domain = secrets.hosts.enterprise.domain;

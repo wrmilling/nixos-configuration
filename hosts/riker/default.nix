@@ -14,13 +14,11 @@
     ./hardware.nix
     ../common/laptop.nix
     ../common/optional/development.nix
-    # ../common/optional/i3wm.nix
     ../common/optional/k8s-utils.nix
-    # ../common/optional/lightdm.nix
-    # ../common/optional/nixbuild-client.nix
     ../common/optional/plasma6.nix
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
+    ../common/optional/visual-boot.nix
     ../common/optional/zram.nix
   ];
 
