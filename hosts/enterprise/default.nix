@@ -28,7 +28,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   services.displayManager.sddm.wayland.enable = lib.mkForce false;
-  
+
   networking = {
     hostName = "enterprise";
     domain = secrets.hosts.enterprise.domain;

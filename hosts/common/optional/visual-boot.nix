@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 {
   # Visual boot
   boot.initrd.systemd.enable = true;
