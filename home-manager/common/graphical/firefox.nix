@@ -5,7 +5,7 @@
     profiles.winston = {
       id = 0;
       isDefault = true;
-      search.default = "Google";
+      search.default = "Kagi";
       search.force = true;
       search.engines = {
         "Nix Packages" = {
