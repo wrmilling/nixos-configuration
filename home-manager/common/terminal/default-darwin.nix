@@ -15,8 +15,6 @@
     google-cloud-sdk
     azure-cli
     rancher
-    docker
-    docker-buildx
     present
   ];
 }
