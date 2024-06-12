@@ -13,6 +13,8 @@
   home.packages = with pkgs; [
     cloudfoundry-cli
     google-cloud-sdk
+    azure-cli
+    rancher
     present
   ];
 }
