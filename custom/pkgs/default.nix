@@ -4,5 +4,5 @@
   pkgs ? (import ../nixpkgs.nix) { },
 }:
 {
-  kubefetch = pkgs.callPackage ./kubefetch { };
+  # kubefetch = pkgs.callPackage ./kubefetch { };
 }
