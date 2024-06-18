@@ -15,6 +15,6 @@
     google-cloud-sdk
     azure-cli
     rancher
-    present
+    slides
   ];
 }
