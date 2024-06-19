@@ -16,5 +16,6 @@
     azure-cli
     rancher
     slides-git
+    graph-easy
   ];
 }
