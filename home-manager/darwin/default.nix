@@ -54,11 +54,12 @@
       # fix brew path (should not be needed but somehow is?)
       ''
         eval (/opt/homebrew/bin/brew shellenv)
-      '' +
-      # Add custom local paths
       ''
-        fish_add_path $HOME/.rd/bin
-      '';
+      +
+        # Add custom local paths
+        ''
+          fish_add_path $HOME/.rd/bin
+        '';
   };
 
   # Alacritty Font Fixes
