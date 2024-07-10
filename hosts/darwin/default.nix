@@ -10,6 +10,7 @@
 {
   imports = [
     ../common/modules/terminal.nix
+    ../common/optional/k8s-utils.nix
     ./homebrew.nix
   ];
 
