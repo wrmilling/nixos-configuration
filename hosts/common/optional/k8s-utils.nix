@@ -8,7 +8,7 @@
   environment.systemPackages = with pkgs; [
     fluxcd # flux CLI
     go-task # task runner
-    k9s # kubernetes viewer tool
+    # k9s # kubernetes viewer tool (Check home-manager)
     kail # kubernetes tail
     ktop # kubernetes top
     kubectl # kubernetes CLI
