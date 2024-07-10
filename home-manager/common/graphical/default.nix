@@ -14,7 +14,7 @@
       (lib.mkIf stdenv.isAarch64 [ ])
       [
         element-desktop
-        cura
+        # cura
         flameshot
         gparted
         # volumeicon
