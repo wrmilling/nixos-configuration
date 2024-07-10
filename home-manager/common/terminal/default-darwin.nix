@@ -13,7 +13,7 @@
   home.packages = with pkgs; [
     cloudfoundry-cli
     google-cloud-sdk
-    azure-cli
+    # azure-cli
     rancher
     slides-git
     graph-easy
