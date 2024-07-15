@@ -7,7 +7,6 @@
 {
   environment.systemPackages = with pkgs; [ pw-volume ];
 
-  sound.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
