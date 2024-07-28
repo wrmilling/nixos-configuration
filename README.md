@@ -27,7 +27,6 @@ A work in progress [NixOS](https://nixos.org/) configuration that can handle Nix
   - [donnager](hosts/donnager) (NixOS Laptop, Lenovo Legion Y530)
   - [enterprise](hosts/enterprise) (NixOS Desktop, Custom Built)
   - [goku](hosts/goku) (NixOS Server, Oracle x86_64)
-  - [luke](hosts/luke) (OpenVZ Server, 128MB instance, testing)
   - [nk3s-amd64-0](hosts/nk3s-amd64-0) (NixOS Server, Virtual on NAS)
   - [nk3s-amd64-a](hosts/nk3s-amd64-a) (NixOS Server, Minisforum UN100C)
   - [nk3s-amd64-b](hosts/nk3s-amd64-b) (NixOS Server, Minisforum UN100C)
