@@ -19,6 +19,7 @@ These configurations generally reference a [home-manager](../home-manager) confi
 - [nk3s-amd64-a](nk3s-amd64-a) (Server, Minisforum UN100C)
 - [nk3s-amd64-b](nk3s-amd64-b) (Server, Minisforum UN100C)
 - [nk3s-amd64-c](nk3s-amd64-c) (Server, Minisforum UN100C)
+- [nk3s-amd64-d](nk3s-amd64-d) (Server, BMAX B4 Plus)
 - [nk3s-arm64-a](nk3s-arm64-a) (Server, Raspberry Pi 4 8GB)
 - [nk3s-arm64-b](nk3s-arm64-b) (Server, Raspberry Pi 4 8GB)
 - [nk3s-arm64-c](nk3s-arm64-c) (Server, Raspberry Pi 4 8GB)
