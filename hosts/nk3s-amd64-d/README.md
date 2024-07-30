@@ -6,10 +6,10 @@ nk3s-amd64-d is a BMAX B4 Plus mini-pc with a 4-core Intel N100 CPU, 16GB ram, 5
 
 ### Disk Setup
 
-Create 2 partitions on the M.2 SATA SSD, one for EFI Boot and one for the root. `/dev/sdb` is assumed based on initial install testing.
+Create 2 partitions on the M.2 SATA SSD, one for EFI Boot and one for the root. `/dev/sda` is assumed based on initial install testing.
 
 ```
-$ sudo fdisk /dev/sdb
+$ sudo fdisk /dev/sda
 > g (GPT Table)
 > n (New Partition)
 > <enter> (Default 1)
@@ -22,9 +22,9 @@ $ sudo fdisk /dev/sdb
 > <enter> (Default End of EFI)
 > <enter> (Default End of Disk)
 > w (Write)
-$ sudo mkfs.fat -F 32 /dev/sdb1
-$ sudo fatlabel /dev/sdb1 BOOTEFI
-$ sudo mkfs.ext4 -L nixos /dev/sdb2
+$ sudo mkfs.fat -F 32 /dev/sda1
+$ sudo fatlabel /dev/sda1 BOOTEFI
+$ sudo mkfs.ext4 -L nixos /dev/sda2
 $ sudo mount /dev/disk/by-label/nixos /mnt
 $ sudo mkdir -p /mnt/boot
 $ sudo mount /dev/disk/by-label/BOOTEFI /mnt/boot
