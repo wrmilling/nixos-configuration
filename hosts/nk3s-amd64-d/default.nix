@@ -33,7 +33,6 @@
           prefixLength = 24;
         }
       ];
-      enp3s0.useDHCP = lib.mkDefault true;
     };
     defaultGateway = secrets.hosts.nk3s-amd64-d.defaultGateway;
     nameservers = secrets.hosts.nk3s-amd64-d.nameservers;
