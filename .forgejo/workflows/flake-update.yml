@@ -1,0 +1,19 @@
+on:
+  schedule:
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+jobs:
+  lockfile:
+    runs-on: alpine-tokyo
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: https://github.com/DeterminateSystems/nix-installer-action@main
+      - run: 'nix flake update --commit-lock-file'
+        env:
+          GIT_AUTHOR_NAME: Winston R. Milling
+          GIT_AUTHOR_EMAIL: Winston@Milli.ng
+          GIT_COMMITTER_NAME: Forge Actions
+          GIT_COMMITTER_EMAIL: forge-actions@noreply.milli.ng
+      - run: 'git push'
