@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - run: 'nix flake update --commit-lock-file'
+      - run: 'nix --extra-experimental-features nix-command flake update --commit-lock-file'
         env:
           GIT_AUTHOR_NAME: Winston R. Milling
           GIT_AUTHOR_EMAIL: Winston@Milli.ng
