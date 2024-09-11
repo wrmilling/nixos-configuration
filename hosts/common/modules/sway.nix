@@ -14,12 +14,12 @@
       export MOZ_DBUS_REMOTE=1
       export NIXOS_OZONE_WL=1
     '';
-    extraPackages = with pkgs; [
-      swaylock
-      swayidle
-      rofi-wayland
-      xwayland
-      qt5.qtwayland
+    extraPackages = [
+      pkgs.swaylock
+      pkgs.swayidle
+      pkgs.rofi-wayland
+      pkgs.xwayland
+      pkgs.qt5.qtwayland
     ];
     wrapperFeatures.gtk = true;
   };
@@ -30,13 +30,13 @@
   programs.thunar.enable = true;
 
   fonts = {
-    fonts = with pkgs; [
-      public-sans
-      open-sans
-      noto-fonts
-      noto-fonts-emoji
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
-      font-awesome
+    fonts = [
+      pkgs.public-sans
+      pkgs.open-sans
+      pkgs.noto-fonts
+      pkgs.noto-fonts-emoji
+      (pkgs.nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+      pkgs.font-awesome
     ];
 
     fontconfig = {

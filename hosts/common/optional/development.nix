@@ -5,11 +5,11 @@
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [
-    vscode
-    dtc
-    nixpkgs-review
-    go
-    pre-commit
+  environment.systemPackages = [
+    pkgs.vscode
+    pkgs.dtc
+    pkgs.nixpkgs-review
+    pkgs.go
+    pkgs.pre-commit
   ];
 }

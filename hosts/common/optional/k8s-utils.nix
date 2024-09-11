@@ -5,23 +5,23 @@
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [
-    fluxcd # flux CLI
-    go-task # task runner
-    # k9s # kubernetes viewer tool (Check home-manager)
-    kail # kubernetes tail
-    ktop # kubernetes top
-    kubectl # kubernetes CLI
-    kubectl-doctor # kubernetes doctor
-    kubectl-example # output example kubernetes types
-    # kubectl-view-allocations # view kubernetes allocations
-    kubectl-view-secret # view kubernetes secrets without piping and decoding
-    kubectl-cnpg # CNPG Plugin for kubectl
-    kubecolor # colorize kubectl output
-    kubernetes-helm # helm CLI
-    kustomize # kustomize CLI for sadists
-    kubectx # kubectx/kubens for switching namespaces/clusters
-    sops # Secrets!
-    kubefetch # neofetch, but k8s
+  environment.systemPackages = [
+    pkgs.fluxcd # flux CLI
+    pkgs.go-task # task runner
+    # pkgs.k9s # kubernetes viewer tool (Check home-manager)
+    pkgs.kail # kubernetes tail
+    pkgs.ktop # kubernetes top
+    pkgs.kubectl # kubernetes CLI
+    pkgs.kubectl-doctor # kubernetes doctor
+    pkgs.kubectl-example # output example kubernetes types
+    # pkgs.kubectl-view-allocations # view kubernetes allocations
+    pkgs.kubectl-view-secret # view kubernetes secrets without piping and decoding
+    pkgs.kubectl-cnpg # CNPG Plugin for kubectl
+    pkgs.kubecolor # colorize kubectl output
+    pkgs.kubernetes-helm # helm CLI
+    pkgs.kustomize # kustomize CLI for sadists
+    pkgs.kubectx # kubectx/kubens for switching namespaces/clusters
+    pkgs.sops # Secrets!
+    pkgs.kubefetch # neofetch, but k8s
   ];
 }

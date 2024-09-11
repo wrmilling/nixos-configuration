@@ -23,8 +23,8 @@ in
 
   programs.nbd.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    k3s-package
-    kubectl
+  environment.systemPackages = [
+    pkgs.k3s-package
+    pkgs.kubectl
   ];
 }

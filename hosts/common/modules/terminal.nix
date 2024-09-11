@@ -5,27 +5,27 @@
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [
-    file
-    bc
-    btop
-    vim
-    git
-    git-crypt
-    wget
-    silver-searcher
-    p7zip
-    rsync
-    rclone
-    dnsutils
-    gnupg
-    pass
-    pinentry-curses
-    minicom
-    fastfetch
-    hydra-check
-    home-manager
-    ipinfo
-    ipcalc
+  environment.systemPackages = [
+    pkgs.file
+    pkgs.bc
+    pkgs.btop
+    pkgs.vim
+    pkgs.git
+    pkgs.git-crypt
+    pkgs.wget
+    pkgs.silver-searcher
+    pkgs.p7zip
+    pkgs.rsync
+    pkgs.rclone
+    pkgs.dnsutils
+    pkgs.gnupg
+    pkgs.pass
+    pkgs.pinentry-curses
+    pkgs.minicom
+    pkgs.fastfetch
+    pkgs.hydra-check
+    pkgs.home-manager
+    pkgs.ipinfo
+    pkgs.ipcalc
   ];
 }

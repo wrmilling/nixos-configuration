@@ -5,8 +5,8 @@
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [
-    exfat
-    nfs-utils
+  environment.systemPackages = [
+    pkgs.exfat
+    pkgs.nfs-utils
   ];
 }

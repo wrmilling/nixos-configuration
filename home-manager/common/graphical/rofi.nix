@@ -5,7 +5,7 @@
   ...
 }:
 {
-  home.packages = with pkgs; [ ];
+  home.packages = [ ];
   home.file."rofi-config" = {
     target = ".config/rofi/config.rasi";
     text = ''

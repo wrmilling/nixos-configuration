@@ -17,9 +17,9 @@
     27036 # Steam Remote Play
   ];
 
-  environment.systemPackages = with pkgs; [
-    lutris
-    heroic
-    protonup-qt
+  environment.systemPackages = [
+    pkgs.lutris
+    pkgs.heroic
+    pkgs.protonup-qt
   ];
 }

@@ -5,8 +5,8 @@
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [
-    qemu
-    qemu-utils
+  environment.systemPackages = [
+    pkgs.qemu
+    pkgs.qemu-utils
   ];
 }

@@ -25,15 +25,15 @@
       enable = true;
       package = pkgs.i3-gaps;
 
-      extraPackages = with pkgs; [
-        i3status-rust
-        i3lock
-        feh
-        rofi
-        imagemagick
-        brightnessctl
-        playerctl
-        pavucontrol
+      extraPackages = [
+        pkgs.i3status-rust
+        pkgs.i3lock
+        pkgs.feh
+        pkgs.rofi
+        pkgs.imagemagick
+        pkgs.brightnessctl
+        pkgs.playerctl
+        pkgs.pavucontrol
       ];
     };
   };
@@ -46,7 +46,7 @@
   xdg.portal = {
     enable = true;
     config.common.default = "*";
-    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
   programs.dconf.enable = true;

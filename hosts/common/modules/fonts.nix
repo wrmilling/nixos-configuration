@@ -5,10 +5,10 @@
   ...
 }:
 {
-  fonts.packages = with pkgs; [
-    source-code-pro
-    font-awesome_4
-    corefonts
-    monaspace
+  fonts.packages = [
+    pkgs.source-code-pro
+    pkgs.font-awesome_4
+    pkgs.corefonts
+    pkgs.monaspace
   ];
 }

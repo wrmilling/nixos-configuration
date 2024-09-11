@@ -9,14 +9,13 @@
   services.kbfs.enable = true;
 
   home.packages =
-    with pkgs;
     lib.mkMerge [
-      (lib.mkIf stdenv.isx86_64 [
-        #keybase-gui
+      (lib.mkIf pkgs.stdenv.isx86_64 [
+        #pkgs.keybase-gui
       ])
       [
-        keybase
-        kbfs
+        pkgs.keybase
+        pkgs.kbfs
       ]
     ];
 }

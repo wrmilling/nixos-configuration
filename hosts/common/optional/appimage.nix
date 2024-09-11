@@ -5,7 +5,7 @@
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [ appimage-run ];
+  environment.systemPackages = [ pkgs.appimage-run ];
 
   boot.binfmt.registrations.appimage = {
     wrapInterpreterInShell = false;

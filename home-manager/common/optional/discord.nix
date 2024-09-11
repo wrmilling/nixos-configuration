@@ -31,8 +31,8 @@ let
   };
 in
 {
-  home.packages = with pkgs; [
-    discord
+  home.packages = [
+    pkgs.discord
     discord-name
     discord-game
   ];

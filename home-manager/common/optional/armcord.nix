@@ -31,8 +31,8 @@ let
   };
 in
 {
-  home.packages = with pkgs; [
-    armcord
+  home.packages = [
+    pkgs.armcord
     discord-name
     discord-game
   ];

@@ -7,13 +7,13 @@
   default = pkgs.mkShell {
     # Enable experimental features without having to specify the argument
     NIX_CONFIG = "experimental-features = nix-command flakes";
-    # nativeBuildInputs = with pkgs; [ nix home-manager git ];
-    nativeBuildInputs = with pkgs; [
-      nix
-      vim
-      git
-      git-crypt
-      magic-wormhole-rs
+    # nativeBuildInputs = [ pkgs.nix pkgs.home-manager pkgs.git ];
+    nativeBuildInputs = [
+      pkgs.nix
+      pkgs.vim
+      pkgs.git
+      pkgs.git-crypt
+      pkgs.magic-wormhole-rs
     ];
   };
 }

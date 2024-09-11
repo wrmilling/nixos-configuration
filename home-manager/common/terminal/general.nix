@@ -5,14 +5,14 @@
   ...
 }:
 {
-  home.packages = with pkgs; [
-    hut
-    shellclear
-    lynx
-    viddy
-    silver-searcher
-    magic-wormhole-rs
-    hugo
-    any-nix-shell
+  home.packages = [
+    pkgs.hut
+    pkgs.shellclear
+    pkgs.lynx
+    pkgs.viddy
+    pkgs.silver-searcher
+    pkgs.magic-wormhole-rs
+    pkgs.hugo
+    pkgs.any-nix-shell
   ];
 }

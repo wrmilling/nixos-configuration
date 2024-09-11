@@ -5,7 +5,7 @@
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [ pw-volume ];
+  environment.systemPackages = [ pkgs.pw-volume ];
 
   security.rtkit.enable = true;
   services.pipewire = {

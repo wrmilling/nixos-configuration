@@ -5,5 +5,5 @@
   ...
 }:
 {
-  home.packages = with pkgs; [ box64 ];
+  home.packages = [ pkgs.box64 ];
 }

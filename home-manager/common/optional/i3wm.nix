@@ -15,9 +15,9 @@ let
   pinentryProgram = "pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env";
 in
 {
-  home.packages = with pkgs; [
-    xautolock
-    pinentry-rofi
+  home.packages = [
+    pkgs.xautolock
+    pkgs.pinentry-rofi
   ];
 
   services.picom = {

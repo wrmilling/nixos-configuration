@@ -5,9 +5,9 @@
   ...
 }:
 {
-  home.packages = with pkgs; [
-    tmux
-    tmuxPlugins.better-mouse-mode
+  home.packages = [
+    pkgs.tmux
+    pkgs.tmuxPlugins.better-mouse-mode
   ];
   home.file.".tmux.conf".text = ''
     # Mouse options

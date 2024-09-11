@@ -5,7 +5,7 @@
   ...
 }:
 {
-  home.packages = with pkgs; [ pinentry_mac ];
+  home.packages = [ pkgs.pinentry_mac ];
 
   programs.gpg = {
     enable = true;

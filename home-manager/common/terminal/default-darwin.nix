@@ -10,12 +10,12 @@
     ./tmux.nix
     ./vim.nix
   ];
-  home.packages = with pkgs; [
-    cloudfoundry-cli
-    google-cloud-sdk
-    # azure-cli
-    rancher
-    slides-git
-    graph-easy
+  home.packages = [
+    pkgs.cloudfoundry-cli
+    pkgs.google-cloud-sdk
+    # pkgs.azure-cli
+    pkgs.rancher
+    pkgs.slides-git
+    pkgs.graph-easy
   ];
 }

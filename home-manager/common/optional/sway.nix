@@ -5,9 +5,9 @@
   ...
 }:
 {
-  home.packages = with pkgs; [
-    swaybg
-    glib
+  home.packages = [
+    pkgs.swaybg
+    pkgs.glib
   ];
 
   wayland.windowManager.sway = {

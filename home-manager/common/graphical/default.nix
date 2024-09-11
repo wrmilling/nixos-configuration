@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   imports = [
     ./alacritty.nix
@@ -8,17 +8,16 @@
   ];
 
   home.packages =
-    with pkgs;
     lib.mkMerge [
-      (lib.mkIf stdenv.isx86_64 [ slack ])
-      (lib.mkIf stdenv.isAarch64 [ ])
+      (lib.mkIf pkgs.stdenv.isx86_64 [ pkgs.slack ])
+      (lib.mkIf pkgs.stdenv.isAarch64 [ ])
       [
-        element-desktop
+        pkgs.element-desktop
         # cura
-        flameshot
-        gparted
+        pkgs.flameshot
+        pkgs.gparted
         # volumeicon
-        keepassxc
+        pkgs.keepassxc
       ]
     ];
 }

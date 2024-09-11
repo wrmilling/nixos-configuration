@@ -5,8 +5,8 @@
   ...
 }:
 {
-  environment.systemPackages = with pkgs; [
-    mesa
-    glxinfo
+  environment.systemPackages = [
+    pkgs.mesa
+    pkgs.glxinfo
   ];
 }

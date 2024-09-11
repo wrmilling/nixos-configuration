@@ -13,8 +13,8 @@
     };
   };
   console.enable = false;
-  environment.systemPackages = with pkgs; [
-    libraspberrypi
-    raspberrypi-eeprom
+  environment.systemPackages = [
+    pkgs.libraspberrypi
+    pkgs.raspberrypi-eeprom
   ];
 }

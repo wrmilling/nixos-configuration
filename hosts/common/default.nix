@@ -24,7 +24,7 @@
   };
 
   # Basic environment.
-  environment.systemPackages = with pkgs; [ ];
+  environment.systemPackages = [ ];
 
   #
   # Misc settings

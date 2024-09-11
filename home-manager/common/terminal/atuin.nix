@@ -19,5 +19,5 @@
     };
   };
 
-  home.packages = with pkgs; [ fzf ];
+  home.packages = [ pkgs.fzf ];
 }
