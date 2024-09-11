@@ -110,7 +110,6 @@
         bill = mkNixos [ ./hosts/bill ];
         bob = mkNixos [ ./hosts/bob ];
         goku = mkNixos [ ./hosts/goku ];
-        hermes = mkNixos [ ./hosts/hermes ];
 
         # k3s Hosts
         nk3s-amd64-0 = mkNixos [ ./hosts/nk3s-amd64-0 ];

@@ -5,8 +5,6 @@
   ...
 }:
 {
-  services.xserver.displayManager = {
-    lightdm.enable = true;
-    defaultSession = "none+i3";
-  };
+  services.xserver.displayManager.lightdm.enable = true;
+  services.displayManager.defaultSession = "none+i3";
 }

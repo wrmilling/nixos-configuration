@@ -6,15 +6,16 @@
   ...
 }:
 {
+  services.libinput = {
+    enable = true;
+    touchpad = {
+      naturalScrolling = true;
+    };
+  };
+
   services.xserver = {
     autorun = true;
     xkb.layout = "us";
-    libinput = {
-      enable = true;
-      touchpad = {
-        naturalScrolling = true;
-      };
-    };
 
     desktopManager = {
       xterm.enable = false;
