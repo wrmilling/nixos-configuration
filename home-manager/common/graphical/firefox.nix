@@ -37,21 +37,21 @@
         };
 
         "Kagi" = {
-            iconUpdateURL = "https://kagi.com/favicon.ico";
-            updateInterval = 24 * 60 * 60 * 1000;
-            definedAliases = ["@k"];
-            urls = [
-              {
-                template = "https://kagi.com/search";
-                params = [
-                  {
-                    name = "q";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }
-            ];
-          };
+          iconUpdateURL = "https://kagi.com/favicon.ico";
+          updateInterval = 24 * 60 * 60 * 1000;
+          definedAliases = [ "@k" ];
+          urls = [
+            {
+              template = "https://kagi.com/search";
+              params = [
+                {
+                  name = "q";
+                  value = "{searchTerms}";
+                }
+              ];
+            }
+          ];
+        };
 
         "Bing".metaData.hidden = true;
         "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
