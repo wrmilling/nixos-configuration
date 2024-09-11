@@ -24,7 +24,7 @@ in
   programs.nbd.enable = true;
 
   environment.systemPackages = [
-    pkgs.k3s-package
+    k3s-package
     pkgs.kubectl
   ];
 }
