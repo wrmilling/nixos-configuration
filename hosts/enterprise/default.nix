@@ -29,7 +29,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  services.displayManager.sddm.wayland.enable = lib.mkForce false;
+  # services.displayManager.sddm.wayland.enable = lib.mkForce false;
 
   networking = {
     hostName = "enterprise";
