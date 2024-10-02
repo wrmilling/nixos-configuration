@@ -19,9 +19,6 @@ in
     token = lib.mkDefault secrets.k3s.agent.nodeToken;
     extraFlags = "--node-label \"k3s-upgrade=false\""; # Optionally add additional args to k3s
     extraKubeletConfig = {
-      featureGates = {
-        ImageMaximumGCAge = true;
-      };
       imageMaximumGCAge = "168h";
     };
   };
