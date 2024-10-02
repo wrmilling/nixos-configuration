@@ -20,7 +20,7 @@ in
     token = lib.mkDefault secrets.k3s.agent.nodeToken;
     extraFlags = "--tls-san ${hostname}.${domain} --disable servicelb --disable traefik --disable local-storage --flannel-backend=host-gw --node-taint \"node-role.kubernetes.io/master=true:NoSchedule\" --node-label \"k3s-upgrade=false\"";
     extraKubeletConfig = {
-      featureGates= {
+      featureGates = {
         ImageMaximumGCAge = "true";
       };
       imageMaximumGCAge = "1w";
