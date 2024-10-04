@@ -34,7 +34,7 @@
       enable = true;
       name = "goku";
       settings = {
-        runner.fetch_interval = "5s";
+        runner.fetch_interval = "15s";
       };
       labels = [
         "alpine:docker://alpine:3.20.2"

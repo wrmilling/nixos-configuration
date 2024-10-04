@@ -33,7 +33,7 @@
       enable = true;
       name = "bill";
       settings = {
-        runner.fetch_interval = "5s";
+        runner.fetch_interval = "15s";
       };
       labels = [
         "alpine:docker://alpine:3.20.2"
