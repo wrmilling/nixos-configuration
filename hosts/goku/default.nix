@@ -33,6 +33,9 @@
     instances.goku = {
       enable = true;
       name = "goku";
+      settings = {
+        runner.fetch_interval = "5s";
+      };
       labels = [
         "alpine:docker://alpine:3.20.2"
         "alpine-latest:docker://alpine:latest"
