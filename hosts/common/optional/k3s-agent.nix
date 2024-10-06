@@ -23,6 +23,11 @@ in
     };
   };
 
+  # https://rook.io/docs/rook/latest-release/Getting-Started/Prerequisites/prerequisites/#nixos
+  systemd.services.containerd.serviceConfig = {
+    LimitNOFILE = lib.mkForce null;
+  };
+
   programs.nbd.enable = true;
 
   environment.systemPackages = [ k3s-package ];
