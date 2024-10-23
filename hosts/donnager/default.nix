@@ -16,6 +16,7 @@
     ../common/optional/appimage.nix
     ../common/optional/development.nix
     ../common/optional/docker.nix
+    ../common/optional/flipper.nix
     ../common/optional/gaming.nix
     ../common/optional/k8s-utils.nix
     ../common/optional/plasma6.nix
