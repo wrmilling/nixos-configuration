@@ -37,6 +37,9 @@
       ];
       warn-dirty = false;
       sandbox = "relaxed";
+      trusted-users = [
+        "${secrets.hosts.work-mac.username}"
+      ];
     };
 
     configureBuildUsers = true;
