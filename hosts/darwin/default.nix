@@ -33,7 +33,6 @@
       experimental-features = [
         "nix-command"
         "flakes"
-        "repl-flake"
       ];
       warn-dirty = false;
       sandbox = "relaxed";
@@ -77,4 +76,7 @@
 
   # Use touch ID for sudo auth
   security.pam.enableSudoTouchIdAuth = true;
+
+  ids.gids.nixbld = 30000;
+  system.stateVersion = 5; 
 }
