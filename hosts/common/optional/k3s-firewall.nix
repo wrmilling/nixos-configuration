@@ -26,6 +26,7 @@
     10250 # K3s Metrics Server (TCP)
     10254 # MetalLB Metrics Export (TCP)
     12321 # HASS VSCode (TCP)
+    18080 # MitMProxy (TCP+UDP)
   ];
   networking.firewall.allowedUDPPorts = [
     53 # PiHole (TCP+UDP)
@@ -34,5 +35,6 @@
     7473 # MetalLB FRR (TCP+UDP)
     7946 # MetalLB (TCP+UDP)
     8123 # Home Assistant (TCP+UDP)
+    18080 # MitMProxy (TCP+UDP)
   ];
 }
