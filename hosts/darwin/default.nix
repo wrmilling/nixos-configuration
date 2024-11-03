@@ -78,5 +78,5 @@
   security.pam.enableSudoTouchIdAuth = true;
 
   ids.gids.nixbld = 30000;
-  system.stateVersion = 5; 
+  system.stateVersion = 5;
 }

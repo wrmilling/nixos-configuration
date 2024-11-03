@@ -24,6 +24,7 @@
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
     ../common/optional/visual-boot.nix
+    ../common/optional/wireshark.nix
     ../common/optional/zram.nix
   ];
 
