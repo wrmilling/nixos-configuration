@@ -20,6 +20,7 @@ A work in progress [NixOS](https://nixos.org/) configuration that can handle Nix
   - [serenity](home-manager/serenity) (Specific home-manager configuration for serenity)
   - [server](home-manager/server) (Basic home-manager configuration for generic servers)
 - [hosts](hosts/README.md) - (Definition of physical/virutal hosts)
+  - [bender](hosts/bender) (NixOS Laptop, Macbook Pro 11,2)
   - [bill](hosts/bill) (KVM Server, 1GB instance, testing)
   - [bob](hosts/bob) (NixOS Server, Oracle ARM64)
   - [common](hosts/common) (Role definitions [Desktop, Laptop, Server])

@@ -8,6 +8,7 @@ These configurations generally reference a [home-manager](../home-manager) confi
 
 ##  Configurations
 
+- [bender](bender) (Laptop, Macbook Pro 11,2)
 - [bill](bill) (Server, KVM Test-instance)
 - [bob](bob) (Server, Oracle Free-tier ARM64)
 - [darwin](darwin) (Laptop, M1 Macbook Pro)
