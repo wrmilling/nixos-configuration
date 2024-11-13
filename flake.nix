@@ -101,6 +101,7 @@
       # Available through 'nixos-rebuild switch --flake .#your-hostname'
       nixosConfigurations = {
         # Desktop/Laptop
+        bender = mkNixos [ ./hosts/bender ];
         donnager = mkNixos [ ./hosts/donnager ];
         enterprise = mkNixos [ ./hosts/enterprise ];
         riker = mkNixos [ ./hosts/riker ];

@@ -41,7 +41,7 @@
       inherit inputs outputs;
     };
     users = {
-      w4cbe = import ../../home-manager/enterprise;
+      w4cbe = import ../../home-manager/w4cbe;
     };
   };
 

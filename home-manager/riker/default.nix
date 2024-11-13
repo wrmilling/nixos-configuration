@@ -8,10 +8,8 @@
 }:
 {
   imports = [
-    # ./i3status-rust.nix
     ../common/terminal
     ../common/graphical
-    ../common/scripts
     ../common/optional/armcord.nix
     ../common/optional/gaming-arm.nix
     ../common/optional/k8s-utils.nix

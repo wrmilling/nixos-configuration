@@ -7,7 +7,7 @@
 }:
 {
   imports = [
-    ./modules/users.nix
+    ./users/w4cbe.nix
     ./modules/terminal.nix
   ];
 

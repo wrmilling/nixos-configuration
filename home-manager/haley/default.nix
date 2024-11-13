@@ -8,14 +8,10 @@
 }:
 {
   imports = [
-    ../common/terminal
-    ../common/graphical
-    ../common/scripts
-    ../common/optional/amateur-radio.nix
-    ../common/optional/discord.nix
-    ../common/optional/k8s-utils.nix
-    ../common/optional/keybase.nix
-    ../common/optional/minecraft-client.nix
+    ../common/terminal/fish.nix
+    ../common/terminal/general.nix
+    ../common/terminal/starship.nix
+    ../common/terminal/vim.nix
   ];
 
   nixpkgs = {
@@ -31,8 +27,11 @@
   };
 
   home = {
-    username = "w4cbe";
-    homeDirectory = "/home/w4cbe";
+    username = "haley";
+    homeDirectory = "/home/haley";
+    packages = [
+      pkgs.google-chrome
+    ];
   };
 
   programs.home-manager.enable = true;
