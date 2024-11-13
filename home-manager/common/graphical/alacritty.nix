@@ -28,7 +28,7 @@
         };
         size = lib.mkDefault 11;
       };
-      shell = {
+      terminal.shell = {
         program = "/bin/sh";
         args = [
           "-c"
