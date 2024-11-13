@@ -17,6 +17,7 @@
       pkgs.gparted
       # volumeicon
       pkgs.keepassxc
+      pkgs.vlc
     ]
   ];
 }
