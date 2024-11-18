@@ -18,6 +18,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.kernelParams = [ "snd-intel-dspcfg.dsp_driver=1" ];
 
   hardware.graphics.enable32Bit = true;
 
