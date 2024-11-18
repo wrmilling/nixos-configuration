@@ -11,7 +11,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Hardware
-    hardware.url = "github:nixos/nixos-hardware";
+    hardware.url = "github:wrmilling/nixos-hardware/lenovo-y530-15ICH";
 
     # Darwin
     darwin.url = "github:lnl7/nix-darwin/master";
