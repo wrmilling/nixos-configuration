@@ -17,9 +17,15 @@
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" "wl" ];
+  boot.kernelModules = [
+    "kvm-intel"
+    "wl"
+  ];
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
-  boot.kernelParams = [ "acpi_osi=Darwin" "acpi_mask_gpe=0x06" ];
+  boot.kernelParams = [
+    "acpi_osi=Darwin"
+    "acpi_mask_gpe=0x06"
+  ];
 
   hardware.graphics.enable32Bit = true;
 
@@ -33,7 +39,10 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/CC6B-4D3E";
     fsType = "vfat";
-    options = [ "fmask=0022" "dmask=0022" ];
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
   };
 
   swapDevices = [ ];

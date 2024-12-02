@@ -12,7 +12,7 @@
     ../common/terminal
     ../common/graphical
     ../common/scripts
-    ../common/optional/armcord.nix
+    ../common/optional/legcord.nix
     ../common/optional/dunst.nix
     ../common/optional/i3wm.nix
     ../common/optional/keybase.nix

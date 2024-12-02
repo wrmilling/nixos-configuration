@@ -10,7 +10,7 @@
   imports = [
     ../common/terminal
     ../common/graphical
-    ../common/optional/armcord.nix
+    ../common/optional/legcord.nix
     ../common/optional/gaming-arm.nix
     ../common/optional/k8s-utils.nix
     ../common/optional/keybase.nix
