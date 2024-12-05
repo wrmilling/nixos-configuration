@@ -4,5 +4,7 @@
     ./alacritty.nix
     ./xresources.nix
   ];
-  home.packages = [ ];
+  home.packages = [ 
+    flameshot
+  ];
 }
