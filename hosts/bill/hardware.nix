@@ -29,7 +29,7 @@
     { device = "/dev/vda2"; }
     {
       device = "/var/lib/swapfile";
-      size = 2 * 1024;
+      size = 1 * 1024;
     }
   ];
 
