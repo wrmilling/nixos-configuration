@@ -12,7 +12,6 @@
     pkgs.viddy
     pkgs.silver-searcher
     pkgs.magic-wormhole-rs
-    pkgs.hugo
     pkgs.any-nix-shell
   ];
 }

@@ -10,5 +10,8 @@
     ./tmux.nix
     ./vim.nix
   ];
-  home.packages = [ pkgs.onedrive ];
+  home.packages = [
+    pkgs.onedrive
+    pkgs.hugo
+  ];
 }
