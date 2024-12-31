@@ -13,5 +13,6 @@
     pkgs.silver-searcher
     pkgs.magic-wormhole-rs
     pkgs.any-nix-shell
+    pkgs.fzf
   ];
 }
