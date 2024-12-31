@@ -35,6 +35,7 @@
       name = "goku";
       settings = {
         runner.fetch_interval = "15s";
+        container.docker_host = "automount";
       };
       labels = [
         "alpine:docker://alpine:3.20.2"
