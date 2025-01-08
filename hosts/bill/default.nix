@@ -38,7 +38,7 @@
       labels = [
         "alpine:docker://alpine:3.20.2"
         "alpine-latest:docker://alpine:latest"
-        "alpine-tokyo:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:3.21.0-1"
+        "alpine-tokyo:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:3.21.2-1"
         "alpine-tokyo-latest:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:latest"
         "ubuntu-latest:docker://node:18-bullseye"
       ];
