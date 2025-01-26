@@ -1,6 +1,6 @@
 # bart
 
-This is a cheap 1 Core, 1GB ram KVM box from a random provider. I used Ubuntu 20.04 as the base image to modify into NixOS.
+This is a cheap 1 Core, 2GB ram KVM box from a random provider. I used Ubuntu 20.04 as the base image to modify into NixOS.
 
 ## Installation
 
