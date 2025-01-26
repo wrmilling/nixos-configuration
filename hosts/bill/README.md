@@ -1,4 +1,4 @@
-# goku
+# bill
 
 This is a cheap 1 Core, 1GB ram KVM box from a random provider.
 
