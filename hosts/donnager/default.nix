@@ -25,7 +25,6 @@
     ../common/optional/virtualization.nix
     ../common/optional/visual-boot.nix
     ../common/optional/wireshark.nix
-    ../common/optional/zram.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
