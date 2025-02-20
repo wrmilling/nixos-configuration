@@ -15,7 +15,6 @@
   ];
 
   security.pki.certificateFiles = [ ../../secrets/certs/cert.pem ];
-  services.activate-system.enable = true;
   programs.nix-index.enable = true;
 
   #package config
