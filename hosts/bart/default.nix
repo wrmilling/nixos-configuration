@@ -53,6 +53,7 @@
     credentials = {
       # Manually placed on machine
       RENOVATE_TOKEN = "/etc/renovate/token";
+      RENOVATE_GITHUB_COM_TOKEN = "/etc/renovate/github_token";
     };
     settings = {
       endpoint = "https://${secrets.forgejo.domain}";
