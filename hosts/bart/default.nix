@@ -47,6 +47,23 @@
     };
   };
 
+  services.renovate = {
+    enable = true;
+    package = pkgs.renovate;
+    credentials = {
+      # Manually placed on machine
+      RENOVATE_TOKEN = "/etc/renovate/token";
+    };
+    settings = {
+      endpoint = "https://${secrets.forgejo.domain}";
+      gitAuthor = secrets.forgejo.renovateEmail;
+      platform = "gitea";
+      autodiscover = true;
+    };
+    # Every 10 minutes
+    schedule = "*:0/10";
+  };
+
   home-manager = {
     extraSpecialArgs = {
       inherit inputs outputs;
