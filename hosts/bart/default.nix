@@ -11,6 +11,7 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
+    ./renovate.nix
     ../common/server.nix
   ];
 
@@ -47,7 +48,7 @@
     };
   };
 
-  services.renovate = {
+  services.renovate-custom = {
     enable = true;
     package = pkgs.renovate;
     credentials = {
@@ -65,14 +66,6 @@
     # Every 10 minutes
     schedule = "*:0/10";
   };
-
-  # Renovate needs gpg for signed commits
-  # lets see if this is all it needs. 
-  system.activationScripts.gnupg = ''
-    if [ ! -e /usr/bin/gpg ]; then
-      ln -s ${pkgs.gnupg}/bin/gpg /usr/bin/gpg
-    fi
-  '';
 
   home-manager = {
     extraSpecialArgs = {
