@@ -66,6 +66,14 @@
     schedule = "*:0/10";
   };
 
+  # Renovate needs gpg for signed commits
+  # lets see if this is all it needs. 
+  system.activationScripts.gnupg = ''
+    if [ ! -e /usr/bin/gpg ]; then
+      ln -s ${pkgs.gnupg}/bin/gpg /usr/bin/gpg
+    fi
+  '';
+
   home-manager = {
     extraSpecialArgs = {
       inherit inputs outputs;
