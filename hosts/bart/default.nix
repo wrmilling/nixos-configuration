@@ -54,6 +54,7 @@
       # Manually placed on machine
       RENOVATE_TOKEN = "/etc/renovate/token";
       RENOVATE_GITHUB_COM_TOKEN = "/etc/renovate/github_token";
+      RENOVATE_GIT_PRIVATE_KEY = "/etc/renovate/private.key";
     };
     settings = {
       endpoint = "https://${secrets.forgejo.domain}";
