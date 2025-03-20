@@ -11,7 +11,6 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ./renovate.nix
     ../common/server.nix
   ];
 
@@ -48,7 +47,7 @@
     };
   };
 
-  services.renovate-custom = {
+  services.renovate = {
     enable = true;
     package = pkgs.renovate;
     credentials = {
@@ -56,6 +55,9 @@
       RENOVATE_TOKEN = "/etc/renovate/token";
       RENOVATE_GITHUB_COM_TOKEN = "/etc/renovate/github_token";
       RENOVATE_GIT_PRIVATE_KEY = "/etc/renovate/private.key";
+    };
+    runtimePackages = {
+      pkgs.gnupg
     };
     settings = {
       endpoint = "https://${secrets.forgejo.domain}";
