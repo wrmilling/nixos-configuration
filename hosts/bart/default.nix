@@ -56,9 +56,9 @@
       RENOVATE_GITHUB_COM_TOKEN = "/etc/renovate/github_token";
       RENOVATE_GIT_PRIVATE_KEY = "/etc/renovate/private.key";
     };
-    runtimePackages = {
+    runtimePackages = [
       pkgs.gnupg
-    };
+    ];
     settings = {
       endpoint = "https://${secrets.forgejo.domain}";
       gitAuthor = secrets.forgejo.renovateEmail;
