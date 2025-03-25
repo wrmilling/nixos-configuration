@@ -31,13 +31,13 @@
 
         "NixOS Wiki" = {
           urls = [ { template = "https://nixos.wiki/index.php?search={searchTerms}"; } ];
-          iconUpdateURL = "https://nixos.wiki/favicon.png";
+          icon = "https://nixos.wiki/favicon.png";
           updateInterval = 24 * 60 * 60 * 1000; # every day
           definedAliases = [ "@nw" ];
         };
 
         "Kagi" = {
-          iconUpdateURL = "https://kagi.com/favicon.ico";
+          icon = "https://kagi.com/favicon.ico";
           updateInterval = 24 * 60 * 60 * 1000;
           definedAliases = [ "@k" ];
           urls = [
@@ -53,8 +53,8 @@
           ];
         };
 
-        "Bing".metaData.hidden = true;
-        "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
+        "bing".metaData.hidden = true;
+        "google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
       };
     };
   };
