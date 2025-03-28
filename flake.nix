@@ -20,12 +20,19 @@
     # Jovian (Steam Deck)
     jovian.url = "github:Jovian-Experiments/Jovian-NixOS/development";
     jovian.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Lix, like nix
+    lix-module = {
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     {
       self,
       nixpkgs,
+      lix-module,
       home-manager,
       darwin,
       ...
@@ -45,7 +52,9 @@
       mkNixos =
         modules:
         nixpkgs.lib.nixosSystem {
-          inherit modules;
+          modules = modules ++ [
+            lix-module.nixosModules.default
+          ];
           specialArgs = {
             inherit inputs outputs secrets;
           };
@@ -54,7 +63,9 @@
       mkDarwin =
         system: modules:
         darwin.lib.darwinSystem {
-          inherit modules;
+          modules = modules ++ [
+            lix-module.nixosModules.default
+          ];
           system = system;
           specialArgs = {
             inherit inputs outputs secrets;
@@ -64,7 +75,10 @@
       mkHome =
         pkgs: modules:
         home-manager.lib.homeManagerConfiguration {
-          inherit pkgs modules;
+          inherit pkgs;
+          modules = modules ++ [
+            lix-module.nixosModules.default
+          ];
           extraSpecialArgs = {
             inherit inputs outputs secrets;
           };
