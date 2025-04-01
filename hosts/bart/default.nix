@@ -61,7 +61,7 @@
     ];
     settings = {
       endpoint = "https://${secrets.forgejo.domain}";
-      gitAuthor = secrets.forgejo.renovateEmail;
+      gitAuthor = "Renovate Bot <${secrets.forgejo.renovateEmail}>";
       platform = "gitea";
       autodiscover = true;
     };
