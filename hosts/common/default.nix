@@ -41,6 +41,7 @@
   security.polkit.enable = true;
 
   nix = {
+    package = pkgs.lix;
     settings = {
       auto-optimise-store = lib.mkDefault true;
     };

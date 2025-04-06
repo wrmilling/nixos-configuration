@@ -27,12 +27,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Lix, like nix
-    lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # secrets through sops
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -44,7 +38,6 @@
     {
       self,
       nixpkgs,
-      lix-module,
       home-manager,
       sops-nix,
       darwin,
@@ -66,7 +59,6 @@
         modules:
         nixpkgs.lib.nixosSystem {
           modules = modules ++ [
-            lix-module.nixosModules.default
             sops-nix.nixosModules.sops
           ];
           specialArgs = {
@@ -78,7 +70,6 @@
         system: modules:
         darwin.lib.darwinSystem {
           modules = modules ++ [
-            lix-module.nixosModules.default
             sops-nix.nixosModules.sops
           ];
           system = system;
@@ -92,7 +83,6 @@
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = modules ++ [
-            lix-module.nixosModules.default
             sops-nix.nixosModules.sops
           ];
           extraSpecialArgs = {
