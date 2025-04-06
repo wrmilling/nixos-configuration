@@ -32,7 +32,7 @@
 
   networking = {
     hostName = "bender";
-    domain = secrets.hosts.bender.domain;
+    domain = secrets.hosts.common.domain;
   };
 
   home-manager = {

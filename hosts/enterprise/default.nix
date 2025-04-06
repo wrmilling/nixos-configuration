@@ -33,7 +33,7 @@
 
   networking = {
     hostName = "enterprise";
-    domain = secrets.hosts.enterprise.domain;
+    domain = secrets.hosts.common.domain;
   };
 
   home-manager = {

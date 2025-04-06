@@ -17,7 +17,7 @@
 
   networking = {
     hostName = "luke";
-    domain = secrets.hosts.luke.domain;
+    domain = secrets.hosts.common.domain;
     useNetworkd = true;
     nameservers = [
       "8.8.8.8"

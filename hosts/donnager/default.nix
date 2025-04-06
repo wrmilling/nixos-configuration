@@ -34,7 +34,7 @@
 
   networking = {
     hostName = "donnager";
-    domain = secrets.hosts.donnager.domain;
+    domain = secrets.hosts.common.domain;
   };
 
   home-manager = {

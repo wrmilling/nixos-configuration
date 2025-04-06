@@ -9,6 +9,7 @@
   imports = [
     ./users/w4cbe.nix
     ./modules/terminal.nix
+    ./modules/sops.nix
   ];
 
   # NixPackage Setup

@@ -24,7 +24,7 @@
 
   networking = {
     hostName = "riker";
-    domain = secrets.hosts.riker.domain;
+    domain = secrets.hosts.common.domain;
   };
 
   boot.loader.systemd-boot.enable = true;

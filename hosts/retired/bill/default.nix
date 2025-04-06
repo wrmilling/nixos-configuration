@@ -21,8 +21,12 @@
 
   networking = {
     hostName = "bill"; # Define your hostname.
-    domain = secrets.hosts.bill.domain;
-    nameservers = secrets.hosts.bill.nameservers;
+    domain = secrets.hosts.common.domain;
+    nameservers = secrets.hosts.common.nameservers;
+  };
+
+  sops.secrets."forgejo/runnerToken" = {
+    sopsFile = ../../secrets/forgejo.yaml;
   };
 
   virtualisation.docker.enable = true;
@@ -43,7 +47,7 @@
         "ubuntu-latest:docker://node:18-bullseye"
       ];
       url = "https://${secrets.forgejo.domain}";
-      token = secrets.forgejo.runnerToken;
+      tokenFile = config.sops.secrets."forgejo/runnerToken".path;
     };
   };
 

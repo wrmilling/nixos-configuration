@@ -1,0 +1,52 @@
+keys:
+  - &primary 21E16B8D2EE875306A6C9968D83077B99F8C6643
+  - &bart age1f93lfyusk4x0e3mfpd0lyag3afspjawnpja5279tz3a72895655sda9p0v
+  - &bob age17l9awkletg9m57n2nz43l4rzz6n5cfa3xqv5j3khaxue3wasgsssya5lkm
+  - &donnager age1jmj0p55rffz43a3jae2c56nyc7zv5jcp5g65073gr45xzt7vqsjqguxcvm
+  - &goku age1xj3ltpd8ac0gv3qmvv64ld0swchsc44yg6mgcw6m4d2zsqn0nusqeycgsn
+  - &nk3s-amd64-0 age1m3e8kmzps4machp9jm09x8sr7s9heqz7te0587h2hzevznhy655qpmgd8d
+  - &nk3s-amd64-a age1kzyfuus4dmrhzcy6xekst93thvsy3dt33j0l4dr7duae3vsf9shqdfhev6
+  - &nk3s-amd64-b age1n3ulakf62eh406wvkcvh7pl5mldgmjzgxx7ndc9dw4m3llgmddfsvelv8h
+  - &nk3s-amd64-c age1ry7h4twlsmu2yvflz3pnla3k6gx0uyujf06y03tpc2tgjf72tvgqdzqzaw
+  - &nk3s-amd64-d age1fp806wdswtnckzukly9m6k7fam795cr0lqdft4ywpqw6am52aspqdfh6v2
+
+stores:
+  json:
+    indent: 2
+  json_binary:
+    indent: 2
+  yaml:
+    indent: 2
+
+creation_rules:
+  - path_regex: secrets/general.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *bart
+          - *bob
+          - *donnager
+          - *goku
+          - *nk3s-amd64-0
+          - *nk3s-amd64-a
+          - *nk3s-amd64-b
+          - *nk3s-amd64-c
+          - *nk3s-amd64-d
+  - path_regex: secrets/k3s.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *nk3s-amd64-0
+          - *nk3s-amd64-a
+          - *nk3s-amd64-b
+          - *nk3s-amd64-c
+          - *nk3s-amd64-d
+  - path_regex: secrets/forgejo.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *bart
+          - *goku

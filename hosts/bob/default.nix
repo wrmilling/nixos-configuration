@@ -24,7 +24,7 @@
 
   networking = {
     hostName = "bob"; # Define your hostname.
-    domain = secrets.hosts.bob.domain;
+    domain = secrets.hosts.common.domain;
   };
 
   services.uptime-kuma = {
@@ -37,25 +37,25 @@
     recommendedTlsSettings = true;
 
     virtualHosts = {
-      "${secrets.hosts.bob.domain}" = {
+      "${secrets.hosts.common.domain}" = {
         forceSSL = true;
         enableACME = true;
-        root = "/var/www/${secrets.hosts.bob.domain}";
+        root = "/var/www/${secrets.hosts.common.domain}";
       };
 
       "${secrets.hosts.bob.alt1Domain}" = {
         forceSSL = true;
         enableACME = true;
-        root = "/var/www/${secrets.hosts.bob.domain}";
+        root = "/var/www/${secrets.hosts.common.domain}";
       };
 
       "${secrets.hosts.bob.alt2Domain}" = {
         forceSSL = true;
         enableACME = true;
-        root = "/var/www/${secrets.hosts.bob.domain}";
+        root = "/var/www/${secrets.hosts.common.domain}";
       };
 
-      "status.${secrets.hosts.bob.domain}" = {
+      "status.${secrets.hosts.common.domain}" = {
         forceSSL = true;
         enableACME = true;
         locations."/" = {

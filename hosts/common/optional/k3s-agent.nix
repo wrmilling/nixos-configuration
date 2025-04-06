@@ -11,12 +11,16 @@ in
 {
   imports = [ ./k3s-firewall.nix ];
 
+  sops.secrets."k3s/agent/nodeToken" = {
+    sopsFile = ../../secrets/k3s.yaml;
+  };
+
   services.k3s = {
     enable = true;
     package = k3s-package;
     role = "agent";
     serverAddr = lib.mkDefault secrets.k3s.server.addr;
-    token = lib.mkDefault secrets.k3s.agent.nodeToken;
+    tokenFile = config.sops.secrets."k3s/agent/nodeToken".path;
     extraFlags = "--node-label \"k3s-upgrade=false\""; # Optionally add additional args to k3s
     extraKubeletConfig = {
       imageMaximumGCAge = "168h";

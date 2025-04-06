@@ -26,7 +26,7 @@
 
   networking = {
     hostName = "nk3s-arm64-a";
-    domain = secrets.hosts.nk3s-arm64-a.domain;
+    domain = secrets.hosts.common-k3s.domain;
     useDHCP = lib.mkDefault true;
     interfaces = {
       end0.ipv4.addresses = [
@@ -36,8 +36,8 @@
         }
       ];
     };
-    defaultGateway = secrets.hosts.nk3s-arm64-a.defaultGateway;
-    nameservers = secrets.hosts.nk3s-arm64-a.nameservers;
+    defaultGateway = secrets.hosts.common-k3s.defaultGateway;
+    nameservers = secrets.hosts.common-k3s.nameservers;
   };
 
   home-manager = {

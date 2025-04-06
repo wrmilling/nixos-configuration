@@ -6,24 +6,36 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
 
-    # Home manager
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
     # Hardware
     hardware.url = "github:wrmilling/nixos-hardware/lenovo-y530-15ICH";
 
+    # Home manager
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Darwin
-    darwin.url = "github:lnl7/nix-darwin/master";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    darwin = {
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Jovian (Steam Deck)
-    jovian.url = "github:Jovian-Experiments/Jovian-NixOS/development";
-    jovian.inputs.nixpkgs.follows = "nixpkgs";
+    jovian = {
+      url = "github:Jovian-Experiments/Jovian-NixOS/development";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Lix, like nix
     lix-module = {
       url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # secrets through sops
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -34,6 +46,7 @@
       nixpkgs,
       lix-module,
       home-manager,
+      sops-nix,
       darwin,
       ...
     }@inputs:
@@ -54,6 +67,7 @@
         nixpkgs.lib.nixosSystem {
           modules = modules ++ [
             lix-module.nixosModules.default
+            sops-nix.nixosModules.sops
           ];
           specialArgs = {
             inherit inputs outputs secrets;
@@ -65,6 +79,7 @@
         darwin.lib.darwinSystem {
           modules = modules ++ [
             lix-module.nixosModules.default
+            sops-nix.nixosModules.sops
           ];
           system = system;
           specialArgs = {
@@ -78,6 +93,7 @@
           inherit pkgs;
           modules = modules ++ [
             lix-module.nixosModules.default
+            sops-nix.nixosModules.sops
           ];
           extraSpecialArgs = {
             inherit inputs outputs secrets;

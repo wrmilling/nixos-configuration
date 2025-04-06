@@ -22,9 +22,13 @@
 
   networking = {
     hostName = "goku"; # Define your hostname.
-    domain = secrets.hosts.goku.domain;
-    nameservers = secrets.hosts.goku.nameservers;
+    domain = secrets.hosts.common.domain;
+    nameservers = secrets.hosts.common.nameservers;
     dhcpcd.extraConfig = "nohook resolv.conf";
+  };
+
+  sops.secrets."forgejo/runnerToken" = {
+    sopsFile = ../../secrets/forgejo.yaml;
   };
 
   virtualisation.docker.enable = true;
@@ -45,7 +49,7 @@
         "ubuntu-latest:docker://node:18-bullseye"
       ];
       url = "https://${secrets.forgejo.domain}";
-      token = secrets.forgejo.runnerToken;
+      tokenFile = config.sops.secrets."forgejo/runnerToken".path;
     };
   };
 
