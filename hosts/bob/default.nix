@@ -43,11 +43,11 @@
         root = "/var/www/${secrets.hosts.common.domain}";
       };
 
-      "${secrets.hosts.bob.alt1Domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.domain}";
-      };
+      # "${secrets.hosts.bob.alt1Domain}" = {
+      #   forceSSL = true;
+      #   enableACME = true;
+      #   root = "/var/www/${secrets.hosts.common.domain}";
+      # };
 
       "${secrets.hosts.bob.alt2Domain}" = {
         forceSSL = true;
