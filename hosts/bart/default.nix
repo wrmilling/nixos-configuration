@@ -70,7 +70,7 @@
       autodiscover = true;
     };
     # Every 10 minutes
-    schedule = "*:0/10";
+    schedule = "*:0/30";
   };
 
   home-manager = {
