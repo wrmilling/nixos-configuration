@@ -12,7 +12,7 @@ in
   imports = [ ./k3s-firewall.nix ];
 
   sops.secrets."k3s/agent/nodeToken" = {
-    sopsFile = ../../secrets/k3s.yaml;
+    sopsFile = ../../../secrets/k3s.yaml;
   };
 
   services.k3s = {
