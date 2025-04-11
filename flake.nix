@@ -69,9 +69,7 @@
       mkDarwin =
         system: modules:
         darwin.lib.darwinSystem {
-          modules = modules ++ [
-            sops-nix.nixosModules.sops
-          ];
+          modules = modules ++ [ ];
           system = system;
           specialArgs = {
             inherit inputs outputs secrets;

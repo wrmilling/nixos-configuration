@@ -24,7 +24,6 @@
       "datagrip"
       "miro"
       "gather"
-      "snagit"
     ];
     masApps = {
       Tailscale = 1475387142;
