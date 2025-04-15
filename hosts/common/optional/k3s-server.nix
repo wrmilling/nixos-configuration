@@ -13,7 +13,7 @@ in
 {
   imports = [ ./k3s-firewall.nix ];
 
-  sops.secrets."k3s/agent/nodeToken" = {
+  sops.secrets."k3s/agent/nodeTokenFull" = {
     sopsFile = ../../../secrets/k3s.yaml;
   };
 
@@ -21,7 +21,7 @@ in
     enable = true;
     package = k3s-package;
     role = "server";
-    tokenFile = config.sops.secrets."k3s/agent/nodeToken".path;
+    tokenFile = config.sops.secrets."k3s/agent/nodeTokenFull".path;
     extraFlags = "--tls-san ${hostname}.${domain} --disable servicelb --disable traefik --disable local-storage --flannel-backend=host-gw --node-taint \"node-role.kubernetes.io/master=true:NoSchedule\" --node-label \"k3s-upgrade=false\"";
     extraKubeletConfig = {
       imageMaximumGCAge = "168h";
