@@ -73,7 +73,9 @@
     enableSshSupport = true;
     defaultCacheTtl = 60;
     maxCacheTtl = 120;
-    pinentryPackage = pkgs.pinentry-qt;
+    pinentry = {
+      package = pkgs.pinentry-qt;
+    };
     extraConfig = ''
       ttyname $GPG_TTY
     '';
