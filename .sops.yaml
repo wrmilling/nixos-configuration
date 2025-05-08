@@ -4,6 +4,7 @@ keys:
   - &bob age17l9awkletg9m57n2nz43l4rzz6n5cfa3xqv5j3khaxue3wasgsssya5lkm
   - &donnager age1jmj0p55rffz43a3jae2c56nyc7zv5jcp5g65073gr45xzt7vqsjqguxcvm
   - &goku age1xj3ltpd8ac0gv3qmvv64ld0swchsc44yg6mgcw6m4d2zsqn0nusqeycgsn
+  - &riker age14upntcrx0nc34scthfvtvt97msy4hekkazsx737z54vyj08glflq2j2h57
   - &nk3s-amd64-0 age1m3e8kmzps4machp9jm09x8sr7s9heqz7te0587h2hzevznhy655qpmgd8d
   - &nk3s-amd64-a age1kzyfuus4dmrhzcy6xekst93thvsy3dt33j0l4dr7duae3vsf9shqdfhev6
   - &nk3s-amd64-b age1n3ulakf62eh406wvkcvh7pl5mldgmjzgxx7ndc9dw4m3llgmddfsvelv8h
@@ -28,6 +29,7 @@ creation_rules:
           - *bob
           - *donnager
           - *goku
+          - *riker
           - *nk3s-amd64-0
           - *nk3s-amd64-a
           - *nk3s-amd64-b
