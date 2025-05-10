@@ -3,6 +3,7 @@ keys:
   - &bart age1f93lfyusk4x0e3mfpd0lyag3afspjawnpja5279tz3a72895655sda9p0v
   - &bob age17l9awkletg9m57n2nz43l4rzz6n5cfa3xqv5j3khaxue3wasgsssya5lkm
   - &donnager age1jmj0p55rffz43a3jae2c56nyc7zv5jcp5g65073gr45xzt7vqsjqguxcvm
+  - &enterprise age1d3as5kdlrreu834lkxwmwzl7wpurqc6v9x8nhdty7rrjz5ge7gcseusjyz
   - &goku age1xj3ltpd8ac0gv3qmvv64ld0swchsc44yg6mgcw6m4d2zsqn0nusqeycgsn
   - &riker age14upntcrx0nc34scthfvtvt97msy4hekkazsx737z54vyj08glflq2j2h57
   - &nk3s-amd64-0 age1m3e8kmzps4machp9jm09x8sr7s9heqz7te0587h2hzevznhy655qpmgd8d
@@ -28,6 +29,7 @@ creation_rules:
           - *bart
           - *bob
           - *donnager
+          - *enterprise
           - *goku
           - *riker
           - *nk3s-amd64-0
