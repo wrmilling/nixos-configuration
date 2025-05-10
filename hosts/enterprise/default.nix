@@ -34,6 +34,8 @@
   networking = {
     hostName = "enterprise";
     domain = secrets.hosts.common.domain;
+    # Though a desktop, has wifi for now, using networkmanager to manage.
+    networkmanager.enable = true;
   };
 
   home-manager = {
