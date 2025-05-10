@@ -19,6 +19,9 @@
   boot.kernelParams = [ "amd_pstate=active" ];
   boot.extraModulePackages = [ ];
 
+  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
+
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/e7bab636-6ef3-4370-afcd-89377956c23a";
     fsType = "ext4";
