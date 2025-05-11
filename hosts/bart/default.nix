@@ -29,6 +29,18 @@
     sopsFile = ../../secrets/forgejo.yaml;
   };
 
+  sops.secrets."renovate/token" = {
+    sopsFile = ../../secrets/renovate.yaml;
+  };
+
+  sops.secrets."renovate/github_token" = {
+    sopsFile = ../../secrets/renovate.yaml;
+  };
+
+  sops.secrets."renovate/git_private_key" = {
+    sopsFile = ../../secrets/renovate.yaml;
+  };
+
   virtualisation.docker.enable = true;
   services.gitea-actions-runner = {
     package = pkgs.forgejo-actions-runner;
@@ -56,9 +68,9 @@
     package = pkgs.renovate;
     credentials = {
       # Manually placed on machine
-      RENOVATE_TOKEN = "/etc/renovate/token";
-      RENOVATE_GITHUB_COM_TOKEN = "/etc/renovate/github_token";
-      RENOVATE_GIT_PRIVATE_KEY = "/etc/renovate/private.key";
+      RENOVATE_TOKEN = config.sops.secrets."renovate/token".path;
+      RENOVATE_GITHUB_COM_TOKEN = config.sops.secrets."renovate/github_token".path;
+      RENOVATE_GIT_PRIVATE_KEY = config.sops.secrets."renovate/git_private_key".path;
     };
     runtimePackages = [
       pkgs.gnupg

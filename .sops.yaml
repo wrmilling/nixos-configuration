@@ -54,3 +54,9 @@ creation_rules:
         age:
           - *bart
           - *goku
+  - path_regex: secrets/renovate.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *bart
