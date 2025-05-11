@@ -32,6 +32,12 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # WSL
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -41,6 +47,7 @@
       home-manager,
       sops-nix,
       darwin,
+      nixos-wsl,
       ...
     }@inputs:
     let
@@ -120,6 +127,10 @@
       nixosConfigurations = {
         # Desktop/Laptop
         bender = mkNixos [ ./hosts/bender ];
+        cousteau = mkNixos [
+          ./hosts/cousteau
+          nixos-wsl.nixosModules.default
+        ];
         donnager = mkNixos [ ./hosts/donnager ];
         enterprise = mkNixos [ ./hosts/enterprise ];
         riker = mkNixos [ ./hosts/riker ];
