@@ -13,6 +13,9 @@
   wsl.defaultUser = "w4cbe";
   wsl.wslConf.network.hostname = "cousteau";
 
+  # Allow VSCode to work from windows
+  programs.nix-ld.enable = true;
+
   home-manager = {
     extraSpecialArgs = {
       inherit inputs outputs;
