@@ -8,7 +8,12 @@ let
   secrets = import ../../../secrets/secrets.nix;
   hostname = config.networking.hostName;
   domain = config.networking.domain;
-  k3s-package = pkgs.k3s_1_32;
+  # https://github.com/NixOS/nixpkgs/pull/405952
+  k3s-package = pkgs.k3s_1_33.override {
+    util-linux = util-linuxMinimal.overrideAttrs (prev: {
+      patches = prev.patches or [] ++ [./patches/fix-mount-regression.patch];
+    });
+  };
 in
 {
   imports = [ ./k3s-firewall.nix ];
