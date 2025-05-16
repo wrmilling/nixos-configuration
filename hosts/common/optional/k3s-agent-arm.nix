@@ -8,7 +8,7 @@ let
   secrets = import ../../../secrets/secrets.nix;
   # https://github.com/NixOS/nixpkgs/pull/405952
   k3s-package = pkgs.k3s_1_33.override {
-    util-linux = util-linuxMinimal.overrideAttrs (prev: {
+    util-linux = pkgs.util-linuxMinimal.overrideAttrs (prev: {
       patches = prev.patches or [] ++ [./patches/fix-mount-regression.patch];
     });
   };
