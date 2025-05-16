@@ -6,7 +6,12 @@
 }:
 let
   secrets = import ../../../secrets/secrets.nix;
-  k3s-package = pkgs.k3s_1_32;
+  # https://github.com/NixOS/nixpkgs/pull/405952
+  k3s-package = pkgs.k3s_1_33.override {
+    util-linux = util-linuxMinimal.overrideAttrs (prev: {
+      patches = prev.patches or [] ++ [./patches/fix-mount-regression.patch];
+    });
+  };
 in
 {
   imports = [ ./k3s-firewall.nix ];
@@ -31,6 +36,8 @@ in
   systemd.services.containerd.serviceConfig = {
     LimitNOFILE = lib.mkForce null;
   };
+
+  k3s
 
   programs.nbd.enable = true;
 
