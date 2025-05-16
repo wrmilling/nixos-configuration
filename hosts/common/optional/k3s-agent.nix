@@ -37,8 +37,6 @@ in
     LimitNOFILE = lib.mkForce null;
   };
 
-  k3s
-
   programs.nbd.enable = true;
 
   environment.systemPackages = [ k3s-package ];
