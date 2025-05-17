@@ -58,6 +58,7 @@
         "x86_64-linux"
         "aarch64-darwin"
         "x86_64-darwin"
+        "riscv64-linux"
       ];
 
       secrets = import ./secrets/secrets.nix;
@@ -140,6 +141,7 @@
         bart = mkNixos [ ./hosts/bart ];
         bob = mkNixos [ ./hosts/bob ];
         goku = mkNixos [ ./hosts/goku ];
+        khan = mkNixos [ ./hosts/khan ];
 
         # k3s Hosts
         nk3s-amd64-0 = mkNixos [ ./hosts/nk3s-amd64-0 ];
