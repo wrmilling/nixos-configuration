@@ -17,6 +17,6 @@
   };
 
   environment.systemPackages = [
-    kdePackages.kdeconnect-kde
+    pkgs.kdePackages.kdeconnect-kde
   ];
 }
