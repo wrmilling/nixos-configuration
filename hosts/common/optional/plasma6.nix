@@ -15,4 +15,8 @@
       wayland.enable = true;
     };
   };
+
+  environment.systemPackages = [
+    kdePackages.kdeconnect-kde
+  ];
 }
