@@ -18,5 +18,6 @@
 
   environment.systemPackages = [
     pkgs.kdePackages.kdeconnect-kde
+    pkgs.signal-desktop
   ];
 }
