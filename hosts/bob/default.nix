@@ -25,6 +25,7 @@
   networking = {
     hostName = "bob"; # Define your hostname.
     domain = secrets.hosts.common.domain;
+    nameservers = secrets.hosts.common.nameservers;
   };
 
   services.uptime-kuma = {
