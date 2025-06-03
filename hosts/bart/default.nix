@@ -52,9 +52,9 @@
         container.docker_host = "automount";
       };
       labels = [
-        "alpine:docker://alpine:3.21.3"
+        "alpine:docker://alpine:3.22.0"
         "alpine-latest:docker://alpine:latest"
-        "alpine-tokyo:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:3.21.3-1"
+        "alpine-tokyo:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:3.22.0-1"
         "alpine-tokyo-latest:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:latest"
         "ubuntu-latest:docker://node:18-bullseye"
       ];
