@@ -49,6 +49,7 @@
       pkgs.git
       pkgs.vim
       pkgs.home-manager
+      pkgs.openssh
     ];
     shells = [
       pkgs.bashInteractive
