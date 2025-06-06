@@ -17,6 +17,8 @@
   security.pki.certificateFiles = [ ../../secrets/certs/cert.pem ];
   programs.nix-index.enable = true;
 
+  system.primaryUser = "${secrets.hosts.work-mac.username}";
+
   #package config
   nixpkgs = {
     config = {

@@ -89,7 +89,7 @@
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = modules ++ [
-            sops-nix.nixosModules.sops
+            # sops-nix.nixosModules.sops
           ];
           extraSpecialArgs = {
             inherit inputs outputs secrets;
