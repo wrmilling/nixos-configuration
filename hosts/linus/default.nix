@@ -34,7 +34,10 @@
       port = 8080;
       settings = {
         server_url = "https://h.${secrets.hosts.common.p_domain}";
-        dns.base_domain = "n.${secrets.hosts.common.p_domain}";
+        dns = {
+          base_domain = "n.${secrets.hosts.common.p_domain}";
+          nameservers.global = secrets.hosts.common.nameservers;
+        };
       };
     };
 
