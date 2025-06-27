@@ -27,6 +27,37 @@
 
   services.openssh.banner = lib.mkForce secrets.sshd.alt_banner;
 
+  services = {
+    headscale = {
+      enable = true;
+      address = "127.0.0.1";
+      port = 8080;
+      settings = {
+        server_url = "https://h.${secrets.hosts.common.p_domain}";
+        dns.base_domain = "n.${secrets.hosts.common.p_domain}";
+      };
+    };
+
+    nginx.virtualHosts."${secrets.hosts.common.p_domain}" = {
+      forceSSL = true;
+      enableACME = true;
+      root = "/var/www/${secrets.hosts.common.p_domain}";
+    };
+
+    nginx.virtualHosts."h.${secrets.hosts.common.p_domain}" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/" = {
+        proxyPass =
+          "http://localhost:${toString config.services.headscale.port}";
+        proxyWebsockets = true;
+      };
+    };
+  };
+
+  environment.systemPackages = [ config.services.headscale.package ];
+
+
   home-manager = {
     extraSpecialArgs = {
       inherit inputs outputs;
