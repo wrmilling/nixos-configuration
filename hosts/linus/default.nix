@@ -32,7 +32,7 @@
     443
   ];
   security.acme.acceptTerms = true;
-  security.acme.defaults.email = "admin@${domain}";
+  security.acme.defaults.email = "admin@${secrets.hosts.common.p_domain}";
 
   services = {
     headscale = {
