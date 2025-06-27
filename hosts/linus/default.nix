@@ -21,7 +21,7 @@
 
   networking = {
     hostName = "linus"; # Define your hostname.
-    domain = secrets.hosts.common.domain;
+    domain = secrets.hosts.common.p_domain;
     nameservers = secrets.hosts.common.nameservers;
   };
 
