@@ -31,7 +31,6 @@
     80
     443
   ];
-  services.nginx.enable = true;
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "admin@${domain}";
 
@@ -49,6 +48,7 @@
       };
     };
 
+    nginx.enable = true;
     nginx.virtualHosts."${secrets.hosts.common.p_domain}" = {
       forceSSL = true;
       enableACME = true;
