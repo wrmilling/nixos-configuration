@@ -25,7 +25,7 @@
     nameservers = secrets.hosts.common.nameservers;
   };
 
-  services.openssh.banner = lib.mkDefault secrets.sshd.alt_banner;
+  services.openssh.banner = lib.mkForce secrets.sshd.alt_banner;
 
   home-manager = {
     extraSpecialArgs = {
