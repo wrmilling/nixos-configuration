@@ -27,6 +27,14 @@
 
   services.openssh.banner = lib.mkForce secrets.sshd.alt_banner;
 
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
+  services.nginx.enable = true;
+  security.acme.acceptTerms = true;
+  security.acme.defaults.email = "admin@${domain}";
+
   services = {
     headscale = {
       enable = true;
