@@ -60,7 +60,7 @@
       enableACME = true;
       locations."/" = {
         proxyPass =
-          "http://localhost:${toString config.services.headscale.port}";
+          "http://127.0.0.1:${toString config.services.headscale.port}";
         proxyWebsockets = true;
       };
     };
