@@ -8,6 +8,7 @@ These configurations generally reference a [home-manager](../home-manager) confi
 
 ##  Configurations
 
+- [bart](bart) (Server, KVM 2GB Instance)
 - [bender](bender) (Laptop, Macbook Pro 11,2)
 - [bill](bill) (Server, KVM Test-instance)
 - [bob](bob) (Server, Oracle Free-tier ARM64)
@@ -15,6 +16,7 @@ These configurations generally reference a [home-manager](../home-manager) confi
 - [donnager](donnager) (Laptop, Lenovo Legion Y530)
 - [enterprise](enterprise) (Desktop, Custom Built)
 - [goku](goku) (Server, Oracle Free-tier x86_64)
+- [linus](linus) (Server, KVM 2GB Instance)
 - [nk3s-amd64-0](nk3s-amd64-0) (Server, Virtual on NAS)
 - [nk3s-amd64-a](nk3s-amd64-a) (Server, Minisforum UN100C)
 - [nk3s-amd64-b](nk3s-amd64-b) (Server, Minisforum UN100C)
