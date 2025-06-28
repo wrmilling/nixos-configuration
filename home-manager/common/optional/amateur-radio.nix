@@ -5,5 +5,5 @@
   ...
 }:
 {
-  # home.packages = [ chirp ];
+  home.packages = [ chirp ];
 }
