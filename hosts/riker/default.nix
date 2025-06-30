@@ -13,6 +13,7 @@
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
     ../common/laptop.nix
+    ../common/optional/amateur-radio.nix
     ../common/optional/development.nix
     ../common/optional/k8s-utils.nix
     ../common/optional/plasma6.nix
