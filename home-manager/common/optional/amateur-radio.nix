@@ -5,5 +5,7 @@
   ...
 }:
 {
-  home.packages = [ chirp ];
+  home.packages = [ 
+    pkgs.chirp 
+  ];
 }
