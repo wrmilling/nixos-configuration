@@ -24,6 +24,16 @@
       "datagrip"
       "miro"
       "gather"
+
+      # Tablet Screenshare
+      "scrcpy"
+
+      # Java Development
+      "openjdk@8"
+      "openjdk@11"
+      "openjdk@17"
+      "openjdk@21"
+      "jenv"
     ];
     masApps = {
       Tailscale = 1475387142;
