@@ -7,6 +7,7 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ../common/default.nix
+    ../common/optional/k8s-utils.nix
   ];
 
   wsl.enable = true;
