@@ -13,6 +13,27 @@
   wsl.enable = true;
   wsl.defaultUser = "w4cbe";
   wsl.wslConf.network.hostname = "cousteau";
+  wsl.usbip = {
+    enable = true;
+    autoAttach = [
+      "8-1"
+    ];
+  };
+
+  environment.systemPackages = [
+    pkgs.yubikey-manager
+    pkgs.libfido2
+  ];
+
+  services.pcscd.enable = true;
+  services.udev = {
+    enable = true;
+    packages = [pkgs.yubikey-personalization];
+    extraRules = ''
+      SUBSYSTEM=="usb", MODE="0666"
+      KERNEL=="hidraw*", SUBSYSTEM=="hidraw", TAG+="uaccess", MODE="0666"
+    '';
+  };
 
   # Allow VSCode to work from windows
   programs.nix-ld.enable = true;
