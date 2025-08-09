@@ -134,6 +134,7 @@
         ];
         donnager = mkNixos [ ./hosts/donnager ];
         enterprise = mkNixos [ ./hosts/enterprise ];
+        icarus = mkNixos [ ./hosts/icarus ];
         riker = mkNixos [ ./hosts/riker ];
         serenity = mkNixos [ ./hosts/serenity ];
 
