@@ -15,8 +15,6 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  hardware.graphics.enable32Bit = true;
-
   fileSystems."/" = {
     device = "TBD";
     fsType = "ext4";
