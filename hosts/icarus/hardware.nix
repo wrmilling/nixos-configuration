@@ -21,6 +21,7 @@
   # Fingerprint Reader
   services.fprintd.enable = true;
   services.fprintd.tod.enable = true;
+  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/d1691757-13d4-437f-98d0-6ba92a7e892f";
