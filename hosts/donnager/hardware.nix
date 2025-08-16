@@ -22,15 +22,15 @@
   hardware.graphics.enable32Bit = true;
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/b0fdc274-87f9-45e1-b670-ffa940554969";
+    device = "/dev/disk/by-uuid/d5bf9c7a-2d21-4d94-a0eb-ecc2dd276d64";
     fsType = "ext4";
   };
 
   boot.initrd.luks.devices."cryptroot".device =
-    "/dev/disk/by-uuid/8c22fb74-e2c6-405d-bce1-3b5d424bcdce";
+    "/dev/disk/by-uuid/3645d7ff-fce0-4a89-816e-c24a1ed84d5f";
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/47E5-D29E";
+    device = "/dev/disk/by-uuid/1A3B-9F79";
     fsType = "vfat";
   };
 
