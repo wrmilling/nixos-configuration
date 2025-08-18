@@ -28,8 +28,10 @@
     fsType = "ext4";
   };
 
-  boot.initrd.luks.devices."cryptroot".device =
-    "/dev/disk/by-uuid/49badd4e-2c54-4ec0-a4f4-893e664df466";
+  boot.initrd.luks.devices."cryptroot" = {
+    device = "/dev/disk/by-uuid/49badd4e-2c54-4ec0-a4f4-893e664df466";
+    crypttabExtraOpts = [ "tpm2-device=auto" "tpm2-measure-pcr=yes" ];
+  };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/B107-307C";
