@@ -38,6 +38,12 @@
       url = "github:nix-community/NixOS-WSL/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Lanzaboote for SecureBoot
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -48,6 +54,7 @@
       sops-nix,
       darwin,
       nixos-wsl,
+      lanzaboote,
       ...
     }@inputs:
     let
@@ -134,7 +141,10 @@
         ];
         donnager = mkNixos [ ./hosts/donnager ];
         enterprise = mkNixos [ ./hosts/enterprise ];
-        icarus = mkNixos [ ./hosts/icarus ];
+        icarus = mkNixos [
+          lanzaboote.nixosModules.lanzaboote
+          ./hosts/icarus
+        ];
         riker = mkNixos [ ./hosts/riker ];
         serenity = mkNixos [ ./hosts/serenity ];
 

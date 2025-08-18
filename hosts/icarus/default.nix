@@ -19,6 +19,7 @@
     ../common/optional/gaming.nix
     ../common/optional/k8s-utils.nix
     ../common/optional/printing.nix
+    ../common/optional/secureboot.nix
     ../common/optional/smartcard.nix
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
@@ -28,6 +29,7 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Enabled lanzaboote through secureboot.nix optional import.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
