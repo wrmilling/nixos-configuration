@@ -14,6 +14,7 @@
     ./modules/fonts.nix
     ./modules/graphical.nix
     ./modules/network.nix
+    ./modules/plasma6.nix
   ];
 
   services.xserver.enable = true;

@@ -16,7 +16,6 @@
     ../common/optional/amateur-radio.nix
     ../common/optional/development.nix
     ../common/optional/k8s-utils.nix
-    ../common/optional/plasma6.nix
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
     ../common/optional/visual-boot.nix

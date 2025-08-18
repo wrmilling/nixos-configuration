@@ -8,13 +8,11 @@
 }:
 {
   imports = [
-    ./i3status-rust.nix
     ../common/terminal
     ../common/graphical
     ../common/scripts
     ../common/optional/legcord.nix
     ../common/optional/dunst.nix
-    ../common/optional/i3wm.nix
     ../common/optional/keybase.nix
   ];
 

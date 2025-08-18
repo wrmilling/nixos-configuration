@@ -18,7 +18,6 @@
     ../common/optional/flipper.nix
     ../common/optional/gaming.nix
     ../common/optional/k8s-utils.nix
-    ../common/optional/plasma6.nix
     ../common/optional/printing.nix
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
