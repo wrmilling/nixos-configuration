@@ -8,7 +8,6 @@
     brews = [
       "cask"
       "scrcpy"
-      "jenv"
     ];
     taps = [
       "homebrew/bundle"
