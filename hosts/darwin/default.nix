@@ -50,6 +50,10 @@
       pkgs.vim
       pkgs.home-manager
       pkgs.openssh
+      pkgs.jdk8
+      pkgs.jdk11
+      pkgs.jdk17
+      pkgs.jdk21
     ];
     shells = [
       pkgs.bashInteractive

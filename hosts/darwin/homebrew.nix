@@ -5,7 +5,11 @@
     onActivation.autoUpdate = true;
     onActivation.upgrade = true;
     onActivation.cleanup = "zap";
-    brews = [ "cask" ];
+    brews = [
+      "cask"
+      "scrcpy"
+      "jenv"
+    ];
     taps = [
       "homebrew/bundle"
       "homebrew/cask-fonts"
@@ -24,16 +28,6 @@
       "datagrip"
       "miro"
       "gather"
-
-      # Tablet Screenshare
-      "scrcpy"
-
-      # Java Development
-      "openjdk@8"
-      "openjdk@11"
-      "openjdk@17"
-      "openjdk@21"
-      "jenv"
     ];
     masApps = {
       Tailscale = 1475387142;
