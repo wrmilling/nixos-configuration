@@ -24,7 +24,7 @@
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/adfc6416-72ba-4c16-813b-c51dd746c51f";
+    device = "/dev/mapper/cryptroot";
     fsType = "ext4";
   };
 
