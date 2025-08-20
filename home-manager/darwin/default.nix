@@ -57,16 +57,16 @@
         eval (/opt/homebrew/bin/brew shellenv)
       ''
       +
-      # Add custom local paths
-      ''
-        fish_add_path $HOME/.rd/bin
-      ''
+        # Add custom local paths
+        ''
+          fish_add_path $HOME/.rd/bin
+        ''
       +
-      # Add jenv path
-      ''
-      export PATH="$HOME/.jenv/bin:$PATH"
-      eval "$(jenv init -)"
-      '';
+        # Add jenv path
+        ''
+          export PATH="$HOME/.jenv/bin:$PATH"
+          eval "$(jenv init -)"
+        '';
   };
 
   # Alacritty Font Fixes

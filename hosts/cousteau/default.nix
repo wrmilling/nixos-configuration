@@ -1,7 +1,14 @@
 # NixOS-WSL specific options are documented on the NixOS-WSL repository:
 # https://github.com/nix-community/NixOS-WSL
 
-{ config, lib, pkgs, inputs, outputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  outputs,
+  ...
+}:
 
 {
   imports = [
@@ -28,7 +35,7 @@
   services.pcscd.enable = true;
   services.udev = {
     enable = true;
-    packages = [pkgs.yubikey-personalization];
+    packages = [ pkgs.yubikey-personalization ];
     extraRules = ''
       SUBSYSTEM=="usb", MODE="0666"
       KERNEL=="hidraw*", SUBSYSTEM=="hidraw", TAG+="uaccess", MODE="0666"
@@ -46,7 +53,6 @@
       w4cbe = import ../../home-manager/server;
     };
   };
-
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   system.stateVersion = "24.11";

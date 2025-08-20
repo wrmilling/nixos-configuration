@@ -59,15 +59,13 @@
       forceSSL = true;
       enableACME = true;
       locations."/" = {
-        proxyPass =
-          "http://127.0.0.1:${toString config.services.headscale.port}";
+        proxyPass = "http://127.0.0.1:${toString config.services.headscale.port}";
         proxyWebsockets = true;
       };
     };
   };
 
   environment.systemPackages = [ config.services.headscale.package ];
-
 
   home-manager = {
     extraSpecialArgs = {

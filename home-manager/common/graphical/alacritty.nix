@@ -29,11 +29,13 @@
         size = lib.mkDefault 11;
       };
       keyboard = {
-        bindings = [{
-          key = "NumpadEnter";
-          mods = "None";
-          action = "ReceiveChar";
-        }];
+        bindings = [
+          {
+            key = "NumpadEnter";
+            mods = "None";
+            action = "ReceiveChar";
+          }
+        ];
       };
       terminal.shell = {
         program = "/bin/sh";

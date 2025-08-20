@@ -32,7 +32,10 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/1A3B-9F79";
     fsType = "vfat";
-    options = [ "fmask=0022" "dmask=0022" ];
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
   };
 
   environment.etc = {
