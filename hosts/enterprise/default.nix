@@ -18,6 +18,7 @@
     ../common/optional/k8s-utils.nix
     ../common/optional/nvidia.nix
     ../common/optional/printing.nix
+    ../common/optional/secureboot.nix
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
     ../common/optional/visual-boot.nix

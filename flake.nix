@@ -140,7 +140,10 @@
           nixos-wsl.nixosModules.default
         ];
         donnager = mkNixos [ ./hosts/donnager ];
-        enterprise = mkNixos [ ./hosts/enterprise ];
+        enterprise = mkNixos [
+          lanzaboote.nixosModules.lanzaboote
+          ./hosts/enterprise
+        ];
         icarus = mkNixos [
           lanzaboote.nixosModules.lanzaboote
           ./hosts/icarus
