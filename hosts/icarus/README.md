@@ -74,7 +74,7 @@ $ vim hosts/icarus/default.nix
 # Update the link to hardware.nix and add all modules/profiles as required.
 ```
 
-I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine.
+I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine. You will need to comment out lanzaboote module in the flake definition for this machine and comment out the secure boot optional import in the hosts/<machine>/default.nix to hve this run successfully prior to onboarding Secure Boot and TPM2 for LUKS.
 
 ```
 $ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
@@ -84,7 +84,7 @@ The above is aliased to `nrs` on my machines.
 
 ### Secure Boot
 
-I also enabled secure boot on this machine using [lanzaboote](https://github.com/nix-community/lanzaboote) which followed their [guide](https://github.com/nix-community/lanzaboote/blob/d32b80889700ec1479d19d08ebfdb9880a4e76d7/docs/QUICK_START.md) for setup. For the ELitebook, disabling Secure Boot in bios will put it into setup mode and by inporting your keys it will enable Secure Boot. The shortlist of commands are below, but read the guide for the latest: 
+I also enabled secure boot on this machine using [lanzaboote](https://github.com/nix-community/lanzaboote) which followed their [guide](https://github.com/nix-community/lanzaboote/blob/d32b80889700ec1479d19d08ebfdb9880a4e76d7/docs/QUICK_START.md) for setup. For the ELitebook, disabling Secure Boot in bios will put it into setup mode and by inporting your keys it will enable Secure Boot. The shortlist of commands are below, but read the guide for the latest:
 
 ```
 # Disable Secure Boot in BIOS, F10 at startup to get into BIOS
@@ -97,7 +97,7 @@ $ sudo sbctl create-keys
 # Import Lanzaboote and generate new signed EFI blobs, already done for Icarus
 $ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
 
-# Verify generations and BOOTX64.EFI and systemd-bootx84.efi are signed. 
+# Verify generations and BOOTX64.EFI and systemd-bootx84.efi are signed.
 $ sudo sbctl verify
 
 # Encroll keys onto machine for Secure Boot
@@ -113,13 +113,13 @@ $ bootctl status
 
 ### TPM2 LUKS Unlock
 
-I also followed [this guide](https://discourse.nixos.org/t/a-modern-and-secure-desktop-setup/41154) for enabling LUKS unlock using TPM2, which also references the Secure Boot instructions mentioned above. Essentially, it boils down to the following command: 
+I also followed [this guide](https://discourse.nixos.org/t/a-modern-and-secure-desktop-setup/41154) for enabling LUKS unlock using TPM2, which also references the Secure Boot instructions mentioned above. Essentially, it boils down to the following command:
 
 ```
 systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs="0+2+3+5+7+8+12+13+14+15:sha256=0000000000000000000000000000000000000000000000000000000000000000" /dev/<root-partition>
 ```
 
-As well as updating `hardware.nix` to include a few extra crypttab options: 
+As well as updating `hardware.nix` to include a few extra crypttab options:
 
 ```
 # Modify HW config
