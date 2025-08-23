@@ -13,6 +13,7 @@
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
     ../common/laptop.nix
+    ../common/optional/3d-printing.nix
     ../common/optional/appimage.nix
     ../common/optional/development.nix
     ../common/optional/flipper.nix
