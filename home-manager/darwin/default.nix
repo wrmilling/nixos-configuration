@@ -60,7 +60,7 @@
         # Add custom local paths
         ''
           fish_add_path $HOME/.rd/bin
-        ''
+        '';
   };
 
   # Alacritty Font Fixes
