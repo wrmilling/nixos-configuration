@@ -61,12 +61,6 @@
         ''
           fish_add_path $HOME/.rd/bin
         ''
-      +
-        # Add jenv path
-        ''
-          export PATH="$HOME/.jenv/bin:$PATH"
-          eval "$(jenv init -)"
-        '';
   };
 
   # Alacritty Font Fixes
