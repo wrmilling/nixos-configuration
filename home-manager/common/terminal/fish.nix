@@ -98,7 +98,7 @@ in
       nrb = "sudo sh -c \"cd /etc/nixos && git pull && nixos-rebuild boot --flake .\"";
       nrd = "sudo sh -c \"cd /etc/nixos && git pull && nixos-rebuild dry-run --flake .\"";
       nrs = "sudo sh -c \"cd /etc/nixos && git pull && nixos-rebuild switch --flake .\"";
-      drs = "cd ~/.nixos-configuration && git pull && darwin-rebuild switch --flake . && home-manager switch --flake . && cd -";
+      drs = "cd ~/.nixos-configuration && git pull && sudo darwin-rebuild switch --flake . && home-manager switch --flake . && cd -";
       ncg = "sudo nix-collect-garbage";
       ncgd = "sudo nix-collect-garbage -d";
       ncl = "home-manager expire-generations \"$(date +%m/%d/%Y)\" && sudo nix-collect-garbage -d";
