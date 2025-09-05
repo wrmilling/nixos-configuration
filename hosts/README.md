@@ -10,8 +10,8 @@ These configurations generally reference a [home-manager](../home-manager) confi
 
 - [bart](bart) (Server, KVM 2GB Instance)
 - [bender](bender) (Laptop, Macbook Pro 11,2)
-- [bill](bill) (Server, KVM Test-instance)
 - [bob](bob) (Server, Oracle Free-tier ARM64)
+- [cousteau](cousteau) (WSL, Windows 11)
 - [darwin](darwin) (Laptop, M1 Macbook Pro)
 - [donnager](donnager) (Laptop, Lenovo Legion Y530)
 - [enterprise](enterprise) (Desktop, Custom Built)

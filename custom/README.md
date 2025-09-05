@@ -4,4 +4,4 @@ Definition of custom packages which are generally not yet available in upstream 
 
 ## Current Packages
 
-- N/A
+- [slides-git](slides-git) is the upstream build for the slides application using git main as source instead of a version tag.

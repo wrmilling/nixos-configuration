@@ -24,6 +24,7 @@ A work in progress [NixOS](https://nixos.org/) configuration that can handle Nix
   - [bart](hosts/bart) (KVM Server, 2GB Instance)
   - [bob](hosts/bob) (NixOS Server, Oracle ARM64)
   - [common](hosts/common) (Role definitions [Desktop, Laptop, Server])
+  - [cousteau](cousteau) (WSL, Windows 11)
   - [darwin](hosts/darwin) (nix-darwin Laptop, Apple M1 Macbook Pro 16")
   - [donnager](hosts/donnager) (NixOS Laptop, Lenovo Legion Y530)
   - [enterprise](hosts/enterprise) (NixOS Desktop, Custom Built)
