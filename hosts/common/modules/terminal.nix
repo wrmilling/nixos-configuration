@@ -27,5 +27,6 @@
     pkgs.home-manager
     pkgs.ipinfo
     pkgs.ipcalc
+    pkgs.nh
   ];
 }
