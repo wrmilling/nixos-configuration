@@ -99,10 +99,10 @@ in
       nrd = "sudo sh -c \"cd /etc/nixos && git pull && nixos-rebuild dry-run --flake .\"";
       nrs = "sudo sh -c \"cd /etc/nixos && git pull && nixos-rebuild switch --flake .\"";
       nhs = "cd ~/.nixos-configuration && git pull && nh os switch . && cd -";
+      nhb = "cd ~/.nixos-configuration && git pull && nh os boot . && cd -";
+      nhd = "cd ~/.nixos-configuration && git pull && nh os switch --dry . && cd -";
       drs = "cd ~/.nixos-configuration && git pull && sudo darwin-rebuild switch --flake . && home-manager switch --flake . && cd -";
       dhs = "cd ~/.nixos-configuration && git pull && nh darwin switch . && home-manager switch --flake . && cd -";
-      ncg = "sudo nix-collect-garbage";
-      ncgd = "sudo nix-collect-garbage -d";
       ncl = "home-manager expire-generations \"$(date +%m/%d/%Y)\" && sudo nix-collect-garbage -d";
 
       # hut
