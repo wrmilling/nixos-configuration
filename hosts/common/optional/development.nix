@@ -11,5 +11,6 @@
     pkgs.nixpkgs-review
     pkgs.go
     pkgs.pre-commit
+    pkgs.gh
   ];
 }
