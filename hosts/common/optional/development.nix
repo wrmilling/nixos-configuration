@@ -12,5 +12,6 @@
     pkgs.go
     pkgs.pre-commit
     pkgs.gh
+    pkgs.diffoscope
   ];
 }
