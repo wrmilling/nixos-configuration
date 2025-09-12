@@ -29,6 +29,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Since secureboot is enabled on this host and we have Windows on another drive, try to enable rebooting to windows:
+  boot.lanzaboote.settings.reboot-for-bitlocker = true;
+
   # services.displayManager.sddm.wayland.enable = lib.mkForce false;
 
   networking = {
