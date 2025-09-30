@@ -14,6 +14,7 @@
     ./hardware.nix
     ../common/laptop.nix
     ../common/optional/3d-printing.nix
+    ../common/optional/amateur-radio.nix
     ../common/optional/appimage.nix
     ../common/optional/development.nix
     ../common/optional/flipper.nix
