@@ -19,7 +19,6 @@
       "microsoft-remote-desktop"
       "obs"
       "alacritty"
-      "barrier"
       "firefox"
       "vivaldi"
       "visual-studio-code"

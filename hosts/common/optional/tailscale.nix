@@ -8,7 +8,7 @@ let
   tailscale-package = pkgs.tailscale;
 in
 {
-  environment.systemPackages = [ pkgs.barrier ];
+  environment.systemPackages = [ ];
 
   services.tailscale = {
     enable = true;
