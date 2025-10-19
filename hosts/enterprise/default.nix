@@ -14,6 +14,7 @@
     ../common/desktop.nix
     ../common/optional/appimage.nix
     ../common/optional/development.nix
+    ../common/optional/docker.nix
     ../common/optional/gaming.nix
     ../common/optional/k8s-utils.nix
     ../common/optional/nvidia.nix
