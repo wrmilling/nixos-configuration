@@ -44,10 +44,8 @@
     package = pkgs.lix;
     settings = {
       auto-optimise-store = lib.mkDefault true;
+      experimental-features = [ "nix-command" "flakes" ];
     };
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
     settings.trusted-users = [
       "root"
       "@wheel"
