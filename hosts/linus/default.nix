@@ -23,6 +23,16 @@
     hostName = "linus"; # Define your hostname.
     domain = secrets.hosts.common.p_domain;
     nameservers = secrets.hosts.common.nameservers;
+    interfaces.eth0 = {
+      ipv4.addresses = [{
+        address = secrets.hosts.linus.ipAddress;
+        prefixLength = secrets.hosts.linus.prefixLength;
+      }];
+    };
+    defaultGateway = {
+      address = secrets.hosts.linus.gateway;
+      interface = "eth0";
+    };
   };
 
   services.openssh.banner = lib.mkForce secrets.sshd.alt_banner;

@@ -23,6 +23,16 @@
     hostName = "bart"; # Define your hostname.
     domain = secrets.hosts.common.domain;
     nameservers = secrets.hosts.common.nameservers;
+    interfaces.eth0 = {
+      ipv4.addresses = [{
+        address = secrets.hosts.bart.ipAddress;
+        prefixLength = secrets.hosts.bart.prefixLength;
+      }];
+    };
+    defaultGateway = {
+      address = secrets.hosts.bart.gateway;
+      interface = "eth0";
+    };
   };
 
   sops.secrets."forgejo/runnerToken" = {
