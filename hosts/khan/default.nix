@@ -30,6 +30,16 @@
     dhcpcd.extraConfig = "nohook resolv.conf";
   };
 
+  services.nginx = {
+    virtualHosts = {
+      "${secrets.hosts.common.c_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.c_domain}";
+      };
+    };
+  };
+
   home-manager = {
     extraSpecialArgs = {
       inherit inputs outputs;
