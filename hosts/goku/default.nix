@@ -23,16 +23,6 @@
     hostName = "goku"; # Define your hostname.
     domain = secrets.hosts.common.domain;
     nameservers = secrets.hosts.common.nameservers;
-    interfaces.ens3 = {
-      ipv4.addresses = [{
-        address = secrets.hosts.goku.ipAddress;
-        prefixLength = secrets.hosts.goku.prefixLength;
-      }];
-    };
-    defaultGateway = {
-      address = secrets.hosts.goku.gateway;
-      interface = "ens3";
-    };
   };
 
   sops.secrets."forgejo/runnerToken" = {
