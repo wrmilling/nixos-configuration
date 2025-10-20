@@ -15,24 +15,24 @@
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Use grub boot loader
+  boot.loader.grub.enable = true;
   services.qemuGuest.enable = true;
 
   networking = {
     hostName = "goku"; # Define your hostname.
-    domain = secrets.hosts.common.domain;
-    nameservers = secrets.hosts.common.nameservers;
-    interfaces.ens3 = {
-      ipv4.addresses = [{
-        address = secrets.hosts.goku.ipAddress;
-        prefixLength = secrets.hosts.goku.prefixLength;
-      }];
-    };
-    defaultGateway = {
-      address = secrets.hosts.goku.gateway;
-      interface = "ens3";
-    };
+    # domain = secrets.hosts.common.domain;
+    # nameservers = secrets.hosts.common.nameservers;
+    # interfaces.ens3 = {
+    #   ipv4.addresses = [{
+    #     address = secrets.hosts.goku.ipAddress;
+    #     prefixLength = secrets.hosts.goku.prefixLength;
+    #   }];
+    # };
+    # defaultGateway = {
+    #   address = secrets.hosts.goku.gateway;
+    #   interface = "ens3";
+    # };
   };
 
   # sops.secrets."forgejo/runnerToken" = {
