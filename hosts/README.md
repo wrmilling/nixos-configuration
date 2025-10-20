@@ -9,13 +9,12 @@ These configurations generally reference a [home-manager](../home-manager) confi
 ##  Configurations
 
 - [bart](bart) (Server, KVM 2GB Instance)
-- [bender](bender) (Laptop, Macbook Pro 11,2)
 - [bob](bob) (Server, Oracle Free-tier ARM64)
 - [cousteau](cousteau) (WSL, Windows 11)
 - [darwin](darwin) (Laptop, M1 Macbook Pro)
 - [donnager](donnager) (Laptop, Lenovo Legion Y530)
 - [enterprise](enterprise) (Desktop, Custom Built)
-- [goku](goku) (Server, KVM 2GB Instance)
+- [goku](goku) (Server, KVM 4GB Instance)
 - [icarus](icarus) (Laptop, HP EliteBook 845 G8)
 - [khan](khan) (Server, Oracle Free-tier x86_64)
 - [linus](linus) (Server, KVM 2GB Instance)
