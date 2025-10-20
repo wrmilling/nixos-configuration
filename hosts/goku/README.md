@@ -10,24 +10,14 @@ Creates 2 partitions on the drive, one for EFI Boot and one for the luks root.
 
 ```
 $ sudo fdisk /dev/vda
-> g (GPT Table)
+> o (MBR Table)
 > n (New Partition)
 > <enter> (Default 1)
 > <enter> (Default 2048)
-> +500M
-> t (Type)
-> 1 (EFI)
-> n (New Partition)
-> <enter> (Default 2)
-> <enter> (Default End of EFI)
 > <enter> (Default End of Disk)
 > w (Write)
-$ sudo mkfs.fat -F 32 /dev/vda1
-$ sudo fatlabel /dev/vda1 BOOTEFI
-$ sudo mkfs.ext4 -L nixos /dev/vda2
+$ sudo mkfs.ext4 -L nixos /dev/vda1
 $ sudo mount /dev/disk/by-label/nixos /mnt
-$ sudo mkdir -p /mnt/boot
-$ sudo mount /dev/disk/by-label/BOOTEFI /mnt/boot
 ```
 
 ### NixOS Install
