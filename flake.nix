@@ -155,6 +155,7 @@
         bart = mkNixos [ ./hosts/bart ];
         bob = mkNixos [ ./hosts/bob ];
         goku = mkNixos [ ./hosts/goku ];
+        khan = mkNixos [ ./hosts/khan ];
         linus = mkNixos [ ./hosts/linus ];
 
         # k3s Hosts

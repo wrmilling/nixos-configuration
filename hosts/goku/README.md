@@ -1,37 +1,129 @@
-# goku
+# Icarus
 
-This is a Oracle Free Tier VM.Standard.E2.1.Micro system.
+Icarus is a 3 vCPU, 4GB ram, and 100GB SSD KVM from a random provider. The installation steps assume you have uploaded a nixos minimal iso image and booted the KVM instance into the iso environment and are connected to it via NoVNC.
 
 ## Installation
 
-### Create Your Machine
+### Disk Setup
 
-Register for Oracle Free tier and create an instance in your desired size running the latest LTS of Ubuntu available as a free-tier image. This may also require setting up an Oracle [VCN](https://www.oracle.com/cloud/networking/virtual-cloud-network/) (its been a minute since I did initial setup) with your desired ports open for the instance, google is a friend here.
-
-For my instance, I built the VVM.Standard.E2.1.Micro with 1 OCPU and 1GB of memory. For my block storage, I chose 50GB to be allocated to this instance, the other 150GB in the free tier being allocated to the also-free ARM64 instance available at Oracle.
-
-Once your machine is created, its time to...
-
-### Install Nix
+Creates 2 partitions on the drive, one for EFI Boot and one for the luks root.
 
 ```
-$ curl https://nixos.org/nix/install | sh
-$ . $HOME/.nix-profile/etc/profile.d/nix.sh
-$ nix-channel --add https://nixos.org/channels/nixos-23.11 nixpkgs
-$ nix-channel --update
-$ nix-env -iE "_: with import <nixpkgs/nixos> { configuration = {}; }; with config.system.build; [ nixos-generate-config nixos-install nixos-enter manual.manpages ]"
-$ sudo `which nixos-generate-config` --root /
-# Update /etc/nixos/configuration.nix and hardware-configuration.nix
-# Be sure to specify mount efi partition to /boot directly rather than /boot/efi
-# In this case, I specify a hefty swap partition to ensure things can build
-$ nix-env -p /nix/var/nix/profiles/system -f '<nixpkgs/nixos>' -I nixos-config=/etc/nixos/configuration.nix -iA system
-$ sudo chown -R 0.0 /nix
-$ sudo touch /etc/NIXOS /etc/NIXOS_LUSTRATE
-$ echo etc/nixos | sudo tee -a /etc/NIXOS_LUSTRATE
-$ sudo mv -v /boot /boot.bak
-$ sudo mkdir /boot/
-$ sudo umount /boot.bak/efi
-$ sudo mount /dev/nvme0n1p1 /boot
-$ sudo mv /boot/EFI /boot.bak/efi/
-$ sudo NIXOS_INSTALL_BOOTLOADER=1 /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+$ sudo fdisk /dev/vda
+> g (GPT Table)
+> n (New Partition)
+> <enter> (Default 1)
+> <enter> (Default 2048)
+> +500M
+> t (Type)
+> 1 (EFI)
+> n (New Partition)
+> <enter> (Default 2)
+> <enter> (Default End of EFI)
+> <enter> (Default End of Disk)
+> w (Write)
+$ sudo mkfs.fat -F 32 /dev/vda1
+$ sudo fatlabel /dev/vda1 BOOTEFI
+$ sudo mkfs.ext4 -L nixos /dev/vda2
+$ sudo mount /dev/disk/by-label/nixos /mnt
+$ sudo mkdir -p /mnt/boot
+$ sudo mount /dev/disk/by-label/BOOTEFI /mnt/boot
 ```
+
+### NixOS Install
+
+Generate a config based on the currently detected hardware and disks.
+
+```
+$ sudo nixos-generate-config --root /mnt
+```
+
+Next I will normally open the hardware and configuration nix files to clean out comments and set basic information like hostname. Most of my other items are set by my profiles or modules so I will take care of those later.
+
+Now, lets install:
+
+```
+$ cd /mnt
+$ sudo nixos-install
+> <root password when prompted>
+$ sudo reboot
+```
+
+### First Run
+
+Here is where I will normally try and setup all the hardware and import the profiles/modules I want from this repo. Since I use the minimal install, I will kick things off like so:
+
+```
+$ nix-shell -p git vim
+$ cd /etc/nixos
+$ git clone https://github.com/wrmilling/nixos-configuration.git .
+```
+
+I will then copy in the new machine basic config into a new machine folder and setup the configuration.nix in root. I will then replace the generated config with the new setup.
+
+```
+$ mkdir -p hosts/icarus
+$ mv ../configuration.nix hosts/icarus/default.nix
+$ mv ../hardware-configuration.nix hosts/icarus/hardware.nix
+$ vim hosts/icarus/default.nix
+# Update the link to hardware.nix and add all modules/profiles as required.
+```
+
+I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine. You will need to comment out lanzaboote module in the flake definition for this machine and comment out the secure boot optional import in the hosts/<machine>/default.nix to hve this run successfully prior to onboarding Secure Boot and TPM2 for LUKS.
+
+```
+$ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
+```
+
+The above is aliased to `nrs` on my machines.
+
+### Secure Boot
+
+I also enabled secure boot on this machine using [lanzaboote](https://github.com/nix-community/lanzaboote) which followed their [guide](https://github.com/nix-community/lanzaboote/blob/d32b80889700ec1479d19d08ebfdb9880a4e76d7/docs/QUICK_START.md) for setup. For the ELitebook, disabling Secure Boot in bios will put it into setup mode and by inporting your keys it will enable Secure Boot. The shortlist of commands are below, but read the guide for the latest:
+
+```
+# Disable Secure Boot in BIOS, F10 at startup to get into BIOS
+# Ensure you see disabled in NixOS, e.g. "Secure Boot: disabled (disabled)"
+$ bootctl status
+
+# Create Keys for Secure Boot
+$ sudo sbctl create-keys
+
+# Import Lanzaboote and generate new signed EFI blobs, already done for Icarus
+$ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
+
+# Verify generations and BOOTX64.EFI and systemd-bootx84.efi are signed.
+$ sudo sbctl verify
+
+# Encroll keys onto machine for Secure Boot
+$ sudo sbctl enroll-keys --microsoft
+
+# Reboot the machine
+$ sudo shutdown -r now
+
+# Verify Secure Boot is enabled, expected "Secure Boot: enabled (user)"
+$ bootctl status
+
+```
+
+### TPM2 LUKS Unlock
+
+I also followed [this guide](https://discourse.nixos.org/t/a-modern-and-secure-desktop-setup/41154) for enabling LUKS unlock using TPM2, which also references the Secure Boot instructions mentioned above. Essentially, it boils down to the following command:
+
+```
+systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs="0+2+3+5+7+8+12+13+14+15:sha256=0000000000000000000000000000000000000000000000000000000000000000" /dev/<root-partition>
+```
+
+As well as updating `hardware.nix` to include a few extra crypttab options:
+
+```
+# Modify HW config
+boot.initrd.luks.devices."cryptroot" = {
+  device = "/dev/disk/by-uuid/<...>";
+  crypttabExtraOpts = [ "tpm2-device=auto" "tpm2-measure-pcr=yes" ];
+};
+```
+
+## Outro
+
+Good luck!

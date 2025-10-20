@@ -15,7 +15,7 @@ in
   ];
   services.nginx.enable = true;
   security.acme.acceptTerms = true;
-  security.acme.defaults.email = "Winston@${domain}";
+  security.acme.defaults.email = "admin@${domain}";
   services.nginx.virtualHosts."${hostname}.${domain}" = {
     forceSSL = true;
     enableACME = true;
