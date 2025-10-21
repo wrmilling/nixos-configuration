@@ -40,12 +40,14 @@
     };
   };
 
+  networking.firewall.allowedTCPPorts = [
+    secrets.hosts.khan.zncPort
+  ];
+
   services.znc = {
     enable = true;
     mutable = true;
-    useLegacyConfig = true;
-    confOptions.port = secrets.hosts.khan.zncPort;
-    openFirewall = true;
+    useLegacyConfig = false;
   };
 
   home-manager = {
