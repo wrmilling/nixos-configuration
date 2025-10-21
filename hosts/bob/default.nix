@@ -56,7 +56,7 @@
         root = "/var/www/${secrets.hosts.common.m_domain}";
         locations = {
           "/" = {
-            return = "302 https://${secrets.hosts.common.b_domain}$request_uri;";
+            return = "302 https://${secrets.hosts.common.b_domain}$request_uri";
           };
           "/.well-known/matrix/server" = {
             return = "200 '{\"m.server\": \"synapse.${secrets.hosts.common.domain}:443\"}'";
