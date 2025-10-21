@@ -30,7 +30,7 @@
 
   users.users.deploy = {
     uid = 1050;
-    shell = pkgs.sh;
+    shell = pkgs.bash;
     isNormalUser = true;
     home = "/home/deploy";
     description = "Site Deployment User";
