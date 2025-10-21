@@ -44,7 +44,7 @@
     enable = true;
     mutable = true;
     useLegacyConfig = true;
-    confOptions.port = ${secrets.hosts.khan.zncPort};
+    confOptions.port = secrets.hosts.khan.zncPort;
     openFirewall = true;
   };
 
