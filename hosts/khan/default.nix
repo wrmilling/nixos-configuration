@@ -37,6 +37,11 @@
         enableACME = true;
         root = "/var/www/${secrets.hosts.common.c_domain}";
       };
+      "irc.${secrets.hosts.common.c_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.c_domain}";
+      };
     };
   };
 
