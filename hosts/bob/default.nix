@@ -62,6 +62,28 @@
         root = "/var/www/${secrets.hosts.common.b_domain}/html";
       };
 
+      "${secrets.hosts.common.d_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.d_domain}";
+        locations = {
+          "/" = {
+            return = "301 https://${secrets.hosts.common.b_domain}$request_uri";
+          };
+        };
+      };
+
+      "${secrets.hosts.common.h_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.h_domain}";
+        locations = {
+          "/" = {
+            return = "301 https://${secrets.hosts.common.b_domain}/blog$request_uri";
+          };
+        };
+      };
+
       "${secrets.hosts.common.m_domain}" = {
         forceSSL = true;
         enableACME = true;
@@ -83,17 +105,28 @@
         };
       };
 
-      # "${secrets.hosts.common.n_domain}" = {
-      #   forceSSL = true;
-      #   enableACME = true;
-      #   root = "/var/www/${secrets.hosts.common.domain}";
-      # };
+      "${secrets.hosts.common.n_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.domain}";
+      };
 
-      # "${secrets.hosts.common.y_domain}" = {
-      #   forceSSL = true;
-      #   enableACME = true;
-      #   root = "/var/www/${secrets.hosts.common.domain}";
-      # };
+      "${secrets.hosts.common.w_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.w_domain}";
+        locations = {
+          "/" = {
+            return = "301 https://${secrets.hosts.common.b_domain}/resume$request_uri";
+          };
+        };
+      };
+
+      "${secrets.hosts.common.y_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.domain}";
+      };
 
       "status.${secrets.hosts.common.domain}" = {
         forceSSL = true;
