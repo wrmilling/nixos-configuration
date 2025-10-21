@@ -63,7 +63,7 @@
           };
           "/.well-known/matrix/client" = {
             return = "200 '{\"m.homeserver\": {\"base_url\": \"https://synapse.${secrets.hosts.common.domain}\"},\"org.matrix.msc2965.authentication\": {\"issuer\": \"https://synapse.${secrets.hosts.common.domain}/\",\"account\": \"https://mas.${secrets.hosts.common.domain}/account\"}}'";
-            extraConfig = "add_header Content-Type application/json;\nadd_header "Access-Control-Allow-Origin" *;\n";
+            extraConfig = "add_header Content-Type application/json;\nadd_header \"Access-Control-Allow-Origin\" *;\n";
           };
           "/.well-known/webfinger" = {
             return = "301 https://mastodon.${secrets.hosts.common.domain}$request_uri";
