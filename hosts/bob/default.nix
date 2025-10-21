@@ -44,16 +44,43 @@
         root = "/var/www/${secrets.hosts.common.domain}";
       };
 
-      # "${secrets.hosts.bob.alt1Domain}" = {
+      # "${secrets.hosts.common.b_domain}" = {
+      #   forceSSL = true;
+      #   enableACME = true;
+      #   root = "/var/www/${secrets.hosts.common.b_domain}";
+      # };
+
+      "${secrets.hosts.common.m_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.m_domain}";
+        locations = {
+          "/" = {
+            return = "302 https://${secrets.hosts.common.b_domain}$request_uri;";
+          };
+          "/.well-known/matrix/server" = {
+            return = "200 '{\"m.server\": \"synapse.${secrets.hosts.common.domain}:443\"}'";
+          };
+          "/.well-known/matrix/client" = {
+            return = "200 '{\"m.homeserver\": {\"base_url\": \"https://synapse.${secrets.hosts.common.domain}\"},\"org.matrix.msc2965.authentication\": {\"issuer\": \"https://synapse.${secrets.hosts.common.domain}/\",\"account\": \"https://mas.${secrets.hosts.common.domain}/account\"}}'";
+            extraConfig = "add_header Content-Type application/json;\nadd_header "Access-Control-Allow-Origin" *;\n"
+          };
+          "/.well-known/webfinger" = {
+            return = "301 https://mastodon.${secrets.hosts.common.domain}$request_uri";
+          };
+        }
+      };
+
+      # "${secrets.hosts.common.n_domain}" = {
       #   forceSSL = true;
       #   enableACME = true;
       #   root = "/var/www/${secrets.hosts.common.domain}";
       # };
 
-      "${secrets.hosts.bob.alt2Domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.domain}";
+      # "${secrets.hosts.common.y_domain}" = {
+      #   forceSSL = true;
+      #   enableACME = true;
+      #   root = "/var/www/${secrets.hosts.common.domain}";
       };
 
       "status.${secrets.hosts.common.domain}" = {
