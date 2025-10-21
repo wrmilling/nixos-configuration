@@ -35,7 +35,7 @@
     };
   };
 
-  services.openssh.banner = lib.mkForce secrets.sshd.alt_banner;
+  services.openssh.banner = lib.mkForce secrets.sshd.p_banner;
 
   networking.firewall.allowedTCPPorts = [
     80

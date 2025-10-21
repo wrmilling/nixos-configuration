@@ -21,7 +21,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  services.openssh.banner = lib.mkForce secrets.sshd.alt_banner;
+  services.openssh.banner = lib.mkForce secrets.sshd.c_banner;
 
   networking = {
     hostName = "khan"; # Define your hostname.
