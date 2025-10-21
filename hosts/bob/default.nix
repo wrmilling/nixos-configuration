@@ -54,18 +54,27 @@
         forceSSL = true;
         enableACME = true;
         root = "/var/www/${secrets.hosts.common.domain}";
+        serverAliases = [
+          "www.${secrets.hosts.common.domain}"
+        ];
       };
 
       "${secrets.hosts.common.b_domain}" = {
         forceSSL = true;
         enableACME = true;
         root = "/var/www/${secrets.hosts.common.b_domain}/html";
+        serverAliases = [
+          "www.${secrets.hosts.common.b_domain}"
+        ];
       };
 
       "${secrets.hosts.common.d_domain}" = {
         forceSSL = true;
         enableACME = true;
         root = "/var/www/${secrets.hosts.common.d_domain}";
+        serverAliases = [
+          "www.${secrets.hosts.common.d_domain}"
+        ];
         locations = {
           "/" = {
             return = "301 https://${secrets.hosts.common.b_domain}$request_uri";
@@ -77,6 +86,9 @@
         forceSSL = true;
         enableACME = true;
         root = "/var/www/${secrets.hosts.common.h_domain}";
+        serverAliases = [
+          "www.${secrets.hosts.common.h_domain}"
+        ];
         locations = {
           "/" = {
             return = "301 https://${secrets.hosts.common.b_domain}/blog$request_uri";
@@ -88,6 +100,9 @@
         forceSSL = true;
         enableACME = true;
         root = "/var/www/${secrets.hosts.common.m_domain}";
+        serverAliases = [
+          "www.${secrets.hosts.common.m_domain}"
+        ];
         locations = {
           "/" = {
             return = "302 https://${secrets.hosts.common.b_domain}$request_uri";
@@ -109,12 +124,18 @@
         forceSSL = true;
         enableACME = true;
         root = "/var/www/${secrets.hosts.common.domain}";
+        # serverAliases = [
+        #   "www.${secrets.hosts.common.n_domain}"
+        # ];
       };
 
       "${secrets.hosts.common.w_domain}" = {
         forceSSL = true;
         enableACME = true;
         root = "/var/www/${secrets.hosts.common.w_domain}";
+        serverAliases = [
+          "www.${secrets.hosts.common.w_domain}"
+        ];
         locations = {
           "/" = {
             return = "301 https://${secrets.hosts.common.b_domain}/resume$request_uri";
@@ -126,6 +147,9 @@
         forceSSL = true;
         enableACME = true;
         root = "/var/www/${secrets.hosts.common.domain}";
+        serverAliases = [
+          "www.${secrets.hosts.common.y_domain}"
+        ];
       };
 
       "status.${secrets.hosts.common.domain}" = {
