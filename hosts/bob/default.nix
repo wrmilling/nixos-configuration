@@ -81,7 +81,7 @@
       #   forceSSL = true;
       #   enableACME = true;
       #   root = "/var/www/${secrets.hosts.common.domain}";
-      };
+      # };
 
       "status.${secrets.hosts.common.domain}" = {
         forceSSL = true;
