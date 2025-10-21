@@ -68,7 +68,7 @@
           "/.well-known/webfinger" = {
             return = "301 https://mastodon.${secrets.hosts.common.domain}$request_uri";
           };
-        }
+        };
       };
 
       # "${secrets.hosts.common.n_domain}" = {
