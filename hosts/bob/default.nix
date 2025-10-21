@@ -56,11 +56,11 @@
         root = "/var/www/${secrets.hosts.common.domain}";
       };
 
-      # "${secrets.hosts.common.b_domain}" = {
-      #   forceSSL = true;
-      #   enableACME = true;
-      #   root = "/var/www/${secrets.hosts.common.b_domain}/html";
-      # };
+      "${secrets.hosts.common.b_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.b_domain}/html";
+      };
 
       "${secrets.hosts.common.m_domain}" = {
         forceSSL = true;
