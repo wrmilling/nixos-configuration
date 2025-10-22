@@ -129,6 +129,24 @@
         # ];
       };
 
+      "${secrets.hosts.common.r_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.r_domain}";
+        serverAliases = [
+          "www.${secrets.hosts.common.r_domain}"
+        ];
+      };
+
+      "${secrets.hosts.common.s_domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/${secrets.hosts.common.s_domain}";
+        serverAliases = [
+          "www.${secrets.hosts.common.s_domain}"
+        ];
+      };
+
       "${secrets.hosts.common.w_domain}" = {
         forceSSL = true;
         enableACME = true;
