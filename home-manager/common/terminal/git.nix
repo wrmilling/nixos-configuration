@@ -8,7 +8,7 @@
   programs.git = {
     enable = true;
     package = pkgs.gitAndTools.gitFull;
-    alias = {
+    aliases = {
       st = "status";
       di = "diff";
       co = "checkout";
@@ -31,10 +31,12 @@
       pom = "push origin master";
       poh = "push origin HEAD";
     };
-    user = {
-      name = lib.mkDefault "Winston R. Milling";
-      email = lib.mkDefault "Winston@Milli.ng";
-    };
+    userEmail = lib.mkDefault "Winston@Milli.ng";
+    userName = lib.mkDefault "Winston R. Milling";
+    # user = {
+    #   name = lib.mkDefault "Winston R. Milling";
+    #   email = lib.mkDefault "Winston@Milli.ng";
+    # };
     signing.key = lib.mkDefault "0xA44A3B1758373973";
     signing.signByDefault = lib.mkDefault true;
     settings = {
