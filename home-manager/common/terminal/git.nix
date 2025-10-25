@@ -8,7 +8,7 @@
   programs.git = {
     enable = true;
     package = pkgs.gitAndTools.gitFull;
-    aliases = {
+    alias = {
       st = "status";
       di = "diff";
       co = "checkout";
@@ -31,11 +31,13 @@
       pom = "push origin master";
       poh = "push origin HEAD";
     };
-    userName = lib.mkDefault "Winston R. Milling";
-    userEmail = lib.mkDefault "Winston@Milli.ng";
+    user = {
+      name = lib.mkDefault "Winston R. Milling";
+      email = lib.mkDefault "Winston@Milli.ng";
+    };
     signing.key = lib.mkDefault "0xA44A3B1758373973";
     signing.signByDefault = lib.mkDefault true;
-    extraConfig = {
+    settings = {
       credential.credentialStore = "gpg";
       credential.helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
       sendemail.smtpserver = "smtp.gmail.com";
