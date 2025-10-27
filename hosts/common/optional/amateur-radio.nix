@@ -7,5 +7,6 @@
 {
   environment.systemPackages = [
     pkgs.chirp
+    pkgs.svxlink
   ];
 }
