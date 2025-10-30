@@ -7,6 +7,6 @@
 {
   environment.systemPackages = [
     pkgs.mesa
-    pkgs.glxinfo
+    pkgs.mesa-demos
   ];
 }
