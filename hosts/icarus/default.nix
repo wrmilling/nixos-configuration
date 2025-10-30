@@ -17,6 +17,7 @@
     ../common/optional/amateur-radio.nix
     ../common/optional/appimage.nix
     ../common/optional/development.nix
+    ../common/optional/docker-rootless.nix
     ../common/optional/flipper.nix
     ../common/optional/gaming.nix
     ../common/optional/k8s-utils.nix
