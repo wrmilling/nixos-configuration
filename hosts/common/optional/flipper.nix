@@ -6,5 +6,5 @@
 }:
 {
   hardware.flipperzero.enable = true;
-  environment.systemPackages = [ pkgs.qflipper ];
+  environment.systemPackages = [ pkgs.qFlipper ];
 }
