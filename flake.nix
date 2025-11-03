@@ -42,6 +42,13 @@
     # Lanzaboote for SecureBoot
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.2";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        rust-overlay.follows = "rust-overlay";
+      };
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
