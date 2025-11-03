@@ -23,6 +23,7 @@
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
     ../common/optional/visual-boot.nix
+    ../common/optional/vpn.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

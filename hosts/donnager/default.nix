@@ -23,6 +23,7 @@
     ../common/optional/tailscale.nix
     ../common/optional/virtualization.nix
     ../common/optional/visual-boot.nix
+    ../common/optional/vpn.nix
     ../common/optional/wireshark.nix
   ];
 
