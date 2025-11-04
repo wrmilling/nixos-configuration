@@ -28,5 +28,6 @@
     pkgs.ipinfo
     pkgs.ipcalc
     pkgs.nh
+    pkgs.caligula
   ];
 }
