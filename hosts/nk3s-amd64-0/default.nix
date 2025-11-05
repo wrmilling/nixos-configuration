@@ -26,7 +26,7 @@
 
   networking = {
     hostName = "nk3s-amd64-0";
-    domain = secrets.hosts.common-k3s.domain;
+    domain = secrets.hosts.common-homelab.domain;
     useDHCP = lib.mkDefault false;
     interfaces = {
       ens3.ipv4.addresses = [
@@ -36,8 +36,8 @@
         }
       ];
     };
-    defaultGateway = secrets.hosts.common-k3s.defaultGateway;
-    nameservers = secrets.hosts.common-k3s.nameservers;
+    defaultGateway = secrets.hosts.common-homelab.defaultGateway;
+    nameservers = secrets.hosts.common-homelab.nameservers;
   };
 
   home-manager = {
