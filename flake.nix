@@ -155,6 +155,10 @@
           lanzaboote.nixosModules.lanzaboote
           ./hosts/icarus
         ];
+        loki = mkNixos [
+          lanzaboote.nixosModules.lanzaboote
+          ./hosts/loki
+        ];
         riker = mkNixos [ ./hosts/riker ];
         serenity = mkNixos [ ./hosts/serenity ];
 
@@ -162,8 +166,11 @@
         bart = mkNixos [ ./hosts/bart ];
         bob = mkNixos [ ./hosts/bob ];
         goku = mkNixos [ ./hosts/goku ];
+        isaac = mkNixos [ ./hosts/isaac ];
+        jack = mkNixos [ ./hosts/jack ];
         khan = mkNixos [ ./hosts/khan ];
         linus = mkNixos [ ./hosts/linus ];
+        owen = mkNixos [ ./hosts/owen ];
 
         # k3s Hosts
         nk3s-amd64-0 = mkNixos [ ./hosts/nk3s-amd64-0 ];
