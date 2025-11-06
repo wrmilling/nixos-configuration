@@ -12,6 +12,7 @@
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
     ../common/desktop.nix
+    ../common/optional/secureboot.nix
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
