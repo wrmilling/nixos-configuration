@@ -37,6 +37,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  services.onedrive.enable = true;
+
   networking = {
     hostName = "icarus";
     domain = secrets.hosts.common.domain;

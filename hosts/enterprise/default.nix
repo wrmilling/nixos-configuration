@@ -36,6 +36,8 @@
 
   # services.displayManager.sddm.wayland.enable = lib.mkForce false;
 
+  services.onedrive.enable = true;
+
   networking = {
     hostName = "enterprise";
     domain = secrets.hosts.common.domain;
