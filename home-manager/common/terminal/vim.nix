@@ -16,7 +16,7 @@
       vim-multiple-cursors
       tabular
       vim-markdown
-      markdown-preview-nvim
+      # markdown-preview-nvim
 
       # Language
       vim-nix
