@@ -23,7 +23,7 @@
   ];
 
   networking = {
-    hostName = "nk3s-arm64-a";
+    hostName = "jack";
     domain = secrets.hosts.common-homelab.domain;
     useDHCP = lib.mkDefault true;
     interfaces = {
