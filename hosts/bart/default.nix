@@ -53,7 +53,7 @@
 
   virtualisation.docker.enable = true;
   services.gitea-actions-runner = {
-    package = pkgs.forgejo-actions-runner;
+    package = pkgs.forgejo-runner;
     instances.bart = {
       enable = true;
       name = "bart";
