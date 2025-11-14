@@ -27,9 +27,7 @@
     ];
   };
 
-  services.dnsmasq.settings = {
-    conf-file = config.sops.secrets."pihole/customHosts".path;
-  };
+  services.dnsmasq.configFile = config.sops.secrets."pihole/customHosts".path;
 
   services.pihole-web = {
     enable = true;
