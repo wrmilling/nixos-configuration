@@ -13,6 +13,7 @@
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
     ../common/server.nix
+    ../common/optional/pihole.nix
   ];
 
   hardware.raspberry-pi."4".poe-hat.enable = true;
