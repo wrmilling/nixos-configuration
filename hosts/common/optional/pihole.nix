@@ -7,6 +7,7 @@
 {
 
   sops.secrets."pihole/customHosts" = {
+    owner = "pihole";
     sopsFile = ../../../secrets/pihole.yaml;
   };
 
@@ -14,6 +15,7 @@
     enable = true;
     openFirewallDNS = true;
     openFirewallWebserver = true;
+    user = "pihole";
     lists = [
       {
         url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
