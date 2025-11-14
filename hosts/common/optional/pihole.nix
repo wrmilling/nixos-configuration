@@ -6,11 +6,14 @@
 }:
 {
 
+  sops.secrets."pihole/customHosts" = {
+    sopsFile = ../../../secrets/pihole.yaml;
+  };
+
   services.pihole-ftl = {
     enable = true;
     openFirewallDNS = true;
     openFirewallWebserver = true;
-    useDnsmasqConfig = true;
     lists = [
       {
         url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
@@ -25,13 +28,10 @@
         description = "Steven Black's Why Wont You Think of the Children List";
       }
     ];
+    settings.misc.dnsmasq_lines = [
+      "conf-file=\"${config.sops.secrets."pihole/customHosts".path}\""
+    ];
   };
-
-  sops.secrets."pihole/customHosts" = {
-    sopsFile = ../../../secrets/pihole.yaml;
-  };
-
-  services.dnsmasq.configFile = config.sops.secrets."pihole/customHosts".path;
 
   services.pihole-web = {
     enable = true;
