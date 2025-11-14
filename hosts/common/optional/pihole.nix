@@ -32,6 +32,7 @@
     ];
     settings.misc.dnsmasq_lines = [
       "conf-file=\"${config.sops.secrets."pihole/customHosts".path}\""
+      "except-interface=nonexisting"
     ];
   };
 
