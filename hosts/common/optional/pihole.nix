@@ -14,7 +14,7 @@
 
   services.pihole-web = {
     enable = true;
-    port = "5353s";
+    ports = [ "5353s" ];
   };
 
 }
