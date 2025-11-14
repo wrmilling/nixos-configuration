@@ -6,6 +6,7 @@ keys:
   - &enterprise age1d3as5kdlrreu834lkxwmwzl7wpurqc6v9x8nhdty7rrjz5ge7gcseusjyz
   - &goku age1nzcgeg8ezk6nu5hjr0c6ltrvu7hdq89m3pg5dmtt3x9xujeejqsqsa3zxt
   - &icarus age1a7wvkf7nfwpz9l5w2k3jwmca206la0tl22f4n4ncjcqg7zc0qe6sm0srct
+  - &isaac age1vykpd6jd93t4lgamtcx50wx30gzlneapxh386dx86u2kve2wfams6k5kpn
   - &jack age137qt55mpu9l64d7gf39h44d9mehq4u6gsjg6wkth9zzjft2r2ams0k6zjy
   - &khan age1tpyvu3dzpadyfa9yd5ellvvmtm778v2fltcwwsheegnupxyv0g7ser6y3h
   - &linus age1mgq3ne0gmwdv4jemu0a5e8ttt5364z5ksjtfsgv5w4j64fr68g6qec0q5l
@@ -37,6 +38,7 @@ creation_rules:
           - *enterprise
           - *goku
           - *icarus
+          - *isaac
           - *jack
           - *khan
           - *linus
@@ -75,4 +77,5 @@ creation_rules:
       - pgp:
           - *primary
         age:
+          - *isaac
           - *jack

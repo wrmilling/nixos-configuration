@@ -19,7 +19,7 @@
   hardware.raspberry-pi."4".poe-hat.enable = true;
 
   # Artifact of the nixos user being created by default on the rpi images
-  users.users.w4cbe.uid = 1001;
+  users.users.w4cbe.uid = lib.mkForce 1001;
 
   boot.kernelParams = [
     "cgroup_memory=1"
