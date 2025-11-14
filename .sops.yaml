@@ -6,8 +6,11 @@ keys:
   - &enterprise age1d3as5kdlrreu834lkxwmwzl7wpurqc6v9x8nhdty7rrjz5ge7gcseusjyz
   - &goku age1nzcgeg8ezk6nu5hjr0c6ltrvu7hdq89m3pg5dmtt3x9xujeejqsqsa3zxt
   - &icarus age1a7wvkf7nfwpz9l5w2k3jwmca206la0tl22f4n4ncjcqg7zc0qe6sm0srct
+  - &isaac age1qp27uv50aznuh3g3hxm5e0e6zp6trw6gqrg2hqpnze3t8jfp3g7srkxpg0
+  - &jack age137qt55mpu9l64d7gf39h44d9mehq4u6gsjg6wkth9zzjft2r2ams0k6zjy
   - &khan age1tpyvu3dzpadyfa9yd5ellvvmtm778v2fltcwwsheegnupxyv0g7ser6y3h
   - &linus age1mgq3ne0gmwdv4jemu0a5e8ttt5364z5ksjtfsgv5w4j64fr68g6qec0q5l
+  - &owen age1s6szp0nlk9sntr8pxem7hd5sfrae4kt0rlphlgwfcjl0schz8ffqzjhpk4
   - &riker age14upntcrx0nc34scthfvtvt97msy4hekkazsx737z54vyj08glflq2j2h57
   - &nk3s-amd64-0 age1m3e8kmzps4machp9jm09x8sr7s9heqz7te0587h2hzevznhy655qpmgd8d
   - &nk3s-amd64-a age1kzyfuus4dmrhzcy6xekst93thvsy3dt33j0l4dr7duae3vsf9shqdfhev6
@@ -35,8 +38,11 @@ creation_rules:
           - *enterprise
           - *goku
           - *icarus
+          - *isaac
+          - *jack
           - *khan
           - *linus
+          - *owen
           - *riker
           - *nk3s-amd64-0
           - *nk3s-amd64-a
@@ -66,3 +72,10 @@ creation_rules:
           - *primary
         age:
           - *bart
+  - path_regex: secrets/pihole.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *isaac
+          - *jack
