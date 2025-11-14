@@ -56,7 +56,7 @@
       edns_client_subnet_private = 1;
       idle_timeout = 10000;
       listen_addresses = [
-        "127.0.0.1#5353"
+        "127.0.0.1@5353"
       ];
       log_level = "GETDNS_LOG_NOTICE";
       resolution_type = "GETDNS_RESOLUTION_STUB";
