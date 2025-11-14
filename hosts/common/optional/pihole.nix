@@ -42,7 +42,7 @@
     ];
     settings = {
       misc.dnsmasq_lines = [
-        "conf-file=\"${config.sops.secrets."pihole/additionalHosts".path}\""
+        "addn-hosts=\"${config.sops.secrets."pihole/additionalHosts".path}\""
         "conf-file=\"${config.sops.secrets."pihole/customAddresses".path}\""
         "conf-file=\"${config.sops.secrets."pihole/customCnames".path}\""
         "except-interface=nonexisting"
