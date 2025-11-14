@@ -6,7 +6,17 @@
 }:
 {
 
-  sops.secrets."pihole/customHosts" = {
+  sops.secrets."pihole/additionalHosts" = {
+    owner = "pihole";
+    sopsFile = ../../../secrets/pihole.yaml;
+  };
+
+  sops.secrets."pihole/customAddresses" = {
+    owner = "pihole";
+    sopsFile = ../../../secrets/pihole.yaml;
+  };
+
+  sops.secrets."pihole/customCnames" = {
     owner = "pihole";
     sopsFile = ../../../secrets/pihole.yaml;
   };
@@ -32,7 +42,9 @@
     ];
     settings = {
       misc.dnsmasq_lines = [
-        "conf-file=\"${config.sops.secrets."pihole/customHosts".path}\""
+        "conf-file=\"${config.sops.secrets."pihole/additionalHosts".path}\""
+        "conf-file=\"${config.sops.secrets."pihole/customAddresses".path}\""
+        "conf-file=\"${config.sops.secrets."pihole/customCnames".path}\""
         "except-interface=nonexisting"
       ];
       dns.upstreams = [
