@@ -27,6 +27,10 @@
     ];
   };
 
+  sops.secrets."pihole/customHosts" = {
+    sopsFile = ../../../secrets/pihole.yaml;
+  };
+
   services.dnsmasq.configFile = config.sops.secrets."pihole/customHosts".path;
 
   services.pihole-web = {
