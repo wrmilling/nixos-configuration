@@ -88,6 +88,7 @@
         nixpkgs.lib.nixosSystem {
           modules = modules ++ [
             sops-nix.nixosModules.sops
+            lanzaboote.nixosModules.lanzaboote
             { imports = builtins.attrValues nixosModules; }
           ];
           specialArgs = {
@@ -154,18 +155,9 @@
           nixos-wsl.nixosModules.default
         ];
         donnager = mkNixos [ ./hosts/donnager ];
-        enterprise = mkNixos [
-          lanzaboote.nixosModules.lanzaboote
-          ./hosts/enterprise
-        ];
-        icarus = mkNixos [
-          lanzaboote.nixosModules.lanzaboote
-          ./hosts/icarus
-        ];
-        loki = mkNixos [
-          lanzaboote.nixosModules.lanzaboote
-          ./hosts/loki
-        ];
+        enterprise = mkNixos [ ./hosts/enterprise ];
+        icarus = mkNixos [ ./hosts/icarus ];
+        loki = mkNixos [ ./hosts/loki ];
         riker = mkNixos [ ./hosts/riker ];
         serenity = mkNixos [ ./hosts/serenity ];
 
