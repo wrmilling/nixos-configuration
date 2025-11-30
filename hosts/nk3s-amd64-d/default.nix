@@ -11,10 +11,20 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/server.nix
-    ../common/optional/k3s-agent.nix
-    ../common/optional/reboot-required.nix
   ];
+
+  sops.secrets."k3s/agent/nodeTokenFull" = {
+    sopsFile = ../../../secrets/k3s.yaml;
+  };
+
+  modules = {
+    machineType.server.enable = true;
+    rebootRequired.enable = true;
+    k3sAgent = {
+      enable = true;
+      tokenFile = config.sops.secrets."k3s/agent/nodeTokenFull".path;
+    }
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 

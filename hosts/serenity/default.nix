@@ -12,13 +12,16 @@
     inputs.hardware.nixosModules.pine64-pinebook-pro
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/laptop.nix
-    ../common/optional/development.nix
-    ../common/optional/k8s-utils.nix
-    ../common/optional/tailscale.nix
-    ../common/optional/virtualization.nix
-    ../common/optional/zram.nix
   ];
+
+  modules = {
+    machineType.laptop.enable = true;
+    development.enable = true;
+    k8sUtils.enable = true;
+    tailscale.enable = true;
+    virtualization.enable = true;
+    zram.enable = true;
+  };
 
   networking = {
     hostName = "serenity";

@@ -11,9 +11,12 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./openvz.nix
-    ../common/server.nix
-    ../common/optional/webhost.nix
   ];
+
+  modules = {
+    machineType.server.enable = true;
+    webhost.enable = true;
+  };
 
   networking = {
     hostName = "luke";

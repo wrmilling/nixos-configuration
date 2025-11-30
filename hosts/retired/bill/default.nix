@@ -11,8 +11,11 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/server.nix
   ];
+
+  modules = {
+    machineType.server.enable = true;
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 

@@ -12,17 +12,20 @@
     inputs.hardware.nixosModules.apple-macbook-pro-11-1
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/laptop.nix
-    ../common/users/haley.nix
-    ../common/optional/appimage.nix
-    ../common/optional/development.nix
-    ../common/optional/gaming.nix
-    ../common/optional/k8s-utils.nix
-    ../common/optional/printing.nix
-    ../common/optional/tailscale.nix
-    ../common/optional/visual-boot.nix
-    ../common/optional/zram.nix
   ];
+
+  modules = {
+    machineType.laptop.enable = true;
+    # users.haley.enable = true;
+    appimage.enable = true;
+    development.enable = true;
+    gaming.enable = true;
+    k8sUtils.enable = true;
+    printing.enable = true;
+    tailscale.enable = true;
+    visualBoot.enable = true;
+    zram.enable = true;
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 

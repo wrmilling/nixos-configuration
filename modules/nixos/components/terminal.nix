@@ -1,0 +1,43 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.modules.terminal;
+in
+{
+  options.modules.terminal = {
+    enable = lib.mkEnableOption "terminal packages / settings";
+  };
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      pkgs.file
+      pkgs.bc
+      pkgs.btop
+      pkgs.vim
+      pkgs.git
+      pkgs.git-crypt
+      pkgs.wget
+      pkgs.silver-searcher
+      pkgs.p7zip
+      pkgs.rsync
+      pkgs.rclone
+      pkgs.dnsutils
+      pkgs.gnupg
+      pkgs.pass
+      pkgs.pinentry-curses
+      pkgs.minicom
+      pkgs.fastfetch
+      pkgs.hydra-check
+      pkgs.home-manager
+      pkgs.ipinfo
+      pkgs.ipcalc
+      pkgs.nh
+      pkgs.caligula
+      pkgs.helix
+    ];
+  };
+}

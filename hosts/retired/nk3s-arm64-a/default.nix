@@ -12,10 +12,20 @@
     inputs.hardware.nixosModules.raspberry-pi-4
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/server.nix
-    ../common/optional/k3s-agent-arm.nix
-    ../common/optional/reboot-required.nix
   ];
+
+  sops.secrets."k3s/agent/nodeTokenFull" = {
+    sopsFile = ../../../secrets/k3s.yaml;
+  };
+
+  modules = {
+    machineType.server.enable = true;
+    rebootRequired.enable = true;
+    k3sAgentArm = {
+      enable = true;
+      tokenFile = config.sops.secrets."k3s/agent/nodeTokenFull".path;
+    }
+  };
 
   hardware.raspberry-pi."4".poe-hat.enable = true;
 

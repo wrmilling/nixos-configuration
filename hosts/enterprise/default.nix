@@ -11,20 +11,23 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/desktop.nix
-    ../common/optional/appimage.nix
-    ../common/optional/development.nix
-    ../common/optional/docker-rootless.nix
-    ../common/optional/gaming.nix
-    ../common/optional/k8s-utils.nix
-    ../common/optional/nvidia.nix
-    ../common/optional/printing.nix
-    ../common/optional/secureboot.nix
-    ../common/optional/tailscale.nix
-    ../common/optional/virtualization.nix
-    ../common/optional/visual-boot.nix
-    ../common/optional/vpn.nix
   ];
+
+  modules = {
+    machineType.desktop.enable = true;
+    appimage.enable = true;
+    development.enable = true;
+    dockerRootless.enable = true;
+    gaming.enable = true;
+    k8sUtils.enable = true;
+    nvidia.enable = true;
+    printing.enable = true;
+    secureboot.enable = true;
+    tailscale.enable = true;
+    virtualization.enable = true;
+    visualBoot.enable = true;
+    vpn.enable = true;
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 

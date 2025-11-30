@@ -11,10 +11,13 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/server.nix
-    ../common/optional/nixbuild-host.nix
-    ../common/optional/webhost.nix
   ];
+
+  modules = {
+    machineType.server.enable = true;
+    nixBuildHost.enable = true;
+    webhost.enable = true;
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
