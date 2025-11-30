@@ -9,10 +9,13 @@
 }:
 {
   imports = [
-    ../common/modules/terminal.nix
-    ../common/optional/k8s-utils.nix
     ./homebrew.nix
   ];
+
+  modules = {
+    terminal.enable = true;
+    k8sUtils.enable = true;
+  };
 
   security.pki.certificateFiles = [ ../../secrets/certs/cert.pem ];
   programs.nix-index.enable = true;

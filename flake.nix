@@ -77,11 +77,18 @@
 
       secrets = import ./secrets/secrets.nix;
 
+      # autowire modules
+      lib = nixpkgs.lib;
+      autowire = import ./lib/autowire.nix { inherit lib; };
+      root = ./.;
+      nixosModules = autowire.discoverModules { dir = root + /modules/nixos; };
+
       mkNixos =
         modules:
         nixpkgs.lib.nixosSystem {
           modules = modules ++ [
             sops-nix.nixosModules.sops
+            { imports = builtins.attrValues nixosModules; }
           ];
           specialArgs = {
             inherit inputs outputs secrets;

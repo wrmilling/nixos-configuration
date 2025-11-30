@@ -13,9 +13,12 @@
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
-    ../common/default.nix
-    ../common/optional/k8s-utils.nix
   ];
+
+  modules = {
+    system.base.enable = true;
+    k8sUtils.enable = true;
+  };
 
   wsl.enable = true;
   wsl.defaultUser = "w4cbe";

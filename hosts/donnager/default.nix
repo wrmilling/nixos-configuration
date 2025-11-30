@@ -12,20 +12,23 @@
     inputs.hardware.nixosModules.lenovo-legion-y530-15ich
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/laptop.nix
-    ../common/optional/appimage.nix
-    ../common/optional/development.nix
-    ../common/optional/docker-rootless.nix
-    ../common/optional/flipper.nix
-    ../common/optional/gaming.nix
-    ../common/optional/k8s-utils.nix
-    ../common/optional/printing.nix
-    ../common/optional/tailscale.nix
-    ../common/optional/virtualization.nix
-    ../common/optional/visual-boot.nix
-    ../common/optional/vpn.nix
-    ../common/optional/wireshark.nix
   ];
+
+  modules = {
+    machineType.laptop.enable = true;
+    appimage.enable = true;
+    development.enable = true;
+    dockerRootless.enable = true;
+    flipper.enable = true;
+    gaming.enable = true;
+    k8sUtils.enable = true;
+    printing.enable = true;
+    tailscale.enable = true;
+    virtualization.enable = true;
+    visualBoot.enable = true;
+    vpn.enable = true;
+    wireshark.enable = true;
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 

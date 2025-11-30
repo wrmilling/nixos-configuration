@@ -12,9 +12,32 @@
     inputs.hardware.nixosModules.raspberry-pi-4
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/server.nix
-    ../common/optional/pihole.nix
   ];
+
+  sops.secrets."pihole/additionalHosts" = {
+    owner = "pihole";
+    sopsFile = ../../../secrets/pihole.yaml;
+  };
+
+  sops.secrets."pihole/customAddresses" = {
+    owner = "pihole";
+    sopsFile = ../../../secrets/pihole.yaml;
+  };
+
+  sops.secrets."pihole/customCnames" = {
+    owner = "pihole";
+    sopsFile = ../../../secrets/pihole.yaml;
+  };
+
+  modules = {
+    machineType.server.enable = true;
+    pihole = {
+      enable = true;
+      additionalHosts = config.sops.secrets."pihole/additionalHosts".path;
+      customAddresses = config.sops.secrets."pihole/customAddresses".path;
+      customCnames = config.sops.secrets."pihole/customCnames".path;
+    };
+  };
 
   hardware.raspberry-pi."4".poe-hat.enable = true;
 

@@ -11,16 +11,19 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/desktop.nix
-    ../common/optional/amateur-radio.nix
-    ../common/optional/development.nix
-    ../common/optional/docker-rootless.nix
-    ../common/optional/flipper.nix
-    ../common/optional/k8s-utils.nix
-    ../common/optional/printing.nix
-    ../common/optional/secureboot.nix
-    ../common/optional/wireshark.nix
   ];
+
+  modules = {
+    machineType.desktop.enable = true;
+    amateruRadio.enable = true;
+    development.enable = true;
+    dockerRootless.enable = true; 
+    flipper.enable = true;
+    k8sUtils.enable = true;
+    printing.enable = true;
+    secureboot.enable = true;
+    wireshark.enable = true;
+  }
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 

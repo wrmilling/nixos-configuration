@@ -12,8 +12,11 @@
     inputs.hardware.nixosModules.raspberry-pi-4
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ../common/server.nix
   ];
+
+  modules = {
+    machineType.server.enable = true;
+  };
 
   hardware.raspberry-pi."4".poe-hat.enable = true;
 

@@ -14,6 +14,10 @@
     ../common/server.nix
   ];
 
+  modules = {
+    machineType.server.enable = true;
+  };
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
   # Use grub boot loader
   boot.loader.grub.enable = true;

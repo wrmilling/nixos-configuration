@@ -1,0 +1,23 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.modules.fonts;
+in
+{
+  options.modules.fonts = {
+    enable = lib.mkEnableOption "font packages / settings";
+  };
+
+  config = lib.mkIf cfg.enable {
+    fonts.packages = [
+      pkgs.source-code-pro
+      pkgs.font-awesome_4
+      pkgs.corefonts
+      pkgs.monaspace
+    ];
+  };
+}
