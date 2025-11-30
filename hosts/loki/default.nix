@@ -23,7 +23,7 @@
     printing.enable = true;
     secureboot.enable = true;
     wireshark.enable = true;
-  }
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 

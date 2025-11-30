@@ -24,7 +24,7 @@
     k3sAgentArm = {
       enable = true;
       tokenFile = config.sops.secrets."k3s/agent/nodeTokenFull".path;
-    }
+    };
   };
 
   hardware.raspberry-pi."4".poe-hat.enable = true;

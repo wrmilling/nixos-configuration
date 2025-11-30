@@ -23,7 +23,7 @@
     k3sAgent = {
       enable = true;
       tokenFile = config.sops.secrets."k3s/agent/nodeTokenFull".path;
-    }
+    };
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

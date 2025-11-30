@@ -16,7 +16,7 @@
   modules = {
     machineType.server.enable = true;
     webhost.enable = true;
-  }
+  };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
