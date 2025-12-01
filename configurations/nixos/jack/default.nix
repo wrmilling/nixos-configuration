@@ -31,6 +31,7 @@
 
   modules = {
     machineType.server.enable = true;
+    sshd.banner = "${secrets.sshd.banner}";
     pihole = {
       enable = true;
       additionalHosts = config.sops.secrets."pihole/additionalHosts".path;

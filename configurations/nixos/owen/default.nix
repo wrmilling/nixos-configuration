@@ -16,6 +16,7 @@
 
   modules = {
     machineType.server.enable = true;
+    sshd.banner = "${secrets.sshd.banner}";
   };
 
   hardware.raspberry-pi."4".poe-hat.enable = true;

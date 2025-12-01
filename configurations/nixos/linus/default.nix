@@ -15,6 +15,7 @@
 
   modules = {
     machineType.server.enable = true;
+    sshd.banner = "${secrets.sshd.p_banner}";
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -37,8 +38,6 @@
       interface = "eth0";
     };
   };
-
-  services.openssh.banner = lib.mkForce secrets.sshd.p_banner;
 
   networking.firewall.allowedTCPPorts = [
     80

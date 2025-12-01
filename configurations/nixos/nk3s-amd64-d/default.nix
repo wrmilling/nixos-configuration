@@ -19,6 +19,7 @@
 
   modules = {
     machineType.server.enable = true;
+    sshd.banner = "${secrets.sshd.banner}";
     rebootRequired.enable = true;
     k3sAgent = {
       enable = true;

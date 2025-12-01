@@ -15,6 +15,7 @@
 
   modules = {
     machineType.server.enable = true;
+    sshd.banner = "${secrets.sshd.banner}";
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

@@ -15,6 +15,7 @@
 
   modules = {
     machineType.server.enable = true;
+    sshd.banner = "${secrets.sshd.c_banner}";
     webhost.enable = true;
   };
 
@@ -23,8 +24,6 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  services.openssh.banner = lib.mkForce secrets.sshd.c_banner;
 
   networking = {
     hostName = "khan"; # Define your hostname.
