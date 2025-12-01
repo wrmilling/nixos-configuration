@@ -7,7 +7,7 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
 
     # Hardware
-    hardware.url = "github:wrmilling/nixos-hardware/lenovo-y530-15ICH";
+    hardware.url = "github:NixOS/nixos-hardware";
 
     # Home manager
     home-manager = {
@@ -41,14 +41,7 @@
 
     # Lanzaboote for SecureBoot
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.2";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        rust-overlay.follows = "rust-overlay";
-      };
-    };
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
+      url = "github:nix-community/lanzaboote/v0.4.3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
