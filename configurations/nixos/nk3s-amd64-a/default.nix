@@ -24,6 +24,7 @@
     k3sAgent = {
       enable = true;
       tokenFile = config.sops.secrets."k3s/agent/nodeTokenFull".path;
+      serverAddr = secrets.k3s.server.addr; 
     };
   };
 
