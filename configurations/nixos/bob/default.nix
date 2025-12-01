@@ -15,7 +15,7 @@
 
   modules = {
     machineType.server.enable = true;
-    nixBuildHost.enable = true;
+    nixbuildHost.enable = true;
     webhost.enable = true;
   };
 
