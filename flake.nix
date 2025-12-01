@@ -149,40 +149,40 @@
       # Available through 'nixos-rebuild switch --flake .#your-hostname'
       nixosConfigurations = {
         # Desktop/Laptop
-        bender = mkNixos [ ./hosts/bender ];
+        bender = mkNixos [ ./configurations/nixos/bender ];
         cousteau = mkNixos [
-          ./hosts/cousteau
+          ./configurations/nixos/cousteau
           nixos-wsl.nixosModules.default
         ];
-        donnager = mkNixos [ ./hosts/donnager ];
-        enterprise = mkNixos [ ./hosts/enterprise ];
-        icarus = mkNixos [ ./hosts/icarus ];
-        loki = mkNixos [ ./hosts/loki ];
-        riker = mkNixos [ ./hosts/riker ];
-        serenity = mkNixos [ ./hosts/serenity ];
+        donnager = mkNixos [ ./configurations/nixos/donnager ];
+        enterprise = mkNixos [ ./configurations/nixos/enterprise ];
+        icarus = mkNixos [ ./configurations/nixos/icarus ];
+        loki = mkNixos [ ./configurations/nixos/loki ];
+        riker = mkNixos [ ./configurations/nixos/riker ];
+        serenity = mkNixos [ ./configurations/nixos/serenity ];
 
         # Servers
-        bart = mkNixos [ ./hosts/bart ];
-        bob = mkNixos [ ./hosts/bob ];
-        goku = mkNixos [ ./hosts/goku ];
-        isaac = mkNixos [ ./hosts/isaac ];
-        jack = mkNixos [ ./hosts/jack ];
-        khan = mkNixos [ ./hosts/khan ];
-        linus = mkNixos [ ./hosts/linus ];
-        owen = mkNixos [ ./hosts/owen ];
+        bart = mkNixos [ ./configurations/nixos/bart ];
+        bob = mkNixos [ ./configurations/nixos/bob ];
+        goku = mkNixos [ ./configurations/nixos/goku ];
+        isaac = mkNixos [ ./configurations/nixos/isaac ];
+        jack = mkNixos [ ./configurations/nixos/jack ];
+        khan = mkNixos [ ./configurations/nixos/khan ];
+        linus = mkNixos [ ./configurations/nixos/linus ];
+        owen = mkNixos [ ./configurations/nixos/owen ];
 
         # k3s Hosts
-        nk3s-amd64-0 = mkNixos [ ./hosts/nk3s-amd64-0 ];
-        nk3s-amd64-a = mkNixos [ ./hosts/nk3s-amd64-a ];
-        nk3s-amd64-b = mkNixos [ ./hosts/nk3s-amd64-b ];
-        nk3s-amd64-c = mkNixos [ ./hosts/nk3s-amd64-c ];
-        nk3s-amd64-d = mkNixos [ ./hosts/nk3s-amd64-d ];
+        nk3s-amd64-0 = mkNixos [ ./configurations/nixos/nk3s-amd64-0 ];
+        nk3s-amd64-a = mkNixos [ ./configurations/nixos/nk3s-amd64-a ];
+        nk3s-amd64-b = mkNixos [ ./configurations/nixos/nk3s-amd64-b ];
+        nk3s-amd64-c = mkNixos [ ./configurations/nixos/nk3s-amd64-c ];
+        nk3s-amd64-d = mkNixos [ ./configurations/nixos/nk3s-amd64-d ];
       };
 
       # nix-darwin configuration entrypoint
       # Available through 'darwin-rebuild switch --flake .#your-hostname'
       darwinConfigurations = {
-        "${secrets.hosts.work-mac.hostname}" = mkDarwin "aarch64-darwin" [ ./hosts/darwin ];
+        "${secrets.hosts.work-mac.hostname}" = mkDarwin "aarch64-darwin" [ ./configurations/darwin/work ];
       };
 
       # Standalone home-manager configuration entrypoint
@@ -190,7 +190,7 @@
       homeConfigurations = {
         "${secrets.hosts.work-mac.username}@${secrets.hosts.work-mac.hostname}" =
           mkHome nixpkgs.legacyPackages.aarch64-darwin
-            [ ./home-manager/darwin ];
+            [ ./configurations/home/work ];
       };
     };
 }
