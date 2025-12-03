@@ -75,6 +75,7 @@
       autowire = import ./lib/autowire.nix { inherit lib; };
       root = ./.;
       nixosModules = autowire.discoverModules { dir = root + /modules/nixos; };
+      darwinModules = autowire.discoverModules { dir = root + /modules/darwin; };
 
       mkNixos =
         modules:
@@ -93,7 +94,7 @@
         system: modules:
         darwin.lib.darwinSystem {
           modules = modules ++ [ 
-            { imports = builtins.attrValues nixosModules; }
+            { imports = builtins.attrValues darwinModules; }
           ];
           system = system;
           specialArgs = {
