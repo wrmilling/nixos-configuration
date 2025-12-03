@@ -92,7 +92,9 @@
       mkDarwin =
         system: modules:
         darwin.lib.darwinSystem {
-          modules = modules ++ [ ];
+          modules = modules ++ [ 
+            { imports = builtins.attrValues nixosModules; }
+          ];
           system = system;
           specialArgs = {
             inherit inputs outputs secrets;
