@@ -29,7 +29,7 @@ in
       pkgs.lutris
       pkgs.heroic
       pkgs.protonup-qt
-      pkgs.mcpelauncher-ui-qt
+      pkgs.mcpelauncher-ui-qt-git
     ];
   };
 }

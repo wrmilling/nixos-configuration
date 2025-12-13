@@ -5,4 +5,6 @@
 }:
 {
   slides-git = pkgs.callPackage ./slides-git { };
+  mcpelauncher-client-git = pkgs.callPackage ./mcpelauncher-client { };
+  mcpelauncher-ui-qt-git = pkgs.callPackage ./mcpelauncher-ui-qt { };
 }
