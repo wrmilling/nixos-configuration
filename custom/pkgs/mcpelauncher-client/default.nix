@@ -34,7 +34,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-uVtvPeGfiCpXIN1aQzF0nw8qNddIeIjFeoKXJUInqwg=";
+    hash = "sha256-QJL2CKcP1Sv7JR2ir0XP4nZUpBeH0NX7QeyrZWPSMoI=";
   };
 
   patches = [

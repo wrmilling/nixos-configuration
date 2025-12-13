@@ -29,7 +29,11 @@ in
       pkgs.lutris
       pkgs.heroic
       pkgs.protonup-qt
-      pkgs.mcpelauncher-ui-qt-git
+      # pkgs.mcpelauncher-ui-qt-git
     ];
+
+    # For MCPE Launcher (TEMP)
+    # TODO: Remove later
+    services.flatpak.enable = true;
   };
 }
