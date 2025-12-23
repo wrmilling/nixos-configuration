@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.home.terminal.minecraft-client;
+  cfg = config.modules.home.graphical.minecraft-client;
 in
 {
-  options.modules.home.terminal.minecraft-client = {
+  options.modules.home.graphical.minecraft-client = {
     enable = lib.mkEnableOption "minecraft-client packages / settings";
   };
 

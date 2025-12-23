@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.home.terminal.alacritty;
+  cfg = config.modules.home.graphical.alacritty;
 in
 {
-  options.modules.home.terminal.alacritty = {
+  options.modules.home.graphical.alacritty = {
     enable = lib.mkEnableOption "alacritty packages / settings";
   };
 

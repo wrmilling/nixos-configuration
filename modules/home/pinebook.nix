@@ -46,10 +46,8 @@ in
       home.terminal.vim.enable = true;
       home.graphical.alacritty.enable = true;
       home.graphical.firefox.enable = true;
-      home.graphical.gaming-arm.enable = true;
       home.graphical.keybase.enable = true;
       home.graphical.legcord.enable = true;
-      home.graphical.rofi.enable = true;
       home.graphical.xresources.enable = true;
       
     };

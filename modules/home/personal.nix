@@ -29,7 +29,6 @@ in
       home.graphical.firefox.enable = true;
       home.graphical.keybase.enable = true;
       home.graphical.minecraft-client.enable = true;
-      home.graphical.rofi.enable = true;
       home.graphical.xresources.enable = true;
     };
 
