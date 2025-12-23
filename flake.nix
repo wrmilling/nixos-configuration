@@ -206,18 +206,18 @@
         "w4cbe@bart" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
         "w4cbe@bob" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server];
         "w4cbe@goku" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
-        "w4cbe@isaac" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/serverc ];
+        "w4cbe@isaac" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server ];
         "w4cbe@jack" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server ];
         "w4cbe@khan" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
-        "w4cbe@linus" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
+        "w4cbe@linus" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
         "w4cbe@owen" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server ];
 
         # K3s hosts
-        "w4cbe@nk3s-amd64-0" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
-        "w4cbe@nk3s-amd64-a" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
-        "w4cbe@nk3s-amd64-b" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
-        "w4cbe@nk3s-amd64-c" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
-        "w4cbe@nk3s-amd64-d" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
+        "w4cbe@nk3s-amd64-0" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
+        "w4cbe@nk3s-amd64-a" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
+        "w4cbe@nk3s-amd64-b" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
+        "w4cbe@nk3s-amd64-c" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
+        "w4cbe@nk3s-amd64-d" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
       };
     };
 }
