@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.secureboot;
+  cfg = config.modules.nixos.secureboot;
 in
 {
-  options.modules.secureboot = {
+  options.modules.nixos.secureboot = {
     enable = lib.mkEnableOption "secureboot packages / settings";
   };
 

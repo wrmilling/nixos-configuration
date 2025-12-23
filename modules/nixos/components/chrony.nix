@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.chrony;
+  cfg = config.modules.nixos.chrony;
 in
 {
-  options.modules.chrony = {
+  options.modules.nixos.chrony = {
     enable = lib.mkEnableOption "chrony packages / settings";
   };
 

@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.zram;
+  cfg = config.modules.nixos.zram;
 in
 {
-  options.modules.zram = {
+  options.modules.nixos.zram = {
     enable = lib.mkEnableOption "zram packages / settings";
   };
 

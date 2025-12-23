@@ -16,8 +16,8 @@
   ];
 
   modules = {
-    system.base.enable = true;
-    k8sUtils.enable = true;
+    nixos.base.enable = true;
+    nixos.k8sUtils.enable = true;
   };
 
   wsl.enable = true;
@@ -47,15 +47,6 @@
 
   # Allow VSCode to work from windows
   programs.nix-ld.enable = true;
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
-    };
-  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   system.stateVersion = "24.11";

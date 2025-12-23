@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.modules.k3sServer;
+  cfg = config.modules.nixos.k3sServer;
   hostname = config.networking.hostName;
   domain = config.networking.domain;
   k3s-package = pkgs.k3s_1_34;
@@ -13,7 +13,7 @@ in
 {
   imports = [ ./k3s-firewall.nix ];
 
-  options.modules.k3sServer = {
+  options.modules.nixos.k3sServer = {
     enable = lib.mkEnableOption "k3s server packages / settings";
     tokenFile = lib.mkOption {
       type = lib.types.str;
@@ -24,7 +24,7 @@ in
 
   config = lib.mkIf cfg.enable {
     modules = {
-      k3sFirewall.enable = true;
+      nixos.k3sFirewall.enable = true;
     };
 
     services.k3s = {

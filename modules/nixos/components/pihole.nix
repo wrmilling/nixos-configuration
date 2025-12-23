@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.pihole;
+  cfg = config.modules.nixos.pihole;
 in
 {
-  options.modules.pihole = {
+  options.modules.nixos.pihole = {
     enable = lib.mkEnableOption "piHole packages / settings";
     additionalHosts = lib.mkOption {
       type = lib.types.str;

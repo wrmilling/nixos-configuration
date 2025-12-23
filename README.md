@@ -13,7 +13,6 @@ A work in progress [NixOS](https://nixos.org/) configuration that can handle Nix
 - [configurations/home](configurations/home/README.md) (User level configuration per machine via home-manager)
   - [common](configurations/home/common) (Re-usable configurations for users in home-manager, to be migrated)
   - [darwin](configurations/home/darwin) (Specific home-manager configuration for darwin)
-  - [haley](configurations/home/haley) (User specific home manager configuration to be re-used in multiple hosts)
   - [riker](configurations/home/riker) (Machine specific home-manager configuration for riker)
   - [serenity](configurations/home/serenity) (Machine specific home-manager configuration for serenity)
   - [server](configurations/home/server) (Basic home-manager configuration for generic servers)

@@ -20,8 +20,8 @@
 
   modules = {
     machineType.server.enable = true;
-    rebootRequired.enable = true;
-    k3sAgentArm = {
+    nixos.rebootRequired.enable = true;
+    nixos.k3sAgentArm = {
       enable = true;
       tokenFile = config.sops.secrets."k3s/agent/nodeTokenFull".path;
       serverAddr = secrets.k3s.server.addr; 
@@ -49,15 +49,6 @@
     };
     defaultGateway = secrets.hosts.common-homelab.defaultGateway;
     nameservers = secrets.hosts.common-homelab.nameservers;
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
-    };
   };
 
   system.stateVersion = "24.11";

@@ -15,18 +15,18 @@
 
   modules = {
     machineType.desktop.enable = true;
-    appimage.enable = true;
-    development.enable = true;
-    dockerRootless.enable = true;
-    gaming.enable = true;
-    k8sUtils.enable = true;
-    nvidia.enable = true;
-    printing.enable = true;
-    secureboot.enable = true;
-    tailscale.enable = true;
-    virtualization.enable = true;
-    visualBoot.enable = true;
-    vpn.enable = true;
+    nixos.appimage.enable = true;
+    nixos.development.enable = true;
+    nixos.dockerRootless.enable = true;
+    nixos.gaming.enable = true;
+    nixos.k8sUtils.enable = true;
+    nixos.nvidia.enable = true;
+    nixos.printing.enable = true;
+    nixos.secureboot.enable = true;
+    nixos.tailscale.enable = true;
+    nixos.virtualization.enable = true;
+    nixos.visualBoot.enable = true;
+    nixos.vpn.enable = true;
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -46,15 +46,6 @@
     domain = secrets.hosts.common.domain;
     # Though a desktop, has wifi for now, using networkmanager to manage.
     networkmanager.enable = true;
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/w4cbe;
-    };
   };
 
   system.stateVersion = "24.11";

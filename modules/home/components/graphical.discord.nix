@@ -1,10 +1,11 @@
 {
-  pkgs,
-  lib,
   config,
+  lib,
+  pkgs,
   ...
 }:
 let
+  cfg = config.modules.home.graphical.discord;
   discord-name = pkgs.makeDesktopItem {
     name = "discord-name";
     desktopName = "Discord (Name)";
@@ -31,17 +32,23 @@ let
   };
 in
 {
-  home.packages = [
-    pkgs.discord
-    discord-name
-    discord-game
-  ];
-  home.file.".discord-name-keep" = {
-    text = " ";
-    target = ".config/discord-name/tmp/.keep";
+  options.modules.home.graphical.discord = {
+    enable = lib.mkEnableOption "discord packages / settings";
   };
-  home.file.".discord-game-keep" = {
-    text = " ";
-    target = ".config/discord-game/tmp/.keep";
+
+  config = lib.mkIf cfg.enable {
+    home.packages = [
+      pkgs.discord
+      discord-name
+      discord-game
+    ];
+    home.file.".discord-name-keep" = {
+      text = " ";
+      target = ".config/discord-name/tmp/.keep";
+    };
+    home.file.".discord-game-keep" = {
+      text = " ";
+      target = ".config/discord-game/tmp/.keep";
+    };
   };
 }

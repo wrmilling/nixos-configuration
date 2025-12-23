@@ -1,5 +1,11 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
+  cfg = config.modules.home.scripts.onedrive-rclone;
   onedrive-rclone = pkgs.writeShellScriptBin "onedrive-rclone" ''
     print_help () {
       ${pkgs.coreutils-full}/bin/cat <<- "EOF"
@@ -42,5 +48,11 @@ let
   '';
 in
 {
-  home.packages = [ onedrive-rclone ];
+  options.modules.home.scripts.onedrive-rclone = {
+    enable = lib.mkEnableOption "onedrive-rclone packages / settings";
+  };
+
+  config = lib.mkIf cfg.enable {
+    home.packages = [ onedrive-rclone ];
+  };
 }

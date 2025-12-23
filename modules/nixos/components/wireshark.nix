@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.wireshark;
+  cfg = config.modules.nixos.wireshark;
 in
 {
-  options.modules.wireshark = {
+  options.modules.nixos.wireshark = {
     enable = lib.mkEnableOption "wireshark packages / settings";
   };
 

@@ -76,6 +76,7 @@
       root = ./.;
       nixosModules = autowire.discoverModules { dir = root + /modules/nixos; };
       darwinModules = autowire.discoverModules { dir = root + /modules/darwin; };
+      homeModules = autowire.discoverModules { dir = root + /modules/home; };
 
       mkNixos =
         modules:
@@ -108,6 +109,7 @@
           inherit pkgs;
           modules = modules ++ [
             # sops-nix.nixosModules.sops
+            { imports = builtins.attrValues homeModules; }
           ];
           extraSpecialArgs = {
             inherit inputs outputs secrets;
@@ -187,6 +189,35 @@
         "${secrets.hosts.work-mac.username}@${secrets.hosts.work-mac.hostname}" =
           mkHome nixpkgs.legacyPackages.aarch64-darwin
             [ ./configurations/home/work ];
+
+        # TODO: Replace with an autowired version which can discover the system type and usernames
+
+        # Desktop / Laptop
+        "w4cbe@bender" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
+        "w4cbe@cousteau" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
+        "w4cbe@donnager" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
+        "w4cbe@icarus" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
+        "w4cbe@enterprise" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
+        "w4cbe@loki" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
+        "w4cbe@riker" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/pinebook ];
+        "w4cbe@serenity" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/pinebook ];
+
+        # Servers
+        "w4cbe@bart" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
+        "w4cbe@bob" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server];
+        "w4cbe@goku" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
+        "w4cbe@isaac" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/serverc ];
+        "w4cbe@jack" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server ];
+        "w4cbe@khan" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
+        "w4cbe@linus" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
+        "w4cbe@owen" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server ];
+
+        # K3s hosts
+        "w4cbe@nk3s-amd64-0" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
+        "w4cbe@nk3s-amd64-a" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
+        "w4cbe@nk3s-amd64-b" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
+        "w4cbe@nk3s-amd64-c" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
+        "w4cbe@nk3s-amd64-d" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/servers ];
       };
     };
 }

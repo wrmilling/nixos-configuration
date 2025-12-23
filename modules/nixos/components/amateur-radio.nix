@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.amateurRadio;
+  cfg = config.modules.nixos.amateurRadio;
 in
 {
-  options.modules.amateurRadio = {
+  options.modules.nixos.amateurRadio = {
     enable = lib.mkEnableOption "amateur radio packages / settings";
   };
 

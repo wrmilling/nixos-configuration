@@ -15,7 +15,7 @@
 
   modules = {
     machineType.server.enable = true;
-    sshd.banner = "${secrets.sshd.banner}";
+    nixos.sshd.banner = "${secrets.sshd.banner}";
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -52,15 +52,6 @@
       ];
       url = "https://${secrets.forgejo.domain}";
       tokenFile = config.sops.secrets."forgejo/runnerToken".path;
-    };
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
     };
   };
 

@@ -15,7 +15,7 @@
 
   modules = {
     machineType.server.enable = true;
-    sshd.banner = "${secrets.sshd.banner}";
+    nixos.sshd.banner = "${secrets.sshd.banner}";
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -97,15 +97,6 @@
     };
     # Every 10 minutes
     schedule = "*:0/30";
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
-    };
   };
 
   system.stateVersion = "24.11";

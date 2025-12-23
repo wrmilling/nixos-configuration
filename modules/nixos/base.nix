@@ -7,7 +7,7 @@
   ...
 }:
 let
-  cfg = config.modules.base;
+  cfg = config.modules.nixos.base;
 in
 {
   imports = lib.filter 
@@ -17,7 +17,7 @@ in
     (n: lib.strings.hasSuffix ".nix" n)
     (lib.filesystem.listFilesRecursive ./users);
 
-  options.modules.base = {
+  options.modules.nixos.base = {
     enable = lib.mkEnableOption "base NixOS configuration";
   };
 
@@ -25,8 +25,8 @@ in
     # Default 
     modules = {
       users.w4cbe.enable = true;
-      terminal.enable = true;
-      sops.enable = true;
+      nixos.terminal.enable = true;
+      nixos.sops.enable = true;
     };
 
     # Nix Setup

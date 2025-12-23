@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.visualBoot;
+  cfg = config.modules.nixos.visualBoot;
 in
 {
-  options.modules.visualBoot = {
+  options.modules.nixos.visualBoot = {
     enable = lib.mkEnableOption "visual boot packages / settings";
   };
 

@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.development;
+  cfg = config.modules.nixos.development;
 in
 {
-  options.modules.development = {
+  options.modules.nixos.development = {
     enable = lib.mkEnableOption "development packages / settings";
   };
 

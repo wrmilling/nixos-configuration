@@ -16,7 +16,7 @@
 
   modules = {
     machineType.server.enable = true;
-    sshd.banner = "${secrets.sshd.banner}";
+    nixos.sshd.banner = "${secrets.sshd.banner}";
   };
 
   hardware.raspberry-pi."4".poe-hat.enable = true;
@@ -43,15 +43,6 @@
     };
     defaultGateway = secrets.hosts.common-homelab.defaultGateway;
     nameservers = secrets.hosts.common-homelab.nameservers;
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
-    };
   };
 
   system.stateVersion = "25.05";

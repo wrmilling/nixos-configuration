@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.k8sUtils;
+  cfg = config.modules.nixos.k8sUtils;
 in
 {
-  options.modules.k8sUtils = {
+  options.modules.nixos.k8sUtils = {
     enable = lib.mkEnableOption "k8s utilities packages";
   };
 

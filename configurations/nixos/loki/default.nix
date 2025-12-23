@@ -15,14 +15,14 @@
 
   modules = {
     machineType.desktop.enable = true;
-    amateruRadio.enable = true;
-    development.enable = true;
-    dockerRootless.enable = true; 
-    flipper.enable = true;
-    k8sUtils.enable = true;
-    printing.enable = true;
-    secureboot.enable = true;
-    wireshark.enable = true;
+    nixos.amateruRadio.enable = true;
+    nixos.development.enable = true;
+    nixos.dockerRootless.enable = true; 
+    nixos.flipper.enable = true;
+    nixos.k8sUtils.enable = true;
+    nixos.printing.enable = true;
+    nixos.secureboot.enable = true;
+    nixos.wireshark.enable = true;
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -34,15 +34,6 @@
   networking = {
     hostName = "loki";
     domain = secrets.hosts.common.domain;
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/w4cbe;
-    };
   };
 
   system.stateVersion = "25.05";

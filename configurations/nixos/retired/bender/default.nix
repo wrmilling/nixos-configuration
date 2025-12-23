@@ -16,15 +16,14 @@
 
   modules = {
     machineType.laptop.enable = true;
-    # users.haley.enable = true;
-    appimage.enable = true;
-    development.enable = true;
-    gaming.enable = true;
-    k8sUtils.enable = true;
-    printing.enable = true;
-    tailscale.enable = true;
-    visualBoot.enable = true;
-    zram.enable = true;
+    nixos.appimage.enable = true;
+    nixos.development.enable = true;
+    nixos.gaming.enable = true;
+    nixos.k8sUtils.enable = true;
+    nixos.printing.enable = true;
+    nixos.tailscale.enable = true;
+    nixos.visualBoot.enable = true;
+    nixos.zram.enable = true;
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -35,16 +34,6 @@
   networking = {
     hostName = "bender";
     domain = secrets.hosts.common.domain;
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/w4cbe;
-      haley = import ../../home/haley;
-    };
   };
 
   system.stateVersion = "24.11";

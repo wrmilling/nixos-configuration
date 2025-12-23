@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.nixbuild-client;
+  cfg = config.modules.nixos.nixbuild-client;
 in
 {
-  options.modules.nixbuild-client = {
+  options.modules.nixos.nixbuild-client = {
     enable = lib.mkEnableOption "nixbuild client packages / settings";
   };
 

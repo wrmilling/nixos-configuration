@@ -14,13 +14,13 @@ in
 
   config = lib.mkIf cfg.enable {
     modules = {
-      base.enable = true;
-      audio.enable = true;
-      filesystem.enable = true;
-      fonts.enable = true;
-      graphical.enable = true;
-      network.enable = true;
-      plasma6.enable = true;
+      nixos.base.enable = true;
+      nixos.audio.enable = true;
+      nixos.filesystem.enable = true;
+      nixos.fonts.enable = true;
+      nixos.graphical.enable = true;
+      nixos.network.enable = true;
+      nixos.plasma6.enable = true;
     };
   };
 }

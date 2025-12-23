@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.audio;
+  cfg = config.modules.nixos.audio;
 in
 {
-  options.modules.audio = {
+  options.modules.nixos.audio = {
     enable = lib.mkEnableOption "audio related packages / settings";
   };
 

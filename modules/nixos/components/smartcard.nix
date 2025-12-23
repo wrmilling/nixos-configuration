@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.smartcard;
+  cfg = config.modules.nixos.smartcard;
 in
 {
-  options.modules.smartcard = {
+  options.modules.nixos.smartcard = {
     enable = lib.mkEnableOption "smartcard packages / settings";
   };
 

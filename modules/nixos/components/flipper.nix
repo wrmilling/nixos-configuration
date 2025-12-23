@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.flipper;
+  cfg = config.modules.nixos.flipper;
 in
 {
-  options.modules.flipper = {
+  options.modules.nixos.flipper = {
     enable = lib.mkEnableOption "flipper zero packages / settings";
   };
 

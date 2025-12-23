@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.k3sFirewall;
+  cfg = config.modules.nixos.k3sFirewall;
 in
 {
-  options.modules.k3sFirewall = {
+  options.modules.nixos.k3sFirewall = {
     enable = lib.mkEnableOption "k3s firewall packages / settings";
   };
 

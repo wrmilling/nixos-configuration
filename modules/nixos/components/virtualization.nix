@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.virtualization;
+  cfg = config.modules.nixos.virtualization;
 in
 {
-  options.modules.virtualization = {
+  options.modules.nixos.virtualization = {
     enable = lib.mkEnableOption "virtualization packages / settings";
   };
 

@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.dockerRootless;
+  cfg = config.modules.nixos.dockerRootless;
 in
 {
-  options.modules.dockerRootless = {
+  options.modules.nixos.dockerRootless = {
     enable = lib.mkEnableOption "docker rootless packages / settings";
   };
 

@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.filesystem;
+  cfg = config.modules.nixos.filesystem;
 in
 {
-  options.modules.filesystem = {
+  options.modules.nixos.filesystem = {
     enable = lib.mkEnableOption "filesystem packages / settings";
   };
 

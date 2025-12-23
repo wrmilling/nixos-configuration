@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.network;
+  cfg = config.modules.nixos.network;
 in
 {
-  options.modules.network = {
+  options.modules.nixos.network = {
     enable = lib.mkEnableOption "network packages / settings";
   };
 

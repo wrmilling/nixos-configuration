@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.nvidia;
+  cfg = config.modules.nixos.nvidia;
 in
 {
-  options.modules.nvidia = {
+  options.modules.nixos.nvidia = {
     enable = lib.mkEnableOption "nvidia packages / settings";
   };
 

@@ -7,7 +7,6 @@ The current layout just assumes each machine will have nuances in their named di
 ##  Configurations
 
 - [work](work) (MacOS Specific Configuration)
-- [haley](haley) (User Specific Configuration)
 - [riker](riker) (Machine Specific Configuration)
 - [serenity](serenity) (Machine Specific Configuration)
 - [server](server) (Generic Server Configuration)

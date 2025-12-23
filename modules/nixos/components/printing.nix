@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.printing;
+  cfg = config.modules.nixos.printing;
 in
 {
-  options.modules.printing = {
+  options.modules.nixos.printing = {
     enable = lib.mkEnableOption "printing packages / settings";
   };
 

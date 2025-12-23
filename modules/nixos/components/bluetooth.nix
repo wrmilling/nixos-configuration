@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.bluetooth;
+  cfg = config.modules.nixos.bluetooth;
 in
 {
-  options.modules.bluetooth = {
+  options.modules.nixos.bluetooth = {
     enable = lib.mkEnableOption "bluetooth packages / settings";
   };
 

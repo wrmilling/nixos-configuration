@@ -19,9 +19,9 @@
 
   modules = {
     machineType.server.enable = true;
-    sshd.banner = "${secrets.sshd.banner}";
-    rebootRequired.enable = true;
-    k3sAgent = {
+    nixos.sshd.banner = "${secrets.sshd.banner}";
+    nixos.rebootRequired.enable = true;
+    nixos.k3sAgent = {
       enable = true;
       tokenFile = config.sops.secrets."k3s/agent/nodeTokenFull".path;
       serverAddr = secrets.k3s.server.addr; 
@@ -48,15 +48,6 @@
     };
     defaultGateway = secrets.hosts.common-homelab.defaultGateway;
     nameservers = secrets.hosts.common-homelab.nameservers;
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
-    };
   };
 
   system.stateVersion = "24.11";

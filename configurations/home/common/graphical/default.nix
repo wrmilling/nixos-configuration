@@ -3,7 +3,6 @@
   imports = [
     ./alacritty.nix
     ./firefox.nix
-    ./rofi.nix
     ./xresources.nix
   ];
 

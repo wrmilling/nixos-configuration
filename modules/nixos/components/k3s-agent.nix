@@ -5,13 +5,13 @@
   ...
 }:
 let
-  cfg = config.modules.k3sAgent;
+  cfg = config.modules.nixos.k3sAgent;
   k3s-package = pkgs.k3s_1_34;
 in
 {
   imports = [ ./k3s-firewall.nix ];
 
-  options.modules.k3sAgent = {
+  options.modules.nixos.k3sAgent = {
     enable = lib.mkEnableOption "k3s agent packages / settings";
     tokenFile = lib.mkOption {
       type = lib.types.str;
@@ -27,7 +27,7 @@ in
 
   config = lib.mkIf cfg.enable {
     modules = {
-      k3sFirewall.enable = true;
+      nixos.k3sFirewall.enable = true;
     };
 
     services.k3s = {

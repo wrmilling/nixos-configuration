@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.plasma6;
+  cfg = config.modules.nixos.plasma6;
 in
 {
-  options.modules.plasma6 = {
+  options.modules.nixos.plasma6 = {
     enable = lib.mkEnableOption "plasma6 packages / settings";
   };
 

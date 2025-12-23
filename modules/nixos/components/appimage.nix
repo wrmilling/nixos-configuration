@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.appimage;
+  cfg = config.modules.nixos.appimage;
 in
 {
-  options.modules.appimage = {
+  options.modules.nixos.appimage = {
     enable = lib.mkEnableOption "AppImage packages / settings";
   };
 

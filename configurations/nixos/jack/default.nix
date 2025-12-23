@@ -31,8 +31,8 @@
 
   modules = {
     machineType.server.enable = true;
-    sshd.banner = "${secrets.sshd.banner}";
-    pihole = {
+    nixos.sshd.banner = "${secrets.sshd.banner}";
+    nixos.pihole = {
       enable = true;
       additionalHosts = config.sops.secrets."pihole/additionalHosts".path;
       customAddresses = config.sops.secrets."pihole/customAddresses".path;
@@ -64,15 +64,6 @@
     };
     defaultGateway = secrets.hosts.common-homelab.defaultGateway;
     nameservers = secrets.hosts.common-homelab.nameservers;
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
-    };
   };
 
   system.stateVersion = "25.05";

@@ -16,11 +16,11 @@
 
   modules = {
     machineType.laptop.enable = true;
-    development.enable = true;
-    k8sUtils.enable = true;
-    tailscale.enable = true;
-    virtualization.enable = true;
-    zram.enable = true;
+    nixos.development.enable = true;
+    nixos.k8sUtils.enable = true;
+    nixos.tailscale.enable = true;
+    nixos.virtualization.enable = true;
+    nixos.zram.enable = true;
   };
 
   networking = {
@@ -37,15 +37,6 @@
       device = "/dev/disk/by-uuid/54c4fcbf-feb8-4029-958f-0cb12b8e2e59";
       allowDiscards = true;
       preLVM = true;
-    };
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/serenity;
     };
   };
 

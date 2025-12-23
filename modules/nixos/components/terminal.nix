@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.terminal;
+  cfg = config.modules.nixos.terminal;
 in
 {
-  options.modules.terminal = {
+  options.modules.nixos.terminal = {
     enable = lib.mkEnableOption "terminal packages / settings";
   };
 

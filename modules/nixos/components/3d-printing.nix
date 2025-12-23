@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.threeDPrinting;
+  cfg = config.modules.nixos.threeDPrinting;
 in
 {
-  options.modules.threeDPrinting = {
+  options.modules.nixos.threeDPrinting = {
     enable = lib.mkEnableOption "3d printing packages / settings";
   };
 

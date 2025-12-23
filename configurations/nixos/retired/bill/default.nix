@@ -54,14 +54,5 @@
     };
   };
 
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
-    };
-  };
-
   system.stateVersion = "24.11";
 }

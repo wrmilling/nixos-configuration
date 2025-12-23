@@ -7,12 +7,16 @@
   ...
 }:
 {
-  imports = [
-    ../common/terminal/fish.nix
-    ../common/terminal/general.nix
-    ../common/terminal/starship.nix
-    ../common/terminal/vim.nix
-  ];
+  # imports = [
+  #   ../common/terminal/fish.nix
+  #   ../common/terminal/general.nix
+  #   ../common/terminal/starship.nix
+  #   ../common/terminal/vim.nix
+  # ];
+
+  modules = {
+    homeType.server.enable = true;
+  };
 
   nixpkgs = {
     overlays = [

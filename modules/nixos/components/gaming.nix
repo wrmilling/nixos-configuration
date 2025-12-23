@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.gaming;
+  cfg = config.modules.nixos.gaming;
 in
 {
-  options.modules.gaming = {
+  options.modules.nixos.gaming = {
     enable = lib.mkEnableOption "gaming packages / settings";
   };
 

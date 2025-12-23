@@ -15,7 +15,7 @@
 
   modules = {
     machineType.server.enable = true;
-    webhost.enable = true;
+    nixos.webhost.enable = true;
   };
 
   networking = {
@@ -74,15 +74,6 @@
     "root"
     "@wheel"
   ];
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
-    };
-  };
 
   system.stateVersion = "23.11";
 }

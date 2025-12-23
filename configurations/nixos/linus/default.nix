@@ -15,7 +15,7 @@
 
   modules = {
     machineType.server.enable = true;
-    sshd.banner = "${secrets.sshd.p_banner}";
+    nixos.sshd.banner = "${secrets.sshd.p_banner}";
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -78,15 +78,6 @@
   };
 
   environment.systemPackages = [ config.services.headscale.package ];
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
-    };
-  };
 
   system.stateVersion = "25.05";
 }

@@ -14,10 +14,10 @@ in
 
   config = lib.mkIf cfg.enable {
     modules = {
-      base.enable = true;
-      chrony.enable = true;
-      filesystem.enable = true;
-      sshd.enable = true;
+      nixos.base.enable = true;
+      nixos.chrony.enable = true;
+      nixos.filesystem.enable = true;
+      nixos.sshd.enable = true;
     };
   };
 }

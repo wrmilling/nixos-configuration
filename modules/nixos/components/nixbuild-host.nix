@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.nixbuildHost;
+  cfg = config.modules.nixos.nixbuildHost;
 in
 {
-  options.modules.nixbuildHost = {
+  options.modules.nixos.nixbuildHost = {
     enable = lib.mkEnableOption "nixbuild host packages / settings";
   };
 

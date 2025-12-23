@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.tailscale;
+  cfg = config.modules.nixos.tailscale;
 in
 {
-  options.modules.tailscale = {
+  options.modules.nixos.tailscale = {
     enable = lib.mkEnableOption "tailscale packages / settings";
   };
 

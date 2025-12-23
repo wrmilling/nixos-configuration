@@ -16,8 +16,8 @@
   modules = {
     machineType.server.enable = true;
     sshd.banner = "${secrets.sshd.banner}";
-    nixbuildHost.enable = true;
-    webhost.enable = true;
+    nixos.nixbuildHost.enable = true;
+    nixos.webhost.enable = true;
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -182,15 +182,6 @@
           proxyWebsockets = true;
         };
       };
-    };
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/server;
     };
   };
 

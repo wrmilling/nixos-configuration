@@ -16,13 +16,13 @@
 
   modules = {
     machineType.laptop.enable = true;
-    amateruRadio.enable = true;
-    development.enable = true;
-    k8sUtils.enable = true;
-    tailscale.enable = true;
-    virtualization.enable = true; 
-    visualBoot.enable = true;
-    zram.enable = true;
+    nixos.amateruRadio.enable = true;
+    nixos.development.enable = true;
+    nixos.k8sUtils.enable = true;
+    nixos.tailscale.enable = true;
+    nixos.virtualization.enable = true; 
+    nixos.visualBoot.enable = true;
+    nixos.zram.enable = true;
   };
 
   networking = {
@@ -48,15 +48,6 @@
         nvmecrypt /dev/disk/by-uuid/92cf1e12-72a6-48fd-911f-5249183e5c64 /home/luks/nvme.key luks
       '';
       mode = "0440";
-    };
-  };
-
-  home-manager = {
-    extraSpecialArgs = {
-      inherit inputs outputs;
-    };
-    users = {
-      w4cbe = import ../../home/riker;
     };
   };
 

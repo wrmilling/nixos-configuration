@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.rebootRequired;
+  cfg = config.modules.nixos.rebootRequired;
 in
 {
-  options.modules.rebootRequired = {
+  options.modules.nixos.rebootRequired = {
     enable = lib.mkEnableOption "reboot required config for nixos k3s nodes";
   };
 

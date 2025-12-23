@@ -5,12 +5,12 @@
   ...
 }:
 let
-  cfg = config.modules.webhost;
+  cfg = config.modules.nixos.webhost;
   hostname = config.networking.hostName;
   domain = config.networking.domain;
 in
 {
-  options.modules.webhost = {
+  options.modules.nixos.webhost = {
     enable = lib.mkEnableOption "webhost packages / settings";
   };
 

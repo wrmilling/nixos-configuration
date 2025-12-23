@@ -1,5 +1,11 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
+  cfg = config.modules.home.scripts.procinfo;
   procinfo = pkgs.writeShellScriptBin "procinfo" ''
     # Provides useful information for the Pine64 Pinebook Pro
     # CPU Core Frequencies
@@ -45,5 +51,12 @@ let
   '';
 in
 {
-  home.packages = [ procinfo ];
+  options.modules.home.scripts.procinfo = {
+    enable = lib.mkEnableOption "procinfo packages / settings";
+    
+  };
+
+  config = lib.mkIf cfg.enable {
+    home.packages = [ procinfo ];
+  };
 }

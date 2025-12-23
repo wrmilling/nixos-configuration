@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.sshd;
+  cfg = config.modules.nixos.sshd;
 in
 {
-  options.modules.sshd = {
+  options.modules.nixos.sshd = {
     enable = lib.mkEnableOption "sshd packages / settings";
     banner = lib.mkOption {
       type = lib.types.str;
