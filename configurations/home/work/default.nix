@@ -8,11 +8,9 @@
   ...
 }:
 {
-  imports = [
-    ../common/terminal/default-darwin.nix
-    ../common/graphical/default-darwin.nix
-    ../common/optional/k8s-utils.nix
-  ];
+  modules = {
+    homeType.darwin.enable = true;
+  };
 
   nixpkgs = {
     overlays = [

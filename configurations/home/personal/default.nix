@@ -7,14 +7,9 @@
   ...
 }:
 {
-  imports = [
-    ../common/terminal
-    ../common/graphical
-    ../common/optional/discord.nix
-    ../common/optional/k8s-utils.nix
-    ../common/optional/keybase.nix
-    ../common/optional/minecraft-client.nix
-  ];
+  modules = {
+    homeType.personal.enable = true;
+  };
 
   nixpkgs = {
     overlays = [
