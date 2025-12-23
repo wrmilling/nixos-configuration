@@ -49,9 +49,9 @@ in
       ];
       settings = {
         misc.dnsmasq_lines = [
-          "addn-hosts=\"${config.modules.pihole.additionalHosts}\""
-          "conf-file=\"${config.modules.pihole.customAddresses}\""
-          "conf-file=\"${config.modules.pihole.customCnames}\""
+          "addn-hosts=\"${config.modules.nixos.pihole.additionalHosts}\""
+          "conf-file=\"${config.modules.nixos.pihole.customAddresses}\""
+          "conf-file=\"${config.modules.nixos.pihole.customCnames}\""
           "except-interface=nonexisting"
         ];
         dns.upstreams = [
