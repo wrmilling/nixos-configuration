@@ -15,7 +15,7 @@
 
   modules = {
     machineType.server.enable = true;
-    nixos.shd.banner = "${secrets.sshd.c_banner}";
+    nixos.sshd.banner = "${secrets.sshd.c_banner}";
     nixos.webhost.enable = true;
   };
 
