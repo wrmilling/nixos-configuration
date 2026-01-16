@@ -136,6 +136,7 @@ in
         dps = "docker ps --format \"table {{.Names}}\t{{.Status}}\"";
         dc = "docker compose";
         watch = "viddy";
+        sbn = "scrcpy --video-codec=h265 --max-fps=60 --no-audio --no-control --keyboard=disabled --mouse=disabled --no-clipboard-autosync"
       };
       shellAliases = {
         # Clear screen and scrollback
