@@ -13,8 +13,7 @@
   ];
 
   modules = {
-    terminal.enable = true;
-    k8sUtils.enable = true;
+    darwin.work.enable = true; 
   };
 
   security.pki.certificateFiles = [ ../../../secrets/certs/cert.pem ];
