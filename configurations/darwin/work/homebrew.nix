@@ -26,6 +26,7 @@
       "datagrip"
       "miro"
       "gather"
+      "android-platform-tools"
     ];
     masApps = {
       Tailscale = 1475387142;
