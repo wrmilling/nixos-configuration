@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+let
+  cfg = config.modules.darwin.work;
+in
 {
   # Re-use the NixOS Module where possible
   options.modules.darwin.work = {
