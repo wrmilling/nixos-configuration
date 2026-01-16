@@ -10,9 +10,10 @@ let
   cfg = config.modules.darwin.base;
 in
 {
-  imports = lib.filter 
-    (n: lib.strings.hasSuffix ".nix" n)
-    (lib.filesystem.listFilesRecursive ../nixos/components);
+  imports = [
+    ../nixos/components/terminal.nix
+    ../nixos/components/k8s-utils.nix
+  ];
 
   options.modules.darwin.base = {
     enable = lib.mkEnableOption "base darwin configuration";
@@ -20,6 +21,9 @@ in
 
   config = lib.mkIf cfg.enable {
     # Default 
-    modules = { };
+    modules = {
+      nixos.terminal.enable = true;
+      nixos.k8sUtils.enable = true;
+    };
   };
 }

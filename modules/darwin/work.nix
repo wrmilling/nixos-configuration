@@ -16,8 +16,6 @@ in
   config = lib.mkIf cfg.enable {
     modules = {
       darwin.base.enable = true;
-      nixos.terminal.enable = true;
-      nixos.k8sUtils.enable = true;
     };
   };
 }
