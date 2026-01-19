@@ -34,8 +34,8 @@ in
       enable = true;
       package = k3s-package;
       role = "agent";
-      serverAddr = config.modules.k3sAgent.serverAddr;
-      tokenFile = config.modules.k3sAgent.tokenFile;
+      serverAddr = cfg.serverAddr;
+      tokenFile = cfg.tokenFile;
       extraFlags = "--node-label \"k3s-upgrade=false\""; # Optionally add additional args to k3s
       extraKubeletConfig = {
         imageMaximumGCAge = "168h";
