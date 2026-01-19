@@ -8,7 +8,7 @@ let
   cfg = config.modules.nixos.k3sServer;
   hostname = config.networking.hostName;
   domain = config.networking.domain;
-  k3s-package = pkgs.k3s_1_34;
+  k3s-package = pkgs.k3s_1_35;
 in
 {
   imports = [ ./k3s-firewall.nix ];
