@@ -19,24 +19,14 @@
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
   # Use grub boot loader
   boot.loader.grub.enable = true;
+  services.qemuGuest.enable = true;
 
   networking = {
     hostName = "bart"; # Define your hostname.
     domain = secrets.hosts.common.domain;
     nameservers = secrets.hosts.common.nameservers;
-    interfaces.eth0 = {
-      ipv4.addresses = [{
-        address = secrets.hosts.bart.ipAddress;
-        prefixLength = secrets.hosts.bart.prefixLength;
-      }];
-    };
-    defaultGateway = {
-      address = secrets.hosts.bart.gateway;
-      interface = "eth0";
-    };
   };
 
   sops.secrets."forgejo/runnerToken" = {
@@ -99,5 +89,5 @@
     schedule = "*:0/30";
   };
 
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.11";
 }

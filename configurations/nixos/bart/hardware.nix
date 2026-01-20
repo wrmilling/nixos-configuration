@@ -13,9 +13,10 @@
     "uhci_hcd"
     "virtio_pci"
     "virtio_blk"
+    "sr_mod"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
@@ -26,10 +27,9 @@
   boot.loader.grub.device = "/dev/vda";
 
   swapDevices = [
-    { device = "/dev/vda2"; }
     {
       device = "/var/lib/swapfile";
-      size = 1 * 1024;
+      size = 4 * 1024;
     }
   ];
 
