@@ -6,7 +6,7 @@ Goku is a 3 vCPU, 4GB ram, and 100GB SSD KVM from a random provider. The install
 
 ### Disk Setup
 
-Creates 2 partitions on the drive, one for EFI Boot and one for the luks root.
+Create a single partition install which will host the root filesystem for the host.
 
 ```
 $ sudo fdisk /dev/vda
@@ -32,8 +32,13 @@ $ sudo rm -rf ./*
 $ sudo git clone https://github.com/wrmilling/nixos-configuration.git .
 $ sudo wormhole-rs receive <CODE>
 $ sudo mv KEY ../ && sudo git crypt unlock ../KEY && sudo rm ../KEY
+$ # Comment out all the sops stuff in default.nix
 $ sudo nixos-install --flake .#goku
 ```
+
+### Post Install
+
+Fix all the sops setup for the new host and setup my ~/.nixos-configuration directory for my default user. 
 
 ## Outro
 
