@@ -56,6 +56,7 @@
       pkgs.jdk11
       pkgs.jdk17
       pkgs.jdk21
+      pkgs.opencode
     ];
     shells = [
       pkgs.bashInteractive
