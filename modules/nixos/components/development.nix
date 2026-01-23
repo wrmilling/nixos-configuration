@@ -21,6 +21,7 @@ in
       pkgs.pre-commit
       pkgs.gh
       pkgs.diffoscopeMinimal
+      pkgs.opencode
     ];
   };
 }

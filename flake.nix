@@ -44,6 +44,12 @@
       url = "github:nix-community/lanzaboote/v0.4.3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # OpenCode Coding Agent
+    opencode-src = {
+      url = "github:anomalyco/opencode/dev";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -55,6 +61,7 @@
       darwin,
       nixos-wsl,
       lanzaboote,
+      opencode-src,
       ...
     }@inputs:
     let
