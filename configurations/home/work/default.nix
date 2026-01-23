@@ -30,7 +30,7 @@
   };
 
   programs.git = {
-    userEmail = secrets.hosts.work-mac.email.long;
+    settings.user.email = secrets.hosts.work-mac.email.long;
     signing.signByDefault = false;
     includes = [
       {
