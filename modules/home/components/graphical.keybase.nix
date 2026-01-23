@@ -13,8 +13,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.keybase.enable = true;
-    services.kbfs.enable = true;
+    # services.keybase.enable = true;
+    # services.kbfs.enable = true;
 
     home.packages = lib.mkMerge [
       (lib.mkIf pkgs.stdenv.isx86_64 [
