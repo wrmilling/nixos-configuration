@@ -9,48 +9,35 @@
     # Hardware
     hardware.url = "github:NixOS/nixos-hardware";
 
-    # Home manager
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Home-Manager
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Darwin
-    darwin = {
-      url = "github:lnl7/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # Jovian (Steam Deck)
-    jovian = {
-      url = "github:Jovian-Experiments/Jovian-NixOS/development";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    jovian.url = "github:Jovian-Experiments/Jovian-NixOS/development";
+    jovian.inputs.nixpkgs.follows = "nixpkgs";
 
-    # secrets through sops
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Secrets through sops
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # WSL
-    nixos-wsl = {
-      url = "github:nix-community/NixOS-WSL/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
 
     # Lanzaboote for SecureBoot
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.3";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.3";
+    lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
     # OpenCode Coding Agent
-    opencode-src = {
-      url = "github:anomalyco/opencode/dev";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    opencode-src.url = "github:anomalyco/opencode/dev";
+    opencode-src.inputs.nixpkgs.follows = "nixpkgs";
   };
+
 
   outputs =
     {
@@ -101,7 +88,7 @@
       mkDarwin =
         system: modules:
         darwin.lib.darwinSystem {
-          modules = modules ++ [ 
+          modules = modules ++ [
             { imports = builtins.attrValues darwinModules; }
           ];
           system = system;
