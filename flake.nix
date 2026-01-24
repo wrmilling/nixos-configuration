@@ -25,10 +25,6 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # WSL
-    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
-    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
-
     # Lanzaboote for SecureBoot
     lanzaboote.url = "github:nix-community/lanzaboote/v0.4.3";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
@@ -46,7 +42,6 @@
       home-manager,
       sops-nix,
       darwin,
-      nixos-wsl,
       lanzaboote,
       opencode-src,
       ...
@@ -139,37 +134,14 @@
 
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild switch --flake .#your-hostname'
-      nixosConfigurations = {
-        # Desktop/Laptop
-        bender = mkNixos [ ./configurations/nixos/bender ];
-        cousteau = mkNixos [
-          ./configurations/nixos/cousteau
-          nixos-wsl.nixosModules.default
+      nixosConfigurations = let
+        hosts = lib.pipe (builtins.readDir (root + /configurations/nixos)) [
+          (lib.filterAttrs (_: type: type == "directory" && _ != "retired"))
+          lib.attrNames
         ];
-        donnager = mkNixos [ ./configurations/nixos/donnager ];
-        enterprise = mkNixos [ ./configurations/nixos/enterprise ];
-        icarus = mkNixos [ ./configurations/nixos/icarus ];
-        loki = mkNixos [ ./configurations/nixos/loki ];
-        riker = mkNixos [ ./configurations/nixos/riker ];
-        serenity = mkNixos [ ./configurations/nixos/serenity ];
-
-        # Servers
-        bart = mkNixos [ ./configurations/nixos/bart ];
-        bob = mkNixos [ ./configurations/nixos/bob ];
-        goku = mkNixos [ ./configurations/nixos/goku ];
-        isaac = mkNixos [ ./configurations/nixos/isaac ];
-        jack = mkNixos [ ./configurations/nixos/jack ];
-        khan = mkNixos [ ./configurations/nixos/khan ];
-        linus = mkNixos [ ./configurations/nixos/linus ];
-        owen = mkNixos [ ./configurations/nixos/owen ];
-
-        # k3s Hosts
-        nk3s-amd64-0 = mkNixos [ ./configurations/nixos/nk3s-amd64-0 ];
-        nk3s-amd64-a = mkNixos [ ./configurations/nixos/nk3s-amd64-a ];
-        nk3s-amd64-b = mkNixos [ ./configurations/nixos/nk3s-amd64-b ];
-        nk3s-amd64-c = mkNixos [ ./configurations/nixos/nk3s-amd64-c ];
-        nk3s-amd64-d = mkNixos [ ./configurations/nixos/nk3s-amd64-d ];
-      };
+        mkHost = host: lib.nameValuePair host (mkNixos [ ./configurations/nixos/${host} ]);
+      in
+      lib.listToAttrs (map mkHost hosts);
 
       # nix-darwin configuration entrypoint
       # Available through 'darwin-rebuild switch --flake .#your-hostname'
@@ -184,11 +156,8 @@
           mkHome nixpkgs.legacyPackages.aarch64-darwin
             [ ./configurations/home/work ];
 
-        # TODO: Replace with an autowired version which can discover the system type and usernames
-
         # Desktop / Laptop
         "w4cbe@bender" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
-        "w4cbe@cousteau" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
         "w4cbe@donnager" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
         "w4cbe@icarus" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];
         "w4cbe@enterprise" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/personal ];

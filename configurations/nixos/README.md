@@ -8,7 +8,6 @@ Each machine has its own directory where main config and hardware specific to it
 
 - [bart](bart) (Server, KVM 2GB Instance)
 - [bob](bob) (Server, Oracle Free-tier ARM64)
-- [cousteau](cousteau) (WSL, Windows 11)
 - [donnager](donnager) (Laptop, Lenovo Legion Y530)
 - [enterprise](enterprise) (Desktop, Custom Built)
 - [goku](goku) (Server, KVM 4GB Instance)
