@@ -1,6 +1,6 @@
 # NixOS Configuration
 
-A work in progress [NixOS](https://nixos.org/) configuration that can handle NixOS and nix-darwin on multiple hosts.
+[Nix / NixOS](https://nixos.org/) configuration repo that handles NixOS, nix-darwin, and home-manager configurations.
 
 ![neofetch screenshot](https://i.imgur.com/Hh16z3T.png)
 
@@ -9,14 +9,12 @@ A work in progress [NixOS](https://nixos.org/) configuration that can handle Nix
 - [flake.nix](flake.nix) (Entrypoint for rebuilding via nixos-rebuild or home-manager)
 - [flake.lock](flake.lock) (Lockfile for current nix flake state)
 - [configurations/darwin](configurations/darwin/README.md) - (Definition of mac-based hosts)
-  - [work](configurations/nixos/work) (Laptop, Apple M1 Macbook Pro 16")
+  - [work](configurations/darwin/work) (Laptop, Apple M1 Macbook Pro 16")
 - [configurations/home](configurations/home/README.md) (User level configuration per machine via home-manager)
-  - [common](configurations/home/common) (Re-usable configurations for users in home-manager, to be migrated)
-  - [darwin](configurations/home/darwin) (Specific home-manager configuration for darwin)
-  - [riker](configurations/home/riker) (Machine specific home-manager configuration for riker)
-  - [serenity](configurations/home/serenity) (Machine specific home-manager configuration for serenity)
+  - [personal](configurations/home/personal) (Personal/home-specific configuration)
+  - [pinebook](configurations/home/pinebook) (Pinebook-specific configuration)
   - [server](configurations/home/server) (Basic home-manager configuration for generic servers)
-  - [w4cbe](configurations/home/w4cbe) (User specific home manager configuration to be re-used in multiple hosts)
+  - [work](configurations/home/work) (MacOS-specific configuration)
 - [configurations/nixos](configurations/nixos/README.md) - (Definition of physical/virutal hosts)
   - [bart](configurations/nixos/bart) (Server, 2GB KVM Instance)
   - [bob](configurations/nixos/bob) (Server, Oracle ARM64)

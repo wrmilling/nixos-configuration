@@ -1,4 +1,4 @@
-# Isaac
+# isaac
 
 Rough documentation on my install process for NixOS on a Raspberry Pi 4B 8GB with the PoE Hat.
 

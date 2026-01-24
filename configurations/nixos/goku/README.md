@@ -1,4 +1,4 @@
-# Goku
+# goku
 
 Goku is a 3 vCPU, 4GB ram, and 100GB SSD KVM from a random provider. The installation steps assume you have uploaded a nixos minimal iso image and booted the KVM instance into the iso environment and are connected to it via NoVNC.
 

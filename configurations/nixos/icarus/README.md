@@ -1,4 +1,4 @@
-# Icarus
+# icarus
 
 Icarus is an HP EliteBook 845 G8 with the Ryzen 5 PRO 5650U, these are the steps that I initially took to install NixOS, though once the config is setup it can just be re-used for future re-installs if needed. This assumes you have booted into a NixOS install image from a USB stick, that we are installing with Full Disk Encryption, and that we will be using systemd-boot.
 
