@@ -85,6 +85,8 @@ in
         plugin = [
           "oh-my-opencode"
         ];
+        # Default to a cheap model for now
+        model = "github-copilot/gpt-5-mini";
       }
       // cfg.opencode.settings
     );
