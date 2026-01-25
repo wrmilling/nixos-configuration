@@ -20,6 +20,18 @@ in
 {
   options.modules.home.terminal.development = {
     enable = lib.mkEnableOption "development configuration file settings";
+
+    opencode = {
+      settings = lib.mkOption {
+        type = lib.types.attrs;
+        default = {
+          share = "disabled";
+          theme = "one-dark";
+          default_agent = "plan";
+        };
+        description = "OpenCode configuration settings";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
