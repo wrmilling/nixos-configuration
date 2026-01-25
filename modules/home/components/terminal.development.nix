@@ -40,6 +40,13 @@ in
       node
       copilot
       pkgs.opencode
+      pkgs.ripgrep
+      pkgs.fd
+      pkgs.eza
+      pkgs.procs
+      pkgs.sd
+      pkgs.jq
+      pkgs.yq
     ];
 
     # Copilot Configuration (shared with OpenCode)
