@@ -13,7 +13,7 @@
   ];
 
   modules = {
-    darwin.work.enable = true; 
+    darwin.work.enable = true;
   };
 
   security.pki.certificateFiles = [ ../../../secrets/certs/cert.pem ];
@@ -56,7 +56,6 @@
       pkgs.jdk11
       pkgs.jdk17
       pkgs.jdk21
-      pkgs.opencode
     ];
     shells = [
       pkgs.bashInteractive
