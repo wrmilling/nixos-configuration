@@ -70,6 +70,9 @@
     size = 16;
   };
 
+  # Development Settings
+  home.terminal.development.oh-my-opencode-slim.preset = "work";
+
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   home.stateVersion = "24.11";
 }
