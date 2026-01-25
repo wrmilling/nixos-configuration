@@ -89,17 +89,29 @@ in
           "~/.copilot/copilot-instructions.md"
           ".github/copilot-instructions.md"
         ];
-        plugin = [
-          # "oh-my-opencode"
-        ];
+        plugin = [ "oh-my-opencode-slim" ];
         # Default to a cheap model for now
         model = "github-copilot/gpt-5-mini";
       }
       // cfg.opencode.settings
     );
+
+    # Default plugin configuration for oh-my-opencode-slim
+    home.file.".config/opencode/oh-my-opencode-slim.json".text = builtins.toJSON (
+      {
+        preset = "local";
+        presets = {
+          local = {
+            orchestrator = { model = "github-copilot/gpt-5.2-codex"; skills = ["*"]; mcps = ["websearch"]; };
+            oracle       = { model = "github-copilot/gpt-5.2-codex"; variant = "low"; skills = []; mcps = []; };
+            librarian    = { model = "github-copilot/gpt-5.1-codex-mini"; variant = "low"; skills = []; mcps = ["websearch" "context7" "grep_app"]; };
+            explorer     = { model = "zai-coding-plan/glm-4.7"; variant = "low"; skills = []; mcps = []; };
+            designer     = { model = "github-copilot/gemini-3-flash-preview"; variant = "low"; skills = []; mcps = []; };
+            fixer        = { model = "zai-coding-plan/glm-4.7"; variant = "low"; skills = []; mcps = []; };
+          };
+        };
+        tmux = { enabled = true; layout = "main-vertical"; main_pane_size = 60; };
+      }
+    );
   };
 }
-
-
-
-
