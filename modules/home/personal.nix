@@ -28,7 +28,7 @@ in
       home.graphical.alacritty.enable = true;
       home.graphical.discord.enable = true;
       home.graphical.firefox.enable = true;
-      home.graphical.keybase.enable = true;
+      # home.graphical.keybase.enable = true;
       home.graphical.minecraft-client.enable = true;
       home.graphical.xresources.enable = true;
     };
