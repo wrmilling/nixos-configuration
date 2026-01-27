@@ -11,7 +11,7 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
-    opencode = inputs.opencode-src.packages.${final.stdenv.hostPlatform.system}.default;
+    opencode = inputs.opencode-git.packages.${final.stdenv.hostPlatform.system}.default;
   };
 
   # When applied, the stable nixpkgs set (declared in the flake inputs) will

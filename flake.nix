@@ -30,8 +30,8 @@
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
     # OpenCode Coding Agent
-    opencode-src.url = "github:anomalyco/opencode/dev";
-    opencode-src.inputs.nixpkgs.follows = "nixpkgs";
+    opencode-git.url = "github:anomalyco/opencode/dev";
+    opencode-git.inputs.nixpkgs.follows = "nixpkgs";
   };
 
 
@@ -43,7 +43,7 @@
       sops-nix,
       darwin,
       lanzaboote,
-      opencode-src,
+      opencode-git,
       ...
     }@inputs:
     let

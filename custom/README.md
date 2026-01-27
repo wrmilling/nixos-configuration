@@ -14,5 +14,5 @@ The `custom/overlays` directory provides Nix overlays that are applied to the fl
 
 - `additions` — Adds the repository's custom packages from `custom/pkgs` into the final package set (`pkgs`).
 - `modifications` — Provides a place to modify or override existing packages (examples are included).
-  - `opencode` — An overlay provided from the `opencode-src` flake input; exposes the `opencode` package set used for the Codex/Opencode agent tooling. Upstream repository: https://github.com/anomalyco/opencode
+  - `opencode` — An overlay provided from the `opencode-git` flake input; exposes the `opencode` package set used for the Codex/Opencode agent tooling. Upstream repository: https://github.com/anomalyco/opencode
 - `stable-packages` — Makes a stable `nixpkgs` set available as `pkgs.stable` (configured with `allowUnfree = true`).

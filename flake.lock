@@ -232,18 +232,18 @@
         "type": "github"
       }
     },
-    "opencode-src": {
+    "opencode-git": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1769533620,
-        "narHash": "sha256-S3fuyaw/5cOU0npcgkbq2BiE4R12VLdvx21BlUNsPl8=",
+        "lastModified": 1769535810,
+        "narHash": "sha256-zMV5933q5pE1BChGmesV5VS3xUE/Dh2AZaFSZFCtfiM=",
         "owner": "anomalyco",
         "repo": "opencode",
-        "rev": "173faca3c6a8d29e4502fbedaa7a56cdddd05c10",
+        "rev": "32ce0f4b0d1a5015c965676c9feae341b13b87a5",
         "type": "github"
       },
       "original": {
@@ -288,7 +288,7 @@
         "lanzaboote": "lanzaboote",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
-        "opencode-src": "opencode-src",
+        "opencode-git": "opencode-git",
         "sops-nix": "sops-nix"
       }
     },
