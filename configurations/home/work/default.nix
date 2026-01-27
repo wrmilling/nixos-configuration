@@ -14,8 +14,8 @@
   };
 
   home = {
-    username = lib.mkDefault "${secrets.hosts.work-mac.username}";
-    homeDirectory = lib.mkDefault "/Users/${secrets.hosts.work-mac.username}";
+    username = lib.mkForce "${secrets.hosts.work-mac.username}";
+    homeDirectory = lib.mkForce "/Users/${secrets.hosts.work-mac.username}";
   };
 
   programs.git = {
