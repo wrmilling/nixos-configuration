@@ -21,7 +21,7 @@ in
       signing.signByDefault = lib.mkDefault true;
       settings = {
         credential.credentialStore = "gpg";
-        credential.helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
+        # credential.helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
         sendemail.smtpserver = "smtp.gmail.com";
         sendemail.smtpuser = "winston@wrmilling.com";
         sendemail.smtpencryption = "tls";
