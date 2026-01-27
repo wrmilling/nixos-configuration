@@ -13,19 +13,6 @@
     home.terminal.development.oh-my-opencode-slim.preset = "work";
   };
 
-  nixpkgs = {
-    overlays = [
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.stable-packages
-    ];
-    config = {
-      allowUnfree = true;
-      # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = _: true;
-    };
-  };
-
   home = {
     username = lib.mkDefault "${secrets.hosts.work-mac.username}";
     homeDirectory = lib.mkDefault "/Users/${secrets.hosts.work-mac.username}";
@@ -45,8 +32,6 @@
       }
     ];
   };
-
-  programs.home-manager.enable = true;
 
   # Fish Additions
   programs.fish = {

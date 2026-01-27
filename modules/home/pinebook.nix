@@ -12,26 +12,6 @@ in
     enable = lib.mkEnableOption "pinebook home-manager modules";
   };
 
-  # ../common/terminal
-  #   ../common/graphical
-  #   ../common/optional/legcord.nix
-  #   ../common/optional/gaming-arm.nix
-  #   ../common/optional/k8s-utils.nix
-  #   ../common/optional/keybase.nix
-
-  # imports = [
-  #   ./atuin.nix
-  #   ./fish.nix
-  #   ./general.nix
-  #   ./git.nix
-  #   ./gpg.nix
-  #   ./starship.nix
-  #   ./tmux.nix
-  #   ./vim.nix
-  # ];
-  
-
-
   config = lib.mkIf cfg.enable {
     modules = {
       home.base.enable = true;
