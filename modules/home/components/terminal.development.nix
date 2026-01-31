@@ -96,6 +96,7 @@ in
         instructions = [
           "~/.copilot/copilot-instructions.md"
           ".github/copilot-instructions.md"
+          "AGENTS.md"
         ];
         plugin = [ "oh-my-opencode-slim" ];
         # Default to a cheap model for now
