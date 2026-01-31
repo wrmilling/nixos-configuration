@@ -137,6 +137,7 @@ in
         dc = "docker compose";
         watch = "viddy";
         sbn = "scrcpy --video-codec=h265 --max-fps=60 --no-audio --no-control --keyboard=disabled --mouse=disabled --no-clipboard-autosync";
+        oc = "opencode --port 4096"; # Required for tmux integration to function right now
       };
       shellAliases = {
         # Clear screen and scrollback
