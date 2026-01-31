@@ -57,8 +57,8 @@ in
       pkgs.yq
     ];
 
-    # Copilot Configuration (shared with OpenCode)
-    home.file.".copilot/copilot-instructions.md" = {
+    # AI Agent Configuration
+    home.file."~/.config/opencode/AGENTS.md" = {
       text = ''
         You are an intelligent CLI assistant running on a ${
           if pkgs.stdenv.isDarwin then "Darwin (macOS)" else "Linux"
@@ -86,6 +86,7 @@ in
           - Running any command that deletes, overwrites, or mutates data (e.g. `rm`, `dd`, `>` redirection, `git push --force`, `git reset --hard`, `kubectl apply`, etc.).
           - Pushing commits to any remote branch.
         - Preview destructive commands with `echo` first when feasible.
+        - Use a directory local to the context you were opened in for temp files (e.g. `./.opencode/tmp`). Ensure that directory is included in the `.gitignore` file if part of a git repo.
       '';
     };
 
@@ -94,7 +95,6 @@ in
       {
         "$schema" = "https://opencode.ai/config.json";
         instructions = [
-          "~/.copilot/copilot-instructions.md"
           ".github/copilot-instructions.md"
         ];
         plugin = [ "oh-my-opencode-slim" ];
