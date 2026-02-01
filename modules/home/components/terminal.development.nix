@@ -100,6 +100,45 @@ in
         plugin = [ "oh-my-opencode-slim" ];
         # Default to a cheap model for now
         model = "github-copilot/gpt-5-mini";
+        provider = {
+          "nano-gpt" = {
+            models = {
+              "moonshotai/kimi-k2.5" = {
+                id = "moonshotai/kimi-k2.5";
+                name = "Kimi K2.5";
+                family = "kimi";
+                attachment = false;
+                reasoning = false;
+                tool_call = true;
+                structured_output = true;
+                temperature = true;
+                modalities = { input = ["text"]; output = ["text"]; };
+                open_weights = false;
+                limit = {
+                  context = 262144;
+                  output = 65536;
+                };
+              };
+              "moonshotai/kimi-k2.5:thinking" = {
+                id = "moonshotai/kimi-k2.5:thinking";
+                name = "Kimi K2.5 Thinking";
+                family = "kimi-thinking";
+                attachment = false;
+                reasoning = true;
+                tool_call = true;
+                interleaved = { field = "reasoning_content" };
+                structured_output = true;
+                temperature = true;
+                modalities = { input = ["text"]; output = ["text"]; };
+                open_weights = false;
+                limit = {
+                  context = 262144;
+                  output = 65536;
+                };
+              };
+            };
+          };
+        };
       }
       // cfg.opencode.settings
     );
