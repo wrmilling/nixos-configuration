@@ -126,7 +126,7 @@ in
                 attachment = false;
                 reasoning = true;
                 tool_call = true;
-                interleaved = { field = "reasoning_content" };
+                interleaved = { field = "reasoning_content"; };
                 structured_output = true;
                 temperature = true;
                 modalities = { input = ["text"]; output = ["text"]; };
