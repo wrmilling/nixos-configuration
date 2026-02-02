@@ -10,7 +10,7 @@
 {
   modules = {
     homeType.darwin.enable = true;
-    home.terminal.development.oh-my-opencode-slim.preset = "work";
+    home.terminal.opencode.oh-my-opencode-slim.preset = "work";
   };
 
   home = {
