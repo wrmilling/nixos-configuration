@@ -14,10 +14,12 @@
   ];
 
   sops.secrets."ncps/private_key" = {
+    owner = "ncps";
     sopsFile = ../../../secrets/ncps.yaml;
   };
 
   sops.secrets."ncps/upload_auth" = {
+    owner = "ncps";
     sopsFile = ../../../secrets/ncps.yaml;
   };
 
