@@ -37,23 +37,11 @@ jobs:
           out_paths=$(nix build --no-link --print-out-paths --system "${{ matrix.system }}" "github:anomalyco/opencode?ref=dev")
           echo "out_paths=${out_paths}" >> "$GITHUB_OUTPUT"
 
-      - name: Configure netrc
+      - name: Copy outputs to cache
         env:
           CACHE_HOST: ${{ secrets.CACHE_HOST }}
           CACHE_USER: ${{ secrets.CACHE_USER }}
           CACHE_PASSWORD: ${{ secrets.CACHE_PASSWORD }}
         run: |
           set -euo pipefail
-          cat <<'EOF' > "$HOME/.netrc"
-          machine ${CACHE_HOST}
-          login ${CACHE_USER}
-          password ${CACHE_PASSWORD}
-          EOF
-          chmod 600 "$HOME/.netrc"
-
-      - name: Copy outputs to cache
-        env:
-          CACHE_HOST: ${{ secrets.CACHE_HOST }}
-        run: |
-          set -euo pipefail
-          nix copy --to "https://${CACHE_HOST}" ${{ steps.build.outputs.out_paths }}
+          nix copy --to "https://${CACHE_USER}:${CACHE_PASSWORD}@${CACHE_HOST}" ${{ steps.build.outputs.out_paths }}
