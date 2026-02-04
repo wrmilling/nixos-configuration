@@ -1,0 +1,59 @@
+name: Build opencode flake
+
+on:
+  push:
+    paths:
+      - flake.lock
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build (${{ matrix.system }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - system: x86_64-linux
+            runner: ubuntu-latest
+          - system: aarch64-darwin
+            runner: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+
+      - name: Build opencode flake
+        id: build
+        run: |
+          set -euo pipefail
+          out_paths=$(nix build --no-link --print-out-paths --system "${{ matrix.system }}" "github:anomalyco/opencode?ref=dev")
+          echo "out_paths=${out_paths}" >> "$GITHUB_OUTPUT"
+
+      - name: Configure netrc
+        env:
+          CACHE_HOST: ${{ secrets.CACHE_HOST }}
+          CACHE_USER: ${{ secrets.CACHE_USER }}
+          CACHE_PASSWORD: ${{ secrets.CACHE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          cat <<'EOF' > "$HOME/.netrc"
+          machine ${CACHE_HOST}
+          login ${CACHE_USER}
+          password ${CACHE_PASSWORD}
+          EOF
+          chmod 600 "$HOME/.netrc"
+
+      - name: Copy outputs to cache
+        env:
+          CACHE_HOST: ${{ secrets.CACHE_HOST }}
+        run: |
+          set -euo pipefail
+          nix copy --to "https://${CACHE_HOST}" ${{ steps.build.outputs.out_paths }}
