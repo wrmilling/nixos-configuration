@@ -19,7 +19,7 @@
   };
 
   sops.secrets."ncps/upload_auth" = {
-    owner = "ncps";
+    owner = "nginx";
     sopsFile = ../../../secrets/ncps.yaml;
   };
 
