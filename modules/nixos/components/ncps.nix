@@ -105,13 +105,13 @@ in
       enableACME = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:${toString cfg.port}/";
+        extraConfig = lib.mkIf (cfg.uploadAuthFile != null) ''
+          limit_except GET HEAD {
+            auth_basic           "Upload Access Only";
+            auth_basic_user_file ${cfg.uploadAuthFile};
+          }
+        '';
       };
-      extraConfig = lib.mkIf (cfg.uploadAuthFile != null) ''
-        limit_except GET HEAD {
-          auth_basic           "Upload Access Only";
-          auth_basic_user_file ${cfg.uploadAuthFile};
-        }
-      '';
     };
   };
 }
