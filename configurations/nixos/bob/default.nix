@@ -13,11 +13,25 @@
     ./hardware.nix
   ];
 
+  sops.secrets."ncps/private_key" = {
+    sopsFile = ../../../secrets/ncps.yaml;
+  };
+
+  sops.secrets."ncps/upload_auth" = {
+    sopsFile = ../../../secrets/ncps.yaml;
+  };
+
   modules = {
     machineType.server.enable = true;
     nixos.sshd.banner = "${secrets.sshd.banner}";
     nixos.nixbuildHost.enable = true;
     nixos.webhost.enable = true;
+    nixos.ncps = {
+      enable = true;
+      hostName = "nixcache.${secrets.hosts.common.domain}";
+      secretKeyPath = config.sops.secrets."ncps/private_key".path;
+      uploadAuthFile = config.sops.secrets."ncps/upload_auth".path;
+    };
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

@@ -79,3 +79,9 @@ creation_rules:
         age:
           - *isaac
           - *jack
+  - path_regex: secrets/ncps.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *bob
