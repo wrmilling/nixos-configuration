@@ -81,6 +81,7 @@ in
     services.ncps = {
       enable = true;
       prometheus.enable = false;
+      analytics.reporting.enable = cfg.enableAnalyticsReporting;
       cache = {
         hostName = cfg.hostName;
         tempPath = "${cfg.cacheDir}/tmp";
@@ -91,7 +92,6 @@ in
         allowDeleteVerb = true;
         secretKeyPath = cfg.secretKeyPath;
         storage.local = "${cfg.cacheDir}";
-        analytics.reporting.enable = cfg.enableAnalyticsReporting;
         upstream = {
           urls = cfg.upstreamCaches;
           publicKeys = cfg.upstreamPublicKeys;
