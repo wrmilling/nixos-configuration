@@ -4,6 +4,7 @@
   pkgs,
   inputs,
   outputs,
+  secrets,
   ...
 }:
 let
@@ -35,6 +36,14 @@ in
       settings = {
         auto-optimise-store = lib.mkDefault true;
         experimental-features = [ "nix-command" "flakes" ];
+        substituters = [
+          secrets.nixcache.hostname
+          "https://cache.nixos.org"
+        ];
+        trusted-public-keys = [
+          secrets.nixcache.public_key
+          "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        ];
       };
       settings.trusted-users = [
         "root"

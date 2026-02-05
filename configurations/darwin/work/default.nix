@@ -36,6 +36,14 @@
         "nix-command"
         "flakes"
       ];
+      substituters = [
+        secrets.nixcache.hostname
+        "https://cache.nixos.org"
+      ];
+      trusted-public-keys = [
+        secrets.nixcache.public_key
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      ];
       warn-dirty = false;
       sandbox = "relaxed";
       trusted-users = [
