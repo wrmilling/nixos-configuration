@@ -40,12 +40,13 @@ in
       [
         pkgs.element-desktop
         # cura
-        pkgs.flameshot
+        # pkgs.flameshot
         pkgs.gparted
         # volumeicon
         pkgs.keepassxc
         pkgs.vlc
         pkgs.hugo
+        pkgs.libreoffice
       ]
     ];
   };
