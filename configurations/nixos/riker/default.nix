@@ -16,11 +16,11 @@
 
   modules = {
     machineType.laptop.enable = true;
-    nixos.amateruRadio.enable = true;
+    nixos.amateurRadio.enable = true;
     nixos.development.enable = true;
     nixos.k8sUtils.enable = true;
     nixos.tailscale.enable = true;
-    nixos.virtualization.enable = true; 
+    nixos.virtualization.enable = true;
     nixos.visualBoot.enable = true;
     nixos.zram.enable = true;
   };
