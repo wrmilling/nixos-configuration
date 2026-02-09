@@ -16,5 +16,10 @@ in
     services.printing.enable = true;
     services.avahi.enable = true;
     services.avahi.nssmdns4 = true;
+    services.printing.drivers = [
+      pkgs.brlaser
+      pkgs.brgenml1lpr
+      pkgs.brgenml1cupswrapper
+    ];
   };
 }
