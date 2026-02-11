@@ -86,45 +86,45 @@ in
         plugin = [ "oh-my-opencode-slim" ];
         # Default to a cheap model for now
         model = "github-copilot/gpt-5-mini";
-        provider = {
-          "nano-gpt" = {
-            models = {
-              "moonshotai/kimi-k2.5" = {
-                id = "moonshotai/kimi-k2.5";
-                name = "Kimi K2.5";
-                family = "kimi";
-                attachment = false;
-                reasoning = false;
-                tool_call = true;
-                structured_output = true;
-                temperature = true;
-                modalities = { input = ["text"]; output = ["text"]; };
-                open_weights = false;
-                limit = {
-                  context = 262144;
-                  output = 65536;
-                };
-              };
-              "moonshotai/kimi-k2.5:thinking" = {
-                id = "moonshotai/kimi-k2.5:thinking";
-                name = "Kimi K2.5 Thinking";
-                family = "kimi-thinking";
-                attachment = false;
-                reasoning = true;
-                tool_call = true;
-                interleaved = { field = "reasoning_content"; };
-                structured_output = true;
-                temperature = true;
-                modalities = { input = ["text"]; output = ["text"]; };
-                open_weights = false;
-                limit = {
-                  context = 262144;
-                  output = 65536;
-                };
-              };
-            };
-          };
-        };
+        # provider = {
+        #   "nano-gpt" = {
+        #     models = {
+        #       "moonshotai/kimi-k2.5" = {
+        #         id = "moonshotai/kimi-k2.5";
+        #         name = "Kimi K2.5";
+        #         family = "kimi";
+        #         attachment = false;
+        #         reasoning = false;
+        #         tool_call = true;
+        #         structured_output = true;
+        #         temperature = true;
+        #         modalities = { input = ["text"]; output = ["text"]; };
+        #         open_weights = false;
+        #         limit = {
+        #           context = 262144;
+        #           output = 65536;
+        #         };
+        #       };
+        #       "moonshotai/kimi-k2.5:thinking" = {
+        #         id = "moonshotai/kimi-k2.5:thinking";
+        #         name = "Kimi K2.5 Thinking";
+        #         family = "kimi-thinking";
+        #         attachment = false;
+        #         reasoning = true;
+        #         tool_call = true;
+        #         interleaved = { field = "reasoning_content"; };
+        #         structured_output = true;
+        #         temperature = true;
+        #         modalities = { input = ["text"]; output = ["text"]; };
+        #         open_weights = false;
+        #         limit = {
+        #           context = 262144;
+        #           output = 65536;
+        #         };
+        #       };
+        #     };
+        #   };
+        # };
       }
       // cfg.settings
     );
@@ -138,9 +138,9 @@ in
             orchestrator = { model = "nano-gpt/moonshotai/kimi-k2.5"; skills = ["*"]; mcps = ["websearch"]; };
             oracle       = { model = "github-copilot/gpt-5.2-codex"; variant = "low"; skills = []; mcps = []; };
             librarian    = { model = "github-copilot/gpt-5.1-codex-mini"; variant = "low"; skills = []; mcps = ["websearch" "context7" "grep_app"]; };
-            explorer     = { model = "zai-coding-plan/glm-4.7"; variant = "low"; skills = []; mcps = []; };
+            explorer     = { model = "zai-coding-plan/glm-5"; variant = "low"; skills = []; mcps = []; };
             designer     = { model = "github-copilot/gemini-3-flash-preview"; variant = "low"; skills = []; mcps = []; };
-            fixer        = { model = "zai-coding-plan/glm-4.7"; variant = "low"; skills = []; mcps = []; };
+            fixer        = { model = "zai-coding-plan/glm-5"; variant = "low"; skills = []; mcps = []; };
           };
           work = {
             orchestrator = { model = "github-copilot/gpt-5.2-codex"; skills = ["*"]; mcps = ["websearch"]; };
