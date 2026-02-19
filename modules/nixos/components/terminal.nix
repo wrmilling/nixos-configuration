@@ -37,7 +37,7 @@ in
       pkgs.ipcalc
       pkgs.nh
       pkgs.caligula
-      pkgs.helix
+      # pkgs.helix
     ];
   };
 }
