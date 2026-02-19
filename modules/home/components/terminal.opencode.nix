@@ -89,7 +89,8 @@ in
         mcp = {
           "atlassian-mcp" = {
             type = "remote";
-            url = "https://mcp.atlassian.com/v1/see";
+            url = "https://mcp.atlassian.com/v1/mcp";
+            oauth = {};
           };
         };
       }
