@@ -28,6 +28,7 @@
     nixos.sshd.banner = "${secrets.sshd.banner}";
     nixos.nixbuildHost.enable = true;
     nixos.webhost.enable = true;
+    nixos.atuin.enable = true;
     nixos.ncps = {
       enable = true;
       hostName = "nixcache.${secrets.hosts.common.domain}";
@@ -196,6 +197,14 @@
         locations."/" = {
           proxyPass = "http://localhost:3001/";
           proxyWebsockets = true;
+        };
+      };
+
+      "atuin.${secrets.hosts.common.domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString config.services.atuin.port}/";
         };
       };
     };
