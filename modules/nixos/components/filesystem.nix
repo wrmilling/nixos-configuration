@@ -17,5 +17,7 @@ in
       pkgs.exfat
       pkgs.nfs-utils
     ];
+
+    boot.supportedFilesystems = [ "nfs" ];
   };
 }
