@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  secrets,
   ...
 }:
 let
@@ -22,6 +23,7 @@ in
       settings = {
         auto_sync = true;
         sync_frequency = "1h";
+        sync_address = "https://atuin.${secrets.hosts.common.domain}";
         search_mode = "fuzzy";
       };
     };
