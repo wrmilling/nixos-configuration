@@ -17,9 +17,8 @@ in
       desktopManager.plasma6 = {
         enable = true;
       };
-      displayManager.sddm = {
+      displayManager.plasma-login-manager = {
         enable = true;
-        wayland.enable = true;
       };
     };
 
