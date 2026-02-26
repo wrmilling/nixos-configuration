@@ -27,6 +27,9 @@ in
     home.packages = [
       node
       copilot
+      pkgs.gh
+      pkgs.python3
+      pkgs.python314Packages.pip
     ];
   };
 }
