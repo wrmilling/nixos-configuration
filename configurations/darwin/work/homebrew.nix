@@ -8,7 +8,6 @@
     brews = [
       "cask"
       "scrcpy"
-      "gcloud-cli"
     ];
     taps = [
       "homebrew/bundle"
@@ -28,6 +27,7 @@
       "miro"
       "gather"
       "android-platform-tools"
+      "gcloud-cli"
     ];
     masApps = {
       Tailscale = 1475387142;
