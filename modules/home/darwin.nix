@@ -32,7 +32,6 @@ in
 
     home.packages = [
       pkgs.cloudfoundry-cli
-      pkgs.google-cloud-sdk
       pkgs.rancher
       pkgs.slides-git
       pkgs.graph-easy

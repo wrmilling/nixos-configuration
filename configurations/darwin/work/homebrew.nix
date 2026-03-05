@@ -8,6 +8,7 @@
     brews = [
       "cask"
       "scrcpy"
+      "gcloud-cli"
     ];
     taps = [
       "homebrew/bundle"
