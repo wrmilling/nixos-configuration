@@ -22,7 +22,6 @@
       "firefox"
       "vivaldi"
       "visual-studio-code"
-      "font-source-code-pro"
       "datagrip"
       "miro"
       "gather"
