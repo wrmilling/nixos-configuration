@@ -23,11 +23,6 @@ in
       qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
     };
 
-    # TODO: Remove patch
-    # https://github.com/NixOS/nixpkgs/issues/496836
-    systemd.services."virt-secret-init-encryption".serviceConfig.ExecStart =
-      lib.mkForce "/usr/bin/env bash -c 'umask 0077 && (dd if=/dev/random status=none bs=32 count=1 | systemd-creds encrypt --name=secrets-encryption-key - /var/lib/libvirt/secrets/secrets-encryption-key)'";
-
     programs.virt-manager.enable = true;
   };
 }
