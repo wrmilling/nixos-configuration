@@ -33,7 +33,7 @@ in
   config = lib.mkIf cfg.enable {
     # Packages
     home.packages = [
-      pkgs.opencode
+      (lib.mkIf pkgs.stdenv.isLinux [ pkgs.opencode ]) # Assumed installed through brew for Darwin due to security on work mac
       pkgs.ripgrep
       pkgs.fd
       pkgs.eza

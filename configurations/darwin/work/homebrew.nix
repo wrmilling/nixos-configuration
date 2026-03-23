@@ -8,11 +8,13 @@
     brews = [
       "cask"
       "scrcpy"
+      "opencode"
     ];
     taps = [
       "homebrew/bundle"
       "homebrew/cask-fonts"
       "homebrew/services"
+      "anomalyco/tap"
     ];
     casks = [
       "flameshot"
