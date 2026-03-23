@@ -27,7 +27,7 @@
     machineType.server.enable = true;
     nixos.sshd.banner = "${secrets.sshd.banner}";
     nixos.nixbuildHost.enable = true;
-    nixos.webhost.enable = true;
+    # nixos.webhost.enable = true;
     nixos.atuin.enable = true;
     nixos.ncps = {
       enable = true;
@@ -66,149 +66,149 @@
     package = pkgs.uptime-kuma;
   };
 
-  services.nginx = {
-    recommendedProxySettings = true;
-    recommendedTlsSettings = true;
+  # services.nginx = {
+  #   recommendedProxySettings = true;
+  #   recommendedTlsSettings = true;
 
-    virtualHosts = {
-      "${secrets.hosts.common.domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.domain}";
-        serverAliases = [
-          "www.${secrets.hosts.common.domain}"
-        ];
-      };
+  #   virtualHosts = {
+  #     "${secrets.hosts.common.domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.domain}";
+  #       serverAliases = [
+  #         "www.${secrets.hosts.common.domain}"
+  #       ];
+  #     };
 
-      "${secrets.hosts.common.b_domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.b_domain}/html";
-        serverAliases = [
-          "www.${secrets.hosts.common.b_domain}"
-        ];
-      };
+  #     "${secrets.hosts.common.b_domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.b_domain}/html";
+  #       serverAliases = [
+  #         "www.${secrets.hosts.common.b_domain}"
+  #       ];
+  #     };
 
-      "${secrets.hosts.common.d_domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.d_domain}";
-        serverAliases = [
-          "www.${secrets.hosts.common.d_domain}"
-        ];
-        locations = {
-          "/" = {
-            return = "301 https://${secrets.hosts.common.b_domain}$request_uri";
-          };
-        };
-      };
+  #     "${secrets.hosts.common.d_domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.d_domain}";
+  #       serverAliases = [
+  #         "www.${secrets.hosts.common.d_domain}"
+  #       ];
+  #       locations = {
+  #         "/" = {
+  #           return = "301 https://${secrets.hosts.common.b_domain}$request_uri";
+  #         };
+  #       };
+  #     };
 
-      "${secrets.hosts.common.h_domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.h_domain}";
-        serverAliases = [
-          "www.${secrets.hosts.common.h_domain}"
-        ];
-        locations = {
-          "/" = {
-            return = "301 https://${secrets.hosts.common.b_domain}/blog$request_uri";
-          };
-        };
-      };
+  #     "${secrets.hosts.common.h_domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.h_domain}";
+  #       serverAliases = [
+  #         "www.${secrets.hosts.common.h_domain}"
+  #       ];
+  #       locations = {
+  #         "/" = {
+  #           return = "301 https://${secrets.hosts.common.b_domain}/blog$request_uri";
+  #         };
+  #       };
+  #     };
 
-      "${secrets.hosts.common.m_domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.m_domain}";
-        serverAliases = [
-          "www.${secrets.hosts.common.m_domain}"
-        ];
-        locations = {
-          "/" = {
-            return = "302 https://${secrets.hosts.common.b_domain}$request_uri";
-          };
-          "/.well-known/matrix/server" = {
-            return = "200 '{\"m.server\": \"synapse.${secrets.hosts.common.domain}:443\"}'";
-          };
-          "/.well-known/matrix/client" = {
-            return = "200 '{\"m.homeserver\": {\"base_url\": \"https://synapse.${secrets.hosts.common.domain}\"},\"org.matrix.msc2965.authentication\": {\"issuer\": \"https://synapse.${secrets.hosts.common.domain}/\",\"account\": \"https://mas.${secrets.hosts.common.domain}/account\"}}'";
-            extraConfig = "add_header Content-Type application/json;\nadd_header \"Access-Control-Allow-Origin\" *;\n";
-          };
-          "/.well-known/webfinger" = {
-            return = "301 https://mastodon.${secrets.hosts.common.domain}$request_uri";
-          };
-        };
-      };
+  #     "${secrets.hosts.common.m_domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.m_domain}";
+  #       serverAliases = [
+  #         "www.${secrets.hosts.common.m_domain}"
+  #       ];
+  #       locations = {
+  #         "/" = {
+  #           return = "302 https://${secrets.hosts.common.b_domain}$request_uri";
+  #         };
+  #         "/.well-known/matrix/server" = {
+  #           return = "200 '{\"m.server\": \"synapse.${secrets.hosts.common.domain}:443\"}'";
+  #         };
+  #         "/.well-known/matrix/client" = {
+  #           return = "200 '{\"m.homeserver\": {\"base_url\": \"https://synapse.${secrets.hosts.common.domain}\"},\"org.matrix.msc2965.authentication\": {\"issuer\": \"https://synapse.${secrets.hosts.common.domain}/\",\"account\": \"https://mas.${secrets.hosts.common.domain}/account\"}}'";
+  #           extraConfig = "add_header Content-Type application/json;\nadd_header \"Access-Control-Allow-Origin\" *;\n";
+  #         };
+  #         "/.well-known/webfinger" = {
+  #           return = "301 https://mastodon.${secrets.hosts.common.domain}$request_uri";
+  #         };
+  #       };
+  #     };
 
-      "${secrets.hosts.common.n_domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.domain}";
-        # serverAliases = [
-        #   "www.${secrets.hosts.common.n_domain}"
-        # ];
-      };
+  #     "${secrets.hosts.common.n_domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.domain}";
+  #       # serverAliases = [
+  #       #   "www.${secrets.hosts.common.n_domain}"
+  #       # ];
+  #     };
 
-      "${secrets.hosts.common.r_domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.r_domain}";
-        serverAliases = [
-          "www.${secrets.hosts.common.r_domain}"
-        ];
-      };
+  #     "${secrets.hosts.common.r_domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.r_domain}";
+  #       serverAliases = [
+  #         "www.${secrets.hosts.common.r_domain}"
+  #       ];
+  #     };
 
-      "${secrets.hosts.common.s_domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.s_domain}";
-        serverAliases = [
-          "www.${secrets.hosts.common.s_domain}"
-        ];
-      };
+  #     "${secrets.hosts.common.s_domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.s_domain}";
+  #       serverAliases = [
+  #         "www.${secrets.hosts.common.s_domain}"
+  #       ];
+  #     };
 
-      "${secrets.hosts.common.w_domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.w_domain}";
-        serverAliases = [
-          "www.${secrets.hosts.common.w_domain}"
-        ];
-        locations = {
-          "/" = {
-            return = "301 https://${secrets.hosts.common.b_domain}/resume$request_uri";
-          };
-        };
-      };
+  #     "${secrets.hosts.common.w_domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.w_domain}";
+  #       serverAliases = [
+  #         "www.${secrets.hosts.common.w_domain}"
+  #       ];
+  #       locations = {
+  #         "/" = {
+  #           return = "301 https://${secrets.hosts.common.b_domain}/resume$request_uri";
+  #         };
+  #       };
+  #     };
 
-      "${secrets.hosts.common.y_domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/${secrets.hosts.common.domain}";
-        serverAliases = [
-          "www.${secrets.hosts.common.y_domain}"
-        ];
-      };
+  #     "${secrets.hosts.common.y_domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       root = "/var/www/${secrets.hosts.common.domain}";
+  #       serverAliases = [
+  #         "www.${secrets.hosts.common.y_domain}"
+  #       ];
+  #     };
 
-      "status.${secrets.hosts.common.domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          proxyPass = "http://localhost:3001/";
-          proxyWebsockets = true;
-        };
-      };
+  #     "status.${secrets.hosts.common.domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       locations."/" = {
+  #         proxyPass = "http://localhost:3001/";
+  #         proxyWebsockets = true;
+  #       };
+  #     };
 
-      "atuin.${secrets.hosts.common.domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString config.services.atuin.port}/";
-        };
-      };
-    };
-  };
+  #     "atuin.${secrets.hosts.common.domain}" = {
+  #       forceSSL = true;
+  #       enableACME = true;
+  #       locations."/" = {
+  #         proxyPass = "http://127.0.0.1:${toString config.services.atuin.port}/";
+  #       };
+  #     };
+  #   };
+  # };
 
   system.stateVersion = "24.11";
 }
