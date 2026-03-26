@@ -17,8 +17,11 @@ in
       enable = true;
       package = pkgs.gitFull;
       
-      signing.key = lib.mkDefault "0xA44A3B1758373973";
-      signing.signByDefault = lib.mkDefault true;
+      signing = {
+        key = lib.mkDefault "0xA44A3B1758373973";
+        signByDefault = lib.mkDefault true;
+        format = "openpgp";
+      };
       settings = {
         credential.credentialStore = "gpg";
         # credential.helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
