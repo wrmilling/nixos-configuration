@@ -103,20 +103,20 @@ in
         preset = cfg.oh-my-opencode-slim.preset;
         presets = {
           personal = {
-            orchestrator = { model = "github-copilot/gpt-5.2-codex"; skills = ["*"]; mcps = ["websearch"]; };
-            oracle       = { model = "github-copilot/gpt-5.2-codex"; variant = "low"; skills = []; mcps = []; };
-            librarian    = { model = "github-copilot/gpt-5.1-codex-mini"; variant = "low"; skills = []; mcps = ["websearch" "context7" "grep_app"]; };
-            explorer     = { model = "zai-coding-plan/glm-4.7"; variant = "low"; skills = []; mcps = []; };
-            designer     = { model = "github-copilot/gemini-3-flash-preview"; variant = "low"; skills = []; mcps = []; };
-            fixer        = { model = "zai-coding-plan/glm-4.7"; variant = "low"; skills = []; mcps = []; };
+            orchestrator = { model = "github-copilot/gpt-5.4"; skills = ["*"]; mcps = ["websearch"]; };
+            oracle       = { model = "github-copilot/gpt-5.4"; variant = "low"; skills = []; mcps = []; };
+            librarian    = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = ["websearch" "context7" "grep_app"]; };
+            explorer     = { model = "zai-coding-plan/glm-5"; variant = "low"; skills = []; mcps = []; };
+            designer     = { model = "github-copilot/gemini-3.1-pro-preview"; variant = "low"; skills = []; mcps = []; };
+            fixer        = { model = "zai-coding-plan/glm-5"; variant = "low"; skills = []; mcps = []; };
           };
           work = {
-            orchestrator = { model = "github-copilot/gpt-5.2-codex"; skills = ["*"]; mcps = ["websearch"]; };
-            oracle       = { model = "github-copilot/gpt-5.2-codex"; variant = "low"; skills = []; mcps = []; };
-            librarian    = { model = "github-copilot/gpt-5.1-codex-mini"; variant = "low"; skills = []; mcps = ["websearch" "context7" "grep_app" "atlassian-mcp"]; };
-            explorer     = { model = "github-copilot/gpt-5.1-codex-mini"; variant = "low"; skills = []; mcps = []; };
-            designer     = { model = "github-copilot/gemini-3-flash-preview"; variant = "low"; skills = []; mcps = []; };
-            fixer        = { model = "github-copilot/gemini-3-flash-preview"; variant = "low"; skills = []; mcps = []; };
+            orchestrator = { model = "github-copilot/gpt-5.4"; skills = ["*"]; mcps = ["websearch"]; };
+            oracle       = { model = "github-copilot/gpt-5.4"; variant = "low"; skills = []; mcps = []; };
+            librarian    = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = ["websearch" "context7" "grep_app" "atlassian-mcp"]; };
+            explorer     = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = []; };
+            designer     = { model = "github-copilot/gemini-3.1-pro-preview"; variant = "low"; skills = []; mcps = []; };
+            fixer        = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = []; };
           };
         };
         tmux = { enabled = true; layout = "main-vertical"; main_pane_size = 60; };
