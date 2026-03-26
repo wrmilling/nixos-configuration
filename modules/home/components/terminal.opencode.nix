@@ -32,15 +32,17 @@ in
 
   config = lib.mkIf cfg.enable {
     # Packages
-    home.packages = [
+    home.packages = lib.mkMerge [
       (lib.mkIf pkgs.stdenv.isLinux [ pkgs.opencode ]) # Assumed installed through brew for Darwin due to security on work mac
-      pkgs.ripgrep
-      pkgs.fd
-      pkgs.eza
-      pkgs.procs
-      pkgs.sd
-      pkgs.jq
-      pkgs.yq
+      [
+        pkgs.ripgrep
+        pkgs.fd
+        pkgs.eza
+        pkgs.procs
+        pkgs.sd
+        pkgs.jq
+        pkgs.yq
+      ]
     ];
 
     # AI Agent Configuration
