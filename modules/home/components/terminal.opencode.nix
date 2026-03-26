@@ -103,6 +103,7 @@ in
     home.file.".config/opencode/oh-my-opencode-slim.json".text = builtins.toJSON (
       {
         preset = cfg.oh-my-opencode-slim.preset;
+        setDefaultAgent = true;
         presets = {
           personal = {
             orchestrator = { model = "github-copilot/gpt-5.4"; skills = ["*"]; mcps = ["websearch"]; };
