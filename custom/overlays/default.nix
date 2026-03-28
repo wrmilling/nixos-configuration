@@ -22,4 +22,13 @@
       config.allowUnfree = true;
     };
   };
+
+  # When applied, the unstable-small nixpkgs set (declared in the flake inputs)
+  # will be accessible through 'pkgs.unstable-small'
+  unstable-small-packages = final: _prev: {
+    unstable-small = import inputs.nixpkgs-unstable-small {
+      system = final.system;
+      config.allowUnfree = true;
+    };
+  };
 }

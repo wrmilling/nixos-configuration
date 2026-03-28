@@ -5,6 +5,7 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
 
     # Hardware
     hardware.url = "github:NixOS/nixos-hardware";
@@ -31,7 +32,7 @@
 
     # OpenCode Coding Agent
     opencode-git.url = "github:anomalyco/opencode/dev";
-    opencode-git.inputs.nixpkgs.follows = "nixpkgs";
+    opencode-git.inputs.nixpkgs.follows = "nixpkgs-unstable-small";
   };
 
 

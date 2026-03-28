@@ -39,6 +39,7 @@ in
         outputs.overlays.additions
         outputs.overlays.modifications
         outputs.overlays.stable-packages
+        outputs.overlays.unstable-small-packages
       ];
       config = {
         allowUnfree = true;
