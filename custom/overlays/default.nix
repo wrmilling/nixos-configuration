@@ -13,7 +13,10 @@
     # });
     opencode = inputs.opencode-git.packages.${final.stdenv.hostPlatform.system}.default.overrideAttrs (
       oldAttrs: {
-        buildInputs = (oldAttrs.buildInputs or [ ]) ++ [ final.vitejs ];
+      postPatch = (oldAttrs.postPatch or "") + ''
+        substituteInPlace packages/opencode/script/build.ts \
+          --replace-warn 'await createEmbeddedWebUIBundle()' 'console.log("Skipping Web UI build")'
+      '';
       }
     );
   };
