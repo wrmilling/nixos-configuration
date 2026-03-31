@@ -108,7 +108,7 @@ in
         nhd = "cd ~/.nixos-configuration && git pull && nh os switch --dry . && cd -";
         drs = "cd ~/.nixos-configuration && git pull && sudo darwin-rebuild switch --flake . && home-manager switch --flake . && cd -";
         dhs = "cd ~/.nixos-configuration && git pull && nh darwin switch . && nh home switch . && cd -";
-        ncl = "home-manager expire-generations \"$(date +%m/%d/%Y)\" && sudo nix-collect-garbage -d";
+        ncl = "home-manager expire-generations \"$(date +%m/%d/%Y)\" && sudo nix-collect-garbage -d && nix-collect-garbage -d";
 
         # hut
         hpl = "hut lists patchset list";
