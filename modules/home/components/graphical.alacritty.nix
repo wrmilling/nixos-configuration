@@ -28,7 +28,7 @@ in
           };
           italic = {
             family = lib.mkDefault "Monaspace Neon";
-            style = "Italic";
+            style = lib.mkDefault "Italic";
           };
           bold_italic = {
             family = lib.mkDefault "Monaspace Neon";
