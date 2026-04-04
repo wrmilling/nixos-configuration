@@ -47,6 +47,7 @@ in
         pkgs.vlc
         pkgs.hugo
         pkgs.libreoffice
+        pkgs.chromium # Will not run from nix-shell for some reason
       ]
     ];
   };
