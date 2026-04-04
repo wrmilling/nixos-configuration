@@ -112,16 +112,6 @@ in
             explorer     = { model = "zai-coding-plan/glm-5.1"; variant = "low"; skills = []; mcps = []; };
             designer     = { model = "github-copilot/gemini-3.1-pro-preview"; variant = "low"; skills = []; mcps = []; };
             fixer        = { model = "zai-coding-plan/glm-5.1"; variant = "low"; skills = []; mcps = []; };
-            council      = {
-              master       = { model = "github-copilot/claude-opus-4.6"; };
-              presets      = {
-                default      = {
-                  alpha        = { model = "github-copilot/gpt-5.4-mini"; };
-                  beta         = { model = "github-copilot/gemini-3.1-pro-preview"; };
-                  gamma        = { model = "github-copilot/gpt-5.3-codex"; };
-                };
-              };
-            };
           };
           work = {
             orchestrator = { model = "github-copilot/gpt-5.4"; skills = ["*"]; mcps = ["websearch"]; };
@@ -130,15 +120,21 @@ in
             explorer     = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = []; };
             designer     = { model = "github-copilot/gemini-3.1-pro-preview"; variant = "low"; skills = []; mcps = []; };
             fixer        = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = []; };
-            council      = {
-              master       = { model = "github-copilot/claude-opus-4.6"; };
-              presets      = {
-                default      = {
-                  alpha        = { model = "github-copilot/gpt-5.4-mini"; };
-                  beta         = { model = "github-copilot/gemini-3.1-pro-preview"; };
-                  gamma        = { model = "github-copilot/gpt-5.3-codex"; };
-                };
-              };
+          };
+        };
+        council = {
+          master = { model = "github-copilot/claude-opus-4.6"; };
+          default_preset = cfg.oh-my-opencode-slim.preset;
+          presets = {
+            personal = {
+              alpha = { model = "github-copilot/gpt-5.4-mini"; };
+              beta = { model = "github-copilot/gemini-3.1-pro-preview"; };
+              gamma = { model = "github-copilot/gpt-5.3-codex"; };
+            };
+            work = {
+              alpha = { model = "github-copilot/gpt-5.4-mini"; };
+              beta = { model = "github-copilot/gemini-3.1-pro-preview"; };
+              gamma = { model = "github-copilot/gpt-5.3-codex"; };
             };
           };
         };
