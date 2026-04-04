@@ -113,12 +113,12 @@ in
             designer     = { model = "github-copilot/gemini-3.1-pro-preview"; variant = "low"; skills = []; mcps = []; };
             fixer        = { model = "zai-coding-plan/glm-5.1"; variant = "low"; skills = []; mcps = []; };
             council      = {
-              master       = { model = "github-copilot/claude-opus-4.6" };
+              master       = { model = "github-copilot/claude-opus-4.6"; };
               presets      = {
                 default      = {
-                  alpha        = { model = "github-copilot/gpt-5.4-mini" };
-                  beta         = { model = "github-copilot/gemini-3.1-pro-preview" };
-                  gamma        = { model = "github-copilot/gpt-5.3-codex" };
+                  alpha        = { model = "github-copilot/gpt-5.4-mini"; };
+                  beta         = { model = "github-copilot/gemini-3.1-pro-preview"; };
+                  gamma        = { model = "github-copilot/gpt-5.3-codex"; };
                 };
               };
             };
@@ -131,12 +131,12 @@ in
             designer     = { model = "github-copilot/gemini-3.1-pro-preview"; variant = "low"; skills = []; mcps = []; };
             fixer        = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = []; };
             council      = {
-              master       = { model = "github-copilot/claude-opus-4.6" };
+              master       = { model = "github-copilot/claude-opus-4.6"; };
               presets      = {
                 default      = {
-                  alpha        = { model = "github-copilot/gpt-5.4-mini" };
-                  beta         = { model = "github-copilot/gemini-3.1-pro-preview" };
-                  gamma        = { model = "github-copilot/gpt-5.3-codex" };
+                  alpha        = { model = "github-copilot/gpt-5.4-mini"; };
+                  beta         = { model = "github-copilot/gemini-3.1-pro-preview"; };
+                  gamma        = { model = "github-copilot/gpt-5.3-codex"; };
                 };
               };
             };
