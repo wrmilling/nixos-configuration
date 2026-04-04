@@ -85,7 +85,7 @@ in
         instructions = [
           ".github/copilot-instructions.md"
         ];
-        plugin = [ "oh-my-opencode-slim" ];
+        plugin = [ "oh-my-opencode-slim@latest" ];
         # Default to a cheap model for now
         model = "github-copilot/gpt-5-mini";
         mcp = {
