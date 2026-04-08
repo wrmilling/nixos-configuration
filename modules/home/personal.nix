@@ -48,6 +48,7 @@ in
         pkgs.hugo
         pkgs.libreoffice
         pkgs.chromium # Will not run from nix-shell for some reason
+        pkgs.calibre
       ]
     ];
   };
