@@ -31,7 +31,7 @@
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
     # OpenCode Coding Agent
-    opencode-git.url = "github:wrmilling/opencode/dev";
+    opencode-git.url = "github:anomalyco/opencode/dev";
     opencode-git.inputs.nixpkgs.follows = "nixpkgs-unstable-small";
   };
 
