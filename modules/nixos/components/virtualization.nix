@@ -16,11 +16,15 @@ in
     environment.systemPackages = [
       pkgs.qemu
       pkgs.qemu-utils
+      pkgs.OVMF
     ];
 
     virtualisation.libvirtd = {
       enable = true;
-      qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
+      qemu = {
+        vhostUserPackages = with pkgs; [ virtiofsd ];
+        swtpm.enable = true;
+      };  
     };
 
     programs.virt-manager.enable = true;
