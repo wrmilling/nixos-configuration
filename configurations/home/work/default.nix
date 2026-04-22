@@ -10,7 +10,10 @@
 {
   modules = {
     homeType.darwin.enable = true;
-    home.terminal.opencode.oh-my-opencode-slim.preset = "work";
+    home.terminal.opencode = {
+      oh-my-opencode-slim.preset = "work";
+      context7ApiKey = secrets.opencode.context7.apiKey;
+    };
   };
 
   home = {

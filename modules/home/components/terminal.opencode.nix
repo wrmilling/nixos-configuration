@@ -28,6 +28,19 @@ in
         description = "Agent model presets to use, currently defined are 'personal' and 'work'";
       };
     };
+
+    context7ApiKey = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Optional Context7 API key. When set, exported as the
+        CONTEXT7_API_KEY environment variable which the oh-my-openagent
+        plugin reads to authenticate against the Context7 MCP.
+
+        Host/user configurations that want Context7 authentication should
+        supply this value (typically from secrets/secrets.nix).
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -44,6 +57,13 @@ in
         pkgs.yq
       ]
     ];
+
+    # Environment variables consumed by oh-my-openagent's built-in MCPs.
+    # Context7 reads CONTEXT7_API_KEY at runtime to attach a bearer token
+    # to the remote MCP. See: src/mcp/context7.ts in code-yeongyu/oh-my-openagent.
+    home.sessionVariables = lib.mkIf (cfg.context7ApiKey != null) {
+      CONTEXT7_API_KEY = cfg.context7ApiKey;
+    };
 
     # AI Agent Configuration
     home.file."~/.config/opencode/AGENTS.md" = {
@@ -85,61 +105,316 @@ in
         instructions = [
           ".github/copilot-instructions.md"
         ];
-        plugin = [ "oh-my-opencode-slim" ];
+        plugin = [
+          # "oh-my-opencode-slim"
+          "oh-my-openagent"
+        ];
         # Default to a cheap model for now
         model = "github-copilot/gpt-5-mini";
         mcp = {
           "atlassian-mcp" = {
             type = "remote";
             url = "https://mcp.atlassian.com/v1/mcp";
-            oauth = {};
+            oauth = { };
           };
         };
       }
       // cfg.settings
     );
 
+    # oh-my-openagent plugin configuration
+    # Maps agents and categories to models available through the GitHub Copilot subscription.
+    # See: https://github.com/code-yeongyu/oh-my-openagent/blob/dev/docs/reference/configuration.md
+    home.file.".config/opencode/oh-my-openagent.json".text = builtins.toJSON {
+      "$schema" =
+        "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json";
+
+      # Per-agent model overrides. All models are pinned to github-copilot/*
+      # so they consume the GitHub Copilot subscription rather than other providers.
+      agents = {
+        # Main orchestrator - Claude Opus is the strongest orchestration model
+        sisyphus = {
+          model = "github-copilot/claude-opus-4.7";
+          fallback_models = [
+            "github-copilot/gpt-5.4"
+            "github-copilot/claude-sonnet-4.6"
+          ];
+        };
+
+        # Autonomous deep worker - GPT-5.4 is tuned for end-to-end execution
+        hephaestus = {
+          model = "github-copilot/gpt-5.4";
+          variant = "medium";
+          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+        };
+
+        # Strategic planner - benefits from a strong reasoning model
+        prometheus = {
+          model = "github-copilot/claude-opus-4.7";
+          fallback_models = [ "github-copilot/gpt-5.4" ];
+        };
+
+        # High-IQ read-only consultant for architecture/debugging
+        oracle = {
+          model = "github-copilot/gpt-5.4";
+          variant = "high";
+          fallback_models = [
+            "github-copilot/claude-opus-4.7"
+            "github-copilot/gemini-3.1-pro-preview"
+          ];
+        };
+
+        # Cheap, fast research/docs lookup agent
+        librarian = {
+          model = "github-copilot/claude-haiku-4.5";
+          fallback_models = [
+            "github-copilot/gpt-5-mini"
+            "github-copilot/gemini-3-flash"
+          ];
+        };
+
+        # Fast contextual codebase grep agent
+        explore = {
+          model = "github-copilot/grok-code-fast-1";
+          fallback_models = [
+            "github-copilot/claude-haiku-4.5"
+            "github-copilot/gpt-5-mini"
+          ];
+        };
+
+        # Multimodal/visual analysis - needs vision-capable model
+        multimodal-looker = {
+          model = "github-copilot/gpt-5.4";
+          fallback_models = [ "github-copilot/gemini-3.1-pro-preview" ];
+        };
+
+        # Pre-planning consultant - identifies ambiguities/failure points
+        metis = {
+          model = "github-copilot/claude-opus-4.7";
+          fallback_models = [ "github-copilot/gpt-5.4" ];
+        };
+
+        # Plan critic - rigorous review needs a strong reasoning model
+        momus = {
+          model = "github-copilot/gpt-5.4";
+          variant = "xhigh";
+          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+        };
+
+        # General-purpose / Sisyphus-Junior helper agents
+        atlas = {
+          model = "github-copilot/claude-sonnet-4.6";
+          fallback_models = [ "github-copilot/gpt-5.4-mini" ];
+        };
+        sisyphus-junior = {
+          model = "github-copilot/claude-sonnet-4.6";
+          fallback_models = [ "github-copilot/gpt-5.4-mini" ];
+        };
+      };
+
+      # Category model mappings - drives the task() delegation tool.
+      # Sisyphus picks a category, the harness picks the model.
+      categories = {
+        # Frontend / UI / UX - Gemini Pro is strongest at visual work
+        visual-engineering = {
+          model = "github-copilot/gemini-3.1-pro-preview";
+          variant = "high";
+          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+        };
+
+        # Hardest logic/architecture problems
+        ultrabrain = {
+          model = "github-copilot/gpt-5.4";
+          variant = "xhigh";
+          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+        };
+
+        # Goal-oriented autonomous work, thorough research before action
+        deep = {
+          model = "github-copilot/gpt-5.4";
+          variant = "medium";
+          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+        };
+
+        # Creative / unconventional approaches
+        artistry = {
+          model = "github-copilot/gemini-3.1-pro-preview";
+          variant = "high";
+          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+        };
+
+        # Trivial single-file changes
+        quick = {
+          model = "github-copilot/gpt-5.4-mini";
+          fallback_models = [
+            "github-copilot/claude-haiku-4.5"
+            "github-copilot/gpt-5-nano"
+          ];
+        };
+
+        # Generic low-effort work
+        unspecified-low = {
+          model = "github-copilot/claude-sonnet-4.6";
+          fallback_models = [ "github-copilot/gpt-5.4-mini" ];
+        };
+
+        # Generic high-effort work
+        unspecified-high = {
+          model = "github-copilot/claude-opus-4.7";
+          variant = "max";
+          fallback_models = [ "github-copilot/gpt-5.4" ];
+        };
+
+        # Documentation, prose, technical writing
+        writing = {
+          model = "github-copilot/gemini-3-flash";
+          fallback_models = [ "github-copilot/claude-sonnet-4.6" ];
+        };
+      };
+
+      # Auto-fallback to backup models on transient API errors
+      runtime_fallback = {
+        enabled = true;
+        notify_on_fallback = true;
+      };
+
+      # Limit concurrency on the single Copilot provider so we don't get rate-limited
+      background_task = {
+        defaultConcurrency = 5;
+        providerConcurrency = {
+          github-copilot = 5;
+        };
+      };
+
+      tmux = {
+        enabled = true;
+      };
+    };
+
     # Default plugin configuration for oh-my-opencode-slim
-    home.file.".config/opencode/oh-my-opencode-slim.json".text = builtins.toJSON (
-      {
-        preset = cfg.oh-my-opencode-slim.preset;
-        setDefaultAgent = true;
+    home.file.".config/opencode/oh-my-opencode-slim.json".text = builtins.toJSON ({
+      preset = cfg.oh-my-opencode-slim.preset;
+      setDefaultAgent = true;
+      presets = {
+        personal = {
+          orchestrator = {
+            model = "github-copilot/gpt-5.4";
+            skills = [ "*" ];
+            mcps = [ "websearch" ];
+          };
+          oracle = {
+            model = "github-copilot/gpt-5.4";
+            variant = "low";
+            skills = [ ];
+            mcps = [ ];
+          };
+          librarian = {
+            model = "github-copilot/gpt-5.4-mini";
+            variant = "low";
+            skills = [ ];
+            mcps = [
+              "websearch"
+              "context7"
+              "grep_app"
+            ];
+          };
+          explorer = {
+            model = "zai-coding-plan/glm-5.1";
+            variant = "low";
+            skills = [ ];
+            mcps = [ ];
+          };
+          designer = {
+            model = "github-copilot/gemini-3.1-pro-preview";
+            variant = "low";
+            skills = [ ];
+            mcps = [ ];
+          };
+          fixer = {
+            model = "zai-coding-plan/glm-5.1";
+            variant = "low";
+            skills = [ ];
+            mcps = [ ];
+          };
+        };
+        work = {
+          orchestrator = {
+            model = "github-copilot/gpt-5.4";
+            skills = [ "*" ];
+            mcps = [ "websearch" ];
+          };
+          oracle = {
+            model = "github-copilot/gpt-5.4";
+            variant = "low";
+            skills = [ ];
+            mcps = [ ];
+          };
+          librarian = {
+            model = "github-copilot/gpt-5.4-mini";
+            variant = "low";
+            skills = [ ];
+            mcps = [
+              "websearch"
+              "context7"
+              "grep_app"
+              "atlassian-mcp"
+            ];
+          };
+          explorer = {
+            model = "github-copilot/gpt-5.4-mini";
+            variant = "low";
+            skills = [ ];
+            mcps = [ ];
+          };
+          designer = {
+            model = "github-copilot/gemini-3.1-pro-preview";
+            variant = "low";
+            skills = [ ];
+            mcps = [ ];
+          };
+          fixer = {
+            model = "github-copilot/gpt-5.4-mini";
+            variant = "low";
+            skills = [ ];
+            mcps = [ ];
+          };
+        };
+      };
+      council = {
+        master = {
+          model = "github-copilot/claude-opus-4.6";
+        };
+        default_preset = cfg.oh-my-opencode-slim.preset;
         presets = {
           personal = {
-            orchestrator = { model = "github-copilot/gpt-5.4"; skills = ["*"]; mcps = ["websearch"]; };
-            oracle       = { model = "github-copilot/gpt-5.4"; variant = "low"; skills = []; mcps = []; };
-            librarian    = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = ["websearch" "context7" "grep_app"]; };
-            explorer     = { model = "zai-coding-plan/glm-5.1"; variant = "low"; skills = []; mcps = []; };
-            designer     = { model = "github-copilot/gemini-3.1-pro-preview"; variant = "low"; skills = []; mcps = []; };
-            fixer        = { model = "zai-coding-plan/glm-5.1"; variant = "low"; skills = []; mcps = []; };
+            alpha = {
+              model = "github-copilot/gpt-5.4-mini";
+            };
+            beta = {
+              model = "github-copilot/gemini-3.1-pro-preview";
+            };
+            gamma = {
+              model = "github-copilot/gpt-5.3-codex";
+            };
           };
           work = {
-            orchestrator = { model = "github-copilot/gpt-5.4"; skills = ["*"]; mcps = ["websearch"]; };
-            oracle       = { model = "github-copilot/gpt-5.4"; variant = "low"; skills = []; mcps = []; };
-            librarian    = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = ["websearch" "context7" "grep_app" "atlassian-mcp"]; };
-            explorer     = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = []; };
-            designer     = { model = "github-copilot/gemini-3.1-pro-preview"; variant = "low"; skills = []; mcps = []; };
-            fixer        = { model = "github-copilot/gpt-5.4-mini"; variant = "low"; skills = []; mcps = []; };
-          };
-        };
-        council = {
-          master = { model = "github-copilot/claude-opus-4.6"; };
-          default_preset = cfg.oh-my-opencode-slim.preset;
-          presets = {
-            personal = {
-              alpha = { model = "github-copilot/gpt-5.4-mini"; };
-              beta = { model = "github-copilot/gemini-3.1-pro-preview"; };
-              gamma = { model = "github-copilot/gpt-5.3-codex"; };
+            alpha = {
+              model = "github-copilot/gpt-5.4-mini";
             };
-            work = {
-              alpha = { model = "github-copilot/gpt-5.4-mini"; };
-              beta = { model = "github-copilot/gemini-3.1-pro-preview"; };
-              gamma = { model = "github-copilot/gpt-5.3-codex"; };
+            beta = {
+              model = "github-copilot/gemini-3.1-pro-preview";
+            };
+            gamma = {
+              model = "github-copilot/gpt-5.3-codex";
             };
           };
         };
-        tmux = { enabled = true; layout = "main-vertical"; main_pane_size = 60; };
-      }
-    );
+      };
+      tmux = {
+        enabled = true;
+        layout = "main-vertical";
+        main_pane_size = 60;
+      };
+    });
   };
 }
