@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.modules.nixos.sshd;
+  bannerFile = pkgs.writeText "sshd-banner" cfg.banner;
 in
 {
   options.modules.nixos.sshd = {
@@ -22,7 +23,7 @@ in
     services.openssh = {
       enable = lib.mkDefault true;
       settings = {
-        Banner = config.modules.nixos.sshd.banner;
+        Banner = lib.mkIf (cfg.banner != "") (toString bannerFile);
         PermitRootLogin = lib.mkDefault "no";
         PasswordAuthentication = lib.mkDefault false;
       };
