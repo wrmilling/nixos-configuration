@@ -21,8 +21,8 @@ in
     # Enable the OpenSSH daemon.
     services.openssh = {
       enable = lib.mkDefault true;
-      banner = config.modules.nixos.sshd.banner;
       settings = {
+        Banner = config.modules.nixos.sshd.banner;
         PermitRootLogin = lib.mkDefault "no";
         PasswordAuthentication = lib.mkDefault false;
       };
