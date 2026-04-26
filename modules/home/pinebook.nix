@@ -21,6 +21,7 @@ in
       home.terminal.git.enable = true;
       home.terminal.gpg.enable = true;
       home.terminal.k8s-utils.enable = true;
+      home.terminal.opencode.enable = true;
       home.terminal.starship.enable = true;
       home.terminal.tmux.enable = true;
       home.terminal.vim.enable = true;
