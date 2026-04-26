@@ -18,6 +18,7 @@ in
       package = pkgs.firefox.override {
         cfg.nativeMessagingHosts.packages = [ pkgs.plasma6Packages.plasma-browser-integration ];
       };
+      configPath = ".mozilla/firefox";
       profiles.winston = {
         id = 0;
         isDefault = true;
