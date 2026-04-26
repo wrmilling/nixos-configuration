@@ -13,10 +13,13 @@
     # });
     opencode = inputs.opencode-git.packages.${final.stdenv.hostPlatform.system}.default.overrideAttrs (
       oldAttrs: {
-      postPatch = (oldAttrs.postPatch or "") + ''
-        substituteInPlace packages/opencode/script/build.ts \
-          --replace-warn 'await createEmbeddedWebUIBundle()' 'console.log("Skipping Web UI build")'
-      '';
+        postPatch = (oldAttrs.postPatch or "") + ''
+          # https://github.com/NixOS/nixpkgs/pull/508770
+          substituteInPlace package.json --replace-fail 'bun@1.3.13' 'bun@1.3.11'
+
+          substituteInPlace packages/opencode/script/build.ts \
+            --replace-warn 'await createEmbeddedWebUIBundle()' 'console.log("Skipping Web UI build")'
+        '';
       }
     );
   };
