@@ -31,12 +31,10 @@ in
       '';
     };
 
-    oh-my-opencode-slim = {
-      preset = lib.mkOption {
-        type = lib.types.str;
-        default = "personal";
-        description = "Agent model presets to use, currently defined are 'personal' and 'work'";
-      };
+    preset = lib.mkOption {
+      type = lib.types.str;
+      default = "personal";
+      description = "Agent model presets to use, currently defined are 'personal' and 'work'";
     };
 
     context7ApiKey = lib.mkOption {
@@ -301,7 +299,7 @@ in
 
     # Default plugin configuration for oh-my-opencode-slim
     home.file.".config/opencode/oh-my-opencode-slim.json".text = builtins.toJSON ({
-      preset = cfg.oh-my-opencode-slim.preset;
+      preset = cfg.preset;
       setDefaultAgent = true;
       presets = {
         personal = {
@@ -390,9 +388,9 @@ in
       };
       council = {
         master = {
-          model = "github-copilot/claude-opus-4.6";
+          model = if cfg.preset == "work" then "github-copilot/claude-opus-4.6" else "github-copilot/gpt-5.4";
         };
-        default_preset = cfg.oh-my-opencode-slim.preset;
+        default_preset = cfg.preset;
         presets = {
           personal = {
             alpha = {
