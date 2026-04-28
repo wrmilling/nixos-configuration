@@ -134,10 +134,11 @@ in
       agents = {
         # Main orchestrator - Claude Opus is the strongest orchestration model
         sisyphus = {
-          model = "github-copilot/claude-opus-4.7";
+          model = "github-copilot/claude-opus-4.6";
           fallback_models = [
-            "github-copilot/gpt-5.4"
-            "github-copilot/claude-sonnet-4.6"
+            "github-copilot/gpt-5.4-mini"
+            "github-copilot/claude-haiku-4.5"
+            "github-copilot/gpt-5.4-nano"
           ];
         };
 
@@ -145,12 +146,12 @@ in
         hephaestus = {
           model = "github-copilot/gpt-5.4";
           variant = "medium";
-          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+          fallback_models = [ "github-copilot/claude-opus-4.6" ];
         };
 
         # Strategic planner - benefits from a strong reasoning model
         prometheus = {
-          model = "github-copilot/claude-opus-4.7";
+          model = "github-copilot/claude-opus-4.6";
           fallback_models = [ "github-copilot/gpt-5.4" ];
         };
 
@@ -159,8 +160,8 @@ in
           model = "github-copilot/gpt-5.4";
           variant = "high";
           fallback_models = [
-            "github-copilot/claude-opus-4.7"
-            "github-copilot/gemini-3.1-pro-preview"
+            "github-copilot/claude-opus-4.6"
+            "github-copilot/gemini-3.1-pro"
           ];
         };
 
@@ -168,7 +169,7 @@ in
         librarian = {
           model = "github-copilot/claude-haiku-4.5";
           fallback_models = [
-            "github-copilot/gpt-5-mini"
+            "github-copilot/gpt-5.4-mini"
             "github-copilot/gemini-3-flash"
           ];
         };
@@ -178,19 +179,19 @@ in
           model = "github-copilot/grok-code-fast-1";
           fallback_models = [
             "github-copilot/claude-haiku-4.5"
-            "github-copilot/gpt-5-mini"
+            "github-copilot/gpt-5.4-mini"
           ];
         };
 
         # Multimodal/visual analysis - needs vision-capable model
         multimodal-looker = {
           model = "github-copilot/gpt-5.4";
-          fallback_models = [ "github-copilot/gemini-3.1-pro-preview" ];
+          fallback_models = [ "github-copilot/gemini-3.1-pro" ];
         };
 
         # Pre-planning consultant - identifies ambiguities/failure points
         metis = {
-          model = "github-copilot/claude-opus-4.7";
+          model = "github-copilot/claude-opus-4.6";
           fallback_models = [ "github-copilot/gpt-5.4" ];
         };
 
@@ -198,7 +199,7 @@ in
         momus = {
           model = "github-copilot/gpt-5.4";
           variant = "xhigh";
-          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+          fallback_models = [ "github-copilot/claude-opus-4.6" ];
         };
 
         # General-purpose / Sisyphus-Junior helper agents
@@ -217,30 +218,30 @@ in
       categories = {
         # Frontend / UI / UX - Gemini Pro is strongest at visual work
         visual-engineering = {
-          model = "github-copilot/gemini-3.1-pro-preview";
+          model = "github-copilot/gemini-3.1-pro";
           variant = "high";
-          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+          fallback_models = [ "github-copilot/claude-opus-4.6" ];
         };
 
         # Hardest logic/architecture problems
         ultrabrain = {
           model = "github-copilot/gpt-5.4";
           variant = "xhigh";
-          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+          fallback_models = [ "github-copilot/claude-opus-4.6" ];
         };
 
         # Goal-oriented autonomous work, thorough research before action
         deep = {
           model = "github-copilot/gpt-5.4";
           variant = "medium";
-          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+          fallback_models = [ "github-copilot/claude-opus-4.6" ];
         };
 
         # Creative / unconventional approaches
         artistry = {
-          model = "github-copilot/gemini-3.1-pro-preview";
+          model = "github-copilot/gemini-3.1-pro";
           variant = "high";
-          fallback_models = [ "github-copilot/claude-opus-4.7" ];
+          fallback_models = [ "github-copilot/claude-opus-4.6" ];
         };
 
         # Trivial single-file changes
@@ -248,7 +249,7 @@ in
           model = "github-copilot/gpt-5.4-mini";
           fallback_models = [
             "github-copilot/claude-haiku-4.5"
-            "github-copilot/gpt-5-nano"
+            "github-copilot/gpt-5.4-nano"
           ];
         };
 
@@ -260,7 +261,7 @@ in
 
         # Generic high-effort work
         unspecified-high = {
-          model = "github-copilot/claude-opus-4.7";
+          model = "github-copilot/claude-opus-4.6";
           variant = "max";
           fallback_models = [ "github-copilot/gpt-5.4" ];
         };
@@ -325,7 +326,7 @@ in
             mcps = [ ];
           };
           designer = {
-            model = "github-copilot/gemini-3.1-pro-preview";
+            model = "github-copilot/gemini-3.1-pro";
             variant = "low";
             skills = [ ];
             mcps = [ ];
@@ -367,7 +368,7 @@ in
             mcps = [ ];
           };
           designer = {
-            model = "github-copilot/gemini-3.1-pro-preview";
+            model = "github-copilot/gemini-3.1-pro";
             variant = "low";
             skills = [ ];
             mcps = [ ];
@@ -391,7 +392,7 @@ in
               model = "github-copilot/gpt-5.4-mini";
             };
             beta = {
-              model = "github-copilot/gemini-3.1-pro-preview";
+              model = "github-copilot/gemini-3.1-pro";
             };
             gamma = {
               model = "github-copilot/gpt-5.3-codex";
@@ -402,7 +403,7 @@ in
               model = "github-copilot/gpt-5.4-mini";
             };
             beta = {
-              model = "github-copilot/gemini-3.1-pro-preview";
+              model = "github-copilot/gemini-3.1-pro";
             };
             gamma = {
               model = "github-copilot/gpt-5.3-codex";
