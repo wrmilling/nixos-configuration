@@ -21,6 +21,16 @@ in
       description = "OpenCode configuration settings";
     };
 
+    plugin = lib.mkOption {
+      type = lib.types.listOf (lib.types.enum [ "oh-my-opencode-slim" "oh-my-openagent" ]);
+      default = [ "oh-my-opencode-slim" ];
+      description = ''
+        Which oh-my-opencode plugin(s) to activate in opencode.json.
+        Use [ "oh-my-openagent" ] for the work profile and [ "oh-my-opencode-slim" ] otherwise.
+        Multiple plugins can be specified together.
+      '';
+    };
+
     oh-my-opencode-slim = {
       preset = lib.mkOption {
         type = lib.types.str;
@@ -105,10 +115,7 @@ in
         instructions = [
           ".github/copilot-instructions.md"
         ];
-        plugin = [
-          # "oh-my-opencode-slim"
-          "oh-my-openagent"
-        ];
+        plugin = cfg.plugin;
         # Default to a cheap model for now
         model = "github-copilot/gpt-5-mini";
         mcp = {

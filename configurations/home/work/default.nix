@@ -11,6 +11,7 @@
   modules = {
     homeType.darwin.enable = true;
     home.terminal.opencode = {
+      plugin = [ "oh-my-openagent" ];
       oh-my-opencode-slim.preset = "work";
       context7ApiKey = secrets.opencode.context7.apiKey;
     };
