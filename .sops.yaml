@@ -15,7 +15,7 @@ keys:
   - &nk3s-amd64-0 age1m3e8kmzps4machp9jm09x8sr7s9heqz7te0587h2hzevznhy655qpmgd8d
   - &nk3s-amd64-a age1kzyfuus4dmrhzcy6xekst93thvsy3dt33j0l4dr7duae3vsf9shqdfhev6
   - &nk3s-amd64-b age1n3ulakf62eh406wvkcvh7pl5mldgmjzgxx7ndc9dw4m3llgmddfsvelv8h
-  - &nk3s-amd64-c age1ry7h4twlsmu2yvflz3pnla3k6gx0uyujf06y03tpc2tgjf72tvgqdzqzaw
+  - &nk3s-amd64-c age12em95kwjmqpc2qtltuekwj64nr0k3ca5cd7nk6kf6lx4nendau0sk683c7
   - &nk3s-amd64-d age1fp806wdswtnckzukly9m6k7fam795cr0lqdft4ywpqw6am52aspqdfh6v2
 
 stores:
