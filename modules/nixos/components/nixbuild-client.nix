@@ -1,38 +1,41 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
   cfg = config.modules.nixos.nixbuild-client;
+  nixbuildHost = "bob.${config.networking.domain}";
 in
 {
   options.modules.nixos.nixbuild-client = {
     enable = lib.mkEnableOption "nixbuild client packages / settings";
+
+    sshKeyPath = lib.mkOption {
+      type = lib.types.str;
+      default = "/etc/nixbuild/nixbuild-client";
+      description = "Path to the SSH private key used for the nixbuild remote builder";
+      example = "/run/secrets/nixbuild/client-ssh-key";
+    };
   };
 
   config = lib.mkIf cfg.enable {
-    programs.ssh.extraConfig = ''
-      Host nixbuild.${config.networking.domain}
-        HostName hermes.${config.networking.domain}
-        User nixbuild
-        PubkeyAcceptedKeyTypes ssh-ed25519
-        IdentityFile /etc/nixbuild/nixbuild-client
-    '';
-
     programs.ssh.knownHosts = {
       nixbuild = {
-        hostNames = [ "hermes.${config.networking.domain}" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE/hRd7PJ/Qby/nB34LNkOPkwyTsc2eJAyaL0ANH1V+h Hermes.BuildHost";
+        hostNames = [ nixbuildHost ];
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIoeugUxFnpQMH50+dpEX2x8YAgw0KfBSzcXoD0fdZmp nixbuild-host";
       };
     };
 
     nix = {
       distributedBuilds = true;
+      settings.builders-use-substitutes = true;
       buildMachines = [
         {
-          hostName = "hermes.${config.networking.domain}";
+          hostName = nixbuildHost;
+          protocol = "ssh-ng";
+          sshUser = "nixbuild";
+          sshKey = cfg.sshKeyPath;
           system = "aarch64-linux";
           maxJobs = 4;
           supportedFeatures = [ ];

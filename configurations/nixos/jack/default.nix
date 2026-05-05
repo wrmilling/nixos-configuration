@@ -29,9 +29,19 @@
     sopsFile = ../../../secrets/pihole.yaml;
   };
 
+  sops.secrets."nixbuild/client-ssh-key" = {
+    owner = "root";
+    mode = "0400";
+    sopsFile = ../../../secrets/nixbuild-arm.yaml;
+  };
+
   modules = {
     machineType.server.enable = true;
     nixos.sshd.banner = "${secrets.sshd.banner}";
+    nixos.nixbuild-client = {
+      enable = true;
+      sshKeyPath = config.sops.secrets."nixbuild/client-ssh-key".path;
+    };
     nixos.pihole = {
       enable = true;
       additionalHosts = config.sops.secrets."pihole/additionalHosts".path;

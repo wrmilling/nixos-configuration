@@ -13,16 +13,20 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    users.groups.nixbuild = { };
+
     users.users.nixbuild = {
-      uid = 2000;
-      shell = pkgs.fish;
-      isNormalUser = true;
-      home = "/home/nixbuild";
-      description = "NixOS Builder";
-      extraGroups = [ ];
+      isSystemUser = true;
+      group = "nixbuild";
+      createHome = true;
+      home = "/var/lib/nixbuild";
+      shell = pkgs.bash;
+      description = "Nix remote builder";
       openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE/hRd7PJ/Qby/nB34LNkOPkwyTsc2eJAyaL0ANH1V+h Hermes.BuildHost"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJg6g95m4hjhES+SZx2fRY2EL6HNFVedpKHOuZuk4c/v nixbuild-client"
       ];
     };
+
+    # nix.settings.trusted-users = lib.mkAfter [ "nixbuild" ];
   };
 }
