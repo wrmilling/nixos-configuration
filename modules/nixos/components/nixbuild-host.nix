@@ -27,6 +27,6 @@ in
       ];
     };
 
-    # nix.settings.trusted-users = lib.mkAfter [ "nixbuild" ];
+    nix.settings.trusted-users = lib.mkAfter [ "nixbuild" ];
   };
 }
