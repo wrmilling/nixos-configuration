@@ -85,3 +85,11 @@ creation_rules:
           - *primary
         age:
           - *bob
+  - path_regex: secrets/nixbuild-arm.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *isaac
+          - *jack
+          - *owen
