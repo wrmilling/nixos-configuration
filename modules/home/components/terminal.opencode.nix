@@ -63,6 +63,12 @@ in
         pkgs.sd
         pkgs.jq
         pkgs.yq
+        pkgs.gopls
+        pkgs.nixd
+        pkgs.rust-analyzer
+        pkgs.bash-language-server
+        pkgs.marksman
+        pkgs.fish-lsp
       ]
     ];
 
@@ -121,6 +127,19 @@ in
             type = "remote";
             url = "https://mcp.atlassian.com/v1/mcp";
             oauth = { };
+          };
+        };
+        lsp = {
+          fish = {
+            command = [ "fish-lsp" ];
+            extensions = [ ".fish" ];
+          };
+          markdown = {
+            command = [ "marksman" ];
+            extensions = [
+              ".md"
+              ".markdown"
+            ];
           };
         };
       }
