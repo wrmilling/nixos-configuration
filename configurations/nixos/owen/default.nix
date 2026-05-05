@@ -20,6 +20,8 @@
     sopsFile = ../../../secrets/nixbuild-arm.yaml;
   };
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  
   modules = {
     machineType.server.enable = true;
     nixos.sshd.banner = "${secrets.sshd.banner}";
@@ -29,7 +31,7 @@
     };
   };
 
-  hardware.raspberry-pi."4".poe-hat.enable = true;
+  # hardware.raspberry-pi."4".poe-hat.enable = true;
 
   # Artifact of the nixos user being created by default on the rpi images
   users.users.w4cbe.uid = lib.mkForce 1001;

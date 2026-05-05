@@ -18,6 +18,7 @@ in
       pkgs.font-awesome_4
       pkgs.corefonts
       pkgs.monaspace
+      pkgs.noto-fonts
     ];
   };
 }

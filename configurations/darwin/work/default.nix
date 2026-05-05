@@ -79,6 +79,7 @@
     pkgs.source-code-pro
     pkgs.font-awesome_4
     pkgs.monaspace
+    pkgs.noto-fonts
   ];
 
   programs = {
