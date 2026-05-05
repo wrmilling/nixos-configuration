@@ -6,6 +6,13 @@
 let
   cfg = config.modules.nixos.nixbuild-client;
   nixbuildHost = "bob.${config.networking.domain}";
+  nixbuildSupportedFeatures = [
+    "nixos-test"
+    "benchmark"
+    "big-parallel"
+    "kvm"
+    "gccarch-armv8-a"
+  ];
 in
 {
   options.modules.nixos.nixbuild-client = {
@@ -38,7 +45,7 @@ in
           sshKey = cfg.sshKeyPath;
           system = "aarch64-linux";
           maxJobs = 4;
-          supportedFeatures = [ ];
+          supportedFeatures = nixbuildSupportedFeatures;
         }
       ];
     };
