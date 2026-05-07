@@ -12,6 +12,7 @@
     inputs.hardware.nixosModules.raspberry-pi-4
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
+    ./poe-hat-v7.nix
   ];
 
   sops.secrets."nixbuild/client-ssh-key" = {
@@ -30,8 +31,6 @@
       sshKeyPath = config.sops.secrets."nixbuild/client-ssh-key".path;
     };
   };
-
-  # hardware.raspberry-pi."4".poe-hat.enable = true;
 
   # Artifact of the nixos user being created by default on the rpi images
   users.users.w4cbe.uid = lib.mkForce 1001;
