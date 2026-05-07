@@ -12,7 +12,6 @@
     inputs.hardware.nixosModules.raspberry-pi-4
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
-    ./poe-hat-v7.nix
   ];
 
   sops.secrets."nixbuild/client-ssh-key" = {
@@ -22,7 +21,7 @@
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  
+
   modules = {
     machineType.server.enable = true;
     nixos.sshd.banner = "${secrets.sshd.banner}";
@@ -30,6 +29,7 @@
       enable = true;
       sshKeyPath = config.sops.secrets."nixbuild/client-ssh-key".path;
     };
+    nixos.rpi-poe-hat.enable = true;
   };
 
   # Artifact of the nixos user being created by default on the rpi images
