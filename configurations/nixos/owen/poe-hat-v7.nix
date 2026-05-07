@@ -2,7 +2,7 @@
 
 {
   hardware.raspberry-pi."4".apply-overlays-dtmerge.enable = lib.mkDefault true;
-  hardware.deviceTree.filter = lib.mkDefault "bcm2711-rpi-4*.dtb";
+  hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-4*.dtb";
 
   hardware.deviceTree.overlays = [
     {
