@@ -14,12 +14,12 @@
   ];
 
   sops.secrets."headplane/cookie_secret_path" = {
-    owner = "headplane";
+    owner = services.headscale.user;
     sopsFile = ../../../secrets/linus.yaml;
   };
 
   sops.secrets."headplane/headscale_psk" = {
-    owner = "headplane";
+    owner = services.headscale.user;
     sopsFile = ../../../secrets/linus.yaml;
   };
 
