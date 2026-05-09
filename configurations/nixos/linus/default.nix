@@ -13,6 +13,16 @@
     ./hardware.nix
   ];
 
+  sops.secrets."headplane/cookie_secret_path" = {
+    owner = "headplane";
+    sopsFile = ../../../secrets/linus.yaml;
+  };
+
+  sops.secrets."headplane/headscale_psk" = {
+    owner = "headplane";
+    sopsFile = ../../../secrets/linus.yaml;
+  };
+
   modules = {
     machineType.server.enable = true;
     nixos.sshd.banner = "${secrets.sshd.p_banner}";
@@ -62,6 +72,13 @@
 
     headplane = {
       enable = true;
+      settings = {
+        integration.agent = {
+          enabled = true;
+          pre_authkey_path = config.sops.secrets."headplane/headscale_psk".path;
+        };
+        cookie_secret_path = config.sops.secrets."headplane/cookie_secret_path".path;
+      }
     }
 
     nginx.enable = true;
@@ -76,6 +93,11 @@
       enableACME = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:${toString config.services.headscale.port}";
+        proxyWebsockets = true;
+      };
+
+      locations."/admin/" = {
+        proxyPass = "http://127.0.0.1:${toString config.services.headplane.settings.server.port}";
         proxyWebsockets = true;
       };
     };
