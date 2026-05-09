@@ -1,24 +1,35 @@
 {
   config,
   lib,
+  options,
   ...
 }:
 let
   cfg = config.modules.nixos.rpi-poe-hat;
+  hasRaspberryPiOption = lib.hasAttrByPath [
+    "hardware"
+    "raspberry-pi"
+    "4"
+    "apply-overlays-dtmerge"
+    "enable"
+  ] options;
 in
 {
   options.modules.nixos.rpi-poe-hat = {
     enable = lib.mkEnableOption "mainline-compatible Raspberry Pi PoE HAT overlay";
   };
 
-  config = lib.mkIf cfg.enable {
-    hardware.raspberry-pi."4".apply-overlays-dtmerge.enable = lib.mkDefault true;
-    hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-4*.dtb";
+  config = lib.mkIf cfg.enable (
+    lib.optionalAttrs hasRaspberryPiOption {
+      hardware.raspberry-pi."4".apply-overlays-dtmerge.enable = lib.mkDefault true;
+    }
+    // {
+      hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-4*.dtb";
 
-    hardware.deviceTree.overlays = [
-      {
-        name = "rpi-poe-overlay-mainline-v7";
-        dtsText = ''
+      hardware.deviceTree.overlays = [
+        {
+          name = "rpi-poe-overlay-mainline-v7";
+          dtsText = ''
           /*
            * Mainline-compatible Raspberry Pi PoE HAT overlay for v7.x Pi 4 DTs.
            */
@@ -111,8 +122,9 @@ in
               };
             };
           };
-        '';
-      }
-    ];
-  };
+          '';
+        }
+      ];
+    }
+  );
 }
