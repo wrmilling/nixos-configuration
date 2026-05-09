@@ -60,6 +60,10 @@
       };
     };
 
+    headplane = {
+      enable = true;
+    }
+
     nginx.enable = true;
     nginx.virtualHosts."${secrets.hosts.common.p_domain}" = {
       forceSSL = true;

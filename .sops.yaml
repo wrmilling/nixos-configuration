@@ -93,3 +93,9 @@ creation_rules:
           - *isaac
           - *jack
           - *owen
+  - path_regex: secrets/linus.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *linus
