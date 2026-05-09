@@ -78,8 +78,8 @@
           pre_authkey_path = config.sops.secrets."headplane/headscale_psk".path;
         };
         cookie_secret_path = config.sops.secrets."headplane/cookie_secret_path".path;
-      }
-    }
+      };
+    };
 
     nginx.enable = true;
     nginx.virtualHosts."${secrets.hosts.common.p_domain}" = {
