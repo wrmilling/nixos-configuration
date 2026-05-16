@@ -16,8 +16,8 @@
     fsType = "ext4";
   };
 
-  fileSystems."/mnt/society" = {
-    device = "10.10.10.30:/mnt/tardisk/society";
+  fileSystems."/mnt/media" = {
+    device = "10.10.10.30:/mnt/tardisk/media/";
     fsType = "nfs";
     options = [
       "x-systemd.automount"

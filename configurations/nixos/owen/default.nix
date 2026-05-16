@@ -100,7 +100,7 @@ in
     settings = {
       address = "127.0.0.1";
       port = 8080;
-      root = "/mnt/society";
+      root = "/mnt/media/society";
       database = "/var/lib/filebrowser/database.db";
     };
   };
