@@ -99,3 +99,9 @@ creation_rules:
           - *primary
         age:
           - *linus
+  - path_regex: secrets/owen.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *owen
