@@ -15,7 +15,7 @@
       oldAttrs: {
         postPatch = (oldAttrs.postPatch or "") + ''
           # https://github.com/NixOS/nixpkgs/pull/508770
-          substituteInPlace package.json --replace-fail 'bun@1.3.13' 'bun@1.3.11'
+          substituteInPlace package.json --replace-fail 'bun@1.3.14' 'bun@1.3.11'
 
           substituteInPlace packages/opencode/script/build.ts \
             --replace-warn 'await createEmbeddedWebUIBundle()' 'console.log("Skipping Web UI build")'
