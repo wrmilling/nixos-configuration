@@ -6,6 +6,83 @@
 }:
 let
   cfg = config.modules.home.terminal.opencode;
+  opencodeSecretsDir = "~/.config/opencode/secrets";
+  workMcp = lib.optionalAttrs (cfg.preset == "work") {
+    "grafana-mcp" = {
+      type = "local";
+      enabled = true;
+      command = [
+        "docker"
+        "run"
+        "-i"
+        "--rm"
+        "-e"
+        "GRAFANA_URL"
+        "-e"
+        "GRAFANA_SERVICE_ACCOUNT_TOKEN"
+        "grafana/mcp-grafana"
+        "-t"
+        "stdio"
+      ];
+      environment = {
+        GRAFANA_URL = cfg.grafanaUrl;
+        GRAFANA_SERVICE_ACCOUNT_TOKEN = "{file:${opencodeSecretsDir}/grafana-service-account-token}";
+      };
+    };
+
+    "awesome-re" = {
+      type = "local";
+      enabled = true;
+      command = [
+        "docker"
+        "run"
+        "-i"
+        "--rm"
+        "docker.artifactory.homedepot.com/one-thd/awesome-re-mcp:latest"
+      ];
+    };
+
+    "snowql-mcp-server" = {
+      type = "local";
+      enabled = true;
+      command = [
+        "docker"
+        "run"
+        "-i"
+        "--rm"
+        "-e"
+        "SNOWQL_CLIENT_ID"
+        "-e"
+        "SNOWQL_CLIENT_SECRET"
+        "-e"
+        "SNOWQL_TOKEN_URL"
+        "-e"
+        "SNOWQL_API_SCOPE"
+        "-e"
+        "SNOWQL_API_BASE_URL"
+        "-e"
+        "MCP_TRANSPORT"
+        "-e"
+        "LOG_LEVEL"
+        "snow-mcp:latest"
+      ];
+      environment = {
+        SNOWQL_CLIENT_ID = "{file:${opencodeSecretsDir}/snowql-client-id}";
+        SNOWQL_CLIENT_SECRET = "{file:${opencodeSecretsDir}/snowql-client-secret}";
+        SNOWQL_TOKEN_URL = cfg.snowqlTokenUrl;
+        SNOWQL_API_SCOPE = cfg.snowqlApiScope;
+        SNOWQL_API_BASE_URL = cfg.snowqlApiBaseUrl;
+        MCP_TRANSPORT = "stdio";
+        LOG_LEVEL = "INFO";
+      };
+    };
+
+    "atlassian-mcp" = {
+      type = "remote";
+      url = "https://mcp.atlassian.com/v1/mcp";
+      oauth = { };
+    };
+  };
 in
 {
   options.modules.home.terminal.opencode = {
@@ -22,7 +99,12 @@ in
     };
 
     plugin = lib.mkOption {
-      type = lib.types.listOf (lib.types.enum [ "oh-my-opencode-slim" "oh-my-openagent" ]);
+      type = lib.types.listOf (
+        lib.types.enum [
+          "oh-my-opencode-slim"
+          "oh-my-openagent"
+        ]
+      );
       default = [ "oh-my-opencode-slim" ];
       description = ''
         Which oh-my-opencode plugin(s) to activate in opencode.json.
@@ -48,6 +130,30 @@ in
         Host/user configurations that want Context7 authentication should
         supply this value (typically from secrets/secrets.nix).
       '';
+    };
+
+    grafanaUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "Grafana instance URL for the work MCP server.";
+    };
+
+    snowqlTokenUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "OAuth token URL for the SnowQL MCP server.";
+    };
+
+    snowqlApiScope = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "OAuth scope for the SnowQL MCP server read access.";
+    };
+
+    snowqlApiBaseUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "Base URL for the SnowQL API.";
     };
   };
 
@@ -122,13 +228,8 @@ in
         plugin = cfg.plugin;
         # Default to a cheap model for now
         model = "github-copilot/gpt-5-mini";
-        mcp = {
-          "atlassian-mcp" = {
-            type = "remote";
-            url = "https://mcp.atlassian.com/v1/mcp";
-            oauth = { };
-          };
-        };
+        mcp = { }
+        // workMcp;
         lsp = {
           fish = {
             command = [ "fish-lsp" ];

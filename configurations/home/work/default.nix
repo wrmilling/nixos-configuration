@@ -10,10 +10,15 @@
 {
   modules = {
     homeType.darwin.enable = true;
+    home.scripts.cv.enable = true;
     home.terminal.opencode = {
       plugin = [ "oh-my-openagent" ];
       preset = "work";
       context7ApiKey = secrets.opencode.context7.apiKey;
+      grafanaUrl = secrets.opencode.grafana.url;
+      snowqlTokenUrl = secrets.opencode.snowql.tokenUrl;
+      snowqlApiScope = secrets.opencode.snowql.apiScope;
+      snowqlApiBaseUrl = secrets.opencode.snowql.apiBaseUrl;
     };
   };
 
@@ -46,10 +51,10 @@
         eval (/opt/homebrew/bin/brew shellenv)
       ''
       +
-        # Add custom local paths
-        ''
-          fish_add_path $HOME/.rd/bin
-        '';
+      # Add custom local paths
+      ''
+        fish_add_path $HOME/.rd/bin
+      '';
   };
 
   # Alacritty Font Fixes
