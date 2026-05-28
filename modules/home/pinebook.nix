@@ -30,7 +30,7 @@ in
       # home.graphical.keybase.enable = true;
       home.graphical.legcord.enable = true;
       home.graphical.xresources.enable = true;
-      
+
     };
 
     home.packages = lib.mkMerge [
@@ -38,10 +38,8 @@ in
       (lib.mkIf pkgs.stdenv.isAarch64 [ ])
       [
         pkgs.element-desktop
-        # cura
         pkgs.flameshot
         pkgs.gparted
-        # volumeicon
         pkgs.keepassxc
         pkgs.vlc
         pkgs.hugo
