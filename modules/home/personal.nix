@@ -39,10 +39,8 @@ in
       (lib.mkIf pkgs.stdenv.isAarch64 [ ])
       [
         pkgs.element-desktop
-        # cura
-        # pkgs.flameshot
+        pkgs.signal-desktop
         pkgs.gparted
-        # volumeicon
         pkgs.keepassxc
         pkgs.vlc
         pkgs.hugo
