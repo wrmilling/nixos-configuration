@@ -22,8 +22,9 @@ in
       };
     };
 
+    programs.kdeconnect.enable = true;
+
     environment.systemPackages = [
-      pkgs.kdePackages.kdeconnect-kde
       pkgs.signal-desktop
     ];
   };
