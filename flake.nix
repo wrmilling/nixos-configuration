@@ -9,6 +9,7 @@
 
     # Hardware
     hardware.url = "github:NixOS/nixos-hardware";
+    hardware.inputs.nixpkgs.follows = "nixpkgs";
 
     # Home-Manager
     home-manager.url = "github:nix-community/home-manager";

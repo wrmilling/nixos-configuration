@@ -97,13 +97,18 @@
     },
     "hardware": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1780065812,
         "narHash": "sha256-SCSLUKBmwlSLGQ8Xbr8PjRFtiHNk0l9ktqkcmqdBkfE=",
+        "lastModified": 1780065812,
+        "narHash": "sha256-SCSLUKBmwlSLGQ8Xbr8PjRFtiHNk0l9ktqkcmqdBkfE=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
+        "rev": "b76b5639c0593e0aeb0b5879ad62d4b30596c144",
         "rev": "b76b5639c0593e0aeb0b5879ad62d4b30596c144",
         "type": "github"
       },
@@ -143,8 +148,11 @@
       "locked": {
         "lastModified": 1780037506,
         "narHash": "sha256-z7lnxUsYex11x73HiRCzRZDYF2OGqnB0QqouMYcHSX4=",
+        "lastModified": 1780037506,
+        "narHash": "sha256-z7lnxUsYex11x73HiRCzRZDYF2OGqnB0QqouMYcHSX4=",
         "owner": "Jovian-Experiments",
         "repo": "Jovian-NixOS",
+        "rev": "aee8bab39b309b038c14f216538e6141f28808c6",
         "rev": "aee8bab39b309b038c14f216538e6141f28808c6",
         "type": "github"
       },
@@ -236,8 +244,11 @@
       "locked": {
         "lastModified": 1780011192,
         "narHash": "sha256-luHrZG6I7Mwdt413XoDOYBpp9z1z6X23/5SNktwjM+k=",
+        "lastModified": 1780011192,
+        "narHash": "sha256-luHrZG6I7Mwdt413XoDOYBpp9z1z6X23/5SNktwjM+k=",
         "owner": "nixos",
         "repo": "nixpkgs",
+        "rev": "3242faf14b7611a62ce0f0071619438a08b65c12",
         "rev": "3242faf14b7611a62ce0f0071619438a08b65c12",
         "type": "github"
       },
@@ -271,11 +282,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780088553,
-        "narHash": "sha256-Jt1MSLxIG2iGC2xpL05LonrEG1wgRaNGkE9Hf4HyVsA=",
+        "lastModified": 1780065032,
+        "narHash": "sha256-3L+ujr9AF0DKf+0dWACSfFrjwFtOxQeArH0uhT1Rbgc=",
         "owner": "anomalyco",
         "repo": "opencode",
-        "rev": "b2a06351b545dbefa30181016696ca25110b2366",
+        "rev": "16cae9a32329b65116869d2fd3c1fac27c4adcb6",
         "type": "github"
       },
       "original": {
