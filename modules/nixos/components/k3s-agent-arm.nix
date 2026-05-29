@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.modules.nixos.k3sAgentArm;
-  k3s-package = pkgs.k3s_1_35;
+  k3s-package = pkgs.k3s_1_36;
 in
 {
   imports = [ ./k3s-firewall.nix ];
