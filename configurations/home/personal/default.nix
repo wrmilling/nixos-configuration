@@ -9,6 +9,9 @@
 {
   modules = {
     homeType.personal.enable = true;
+    home.terminal.opencode = {
+      plugin = [ "oh-my-openagent" ];
+    };
   };
 
  # Nicely reload system units when changing configs
