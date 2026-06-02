@@ -16,6 +16,7 @@
 
   modules = {
     machineType.laptop.enable = true;
+    users.child.enable = true;
     nixos.appimage.enable = true;
     nixos.gaming.enable = true;
     nixos.printing.enable = true;
