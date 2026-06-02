@@ -17,11 +17,8 @@
   modules = {
     machineType.laptop.enable = true;
     nixos.appimage.enable = true;
-    nixos.development.enable = true;
     nixos.gaming.enable = true;
-    nixos.k8sUtils.enable = true;
     nixos.printing.enable = true;
-    nixos.tailscale.enable = true;
     nixos.visualBoot.enable = true;
     nixos.zram.enable = true;
   };
@@ -36,5 +33,5 @@
     domain = secrets.hosts.common.domain;
   };
 
-  system.stateVersion = "24.11";
+  system.stateVersion = "26.05";
 }
