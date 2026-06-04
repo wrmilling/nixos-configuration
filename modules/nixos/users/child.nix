@@ -5,11 +5,11 @@
   ...
 }:
 let
-  cfg = config.modules.users.w4cbe;
+  cfg = config.modules.users.child;
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
 {
-  options.modules.users.w4cbe = {
+  options.modules.users.child = {
     enable = lib.mkEnableOption "child user";
   };
 
