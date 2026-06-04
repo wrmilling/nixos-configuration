@@ -7,82 +7,95 @@
 let
   cfg = config.modules.home.terminal.opencode;
   opencodeSecretsDir = "~/.config/opencode/secrets";
-  workMcp = lib.optionalAttrs (cfg.preset == "work") {
-    "grafana-mcp" = {
-      type = "local";
-      enabled = true;
-      command = [
-        "docker"
-        "run"
-        "-i"
-        "--rm"
-        "-e"
-        "GRAFANA_URL"
-        "-e"
-        "GRAFANA_SERVICE_ACCOUNT_TOKEN"
-        "grafana/mcp-grafana"
-        "-t"
-        "stdio"
-      ];
-      environment = {
-        GRAFANA_URL = cfg.grafanaUrl;
-        GRAFANA_SERVICE_ACCOUNT_TOKEN = "{file:${opencodeSecretsDir}/grafana-service-account-token}";
+  opencodeSecretsPath = "${config.home.homeDirectory}/.config/opencode/secrets";
+  grafanaSecretExists = lib.pathExists "${opencodeSecretsPath}/grafana-service-account-token";
+  snowqlSecretsExist =
+    lib.pathExists "${opencodeSecretsPath}/snowql-client-id"
+    && lib.pathExists "${opencodeSecretsPath}/snowql-client-secret";
+  workMcp = lib.optionalAttrs (cfg.preset == "work") (
+    lib.optionalAttrs grafanaSecretExists {
+      "grafana-mcp" = {
+        type = "local";
+        enabled = true;
+        command = [
+          "docker"
+          "run"
+          "-i"
+          "--rm"
+          "-e"
+          "GRAFANA_URL"
+          "-e"
+          "GRAFANA_SERVICE_ACCOUNT_TOKEN"
+          "grafana/mcp-grafana"
+          "-t"
+          "stdio"
+        ];
+        environment = {
+          GRAFANA_URL = cfg.grafanaUrl;
+          GRAFANA_SERVICE_ACCOUNT_TOKEN = "{file:${opencodeSecretsDir}/grafana-service-account-token}";
+        };
       };
-    };
+    }
+    // {
 
-    "awesome-re" = {
-      type = "local";
-      enabled = true;
-      command = [
-        "docker"
-        "run"
-        "-i"
-        "--rm"
-        "docker.artifactory.homedepot.com/one-thd/awesome-re-mcp:latest"
-      ];
-    };
-
-    "snowql-mcp-server" = {
-      type = "local";
-      enabled = true;
-      command = [
-        "docker"
-        "run"
-        "-i"
-        "--rm"
-        "-e"
-        "SNOWQL_CLIENT_ID"
-        "-e"
-        "SNOWQL_CLIENT_SECRET"
-        "-e"
-        "SNOWQL_TOKEN_URL"
-        "-e"
-        "SNOWQL_API_SCOPE"
-        "-e"
-        "SNOWQL_API_BASE_URL"
-        "-e"
-        "MCP_TRANSPORT"
-        "-e"
-        "LOG_LEVEL"
-        "snow-mcp:latest"
-      ];
-      environment = {
-        SNOWQL_CLIENT_ID = "{file:${opencodeSecretsDir}/snowql-client-id}";
-        SNOWQL_CLIENT_SECRET = "{file:${opencodeSecretsDir}/snowql-client-secret}";
-        SNOWQL_TOKEN_URL = cfg.snowqlTokenUrl;
-        SNOWQL_API_SCOPE = cfg.snowqlApiScope;
-        SNOWQL_API_BASE_URL = cfg.snowqlApiBaseUrl;
-        MCP_TRANSPORT = "stdio";
-        LOG_LEVEL = "INFO";
+      "awesome-re" = {
+        type = "local";
+        enabled = true;
+        command = [
+          "docker"
+          "run"
+          "-i"
+          "--rm"
+          "docker.artifactory.homedepot.com/one-thd/awesome-re-mcp:latest"
+        ];
       };
-    };
+    }
+    // lib.optionalAttrs snowqlSecretsExist {
 
-    "atlassian-mcp" = {
-      type = "remote";
-      url = "https://mcp.atlassian.com/v1/mcp";
-      oauth = { };
-    };
-  };
+      "snowql-mcp-server" = {
+        type = "local";
+        enabled = true;
+        command = [
+          "docker"
+          "run"
+          "-i"
+          "--rm"
+          "-e"
+          "SNOWQL_CLIENT_ID"
+          "-e"
+          "SNOWQL_CLIENT_SECRET"
+          "-e"
+          "SNOWQL_TOKEN_URL"
+          "-e"
+          "SNOWQL_API_SCOPE"
+          "-e"
+          "SNOWQL_API_BASE_URL"
+          "-e"
+          "MCP_TRANSPORT"
+          "-e"
+          "LOG_LEVEL"
+          "snow-mcp:latest"
+        ];
+        environment = {
+          SNOWQL_CLIENT_ID = "{file:${opencodeSecretsDir}/snowql-client-id}";
+          SNOWQL_CLIENT_SECRET = "{file:${opencodeSecretsDir}/snowql-client-secret}";
+          SNOWQL_TOKEN_URL = cfg.snowqlTokenUrl;
+          SNOWQL_API_SCOPE = cfg.snowqlApiScope;
+          SNOWQL_API_BASE_URL = cfg.snowqlApiBaseUrl;
+          MCP_TRANSPORT = "stdio";
+          LOG_LEVEL = "INFO";
+        };
+      };
+    }
+    // {
+
+      "atlassian-mcp" = {
+        type = "remote";
+        url = "https://mcp.atlassian.com/v1/mcp";
+        oauth = { };
+      };
+    }
+  );
 in
 {
   options.modules.home.terminal.opencode = {
@@ -259,7 +272,7 @@ in
       agents = {
         # Main orchestrator - Claude Opus is the strongest orchestration model
         sisyphus = {
-          model = "github-copilot/claude-opus-4.8";
+          model = "github-copilot/claude-opus-4.6";
           fallback_models = [
             "github-copilot/claude-sonnet-4.6"
           ];
@@ -326,7 +339,7 @@ in
         metis = {
           model = "github-copilot/claude-sonnet-4.6";
           fallback_models = [ 
-            "github-copilot/claude-opus-4.8"
+            "github-copilot/claude-opus-4.6"
             "github-copilot/gpt-5.5"
             "github-copilot/gpt-5.4"
             "zai-coding-plan/glm-5.1"
@@ -338,7 +351,7 @@ in
           model = "github-copilot/gpt-5.5";
           variant = "xhigh";
           fallback_models = [ 
-            "github-copilot/claude-opus-4.7"
+            "github-copilot/claude-opus-4.6"
             "github-copilot/gemini-3.1-pro-preview"
             "zai-coding-plan/glm-5.1"
           ];
@@ -367,7 +380,7 @@ in
           model = "github-copilot/gemini-3.1-pro-preview";
           variant = "high";
           fallback_models = [ 
-            "github-copilot/claude-opus-4.8"
+            "github-copilot/claude-opus-4.6"
             "zai-coding-plan/glm-5.1"
           ];
         };
@@ -378,7 +391,7 @@ in
           variant = "xhigh";
           fallback_models = [ 
             "github-copilot/gemini-3.1-pro-preview"
-            "github-copilot/claude-opus-4.8"
+            "github-copilot/claude-opus-4.6"
             "zai-coding-plan/glm-5.1"
           ];
         };
@@ -388,7 +401,7 @@ in
           model = "github-copilot/gpt-5.5";
           variant = "medium";
           fallback_models = [
-            "github-copilot/claude-opus-4.7"
+            "github-copilot/claude-opus-4.6"
             "github-copilot/gemini-3.1-pro-preview"
           ];
         };
@@ -398,7 +411,7 @@ in
           model = "github-copilot/gemini-3.1-pro";
           variant = "high";
           fallback_models = [
-            "github-copilot/claude-opus-4.8"
+            "github-copilot/claude-opus-4.6"
             "github-copilot/gpt-5.5"
           ];
         };
@@ -422,7 +435,7 @@ in
 
         # Generic high-effort work
         unspecified-high = {
-          model = "github-copilot/claude-opus-4.8";
+          model = "github-copilot/claude-opus-4.6";
           variant = "max";
           fallback_models = [ 
             "github-copilot/gpt-5.5"
