@@ -9,7 +9,7 @@
 }:
 {
   imports = [
-    inputs.hardware.nixosModules.apple-macbook-pro-11-1
+    inputs.hardware.nixosModules.apple-macbook-pro-11-4
     inputs.home-manager.nixosModules.home-manager
     ./hardware.nix
   ];

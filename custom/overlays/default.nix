@@ -11,21 +11,36 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
-    opencode = inputs.opencode-git.packages.${final.stdenv.hostPlatform.system}.default.overrideAttrs (
-      oldAttrs: {
-        postPatch = (oldAttrs.postPatch or "") + ''
-          # https://github.com/NixOS/nixpkgs/pull/508770
-          substituteInPlace package.json --replace-fail 'bun@1.3.14' 'bun@1.3.11'
+    opencode =
+      inputs.opencode-git.packages.${final.stdenv.hostPlatform.system}.default.overrideAttrs
+        (oldAttrs: {
+          postPatch = (oldAttrs.postPatch or "") + ''
+            # https://github.com/NixOS/nixpkgs/pull/508770
+            substituteInPlace package.json --replace-fail 'bun@1.3.14' 'bun@1.3.11'
 
-          substituteInPlace packages/opencode/script/build.ts \
-            --replace-warn 'await createEmbeddedWebUIBundle()' 'console.log("Skipping Web UI build")'
-        '';
-      }
-    );
+            substituteInPlace packages/opencode/script/build.ts \
+              --replace-warn 'await createEmbeddedWebUIBundle()' 'console.log("Skipping Web UI build")'
+          '';
+        });
 
     openldap = prev.openldap.overrideAttrs {
       doCheck = !prev.stdenv.hostPlatform.isi686;
     };
+
+    # nixpkgs PR #510918: linuxPackages.facetimehd 0.6.13 -> 0.7.0.1
+    linuxPackagesFor =
+      kernel:
+      (prev.linuxPackagesFor kernel).extend (
+        lpFinal: lpPrev: {
+          facetimehd = lpPrev.facetimehd.overrideAttrs (oldAttrs: {
+            version = "0.7.0.1";
+            src = oldAttrs.src.override {
+              rev = "0.7.0.1";
+              sha256 = "sha256-VDEG0EsmkNLxXoQDGQV1HMX8Yg8YjoGLJ8NSerGms0I=";
+            };
+          });
+        }
+      );
   };
 
   # When applied, the stable nixpkgs set (declared in the flake inputs) will

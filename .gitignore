@@ -3,3 +3,6 @@ nixpkgs
 
 # In case you nixos-rebuild bulid
 result
+
+# AI Stuff
+.sisyphus
