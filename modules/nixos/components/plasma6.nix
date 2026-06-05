@@ -22,7 +22,7 @@ in
       };
     };
 
-    programs.kdeconnect.enable = true;
+    # programs.kdeconnect.enable = true;
     programs.partition-manager.enable = true;
   };
 }
