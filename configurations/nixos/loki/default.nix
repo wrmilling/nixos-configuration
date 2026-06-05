@@ -15,7 +15,7 @@
 
   modules = {
     machineType.desktop.enable = true;
-    nixos.amateruRadio.enable = true;
+    nixos.amateurRadio.enable = true;
     nixos.development.enable = true;
     nixos.dockerRootless.enable = true; 
     nixos.flipper.enable = true;
