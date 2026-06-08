@@ -347,7 +347,7 @@ let
   };
 in
 {
-  options.modules.home.terminal.claude = {
+  options.modules.home.terminal.claude-code = {
     enable = lib.mkEnableOption "Claude Code CLI configuration";
 
     settings = lib.mkOption {
@@ -393,9 +393,9 @@ in
 
     programs.claude-code = {
       enable = true;
-      # Managed outside of Nix for faster auto-updates:
-      # curl -fsSL https://claude.ai/install.sh | bash
-      package = null;
+      # Package provided via the sadjow/claude-code-nix overlay (keeps in sync
+      # with upstream releases without needing nixpkgs PRs).
+      package = pkgs.claude-code;
 
       settings =
         cfg.settings

@@ -40,6 +40,7 @@ in
         outputs.overlays.modifications
         outputs.overlays.stable-packages
         outputs.overlays.unstable-small-packages
+        outputs.overlays.claude-code
       ];
       config = {
         allowUnfree = true;

@@ -7,6 +7,12 @@
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
+  
+  # Provides pkgs.claude-code from the sadjow/claude-code-nix flake.
+  # Kept as a separate overlay so it can be selectively applied to home
+  # configurations without touching NixOS hosts.
+  claude-code = inputs.claude-code-nix.overlays.default;
+
   modifications = final: prev: {
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
