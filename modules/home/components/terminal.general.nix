@@ -18,7 +18,7 @@ in
       pkgs.shellclear
       pkgs.lynx
       pkgs.viddy
-      pkgs.silver-searcher
+      pkgs.ripgrep
       pkgs.magic-wormhole-rs
       pkgs.any-nix-shell
       pkgs.fzf

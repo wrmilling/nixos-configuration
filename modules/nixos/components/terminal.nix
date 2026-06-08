@@ -21,7 +21,7 @@ in
       pkgs.git
       pkgs.git-crypt
       pkgs.wget
-      pkgs.silver-searcher
+      pkgs.ripgrep
       pkgs.p7zip
       pkgs.rsync
       pkgs.rclone
