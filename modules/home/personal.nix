@@ -13,12 +13,22 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    sops.secrets."mcp/context7/apiKey" = {
+      sopsFile = ../../secrets/agents.yaml;
+    };
+
+    sops.secrets."providers/z-ai/apiKey" = {
+      sopsFile = ../../secrets/agents.yaml;
+    };
+
     modules = {
       home.base.enable = true;
+      home.sops.enable = true;
       home.terminal.atuin.enable = true;
       home.terminal.claude-code.enable = true;
       home.terminal.development.enable = true;
       home.terminal.opencode.enable = true;
+      home.terminal.opencode.context7ApiKeyFile = config.sops.secrets."mcp/context7/apiKey".path;
       home.terminal.fish.enable = true;
       home.terminal.general.enable = true;
       home.terminal.git.enable = true;

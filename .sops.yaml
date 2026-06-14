@@ -17,6 +17,8 @@ keys:
   - &nk3s-amd64-b age1n3ulakf62eh406wvkcvh7pl5mldgmjzgxx7ndc9dw4m3llgmddfsvelv8h
   - &nk3s-amd64-c age12em95kwjmqpc2qtltuekwj64nr0k3ca5cd7nk6kf6lx4nendau0sk683c7
   - &nk3s-amd64-d age1fp806wdswtnckzukly9m6k7fam795cr0lqdft4ywpqw6am52aspqdfh6v2
+  # User Keys (Home Manager)
+  - &w4cbe age19dydkz80nke9p5l3yzue03snksukl8aw8qxt629j6eef2nrrvpdqyt63s7
 
 stores:
   json:
@@ -105,3 +107,9 @@ creation_rules:
           - *primary
         age:
           - *owen
+  - path_regex: secrets/agents.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *w4cbe

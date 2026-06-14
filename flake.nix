@@ -40,7 +40,6 @@
     claude-code-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-
   outputs =
     {
       self,
@@ -103,7 +102,7 @@
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = modules ++ [
-            # sops-nix.nixosModules.sops
+            sops-nix.homeManagerModules.sops
             { imports = builtins.attrValues homeModules; }
           ];
           extraSpecialArgs = {
@@ -140,14 +139,15 @@
 
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild switch --flake .#your-hostname'
-      nixosConfigurations = let
-        hosts = lib.pipe (builtins.readDir (root + /configurations/nixos)) [
-          (lib.filterAttrs (_: type: type == "directory" && _ != "retired"))
-          lib.attrNames
-        ];
-        mkHost = host: lib.nameValuePair host (mkNixos [ ./configurations/nixos/${host} ]);
-      in
-      lib.listToAttrs (map mkHost hosts);
+      nixosConfigurations =
+        let
+          hosts = lib.pipe (builtins.readDir (root + /configurations/nixos)) [
+            (lib.filterAttrs (_: type: type == "directory" && _ != "retired"))
+            lib.attrNames
+          ];
+          mkHost = host: lib.nameValuePair host (mkNixos [ ./configurations/nixos/${host} ]);
+        in
+        lib.listToAttrs (map mkHost hosts);
 
       # nix-darwin configuration entrypoint
       # Available through 'darwin-rebuild switch --flake .#your-hostname'
@@ -173,7 +173,7 @@
 
         # Servers
         "w4cbe@bart" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
-        "w4cbe@bob" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server];
+        "w4cbe@bob" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server ];
         "w4cbe@goku" = mkHome nixpkgs.legacyPackages.x86_64-linux [ ./configurations/home/server ];
         "w4cbe@isaac" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server ];
         "w4cbe@jack" = mkHome nixpkgs.legacyPackages.aarch64-linux [ ./configurations/home/server ];

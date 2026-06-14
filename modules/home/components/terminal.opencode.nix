@@ -132,16 +132,20 @@ in
       description = "Agent model presets to use, currently defined are 'personal' and 'work'";
     };
 
-    context7ApiKey = lib.mkOption {
+    context7ApiKeyFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
-        Optional Context7 API key. When set, exported as the
-        CONTEXT7_API_KEY environment variable which the oh-my-openagent
-        plugin reads to authenticate against the Context7 MCP.
+        Optional path to a file containing the Context7 API key (e.g. a
+        sops-nix decrypted secret path). When set, the key is read from this
+        file at shell startup and exported as the CONTEXT7_API_KEY environment
+        variable which the oh-my-openagent plugin reads to authenticate against
+        the Context7 MCP.
 
-        Host/user configurations that want Context7 authentication should
-        supply this value (typically from secrets/secrets.nix).
+        Reading the value from a file at runtime (rather than embedding it)
+        keeps the secret out of the world-readable Nix store. Host/user
+        configurations should supply a sops secret path, e.g.
+        config.sops.secrets."mcp/context7/apiKey".path.
       '';
     };
 
@@ -193,11 +197,16 @@ in
     ];
 
     # Environment variables consumed by oh-my-openagent's built-in MCPs.
-    # Context7 reads CONTEXT7_API_KEY at runtime to attach a bearer token
-    # to the remote MCP. See: src/mcp/context7.ts in code-yeongyu/oh-my-openagent.
-    home.sessionVariables = lib.mkIf (cfg.context7ApiKey != null) {
-      CONTEXT7_API_KEY = cfg.context7ApiKey;
-    };
+    # Context7 reads CONTEXT7_API_KEY at runtime to attach a bearer token to
+    # the remote MCP. See: src/mcp/context7.ts in code-yeongyu/oh-my-openagent.
+    # The key is loaded from its (sops-decrypted) file at shell startup so the
+    # plaintext never lands in the Nix store; opencode inherits it from the
+    # launching shell.
+    programs.fish.interactiveShellInit = lib.mkIf (cfg.context7ApiKeyFile != null) ''
+      if test -r ${cfg.context7ApiKeyFile}
+          set -gx CONTEXT7_API_KEY (cat ${cfg.context7ApiKeyFile})
+      end
+    '';
 
     # AI Agent Configuration
     home.file."~/.config/opencode/AGENTS.md" = {
@@ -280,8 +289,7 @@ in
         plugin = cfg.plugin;
         # Default to a cheap model for now
         model = "github-copilot/gpt-5-mini";
-        mcp = { }
-        // workMcp;
+        mcp = { } // workMcp;
         lsp = {
           fish = {
             command = [ "fish-lsp" ];
@@ -321,7 +329,7 @@ in
         hephaestus = {
           model = "github-copilot/gpt-5.5";
           variant = "medium";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/gpt-5.4"
             "github-copilot/gpt-5.3-codex"
           ];
@@ -330,7 +338,7 @@ in
         # Strategic planner - benefits from a strong reasoning model
         prometheus = {
           model = "github-copilot/gpt-5.5";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/gpt-5.4"
             "github-copilot/gpt-5.3-codex"
           ];
@@ -367,7 +375,7 @@ in
         # Multimodal/visual analysis - needs vision-capable model
         multimodal-looker = {
           model = "github-copilot/gpt-5.5";
-          fallback_models = [ 
+          fallback_models = [
             "zai-coding-plan/glm-5.1"
             "github-copilot/gpt-5.4"
             "github-copilot/gemini-3.1-pro-preview"
@@ -377,7 +385,7 @@ in
         # Pre-planning consultant - identifies ambiguities/failure points
         metis = {
           model = "github-copilot/claude-sonnet-4.6";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/claude-opus-4.6"
             "github-copilot/gpt-5.5"
             "github-copilot/gpt-5.4"
@@ -389,7 +397,7 @@ in
         momus = {
           model = "github-copilot/gpt-5.5";
           variant = "xhigh";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/claude-opus-4.6"
             "github-copilot/gemini-3.1-pro-preview"
             "zai-coding-plan/glm-5.1"
@@ -399,13 +407,13 @@ in
         # General-purpose / Sisyphus-Junior helper agents
         atlas = {
           model = "github-copilot/claude-sonnet-4.6";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/gpt-5.5"
           ];
         };
         sisyphus-junior = {
           model = "github-copilot/claude-sonnet-4.6";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/gpt-5.5"
           ];
         };
@@ -418,7 +426,7 @@ in
         visual-engineering = {
           model = "github-copilot/gemini-3.1-pro-preview";
           variant = "high";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/claude-opus-4.6"
             "zai-coding-plan/glm-5.1"
           ];
@@ -428,7 +436,7 @@ in
         ultrabrain = {
           model = "github-copilot/gpt-5.5";
           variant = "xhigh";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/gemini-3.1-pro-preview"
             "github-copilot/claude-opus-4.6"
             "zai-coding-plan/glm-5.1"
@@ -467,7 +475,7 @@ in
         # Generic low-effort work
         unspecified-low = {
           model = "github-copilot/claude-sonnet-4.6";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/gpt-5.3-codex"
           ];
         };
@@ -476,7 +484,7 @@ in
         unspecified-high = {
           model = "github-copilot/claude-opus-4.6";
           variant = "max";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/gpt-5.5"
             "zai-coding-plan/glm-5.1"
           ];
@@ -485,7 +493,7 @@ in
         # Documentation, prose, technical writing
         writing = {
           model = "github-copilot/gemini-3-flash";
-          fallback_models = [ 
+          fallback_models = [
             "github-copilot/claude-sonnet-4.6"
           ];
         };

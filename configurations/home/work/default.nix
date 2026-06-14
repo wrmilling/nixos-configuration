@@ -14,7 +14,7 @@
     home.terminal.opencode = {
       plugin = [ "oh-my-openagent" ];
       preset = "work";
-      context7ApiKey = secrets.opencode.context7.apiKey;
+      context7ApiKeyFile = config.sops.secrets."mcp/context7/apiKey".path;
       grafanaUrl = secrets.opencode.grafana.url;
       snowqlTokenUrl = secrets.opencode.snowql.tokenUrl;
       snowqlApiScope = secrets.opencode.snowql.apiScope;
