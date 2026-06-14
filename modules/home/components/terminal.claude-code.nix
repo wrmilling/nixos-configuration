@@ -367,13 +367,12 @@ let
       export ANTHROPIC_AUTH_TOKEN
       export ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic"
       export API_TIMEOUT_MS="3000000"
-      export ANTHROPIC_DEFAULT_OPUS_MODEL=${lib.escapeShellArg cfg.zaiModel}
-      export ANTHROPIC_DEFAULT_SONNET_MODEL=${lib.escapeShellArg cfg.zaiModel}
+      export ANTHROPIC_DEFAULT_OPUS_MODEL="glm-5.2[1m]"
+      export ANTHROPIC_DEFAULT_SONNET_MODEL="glm-4.7"
       export ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-4.5-air"
       # Override the global subagent model (set to a Claude id below) with a
       # valid z.ai model so subagents stay on GLM when launched via zclaude.
       export CLAUDE_CODE_SUBAGENT_MODEL="glm-4.5-air"
-      export CLAUDE_CODE_AUTO_COMPACT_WINDOW="1000000"
 
       exec claude "$@"
     '';
@@ -430,15 +429,6 @@ in
         Claude Code against z.ai's Anthropic-compatible endpoint using GLM
         models. The key is read from this file at runtime so the plaintext
         never lands in the world-readable Nix store.
-      '';
-    };
-
-    zaiModel = lib.mkOption {
-      type = lib.types.str;
-      default = "glm-5.2[1m]";
-      description = ''
-        z.ai GLM model mapped to the Opus and Sonnet slots for the `zclaude`
-        wrapper. Defaults to the latest GLM-5.2 with the 1M-context variant.
       '';
     };
   };
