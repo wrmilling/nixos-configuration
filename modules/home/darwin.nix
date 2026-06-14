@@ -12,16 +12,7 @@ in
     enable = lib.mkEnableOption "darwin home-manager modules";
   };
 
-
   config = lib.mkIf cfg.enable {
-    sops.secrets."mcp/context7/apiKey" = {
-      sopsFile = ../../secrets/agents.yaml;
-    };
-
-    sops.secrets."providers/z-ai/apiKey" = {
-      sopsFile = ../../secrets/agents.yaml;
-    };
-
     modules = {
       home.base.enable = true;
       home.sops.enable = true;

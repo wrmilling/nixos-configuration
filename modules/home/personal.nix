@@ -26,6 +26,7 @@ in
       home.sops.enable = true;
       home.terminal.atuin.enable = true;
       home.terminal.claude-code.enable = true;
+      home.terminal.claude-code.zaiApiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
       home.terminal.development.enable = true;
       home.terminal.opencode.enable = true;
       home.terminal.opencode.context7ApiKeyFile = config.sops.secrets."mcp/context7/apiKey".path;

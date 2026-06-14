@@ -8,6 +8,10 @@
   ...
 }:
 {
+  sops.secrets."mcp/context7/apiKey" = {
+    sopsFile = ../../secrets/agents.yaml;
+  };
+
   modules = {
     homeType.darwin.enable = true;
     home.scripts.cv.enable = true;

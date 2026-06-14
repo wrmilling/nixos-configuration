@@ -345,6 +345,39 @@ let
       };
     };
   };
+  # zclaude: launches Claude Code against z.ai's Anthropic-compatible endpoint
+  # using GLM models. The z.ai API key is read from its sops-decrypted file at
+  # runtime so the plaintext never enters the world-readable Nix store.
+  # See: https://docs.z.ai/devpack/tool/claude
+  zaiClaudePackage = pkgs.writeShellApplication {
+    name = "zclaude";
+    runtimeInputs = [
+      pkgs.claude-code
+      pkgs.coreutils
+    ];
+    text = ''
+      keyfile=${lib.escapeShellArg (toString cfg.zaiApiKeyFile)}
+      if [ ! -r "$keyfile" ]; then
+        echo "zclaude: z.ai API key not readable at $keyfile" >&2
+        echo "zclaude: ensure sops-nix is active and the providers/z-ai/apiKey secret is configured." >&2
+        exit 1
+      fi
+
+      ANTHROPIC_AUTH_TOKEN="$(cat "$keyfile")"
+      export ANTHROPIC_AUTH_TOKEN
+      export ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic"
+      export API_TIMEOUT_MS="3000000"
+      export ANTHROPIC_DEFAULT_OPUS_MODEL=${lib.escapeShellArg cfg.zaiModel}
+      export ANTHROPIC_DEFAULT_SONNET_MODEL=${lib.escapeShellArg cfg.zaiModel}
+      export ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-4.5-air"
+      # Override the global subagent model (set to a Claude id below) with a
+      # valid z.ai model so subagents stay on GLM when launched via zclaude.
+      export CLAUDE_CODE_SUBAGENT_MODEL="glm-4.5-air"
+      export CLAUDE_CODE_AUTO_COMPACT_WINDOW="1000000"
+
+      exec claude "$@"
+    '';
+  };
 in
 {
   options.modules.home.terminal.claude-code = {
@@ -384,12 +417,39 @@ in
         default = true;
       };
     };
+
+    zaiApiKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Optional path to a file containing a z.ai API key (e.g. a sops-nix
+        decrypted secret path such as
+        config.sops.secrets."providers/z-ai/apiKey".path).
+
+        When set, a `zclaude` wrapper is added to the environment that launches
+        Claude Code against z.ai's Anthropic-compatible endpoint using GLM
+        models. The key is read from this file at runtime so the plaintext
+        never lands in the world-readable Nix store.
+      '';
+    };
+
+    zaiModel = lib.mkOption {
+      type = lib.types.str;
+      default = "glm-5.2[1m]";
+      description = ''
+        z.ai GLM model mapped to the Opus and Sonnet slots for the `zclaude`
+        wrapper. Defaults to the latest GLM-5.2 with the 1M-context variant.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
     home.sessionVariables = {
       CLAUDE_CODE_SUBAGENT_MODEL = "claude-haiku-4-5";
     };
+
+    # Provide the `zclaude` wrapper when a z.ai API key file is configured.
+    home.packages = lib.optional (cfg.zaiApiKeyFile != null) zaiClaudePackage;
 
     programs.claude-code = {
       enable = true;
