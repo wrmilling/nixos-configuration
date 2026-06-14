@@ -114,6 +114,19 @@ let
       i=0; while [ "$i" -lt "$empty"  ]; do bar="''${bar}░"; i=$((i+1)); done
       export CLAUDE_CTX_BAR="$bar"
 
+      ctx_size=$(printf '%s' "$payload" | jq -r '.context_window.context_window_size // 0' | awk '{printf "%d", $1+0}')
+      ctx_size_human=""
+      if [ "$ctx_size" -ge 1000000 ]; then
+        ctx_size_human=$(awk -v n="$ctx_size" 'BEGIN { v = n / 1000000; if (v == int(v)) printf "%dM", v; else printf "%.1fM", v }')
+      elif [ "$ctx_size" -ge 1000 ]; then
+        ctx_size_human=$(awk -v n="$ctx_size" 'BEGIN { printf "%dK", int(n / 1000 + 0.5) }')
+      elif [ "$ctx_size" -gt 0 ]; then
+        ctx_size_human="$ctx_size"
+      fi
+      CLAUDE_CTX_SIZE_SUFFIX=""
+      [ -n "$ctx_size_human" ] && CLAUDE_CTX_SIZE_SUFFIX=" ($ctx_size_human)"
+      export CLAUDE_CTX_SIZE_SUFFIX
+
       cost_usd=$(printf '%s' "$payload" | jq -r '.cost.total_cost_usd // 0' | awk '{printf "%.2f", $1+0}')
       export CLAUDE_COST_USD="$cost_usd"
 
@@ -246,7 +259,7 @@ let
       };
       ctx_low = {
         when = ''[ "$CLAUDE_CTX_PCT" -lt 50 ]'';
-        command = ''printf 'ctx %s %s%%' "$CLAUDE_CTX_BAR" "$CLAUDE_CTX_PCT"'';
+        command = ''printf 'ctx %s %s%%%s' "$CLAUDE_CTX_BAR" "$CLAUDE_CTX_PCT" "$CLAUDE_CTX_SIZE_SUFFIX"'';
         format = "[$output]($style)";
         style = "green";
         shell = [
@@ -257,7 +270,7 @@ let
       };
       ctx_med = {
         when = ''[ "$CLAUDE_CTX_PCT" -ge 50 ] && [ "$CLAUDE_CTX_PCT" -lt 80 ]'';
-        command = ''printf 'ctx %s %s%%' "$CLAUDE_CTX_BAR" "$CLAUDE_CTX_PCT"'';
+        command = ''printf 'ctx %s %s%%%s' "$CLAUDE_CTX_BAR" "$CLAUDE_CTX_PCT" "$CLAUDE_CTX_SIZE_SUFFIX"'';
         format = "[$output]($style)";
         style = "yellow";
         shell = [
@@ -268,7 +281,7 @@ let
       };
       ctx_high = {
         when = ''[ "$CLAUDE_CTX_PCT" -ge 80 ]'';
-        command = ''printf 'ctx %s %s%%' "$CLAUDE_CTX_BAR" "$CLAUDE_CTX_PCT"'';
+        command = ''printf 'ctx %s %s%%%s' "$CLAUDE_CTX_BAR" "$CLAUDE_CTX_PCT" "$CLAUDE_CTX_SIZE_SUFFIX"'';
         format = "[$output]($style)";
         style = "bold red";
         shell = [
