@@ -9,7 +9,7 @@
 }:
 {
   sops.secrets."mcp/context7/apiKey" = {
-    sopsFile = ../../secrets/agents.yaml;
+    sopsFile = ../../../secrets/agents.yaml;
   };
 
   modules = {

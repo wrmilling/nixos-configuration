@@ -26,7 +26,7 @@ in
       pkgs.kubectl-view-secret # view kubernetes secrets without piping and decoding
       pkgs.kubectl-cnpg # CNPG Plugin for kubectl
       pkgs.kubecolor # colorize kubectl output
-      pkgs.kubernetes-helm # helm CLI
+      # pkgs.kubernetes-helm # helm CLI
       pkgs.kustomize # kustomize CLI for sadists
       pkgs.kubectx # kubectx/kubens for switching namespaces/clusters
       pkgs.sops # Secrets!

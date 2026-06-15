@@ -19,6 +19,7 @@ keys:
   - &nk3s-amd64-d age1fp806wdswtnckzukly9m6k7fam795cr0lqdft4ywpqw6am52aspqdfh6v2
   # User Keys (Home Manager)
   - &w4cbe age19dydkz80nke9p5l3yzue03snksukl8aw8qxt629j6eef2nrrvpdqyt63s7
+  - &work age10sz0xl63gtjmlj9aukwr57uhg5fnwwev0d7mmn8h5kc8lncpf9xs678kx7
 
 stores:
   json:
@@ -113,3 +114,4 @@ creation_rules:
           - *primary
         age:
           - *w4cbe
+          - *work
