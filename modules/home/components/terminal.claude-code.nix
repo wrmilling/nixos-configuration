@@ -358,6 +358,7 @@ let
       };
     };
   };
+  
   # zclaude: launches Claude Code against z.ai's Anthropic-compatible endpoint
   # using GLM models. The z.ai API key is read from its sops-decrypted file at
   # runtime so the plaintext never enters the world-readable Nix store.
@@ -395,23 +396,13 @@ in
   options.modules.home.terminal.claude-code = {
     enable = lib.mkEnableOption "Claude Code CLI configuration";
 
-    settings = lib.mkOption {
+    extraSettings = lib.mkOption {
       type = lib.types.attrs;
       default = defaultSettings;
       description = ''
         Contents of ~/.claude/settings.json. Defaults enable plan mode and a
         read-only command allowlist. Per-host modules can override individual
         fields with lib.mkForce.
-      '';
-    };
-
-    mcpServers = lib.mkOption {
-      type = lib.types.attrsOf lib.types.attrs;
-      default = defaultMcpServers;
-      description = ''
-        MCP servers written to ~/.claude/claude_desktop_config.json via the
-        home-manager programs.claude-code module. Stdio servers need
-        {command, args}; HTTP servers need {type="http", url}.
       '';
     };
 
@@ -440,6 +431,11 @@ in
       };
     };
 
+    zclaude = {
+      enable = lib.mkEnableOption "" // {
+        default = true;
+      };
+    }
     zaiApiKeyFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -471,10 +467,10 @@ in
       package = pkgs.claude-code;
 
       settings =
-        cfg.settings
+        cfg.extraSettings
         // {
-          permissions = cfg.settings.permissions // {
-            allow = cfg.settings.permissions.allow ++ cfg.extraPermissions;
+          permissions = cfg.extraSettings.permissions // {
+            allow = cfg.extraSettings.permissions.allow ++ cfg.extraPermissions;
           };
         }
         // lib.optionalAttrs cfg.statusline.enable {
@@ -490,7 +486,7 @@ in
           };
         };
 
-      mcpServers = cfg.mcpServers // cfg.extraMcpServers;
+      mcpServers = defaultMcpServers // cfg.extraMcpServers;
     };
 
     home.file.".claude/statusline-command.sh" = lib.mkIf cfg.statusline.enable {
