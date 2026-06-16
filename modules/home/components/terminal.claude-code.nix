@@ -424,6 +424,16 @@ in
       '';
     };
 
+    extraPermissions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = ''
+        Per-host permission strings appended to the default allow list in
+        settings.json. Lets a host add MCP or Bash permissions without
+        redefining the full defaults.
+      '';
+    };
+
     statusline = {
       enable = lib.mkEnableOption "starship-driven Claude statusline" // {
         default = true;
@@ -462,6 +472,11 @@ in
 
       settings =
         cfg.settings
+        // {
+          permissions = cfg.settings.permissions // {
+            allow = cfg.settings.permissions.allow ++ cfg.extraPermissions;
+          };
+        }
         // lib.optionalAttrs cfg.statusline.enable {
           statusLine = {
             type = "command";

@@ -24,6 +24,16 @@
       snowqlApiScope = secrets.opencode.snowql.apiScope;
       snowqlApiBaseUrl = secrets.opencode.snowql.apiBaseUrl;
     };
+
+    home.terminal.claude-code.extraMcpServers = {
+      "atlassian-mcp" = {
+        type = "http";
+        url = "https://mcp.atlassian.com/v1/mcp";
+      };
+    };
+    home.terminal.claude-code.extraPermissions = [
+      "mcp__atlassian-mcp"
+    ];
   };
 
   home = {
