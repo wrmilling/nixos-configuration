@@ -363,14 +363,14 @@ let
   # using GLM models. The z.ai API key is read from its sops-decrypted file at
   # runtime so the plaintext never enters the world-readable Nix store.
   # See: https://docs.z.ai/devpack/tool/claude
-  zaiClaudePackage = pkgs.writeShellApplication {
+  zclaudePackage = pkgs.writeShellApplication {
     name = "zclaude";
     runtimeInputs = [
       pkgs.claude-code
       pkgs.coreutils
     ];
     text = ''
-      keyfile=${lib.escapeShellArg (toString cfg.zaiApiKeyFile)}
+      keyfile=${lib.escapeShellArg (toString cfg.zclaude.apiKeyFile)}
       if [ ! -r "$keyfile" ]; then
         echo "zclaude: z.ai API key not readable at $keyfile" >&2
         echo "zclaude: ensure sops-nix is active and the providers/z-ai/apiKey secret is configured." >&2
@@ -435,21 +435,22 @@ in
       enable = lib.mkEnableOption "" // {
         default = true;
       };
-    }
-    zaiApiKeyFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = ''
-        Optional path to a file containing a z.ai API key (e.g. a sops-nix
-        decrypted secret path such as
-        config.sops.secrets."providers/z-ai/apiKey".path).
 
-        When set, a `zclaude` wrapper is added to the environment that launches
-        Claude Code against z.ai's Anthropic-compatible endpoint using GLM
-        models. The key is read from this file at runtime so the plaintext
-        never lands in the world-readable Nix store.
-      '';
-    };
+      apiKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Optional path to a file containing a z.ai API key (e.g. a sops-nix
+          decrypted secret path such as
+          config.sops.secrets."providers/z-ai/apiKey".path).
+
+          When set, a `zclaude` wrapper is added to the environment that launches
+          Claude Code against z.ai's Anthropic-compatible endpoint using GLM
+          models. The key is read from this file at runtime so the plaintext
+          never lands in the world-readable Nix store.
+        '';
+      };
+    }
   };
 
   config = lib.mkIf cfg.enable {
@@ -458,7 +459,7 @@ in
     };
 
     # Provide the `zclaude` wrapper when a z.ai API key file is configured.
-    home.packages = lib.optional (cfg.zaiApiKeyFile != null) zaiClaudePackage;
+    home.packages = lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage;
 
     programs.claude-code = {
       enable = true;
