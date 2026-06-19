@@ -450,7 +450,7 @@ in
           never lands in the world-readable Nix store.
         '';
       };
-    }
+    };
   };
 
   config = lib.mkIf cfg.enable {
