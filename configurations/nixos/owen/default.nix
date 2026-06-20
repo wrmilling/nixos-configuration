@@ -154,6 +154,13 @@ in
     after = [ "filebrowser-tailscale-cert.service" ];
   };
 
+  systemd.services.filebrowser = {
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "5s";
+    };
+  };
+
   systemd.timers.filebrowser-tailscale-cert = {
     description = "Renew Tailscale TLS certificate for File Browser";
     wantedBy = [ "timers.target" ];
