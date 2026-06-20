@@ -260,6 +260,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-filebrowser": {
+      "locked": {
+        "lastModified": 1781141223,
+        "narHash": "sha256-Eye4UQJjC4TLobclolFCMl6MrjgiF6Bk1cOI5x8SH00=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "b503dde361500433ca25a32e8f4d218bf58fb659",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "b503dde361500433ca25a32e8f4d218bf58fb659",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1781509190,
@@ -348,6 +364,7 @@
         "jovian": "jovian",
         "lanzaboote": "lanzaboote",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-filebrowser": "nixpkgs-filebrowser",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable-small": "nixpkgs-unstable-small",
         "opencode-git": "opencode-git",

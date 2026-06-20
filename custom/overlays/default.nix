@@ -29,6 +29,10 @@
           '';
         });
 
+    # Pin to 2.63.5; latest release breaks symlink handling
+    filebrowser =
+      (import inputs.nixpkgs-filebrowser { system = final.system; config.allowUnfree = true; }).filebrowser;
+
     openldap = prev.openldap.overrideAttrs {
       doCheck = !prev.stdenv.hostPlatform.isi686;
     };
