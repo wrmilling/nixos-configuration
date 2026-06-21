@@ -29,7 +29,7 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Lanzaboote for SecureBoot
-    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.3";
+    lanzaboote.url = "github:nix-community/lanzaboote/master";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
     # OpenCode Coding Agent
