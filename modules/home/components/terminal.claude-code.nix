@@ -7,11 +7,28 @@
 let
   cfg = config.modules.home.terminal.claude-code;
 
+  kubernetes-mcp-server = pkgs.kubernetes-mcp-server;
+  flux-operator-mcp = pkgs.flux-operator-mcp;
+
   # Default MCP servers - mcp-nixos is available in nixpkgs
   defaultMcpServers = {
     mcp-nixos = {
       command = "${pkgs.mcp-nixos}/bin/mcp-nixos";
       args = [ ];
+    };
+    kubernetes = {
+      command = "${kubernetes-mcp-server}/bin/kubernetes-mcp-server";
+      args = [ ];
+    };
+    flux = {
+      command = "${flux-operator-mcp}/bin/flux-operator-mcp";
+      args = [
+        "serve"
+        "--read-only"
+      ];
+      env = {
+        KUBECONFIG = "${config.home.homeDirectory}/.kube/config";
+      };
     };
   };
 
@@ -81,6 +98,25 @@ let
 
       # MCP — mcp-nixos read-only tools
       "mcp__mcp-nixos"
+
+      # MCP — kubernetes read-only tools only
+      "mcp__kubernetes__configuration_contexts_list"
+      "mcp__kubernetes__configuration_view"
+      "mcp__kubernetes__events_list"
+      "mcp__kubernetes__namespaces_list"
+      "mcp__kubernetes__nodes_log"
+      "mcp__kubernetes__nodes_stats_summary"
+      "mcp__kubernetes__nodes_top"
+      "mcp__kubernetes__pods_get"
+      "mcp__kubernetes__pods_list"
+      "mcp__kubernetes__pods_list_in_namespace"
+      "mcp__kubernetes__pods_log"
+      "mcp__kubernetes__pods_top"
+      "mcp__kubernetes__resources_get"
+      "mcp__kubernetes__resources_list"
+
+      # MCP — flux read-only (--read-only flag enforced at server level)
+      "mcp__flux"
     ];
     deny = [ ];
   };

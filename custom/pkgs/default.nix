@@ -7,4 +7,6 @@
   slides-git = pkgs.callPackage ./slides-git { };
   mcpelauncher-client-git = pkgs.callPackage ./mcpelauncher-client { };
   mcpelauncher-ui-qt-git = pkgs.callPackage ./mcpelauncher-ui-qt { };
+  kubernetes-mcp-server = pkgs.callPackage ./kubernetes-mcp-server { };
+  flux-operator-mcp = pkgs.callPackage ./flux-operator-mcp { };
 }
