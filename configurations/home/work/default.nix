@@ -31,7 +31,7 @@
         url = "https://mcp.atlassian.com/v1/mcp";
       };
     };
-    home.terminal.claude-code.extraPermissions = [
+    home.terminal.claude-code.extraPermissions.allow = [
       "mcp__atlassian-mcp"
     ];
   };

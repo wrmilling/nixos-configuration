@@ -15,9 +15,8 @@ let
     };
   };
 
-  defaultSettings = {
-    permissions.defaultMode = "plan";
-    permissions.allow = [
+  defaultPermissions = {
+    allow = [
       # Modern CLI (preferred tools per AGENTS.md)
       "Bash(rg:*)"
       "Bash(fd:*)"
@@ -83,6 +82,7 @@ let
       # MCP — mcp-nixos read-only tools
       "mcp__mcp-nixos"
     ];
+    deny = [ ];
   };
 
   statuslinePackage = pkgs.writeShellApplication {
@@ -398,11 +398,10 @@ in
 
     extraSettings = lib.mkOption {
       type = lib.types.attrs;
-      default = defaultSettings;
+      default = { };
       description = ''
-        Contents of ~/.claude/settings.json. Defaults enable plan mode and a
-        read-only command allowlist. Per-host modules can override individual
-        fields with lib.mkForce.
+        Per-host settings merged on top of the defaults in ~/.claude/settings.json.
+        Use this to add or override individual top-level fields.
       '';
     };
 
@@ -410,18 +409,35 @@ in
       type = lib.types.attrsOf lib.types.attrs;
       default = { };
       description = ''
-        Per-host MCP servers merged on top of mcpServers. Lets a single host
-        add extra servers without redefining the shared defaults.
+        Per-host MCP servers merged on top of the defaults.
+        Use this to add servers without redefining the shared set.
       '';
     };
 
     extraPermissions = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
+      type = lib.types.submodule {
+        options = {
+          defaultMode = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = "plan";
+            description = "Per-host permission mode. Valid values: \"plan\", \"ask\", \"auto\", \"deny\".";
+          };
+          allow = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            description = "Per-host allow rules appended to the defaults.";
+          };
+          deny = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            description = "Per-host deny rules appended to the defaults. Deny takes precedence over allow.";
+          };
+        };
+      };
+      default = { };
       description = ''
-        Per-host permission strings appended to the default allow list in
-        settings.json. Lets a host add MCP or Bash permissions without
-        redefining the full defaults.
+        Per-host permission overrides merged on top of the defaults.
+        Use this to extend allow/deny rules or change the permission mode.
       '';
     };
 
@@ -470,8 +486,10 @@ in
       settings =
         cfg.extraSettings
         // {
-          permissions = cfg.extraSettings.permissions // {
-            allow = cfg.extraSettings.permissions.allow ++ cfg.extraPermissions;
+          permissions = {
+            defaultMode = cfg.extraPermissions.defaultMode;
+            allow = defaultPermissions.allow ++ cfg.extraPermissions.allow;
+            deny = defaultPermissions.deny ++ cfg.extraPermissions.deny;
           };
         }
         // lib.optionalAttrs cfg.statusline.enable {
