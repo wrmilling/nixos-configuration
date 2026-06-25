@@ -13,10 +13,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets."mcp/context7/apiKey" = {
-      sopsFile = ../../secrets/agents.yaml;
-    };
-
     sops.secrets."providers/z-ai/apiKey" = {
       sopsFile = ../../secrets/agents.yaml;
     };
@@ -28,8 +24,6 @@ in
       home.terminal.claude-code.enable = true;
       home.terminal.claude-code.zclaude.apiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
       home.terminal.development.enable = true;
-      home.terminal.opencode.enable = true;
-      home.terminal.opencode.context7ApiKeyFile = config.sops.secrets."mcp/context7/apiKey".path;
       home.terminal.fish.enable = true;
       home.terminal.general.enable = true;
       home.terminal.git.enable = true;

@@ -32,10 +32,6 @@
     lanzaboote.url = "github:nix-community/lanzaboote/master";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
-    # OpenCode Coding Agent
-    opencode-git.url = "github:anomalyco/opencode/dev";
-    opencode-git.inputs.nixpkgs.follows = "nixpkgs-unstable-small";
-
     # Claude Code CLI (Nix-managed package, kept in sync with upstream)
     claude-code-nix.url = "github:sadjow/claude-code-nix";
     claude-code-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -49,7 +45,6 @@
       sops-nix,
       darwin,
       lanzaboote,
-      opencode-git,
       ...
     }@inputs:
     let

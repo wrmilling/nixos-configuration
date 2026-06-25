@@ -21,7 +21,6 @@ in
       home.terminal.atuin.enable = true;
       home.terminal.claude-code.enable = true;
       home.terminal.development.enable = true;
-      home.terminal.opencode.enable = true;
       home.terminal.fish.enable = true;
       home.terminal.general.enable = true;
       home.terminal.git.enable = true;

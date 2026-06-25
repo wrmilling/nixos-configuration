@@ -8,22 +8,9 @@
   ...
 }:
 {
-  sops.secrets."mcp/context7/apiKey" = {
-    sopsFile = ../../../secrets/agents.yaml;
-  };
-
   modules = {
     homeType.darwin.enable = true;
     home.scripts.cv.enable = true;
-    home.terminal.opencode = {
-      plugin = [ "oh-my-openagent" ];
-      preset = "work";
-      context7ApiKeyFile = config.sops.secrets."mcp/context7/apiKey".path;
-      grafanaUrl = secrets.opencode.grafana.url;
-      snowqlTokenUrl = secrets.opencode.snowql.tokenUrl;
-      snowqlApiScope = secrets.opencode.snowql.apiScope;
-      snowqlApiBaseUrl = secrets.opencode.snowql.apiBaseUrl;
-    };
 
     home.terminal.claude-code.extraMcpServers = {
       "atlassian-mcp" = {
