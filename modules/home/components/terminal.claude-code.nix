@@ -396,6 +396,25 @@ in
   options.modules.home.terminal.claude-code = {
     enable = lib.mkEnableOption "Claude Code CLI configuration";
 
+    defaultModel = lib.mkOption {
+      type = lib.types.str;
+      default = "claude-sonnet-4-6";
+      description = "Default model for Claude Code sessions.";
+    };
+
+    fallbackModels = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      example = "[ \"claude-sonnet-4-6\" ]";
+      default = [ ];
+      description = "Fallback model chain when the primary model is unavailable. Maximum 3 entries.";
+    };
+
+    subagentModel = lib.mkOption {
+      type = lib.types.str;
+      default = "claude-haiku-4-5";
+      description = "Model used for subagent tasks.";
+    };
+
     extraSettings = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -470,10 +489,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.sessionVariables = {
-      CLAUDE_CODE_SUBAGENT_MODEL = "claude-haiku-4-5";
-    };
-
     # Provide the `zclaude` wrapper when a z.ai API key file is configured.
     home.packages = lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage;
 
@@ -486,6 +501,9 @@ in
       settings =
         cfg.extraSettings
         // {
+          model = cfg.defaultModel;
+          fallbackModel = cfg.fallbackModels;
+          env.CLAUDE_CODE_SUBAGENT_MODEL = cfg.subagentModel;
           permissions = {
             defaultMode = cfg.extraPermissions.defaultMode;
             allow = defaultPermissions.allow ++ cfg.extraPermissions.allow;
