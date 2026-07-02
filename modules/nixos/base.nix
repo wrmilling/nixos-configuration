@@ -11,10 +11,10 @@ let
   cfg = config.modules.nixos.base;
 in
 {
-  imports = lib.filter 
+  imports = lib.filter
     (n: lib.strings.hasSuffix ".nix" n)
     (lib.filesystem.listFilesRecursive ./components)
-    ++ lib.filter 
+    ++ lib.filter
     (n: lib.strings.hasSuffix ".nix" n)
     (lib.filesystem.listFilesRecursive ./users);
 
@@ -23,7 +23,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # Default 
+    # Default
     modules = {
       users.w4cbe.enable = true;
       nixos.terminal.enable = true;

@@ -16,7 +16,7 @@ let
       "Network"
       "InstantMessaging"
     ];
-    exec = "${pkgs.bashInteractive}/bin/bash -c \"export XDG_CONFIG_HOME=~/.config/discord-name\; export TMPDIR=~/.config/discord-name/tmp\; ${pkgs.discord}/bin/discord\"";
+    exec = "${pkgs.bashInteractive}/bin/bash -c \"export XDG_CONFIG_HOME=~/.config/discord-name; export TMPDIR=~/.config/discord-name/tmp; ${pkgs.discord}/bin/discord\"";
   };
   discord-game = pkgs.makeDesktopItem {
     name = "discord-game";
@@ -28,7 +28,7 @@ let
       "Network"
       "InstantMessaging"
     ];
-    exec = "${pkgs.bashInteractive}/bin/bash -c \"export XDG_CONFIG_HOME=~/.config/discord-game\; export TMPDIR=~/.config/discord-game/tmp\; ${pkgs.discord}/bin/discord\"";
+    exec = "${pkgs.bashInteractive}/bin/bash -c \"export XDG_CONFIG_HOME=~/.config/discord-game; export TMPDIR=~/.config/discord-game/tmp; ${pkgs.discord}/bin/discord\"";
   };
 in
 {
