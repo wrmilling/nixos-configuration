@@ -35,6 +35,10 @@
     # Claude Code CLI (Nix-managed package, kept in sync with upstream)
     claude-code-nix.url = "github:sadjow/claude-code-nix";
     claude-code-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Star Citizen
+    nix-citizen.url = "github:LovingMelody/nix-citizen";
+    nix-citizen.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -74,6 +78,7 @@
           modules = modules ++ [
             sops-nix.nixosModules.sops
             lanzaboote.nixosModules.lanzaboote
+            inputs.nix-citizen.nixosModules.default
             { imports = builtins.attrValues nixosModules; }
           ];
           specialArgs = {

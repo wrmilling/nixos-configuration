@@ -23,6 +23,7 @@
     nixos.dockerRootless.enable = true;
     nixos.flipper.enable = true;
     nixos.gaming.enable = true;
+    nixos.starCitizen.enable = true;
     nixos.k8sUtils.enable = true;
     nixos.printing.enable = true;
     nixos.secureboot.enable = true;

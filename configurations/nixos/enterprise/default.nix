@@ -19,6 +19,7 @@
     nixos.development.enable = true;
     nixos.dockerRootless.enable = true;
     nixos.gaming.enable = true;
+    nixos.starCitizen.enable = true;
     nixos.k8sUtils.enable = true;
     nixos.nvidia.enable = true;
     nixos.printing.enable = true;
