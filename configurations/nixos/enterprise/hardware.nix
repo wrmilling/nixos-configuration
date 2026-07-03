@@ -40,6 +40,21 @@
     fsType = "vfat";
   };
 
+  environment.etc.crypttab.text = ''
+    helium /dev/disk/by-uuid/760e3749-cd08-4941-a8f4-babc075ba66c /root/storage-drives.key luks
+    fire /dev/disk/by-uuid/77007c73-eaf4-4b53-8622-9ced3767cc32 /root/storage-drives.key luks
+  '';
+
+  fileSystems."/mnt/helium" = {
+    device = "/dev/mapper/helium";
+    fsType = "ext4";
+  };
+
+  fileSystems."/mnt/fire" = {
+    device = "/dev/mapper/fire";
+    fsType = "ext4";
+  };
+
   swapDevices = [
     {
       device = "/var/lib/swapfile";
