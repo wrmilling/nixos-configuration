@@ -29,6 +29,7 @@
     nixos.virtualization.enable = true;
     nixos.visualBoot.enable = true;
     nixos.vpn.enable = true;
+    nixos.onedrive.enable = true;
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -40,8 +41,6 @@
   boot.lanzaboote.settings.reboot-for-bitlocker = true;
 
   # services.displayManager.sddm.wayland.enable = lib.mkForce false;
-
-  services.onedrive.enable = true;
 
   networking = {
     hostName = "enterprise";

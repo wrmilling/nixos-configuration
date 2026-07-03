@@ -33,6 +33,7 @@
     nixos.visualBoot.enable = true;
     nixos.vpn.enable = true;
     nixos.wireshark.enable = true;
+    nixos.onedrive.enable = true;
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -40,8 +41,6 @@
   # Enabled lanzaboote through secureboot.nix optional import.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  services.onedrive.enable = true;
 
   networking = {
     hostName = "icarus";
