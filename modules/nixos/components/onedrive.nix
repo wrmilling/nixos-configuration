@@ -13,8 +13,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.onedrive.enable = true;
+    # services.onedrive.enable = true;
 
-    environment.systemPackages = [ pkgs.onedrivegui ];
+    environment.systemPackages = [
+      pkgs.onedrive
+      pkgs.onedrivegui
+    ];
   };
 }
