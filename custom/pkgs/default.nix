@@ -9,4 +9,5 @@
   mcpelauncher-ui-qt-git = pkgs.callPackage ./mcpelauncher-ui-qt { };
   kubernetes-mcp-server = pkgs.callPackage ./kubernetes-mcp-server { };
   flux-operator-mcp = pkgs.callPackage ./flux-operator-mcp { };
+  shiftleft-sl = pkgs.callPackage ./shiftleft-sl { };
 }

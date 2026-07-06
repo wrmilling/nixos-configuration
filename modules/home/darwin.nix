@@ -34,6 +34,7 @@ in
     home.packages = [
       pkgs.cloudfoundry-cli
       pkgs.rancher
+      pkgs.shiftleft-sl
       pkgs.slides-git
       pkgs.graph-easy
     ];

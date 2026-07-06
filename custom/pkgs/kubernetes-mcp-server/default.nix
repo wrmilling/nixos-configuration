@@ -6,28 +6,28 @@
 }:
 
 let
-  version = "0.0.62";
+  version = "0.0.63";
   plat =
     {
       "x86_64-linux" = {
         os = "linux";
         arch = "amd64";
-        sha256 = "sha256-TjI5SLzxybJWFAZp6lalOzEkb87scejNUzYXYk9CUOU=";
+        sha256 = "sha256-ysEVrf7CMJdpnwoiK+c72fE9L91fzsMuquy1oZLuT6Q=";
       };
       "aarch64-linux" = {
         os = "linux";
         arch = "arm64";
-        sha256 = "sha256-GTDRv23B3n3wrgEM9xSqCIxAjxNWTgYkHKsCkEpVKgs=";
+        sha256 = "sha256-1lgH+4m3sqM4chPBpybkz3LqP+JgeVHVuu0/rBDUYrY=";
       };
       "x86_64-darwin" = {
         os = "darwin";
         arch = "amd64";
-        sha256 = "sha256-hs6pWO+qLkaGK8T5/6p9I/oguSSw2IRuTOAhbH2iX1Y=";
+        sha256 = "sha256-MYP6qzA2oxggp39KtwktM7/GyzZEXMCPyk0CTbxPzYM=";
       };
       "aarch64-darwin" = {
         os = "darwin";
         arch = "arm64";
-        sha256 = "sha256-YOmBzkroApJ/o7kD6gfOAsIht5ssa4mp/mym6KwRHjo=";
+        sha256 = "sha256-iosGUkRm/lpBeADgOG8lT3UOdIY4IH9Cm1jjYebcoz8=";
       };
     }
     .${stdenvNoCC.hostPlatform.system};
@@ -48,6 +48,8 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     install -Dm755 "$src" "$out/bin/kubernetes-mcp-server"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "MCP server for Kubernetes cluster interaction";
