@@ -19,7 +19,10 @@ in
       home.graphical.alacritty.enable = true;
       home.graphical.xresources.enable = true;
       home.terminal.atuin.enable = true;
-      home.terminal.claude-code.enable = true;
+      home.terminal.claude-code = {
+        enable = true;
+        defaultModel = "sonnet[1m]";
+      };
       home.terminal.development.enable = true;
       home.terminal.fish.enable = true;
       home.terminal.general.enable = true;

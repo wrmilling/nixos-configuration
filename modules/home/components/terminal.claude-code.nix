@@ -435,20 +435,20 @@ in
 
     defaultModel = lib.mkOption {
       type = lib.types.str;
-      default = "claude-sonnet-4-6";
+      default = "sonnet";
       description = "Default model for Claude Code sessions.";
     };
 
     fallbackModels = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      example = "[ \"claude-sonnet-4-6\" ]";
+      example = "[ \"sonnet\" ]";
       default = [ ];
       description = "Fallback model chain when the primary model is unavailable. Maximum 3 entries.";
     };
 
     subagentModel = lib.mkOption {
       type = lib.types.str;
-      default = "claude-haiku-4-5";
+      default = "haiku";
       description = "Model used for subagent tasks.";
     };
 
