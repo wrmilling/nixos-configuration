@@ -30,6 +30,16 @@ let
         KUBECONFIG = "${config.home.homeDirectory}/.kube/config";
       };
     };
+    codegraph = {
+      command = "${pkgs.codegraph}/bin/codegraph";
+      args = [
+        "serve"
+        "--mcp"
+      ];
+      env = {
+        CODEGRAPH_TELEMETRY = "0";
+      };
+    };
   };
 
   defaultPermissions = {
@@ -118,6 +128,9 @@ let
 
       # MCP — flux read-only (--read-only flag enforced at server level)
       "mcp__flux"
+
+      # MCP — codegraph (local, read-only code knowledge graph)
+      "mcp__codegraph"
     ];
     deny = [ ];
   };
