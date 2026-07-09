@@ -547,6 +547,12 @@ in
     ]
     ++ lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage;
 
+    # Disable codegraph's telemetry universally -- the MCP server entry below
+    # also sets this explicitly (belt-and-suspenders in case a subprocess
+    # doesn't inherit session vars), but this covers manual CLI use
+    # (`codegraph init`/`index`/`sync`/etc.) which never goes through that env.
+    home.sessionVariables.CODEGRAPH_TELEMETRY = "0";
+
     programs.claude-code = {
       enable = true;
       # Package provided via the sadjow/claude-code-nix overlay (keeps in sync
