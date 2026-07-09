@@ -42,6 +42,6 @@ fi
 sed -i.bak "s#vendorHash = \"${fake_hash}\"#vendorHash = \"${new_vendor_hash}\"#" "$file"
 rm -f "$file.bak"
 
-echo "Updated cc9s $current_version -> $new_version"
 echo "  sha256:     $old_sha256 -> $new_sha256"
 echo "  vendorHash: $old_vendor_hash -> $new_vendor_hash"
+echo "Updated cc9s $current_version -> $new_version"

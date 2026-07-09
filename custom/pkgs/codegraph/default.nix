@@ -114,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
         update-source-version "codegraph" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
+      echo "Updated codegraph ${finalAttrs.version} -> $NEW_VERSION"
     '';
   };
 

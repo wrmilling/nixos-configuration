@@ -1,0 +1,100 @@
+name: Update Custom Packages
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+jobs:
+  discover:
+    runs-on: alpine-tokyo
+    outputs:
+      packages: ${{ steps.list.outputs.packages }}
+    steps:
+      - uses: ${{ github.server_url }}/actions/checkout@v6.0.2
+
+      - name: List updatable packages
+        id: list
+        run: |
+          set -euo pipefail
+          packages=()
+          for dir in custom/pkgs/*/; do
+            name=$(basename "$dir")
+            [[ -f "$dir/default.nix" ]] || continue
+            # Skip pure delegation wrappers (e.g. mcpelauncher-ui-qt just execs
+            # mcpelauncher-client's update.sh) -- the package they delegate to
+            # already covers them in one run, so a separate matrix entry would
+            # just produce a duplicate/conflicting PR for the same change.
+            if [[ -x "$dir/update.sh" ]] && grep -qE '^exec ".*/update\.sh"' "$dir/update.sh"; then
+              continue
+            fi
+            packages+=("$name")
+          done
+          json=$(printf '%s\n' "${packages[@]}" | jq -R -s -c 'split("\n")[:-1]')
+          echo "packages=$json" >> "$GITHUB_OUTPUT"
+
+  update:
+    needs: discover
+    if: needs.discover.outputs.packages != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.discover.outputs.packages) }}
+    runs-on: alpine-tokyo
+    concurrency:
+      group: pkg-update-${{ matrix.package }}
+      cancel-in-progress: false
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: ${{ github.server_url }}/actions/checkout@v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Run update script
+        run: custom/pkgs/update.sh ${{ matrix.package }} | tee /tmp/update.log
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit, push, and open/update PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          title=$(tail -1 /tmp/update.log)
+          body=$(cat /tmp/update.log)
+          branch="pkg-update/${{ matrix.package }}"
+          base="${{ github.ref_name }}"
+
+          git config user.name "Forge Actions"
+          git config user.email "forge-actions@noreply.milli.ng"
+          git checkout -B "$branch"
+          git commit -am "$title"
+          git push -f origin "$branch"
+
+          api="${{ github.api_url }}/repos/${{ github.repository }}"
+          existing=$(curl -sf -H "Authorization: token $GH_TOKEN" \
+            "$api/pulls?state=open&type=all" \
+            | jq --arg h "$branch" '[.[] | select(.head.ref == $h)]')
+          pr_id=$(printf '%s' "$existing" | jq -r 'first(.[].number) // empty')
+
+          payload=$(jq -n --arg t "$title" --arg b "$body" '{title: $t, body: $b}')
+
+          if [[ -n "$pr_id" ]]; then
+            curl -sf -X PATCH -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
+              "$api/pulls/$pr_id" -d "$payload"
+          else
+            create_payload=$(jq -n --arg t "$title" --arg b "$body" --arg h "$branch" --arg base "$base" \
+              '{title: $t, body: $b, head: $h, base: $base}')
+            curl -sf -X POST -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
+              "$api/pulls" -d "$create_payload"
+          fi

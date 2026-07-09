@@ -48,6 +48,5 @@ rm -f "$file.bak"
 if [[ "$new_hash" == "$old_hash" ]]; then
   echo "m5burner already up to date (hash unchanged)"
 else
-  echo "m5burner hash changed: $old_hash -> $new_hash"
-  echo "Bump 'version' in $file by hand if you can find a real version number for the new build."
+  echo "Updated m5burner (hash changed: $old_hash -> $new_hash; version unchanged -- bump manually if a real version can be found)"
 fi
