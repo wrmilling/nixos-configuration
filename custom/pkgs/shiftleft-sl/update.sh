@@ -63,7 +63,7 @@ while read -r plat os arch; do
   [ -z "$plat" ] && continue
   old_hash=$(get_hash "$plat")
   url="https://cdn.shiftleft.io/download/sl-${new_version}-${os}-${arch}.tar.gz"
-  new_hash=$(nix --extra-experimental-features nix-command store prefetch-file --hash-type sha256 --json "$url" | jq -r .hash)
+  new_hash=$(nix --extra-experimental-features nix-command store prefetch-file --hash-type sha256 "$url" 2>&1 | grep -oE "sha256-[A-Za-z0-9+/=]+")
   sed -i.bak "s#${old_hash}#${new_hash}#" "$file"
   rm -f "$file.bak"
   echo "$plat: $old_hash -> $new_hash"

@@ -1,12 +1,27 @@
 # Custom Packages
 
-Definition of custom packages which are generally not yet available in upstream nixpkgs.
+Definition of custom packages which are generally not yet available in upstream nixpkgs or deired to have faster version bumps than upstream can support.
 
 ## Current Packages
 
 - [slides-git](pkgs/slides-git) — Terminal based presentation tool (upstream build from git).
 - [mcpelauncher-client-git](pkgs/mcpelauncher-client) — Unofficial Minecraft Bedrock Edition launcher with CLI (built from git/tag).
 - [mcpelauncher-ui-qt-git](pkgs/mcpelauncher-ui-qt) — Unofficial Minecraft Bedrock Edition launcher with GUI (Qt frontend).
+- [kubernetes-mcp-server](pkgs/kubernetes-mcp-server) — MCP server for Kubernetes cluster interaction.
+- [flux-operator-mcp](pkgs/flux-operator-mcp) — MCP server for FluxCD GitOps cluster management.
+- [codegraph](pkgs/codegraph) — Local code knowledge graph MCP server for AI coding agents (tracked ahead of the nixpkgs-provided version).
+- [shiftleft-sl](pkgs/shiftleft-sl) — ShiftLeft CLI for code security analysis.
+- [m5burner](pkgs/m5burner) — M5Stack firmware burning tool.
+
+## Updating packages
+
+```sh
+custom/pkgs/update.sh          # update every package
+custom/pkgs/update.sh <name>   # update one, e.g. codegraph, slides-git, m5burner
+```
+
+Prints what it did (or "already up to date") per package; review the diff and
+build (`nix build .#packages.<system>.<name>`) before committing.
 
 ## Overlays
 

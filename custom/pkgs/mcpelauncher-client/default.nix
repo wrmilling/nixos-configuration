@@ -26,7 +26,7 @@
 # Bionic libc part doesn't compile with GCC
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "mcpelauncher-client";
-  version = "1.5.5-qt6";
+  version = "1.7.6-qt6";
 
   # NOTE: check mcpelauncher-ui-qt when updating
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-QJL2CKcP1Sv7JR2ir0XP4nZUpBeH0NX7QeyrZWPSMoI=";
+    hash = "sha256-KAHAr1cAkG6B15CTwxRWZWT9IdTcvCSal3jrPe8C4wE=";
   };
 
   patches = [
@@ -104,6 +104,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XAL_WEBVIEW_USE_QT" withQtWebview)
     (lib.cmakeBool "ENABLE_QT_ERROR_UI" withQtErrorWindow)
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Unofficial Minecraft Bedrock Edition launcher with CLI";

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "slides";
-  version = "0.10.0";
+  version = "0.9.0-unstable-2026-07-08";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "slides";
-    rev = "c6eea3330053045cede8d65ee1086fb5d4db6c43";
-    sha256 = "sha256-fFKW1/+grANz7Znkkqk3X76rG+cxO57lfd24yx84HL8=";
+    rev = "92af1ef1f33a75bd51db9842a760bd228f3b1a61";
+    sha256 = "sha256-eeueKw3ED86EenmrAvunvqwOaPa9Sd/iyQ1Z//NMwVY=";
   };
 
   nativeCheckInputs = [
@@ -22,13 +22,15 @@ buildGoModule rec {
     go
   ];
 
-  vendorHash = "sha256-oV3UcbOC4y8xWnA5qZGEK/TRdQ4zCeZshgBAs2l+vSY=";
+  vendorHash = "sha256-ULF6zzg1fY0xW4eUOC452XlnG3/Pxm+H9thyZO2OtDc=";
 
   ldflags = [
     "-s"
     "-w"
     "-X=main.Version=${version}"
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Terminal based presentation tool";

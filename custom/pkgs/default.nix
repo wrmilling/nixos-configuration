@@ -1,7 +1,7 @@
 # Custom packages, that can be defined similarly to ones from nixpkgs
 # You can build them using 'nix build .#example' or (legacy) 'nix-build -A example'
 {
-  pkgs ? (import ../nixpkgs.nix) { },
+  pkgs ? import <nixpkgs> { },
 }:
 {
   slides-git = pkgs.callPackage ./slides-git { };
@@ -9,5 +9,7 @@
   mcpelauncher-ui-qt-git = pkgs.callPackage ./mcpelauncher-ui-qt { };
   kubernetes-mcp-server = pkgs.callPackage ./kubernetes-mcp-server { };
   flux-operator-mcp = pkgs.callPackage ./flux-operator-mcp { };
+  codegraph = pkgs.callPackage ./codegraph { };
   shiftleft-sl = pkgs.callPackage ./shiftleft-sl { };
+  m5burner = pkgs.callPackage ./m5burner { };
 }

@@ -143,6 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   desktopItems = [
     (makeDesktopItem {
       name = finalAttrs.pname;

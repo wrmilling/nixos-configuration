@@ -6,28 +6,28 @@
 }:
 
 let
-  version = "0.53.0";
+  version = "0.54.1";
   plat =
     {
       "x86_64-linux" = {
         os = "linux";
         arch = "amd64";
-        sha256 = "sha256-td0Er9knMPsUj/yr8otgWKTq0chuXgMdHIrXWRRstHs=";
+        sha256 = "sha256-RnDaepoBnpNoIgWl++oqAqVwLO2AtMnVAbGrAKvrMoo=";
       };
       "aarch64-linux" = {
         os = "linux";
         arch = "arm64";
-        sha256 = "sha256-V18rvR70RwO0Ttt28+5uQfJ1YvzFXMQeMPO6pH29Ta8=";
+        sha256 = "sha256-sQ7bVHNylIfXC0nnRWRvwVSikcr/z048rDxwxTGWtpU=";
       };
       "x86_64-darwin" = {
         os = "darwin";
         arch = "amd64";
-        sha256 = "sha256-M8XgtPVO/pbinUwoaIpQSwdtEWFXqQ4BdQOA6UA+5e8=";
+        sha256 = "sha256-whVbRX0XHHKdL421lA/iyxZULAX/QmEgAsGcH62166c=";
       };
       "aarch64-darwin" = {
         os = "darwin";
         arch = "arm64";
-        sha256 = "sha256-2nZTlEYA6GBDk++BkPzdBB9WdfBxLzD7SZNbXp5nx00=";
+        sha256 = "sha256-usu5hKdex8yYK/8y/afN3f6HW2uvrvarFNTNKeCUBqk=";
       };
     }
     .${stdenvNoCC.hostPlatform.system};
