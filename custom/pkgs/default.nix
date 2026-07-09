@@ -5,6 +5,7 @@
 }:
 {
   slides-git = pkgs.callPackage ./slides-git { };
+  cc9s = pkgs.callPackage ./cc9s { };
   mcpelauncher-client-git = pkgs.callPackage ./mcpelauncher-client { };
   mcpelauncher-ui-qt-git = pkgs.callPackage ./mcpelauncher-ui-qt { };
   kubernetes-mcp-server = pkgs.callPackage ./kubernetes-mcp-server { };

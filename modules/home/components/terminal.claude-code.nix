@@ -544,6 +544,7 @@ in
     # `codegraph status`) is usable outside of the MCP server Claude Code launches.
     home.packages = [
       pkgs.codegraph
+      pkgs.cc9s
     ]
     ++ lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage;
 
