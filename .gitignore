@@ -6,3 +6,7 @@ result
 
 # AI Stuff
 .sisyphus
+
+# CodeGraph local index (db/cache/logs/hook markers are all machine-local,
+# regenerated per project via `codegraph init` -- see .codegraph/.gitignore)
+.codegraph/

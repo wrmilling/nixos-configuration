@@ -540,7 +540,12 @@ in
 
   config = lib.mkIf cfg.enable {
     # Provide the `zclaude` wrapper when a z.ai API key file is configured.
-    home.packages = lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage;
+    # codegraph is also put on PATH directly so its CLI (e.g. `codegraph init`,
+    # `codegraph status`) is usable outside of the MCP server Claude Code launches.
+    home.packages = [
+      pkgs.codegraph
+    ]
+    ++ lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage;
 
     programs.claude-code = {
       enable = true;
