@@ -28,6 +28,10 @@
     homeDirectory = lib.mkForce "/Users/${secrets.hosts.work-mac.username}";
   };
 
+  sops.secrets."fish/extraConfig" = {
+    sopsFile = ../../../secrets/work.yaml;
+  };
+
   programs.git = {
     settings.user.email = secrets.hosts.work-mac.email.long;
     signing.signByDefault = false;
@@ -55,6 +59,14 @@
       # Add custom local paths
       ''
         fish_add_path $HOME/.rd/bin
+      ''
+      +
+      # Work-only extra fish config (aliases/functions), loaded from a sops secret
+      # so nothing company-internal lands in the repo in plaintext.
+      ''
+        if test -e ${config.sops.secrets."fish/extraConfig".path}
+          source ${config.sops.secrets."fish/extraConfig".path}
+        end
       '';
   };
 
