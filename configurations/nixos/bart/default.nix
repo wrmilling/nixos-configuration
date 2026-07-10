@@ -69,10 +69,59 @@
       autodiscover = true;
       packageRules = [
         {
+          # Aliased action names the built-in manager can't resolve; handled by customManagers below.
           matchManagers = [ "github-actions" ];
-          registryUrls = [ "https://${secrets.forgejo.domain}" ];
+          matchDepNames = [
+            "actions/ssh-agent"
+            "actions/setup-qemu-action"
+            "actions/setup-buildx-action"
+            "actions/docker-login-action"
+            "actions/docker-build-push-action"
+          ];
+          enabled = false;
+        }
+        {
+          # Local action mirrors only sync every 48h; don't suggest a release before the mirror can have it.
+          matchDatasources = [ "github-tags" ];
+          minimumReleaseAge = "48 hours";
         }
       ];
+      customManagers =
+        let
+          mirroredActions = [
+            {
+              alias = "actions/ssh-agent";
+              upstream = "webfactory/ssh-agent";
+            }
+            {
+              alias = "actions/setup-qemu-action";
+              upstream = "docker/setup-qemu-action";
+            }
+            {
+              alias = "actions/setup-buildx-action";
+              upstream = "docker/setup-buildx-action";
+            }
+            {
+              alias = "actions/docker-login-action";
+              upstream = "docker/login-action";
+            }
+            {
+              alias = "actions/docker-build-push-action";
+              upstream = "docker/build-push-action";
+            }
+          ];
+        in
+        map (a: {
+          customType = "regex";
+          managerFilePatterns = [ "/\\.forgejo/workflows/.*\\.ya?ml$/" ];
+          matchStrings = [
+            "uses:\\s+${a.alias}@(?<currentDigest>[a-f0-9]{40})\\s*#\\s*(?<currentValue>v[0-9.]+)"
+          ];
+          depNameTemplate = a.upstream;
+          packageNameTemplate = a.upstream;
+          datasourceTemplate = "github-tags";
+          versioningTemplate = "semver";
+        }) mirroredActions;
     };
     # Every 10 minutes
     schedule = "*:0/30";
