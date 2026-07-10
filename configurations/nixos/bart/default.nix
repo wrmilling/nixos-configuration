@@ -16,6 +16,11 @@
   modules = {
     machineType.server.enable = true;
     nixos.sshd.banner = "${secrets.sshd.banner}";
+    nixos.forgejoRunner = {
+      enable = true;
+      domain = secrets.forgejo.domain;
+      runnerTokenFile = config.sops.secrets."forgejo/runnerToken".path;
+    };
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -45,28 +50,6 @@
     sopsFile = ../../../secrets/renovate.yaml;
   };
 
-  virtualisation.docker.enable = true;
-  services.gitea-actions-runner = {
-    package = pkgs.forgejo-runner;
-    instances.bart = {
-      enable = true;
-      name = "bart";
-      settings = {
-        runner.fetch_interval = "15s";
-        container.docker_host = "automount";
-      };
-      labels = [
-        "alpine:docker://alpine:3.23.4"
-        "alpine-latest:docker://alpine:latest"
-        "alpine-tokyo:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:3.23.4-3"
-        "alpine-tokyo-latest:docker://${secrets.forgejo.domain}/wrmilling/alpine-tokyo:latest"
-        "ubuntu-latest:docker://node:18-bullseye"
-      ];
-      url = "https://${secrets.forgejo.domain}";
-      tokenFile = config.sops.secrets."forgejo/runnerToken".path;
-    };
-  };
-
   services.renovate = {
     enable = true;
     package = pkgs.renovate;
@@ -84,6 +67,12 @@
       gitAuthor = "Renovate Bot <${secrets.forgejo.renovateEmail}>";
       platform = "gitea";
       autodiscover = true;
+      packageRules = [
+        {
+          matchManagers = [ "github-actions" ];
+          registryUrls = [ "https://${secrets.forgejo.domain}" ];
+        }
+      ];
     };
     # Every 10 minutes
     schedule = "*:0/30";
