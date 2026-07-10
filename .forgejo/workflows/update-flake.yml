@@ -11,6 +11,8 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: write
+    outputs:
+      changed: ${{ steps.diff.outputs.changed }}
     steps:
       - uses: ${{ github.server_url }}/actions/checkout@v6.0.2
         with:
@@ -56,3 +58,9 @@ jobs:
           set -euo pipefail
           git commit -am "Flake: Update Lockfile"
           git push origin main
+
+  sync:
+    needs: lockfile
+    if: needs.lockfile.outputs.changed == 'true'
+    uses: ./.forgejo/workflows/repo-sync.yml
+    secrets: inherit
