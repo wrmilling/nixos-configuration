@@ -1,19 +1,14 @@
 # Based on the upstream nixpkgs derivation (pkgs/by-name/co/codegraph/package.nix,
 # maintained by gdifolco). Kept here as a custom package so version bumps don't have
 # to wait on nixpkgs channel promotion -- upstream releases fairly often and this
-# repo wants to track it more closely. Bump `version` + `passthru.sources` hashes (or
-# run the updateScript) to update; the build logic itself should stay in sync with
-# nixpkgs' package.nix if it changes upstream.
+# repo wants to track it more closely. Run ./update.sh to update; the build logic
+# itself should stay in sync with nixpkgs' package.nix if it changes upstream.
 {
   lib,
   stdenv,
   fetchurl,
   autoPatchelfHook,
   makeWrapper,
-  writeShellScript,
-  curl,
-  gnused,
-  common-updater-scripts,
   cctools,
   darwin,
   rcodesign,
@@ -21,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codegraph";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -82,40 +77,21 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-darwin-arm64.tar.gz";
-        hash = "sha256-1JMTNOJJekhhshTsB3145eOHAqJY/k4Fwz7TvB0USpA=";
+        hash = "sha256-NrVTIuY4tVOAPl0RfKnrY2u4xa+W/bTn33rucX/Tvu0=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-arm64.tar.gz";
-        hash = "sha256-KBMNpvbHCH0pMzdzffyhBA8GlJlrAlLJUop3BqVyHYs=";
+        hash = "sha256-RzEL0Gc58rhB9bsvELc6DwFWJdMZlgi2EgFv6MaG03k=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-darwin-x64.tar.gz";
-        hash = "sha256-6TZM+LEEzykMfJbvHtPc0w0Xr1ZYPN8Ake+gsAHjZp4=";
+        hash = "sha256-5LprVEu54cYEtOkrbZNxAWssvpJezA0hGkV0s+p14vo=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-x64.tar.gz";
-        hash = "sha256-5gUHP26xcP4WHphsI1C2oGgeaAGO2ETOV/coFMCf6h0=";
+        hash = "sha256-T+sI+s+w/0wILb1GuPz1Evh0krrqOkWKfTkCDf3AvOE=";
       };
     };
-    updateScript = writeShellScript "update-codegraph" ''
-      set -o errexit
-      export PATH="${
-        lib.makeBinPath [
-          curl
-          gnused
-          common-updater-scripts
-        ]
-      }"
-      NEW_VERSION=$(curl --silent -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/colbymchenry/codegraph/releases/latest" | sed -n 's#.*/releases/tag/v##p')
-      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-          echo "The new version same as the old version."
-          exit 0
-      fi
-      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version "codegraph" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
-      done
-      echo "Updated codegraph ${finalAttrs.version} -> $NEW_VERSION"
-    '';
   };
 
   meta = {
