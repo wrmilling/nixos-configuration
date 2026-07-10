@@ -52,7 +52,10 @@ jobs:
           fetch-depth: 0
 
       - name: Run update script
-        run: custom/pkgs/update.sh ${{ matrix.package }} | tee /tmp/update.log
+        run: |
+          # Unset Forgejo's auto-injected token so `gh` calls to github.com stay unauthenticated.
+          unset GH_TOKEN GITHUB_TOKEN
+          custom/pkgs/update.sh ${{ matrix.package }} | tee /tmp/update.log
 
       - name: Check for changes
         id: diff
