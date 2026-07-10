@@ -65,7 +65,7 @@
     settings = {
       endpoint = "https://${secrets.forgejo.domain}";
       gitAuthor = "Renovate Bot <${secrets.forgejo.renovateEmail}>";
-      platform = "gitea";
+      platform = "forgejo";
       autodiscover = true;
       packageRules = [
         {
