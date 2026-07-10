@@ -1,0 +1,58 @@
+name: Update Flake Lockfile
+on:
+  schedule:
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+jobs:
+  lockfile:
+    runs-on: alpine-tokyo
+    concurrency:
+      group: flake-update
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: ${{ github.server_url }}/actions/checkout@v6.0.2
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Update flake lockfile
+        run: nix flake update
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Import GPG signing key
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.FORGE_ACTIONS_GPG_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.gnupg
+          chmod 700 ~/.gnupg
+          echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
+          echo "pinentry-mode loopback" > ~/.gnupg/gpg.conf
+          gpgconf --kill gpg-agent
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          key_id=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr:/ {print $10; exit}')
+          git config --global user.signingkey "$key_id"
+          git config --global commit.gpgsign true
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GIT_AUTHOR_NAME: Winston R. Milling
+          GIT_AUTHOR_EMAIL: Winston@Milli.ng
+          GIT_COMMITTER_NAME: ${{ vars.GIT_AUTHOR_NAME }}
+          GIT_COMMITTER_EMAIL: ${{ vars.GIT_AUTHOR_EMAIL }}
+        run: |
+          set -euo pipefail
+          git commit -am "Flake: Update Lockfile"
+          git push origin main
