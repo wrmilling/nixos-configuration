@@ -2,7 +2,7 @@
 
 [Nix / NixOS](https://nixos.org/) configuration repo that handles NixOS, nix-darwin, and home-manager configurations.
 
-![neofetch screenshot](https://i.imgur.com/Hh16z3T.png)
+![fastfetch screenshot](https://i.imgur.com/EwKciVY.png)
 
 ## General Layout
 
