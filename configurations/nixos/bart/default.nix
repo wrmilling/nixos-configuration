@@ -67,7 +67,6 @@
       gitAuthor = "Renovate Bot <${secrets.forgejo.renovateEmail}>";
       platform = "forgejo";
       autodiscover = true;
-      requiredStatusChecks = null;
       packageRules = [
         {
           # Aliased action names the built-in manager can't resolve; handled by customManagers below.
@@ -124,7 +123,7 @@
           versioningTemplate = "semver";
         }) mirroredActions;
     };
-    # Every 30 minutes
+    # Every 10 minutes
     schedule = "*:0/30";
   };
 
