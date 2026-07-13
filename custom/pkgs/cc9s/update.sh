@@ -1,47 +1,98 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-file="$dir/default.nix"
-flake_root="$(cd "$dir/../../.." && pwd)"
-fake_hash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+package_file="$script_dir/default.nix"
+versions_file="$script_dir/versions.json"
+repo_root="$(cd "$script_dir/../../.." && pwd)"
 
-current_version=$(sed -n 's/.*version = "\(.*\)".*/\1/p' "$file")
-new_version=$(gh api repos/kincoy/cc9s/releases/latest --jq .tag_name | sed 's/^v//')
+current_version=$(nix shell nixpkgs#jq -c jq -r '.version' "$versions_file")
+new_version=$(gh api repos/kincoy/cc9s/releases/latest --jq '.tag_name | ltrimstr("v")')
 
 if [[ "$new_version" == "$current_version" ]]; then
   echo "cc9s already up to date at $current_version"
   exit 0
 fi
 
-old_sha256=$(sed -n 's/.*sha256 = "\(.*\)".*/\1/p' "$file" | head -n1)
-old_vendor_hash=$(sed -n 's/.*vendorHash = "\(.*\)".*/\1/p' "$file")
+echo "Updating cc9s to version: ${new_version}" >&2
+tag="v${new_version}"
 
-sed -i.bak "s#version = \"${current_version}\"#version = \"${new_version}\"#" "$file"
-sed -i.bak "s#sha256 = \"${old_sha256}\"#sha256 = \"${fake_hash}\"#" "$file"
-sed -i.bak "s#vendorHash = \"${old_vendor_hash}\"#vendorHash = \"${fake_hash}\"#" "$file"
-rm -f "$file.bak"
+echo "Prefetching source hash..." >&2
 
-build_and_get_hash() {
-  nix build "$flake_root#cc9s" 2>&1 | sed -n 's/.*got:\s*//p' | head -n1
-}
+src_json="$(
+  nix store prefetch-file \
+    --json \
+    --unpack \
+    "https://github.com/kincoy/cc9s/archive/refs/tags/${tag}.tar.gz"
+)"
 
-new_sha256=$(build_and_get_hash)
-if [[ -z "$new_sha256" ]]; then
-  echo "Failed to determine src sha256 - see build output above" >&2
+src_hash="$(
+  printf '%s\n' "$src_json" |
+    nix shell nixpkgs#jq -c jq -r '.hash'
+)"
+
+if [[ -z "$src_hash" || "$src_hash" == "null" ]]; then
+  echo "error: failed to determine source hash" >&2
+  echo "$src_json" >&2
   exit 1
 fi
-sed -i.bak "s#sha256 = \"${fake_hash}\"#sha256 = \"${new_sha256}\"#" "$file"
-rm -f "$file.bak"
 
-new_vendor_hash=$(build_and_get_hash)
-if [[ -z "$new_vendor_hash" ]]; then
-  echo "Failed to determine vendorHash - see build output above" >&2
+echo "Source hash: ${src_hash}" >&2
+echo >&2
+
+echo "Computing vendorHash. This intentionally builds with lib.fakeHash..." >&2
+
+tmp_log="$(mktemp)"
+trap 'rm -f "$tmp_log"' EXIT
+
+set +e
+nix build \
+  --no-link \
+  --impure \
+  --expr "
+    let
+      flake = builtins.getFlake \"path:${repo_root}\";
+      system = builtins.currentSystem;
+      pkgs = import flake.inputs.nixpkgs {
+        inherit system;
+      };
+      pkg = pkgs.callPackage ${package_file} {};
+    in
+      pkg.overrideAttrs (old: {
+        version = \"${new_version}\";
+        src = pkgs.fetchFromGitHub {
+          owner = \"kincoy\";
+          repo = \"cc9s\";
+          rev = \"${tag}\";
+          hash = \"${src_hash}\";
+        };
+        vendorHash = pkgs.lib.fakeHash;
+      })
+  " 2>&1 | tee "$tmp_log" >&2
+build_status="${PIPESTATUS[0]}"
+set -e
+
+vendor_hash="$(
+  sed -nE 's/.*got:[[:space:]]*(sha256-[A-Za-z0-9+/=]+).*/\1/p' "$tmp_log" |
+    tail -n1
+)"
+
+if [[ -z "$vendor_hash" ]]; then
+  echo >&2
+  echo "error: could not extract vendorHash from nix build output" >&2
+
+  if [[ "$build_status" -eq 0 ]]; then
+    echo "The build unexpectedly succeeded with lib.fakeHash." >&2
+  else
+    echo "Look above for the nix error output." >&2
+  fi
+
   exit 1
 fi
-sed -i.bak "s#vendorHash = \"${fake_hash}\"#vendorHash = \"${new_vendor_hash}\"#" "$file"
-rm -f "$file.bak"
 
-echo "  sha256:     $old_sha256 -> $new_sha256"
-echo "  vendorHash: $old_vendor_hash -> $new_vendor_hash"
+printf '{\n  "version": "%s",\n  "hash": "%s",\n  "vendorHash": "%s"\n}\n' \
+  "$new_version" "$src_hash" "$vendor_hash" > "$versions_file"
+
+echo >&2
+echo "Written to ${versions_file}" >&2
 echo "Updated cc9s $current_version -> $new_version"

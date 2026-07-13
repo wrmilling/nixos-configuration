@@ -1,0 +1,9 @@
+{
+  "version": "0.9.4265",
+  "hashes": {
+    "x86_64-linux": "sha256-cCC/BhnPVkornSnAdNXjHeDyGBWCyT0l2wWaFneSQZo=",
+    "aarch64-linux": "sha256-jL8t6YJL6kCQ8OjOuHEaY9j8a4c9Twqp/oL3odW5MQ8=",
+    "x86_64-darwin": "sha256-NqEFKAKgBWH0R5gxLb+slFBi945fMEMhUNPVWt5kKeU=",
+    "aarch64-darwin": "sha256-DK8Fwb2/IHQuWqBtuHhLXwWj2x3Pp+Pera7TM1eJsbY="
+  }
+}

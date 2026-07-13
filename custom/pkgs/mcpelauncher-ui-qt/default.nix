@@ -11,8 +11,9 @@
   protobuf,
   qt6,
   glfw,
-}:
-
+}: let
+  versions = lib.importJSON ./versions.json;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcpelauncher-ui-qt";
   inherit (mcpelauncher-client-git) version;
@@ -22,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-ui-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Oibi7+LJK7K1a1fFN2SKy4XiA0gSC4u7Wmk0t86SHaw=";
+    hash = versions.hash;
   };
 
   patches = [

@@ -33,11 +33,13 @@
   pango,
   python3,
   udev,
-}:
-
+}: let
+  versions = lib.importJSON ./versions.json;
+  inherit (versions) version;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "m5burner";
-  version = "3.0-beta";
+  inherit version;
 
   passthru.runtimeLibraries = [
     alsa-lib
@@ -71,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://m5burner-cdn.m5stack.com/app/M5Burner-v3-beta-linux-x64.zip";
-    hash = "sha256-LLidQzeQTfxJTnvD9I8N3hvOm0YCRnk9OThlleZipRg=";
+    hash = versions.hash;
     stripRoot = false;
     curlOptsList = [
       "--referer"

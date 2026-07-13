@@ -2,8 +2,8 @@
 set -euo pipefail
 
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-file="$dir/default.nix"
-ui_file="$dir/../mcpelauncher-ui-qt/default.nix"
+versions_file="$dir/versions.json"
+ui_versions_file="$dir/../mcpelauncher-ui-qt/versions.json"
 repo_root="$(cd "$dir/../../.." && pwd)"
 
 fakehash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
@@ -45,20 +45,13 @@ resolve_hash() {
   printf '%s' "$hash"
 }
 
-get_src_hash() {
-  awk '
-    /src = fetchFromGitHub/ { in_src = 1 }
-    in_src && /hash = "sha256-/ {
-      line = $0
-      sub(/.*hash = "/, "", line)
-      sub(/".*/, "", line)
-      print line
-      exit
-    }
-  ' "$1"
+jq_set() {
+  local file="$1" field="$2" value="$3"
+  nix shell nixpkgs#jq -c jq --arg v "$value" ".${field} = \$v" "$file" > "$file.tmp"
+  mv "$file.tmp" "$file"
 }
 
-current_version=$(sed -n 's/.*version = "\(.*\)";/\1/p' "$file")
+current_version=$(nix shell nixpkgs#jq -c jq -r '.version' "$versions_file")
 
 # Only the "-qt6" tags matter here -- this package builds the Qt6 UI variant;
 # the plain "vX.Y.Z" tags (no suffix) are the older Qt5/CLI-only line.
@@ -72,26 +65,19 @@ fi
 
 echo "mcpelauncher-client: $current_version -> $new_version"
 
-sed -i.bak "s#version = \"${current_version}\";#version = \"${new_version}\";#" "$file"
-rm -f "$file.bak"
+jq_set "$versions_file" version "$new_version"
 
-old_hash=$(get_src_hash "$file")
-sed -i.bak "s#${old_hash}#${fakehash}#" "$file"
-rm -f "$file.bak"
+jq_set "$versions_file" hash "$fakehash"
 new_hash=$(resolve_hash "mcpelauncher-client-git")
-sed -i.bak "s#${fakehash}#${new_hash}#" "$file"
-rm -f "$file.bak"
+jq_set "$versions_file" hash "$new_hash"
 echo "mcpelauncher-client hash -> $new_hash"
 
 # mcpelauncher-ui-qt has no version of its own -- it inherits `version` from
 # this package and tracks the same "v<version>" tag on a sibling repo (see the
 # NOTE above the `src` block below), so bump its hash here too.
-old_ui_hash=$(get_src_hash "$ui_file")
-sed -i.bak "s#${old_ui_hash}#${fakehash}#" "$ui_file"
-rm -f "$ui_file.bak"
+jq_set "$ui_versions_file" hash "$fakehash"
 new_ui_hash=$(resolve_hash "mcpelauncher-ui-qt-git")
-sed -i.bak "s#${fakehash}#${new_ui_hash}#" "$ui_file"
-rm -f "$ui_file.bak"
+jq_set "$ui_versions_file" hash "$new_ui_hash"
 echo "mcpelauncher-ui-qt hash -> $new_ui_hash"
 
 echo "Updated mcpelauncher-client + mcpelauncher-ui-qt $current_version -> $new_version"

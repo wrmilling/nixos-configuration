@@ -12,11 +12,13 @@
   cctools,
   darwin,
   rcodesign,
-}:
-
+}: let
+  versions = lib.importJSON ./versions.json;
+  inherit (versions) version;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "codegraph";
-  version = "1.4.1";
+  inherit version;
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -77,19 +79,19 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-darwin-arm64.tar.gz";
-        hash = "sha256-Smea5aXLn/+QDdWbt4baalgbf2j0z3E73t0TfjR9NNw=";
+        hash = versions.hashes.aarch64-darwin;
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-arm64.tar.gz";
-        hash = "sha256-DWLF6yci+NGdIPehvZdEReGNUpTLWb4Ragw9Vc6HWR8=";
+        hash = versions.hashes.aarch64-linux;
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-darwin-x64.tar.gz";
-        hash = "sha256-Q2+WlDz9km6m0KhFTxiDPSElTV/Zs9IkMXsUJhMt75U=";
+        hash = versions.hashes.x86_64-darwin;
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-x64.tar.gz";
-        hash = "sha256-+1hf9QGNb6qkbSgrYfT2ibx5Z+2KG0Z6XFVt187ZtUI=";
+        hash = versions.hashes.x86_64-linux;
       };
     };
   };

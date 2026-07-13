@@ -21,12 +21,14 @@
   zenity,
   xdg-utils,
   sdl3,
-}:
-
+}: let
+  versions = lib.importJSON ./versions.json;
+  inherit (versions) version;
+in
 # Bionic libc part doesn't compile with GCC
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "mcpelauncher-client";
-  version = "1.7.6-qt6";
+  inherit version;
 
   # NOTE: check mcpelauncher-ui-qt when updating
   src = fetchFromGitHub {
@@ -34,7 +36,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-KAHAr1cAkG6B15CTwxRWZWT9IdTcvCSal3jrPe8C4wE=";
+    hash = versions.hash;
   };
 
   patches = [

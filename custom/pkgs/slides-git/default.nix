@@ -4,25 +4,25 @@
   buildGoModule,
   fetchFromGitHub,
   go,
-}:
-
+}: let
+  versions = lib.importJSON ./versions.json;
+  inherit (versions) version rev vendorHash;
+in
 buildGoModule rec {
   pname = "slides";
-  version = "0.9.0-unstable-2026-07-08";
+  inherit version vendorHash;
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "slides";
-    rev = "92af1ef1f33a75bd51db9842a760bd228f3b1a61";
-    sha256 = "sha256-eeueKw3ED86EenmrAvunvqwOaPa9Sd/iyQ1Z//NMwVY=";
+    inherit rev;
+    hash = versions.hash;
   };
 
   nativeCheckInputs = [
     bash
     go
   ];
-
-  vendorHash = "sha256-ULF6zzg1fY0xW4eUOC452XlnG3/Pxm+H9thyZO2OtDc=";
 
   ldflags = [
     "-s"

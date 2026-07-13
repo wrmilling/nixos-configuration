@@ -2,7 +2,7 @@
 set -euo pipefail
 
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-file="$dir/default.nix"
+versions_file="$dir/versions.json"
 repo_root="$(cd "$dir/../../.." && pwd)"
 
 fakehash="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
@@ -28,8 +28,16 @@ resolve_hash() {
   printf '%s' "$hash"
 }
 
-current_version=$(sed -n 's/.*version = "\(.*\)";/\1/p' "$file")
-old_rev=$(sed -n 's/.*rev = "\([^"]*\)";/\1/p' "$file")
+jq_set() {
+  local field="$1" value="$2"
+  local tmp
+  tmp=$(mktemp)
+  nix shell nixpkgs#jq -c jq --arg v "$value" ".${field} = \$v" "$versions_file" > "$tmp"
+  mv "$tmp" "$versions_file"
+}
+
+current_version=$(nix shell nixpkgs#jq -c jq -r '.version' "$versions_file")
+old_rev=$(nix shell nixpkgs#jq -c jq -r '.rev' "$versions_file")
 
 # maaslalani/slides tags releases rarely and this package tracks its default
 # branch past the last tag (the current pin is already ahead of the latest
@@ -52,30 +60,24 @@ new_version="${last_release}-unstable-${new_date}"
 
 echo "slides: $current_version ($old_rev) -> $new_version ($new_rev)"
 
-sed -i.bak \
-  -e "s#version = \"${current_version}\";#version = \"${new_version}\";#" \
-  -e "s#rev = \"${old_rev}\";#rev = \"${new_rev}\";#" \
-  "$file"
-rm -f "$file.bak"
+# Write the placeholder rev/version so resolve_hash's rebuild picks up the new
+# pin, keeping the existing hashes in place until they're re-resolved below.
+jq_set version "$new_version"
+jq_set rev "$new_rev"
 
-# 1. src hash (fetchFromGitHub's `sha256`, distinct from the `vendorHash` key
+# 1. src hash (fetchFromGitHub's `hash`, distinct from the `vendorHash` key
 # further down).
-old_src_hash=$(sed -n 's/.*[^a-zA-Z]sha256 = "\(sha256-[^"]*\)";/\1/p' "$file" | head -1)
-sed -i.bak "s#${old_src_hash}#${fakehash}#" "$file"
-rm -f "$file.bak"
+jq_set hash "$fakehash"
 new_src_hash=$(resolve_hash)
-sed -i.bak "s#${fakehash}#${new_src_hash}#" "$file"
-rm -f "$file.bak"
-echo "src sha256 -> $new_src_hash"
+jq_set hash "$new_src_hash"
+echo "hash -> $new_src_hash"
 
 # 2. vendorHash (depends on the new src's go.mod/go.sum, so it must be
 # re-resolved after the src hash above is already correct).
-old_vendor_hash=$(sed -n 's/.*vendorHash = "\(sha256-[^"]*\)";/\1/p' "$file")
-sed -i.bak "s#${old_vendor_hash}#${fakehash}#" "$file"
-rm -f "$file.bak"
+jq_set vendorHash "$fakehash"
 new_vendor_hash=$(resolve_hash)
-sed -i.bak "s#${fakehash}#${new_vendor_hash}#" "$file"
-rm -f "$file.bak"
+jq_set vendorHash "$new_vendor_hash"
 echo "vendorHash -> $new_vendor_hash"
 
+echo "Written to ${versions_file}"
 echo "Updated slides $current_version -> $new_version"

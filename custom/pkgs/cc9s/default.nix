@@ -2,20 +2,20 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-}:
-
+}: let
+  versions = lib.importJSON ./versions.json;
+  inherit (versions) version vendorHash;
+in
 buildGoModule rec {
   pname = "cc9s";
-  version = "0.2.3";
+  inherit version vendorHash;
 
   src = fetchFromGitHub {
     owner = "kincoy";
     repo = "cc9s";
     rev = "v${version}";
-    sha256 = "sha256-FFDwLpSyzSR8TEi6z9vTRIExBtqwKTZQ1Il002HsjCM=";
+    hash = versions.hash;
   };
-
-  vendorHash = "sha256-BUI/+bSDi7Qgo6UC8Esl7MVzQm10X7iVKndLNYqDQrE=";
 
   ldflags = [
     "-s"
