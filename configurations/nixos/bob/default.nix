@@ -132,7 +132,7 @@
             return = "200 '{\"m.server\": \"synapse.${secrets.hosts.common.domain}:443\"}'";
           };
           "/.well-known/matrix/client" = {
-            return = "200 '{\"m.homeserver\": {\"base_url\": \"https://synapse.${secrets.hosts.common.domain}\"},\"org.matrix.msc2965.authentication\": {\"issuer\": \"https://synapse.${secrets.hosts.common.domain}/\",\"account\": \"https://mas.${secrets.hosts.common.domain}/account\"}}'";
+            return = "200 '{\"m.homeserver\": {\"base_url\": \"https://synapse.${secrets.hosts.common.domain}\"},\"org.matrix.msc2965.authentication\": {\"issuer\": \"https://mas.${secrets.hosts.common.domain}/\",\"account\": \"https://mas.${secrets.hosts.common.domain}/account\"}}'";
             extraConfig = "add_header Content-Type application/json;\nadd_header \"Access-Control-Allow-Origin\" *;\n";
           };
           "/.well-known/webfinger" = {
