@@ -45,7 +45,6 @@ in
           container.docker_host = "automount";
           cache = {
             enabled = true;
-            host = "host.docker.internal";
             proxy_port = 41230;
           };
         };
