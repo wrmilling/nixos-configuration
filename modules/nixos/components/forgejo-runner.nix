@@ -25,6 +25,16 @@ in
   config = lib.mkIf cfg.enable {
     virtualisation.docker.enable = true;
 
+    # act_runner's actions/cache server needs a pinned port reachable from job containers, but only via Docker's bridge interfaces - never the public one.
+    networking.firewall.extraCommands = ''
+      iptables -A nixos-fw -i docker0 -p tcp --dport 41230 -j nixos-fw-accept
+      iptables -A nixos-fw -i br-+    -p tcp --dport 41230 -j nixos-fw-accept
+    '';
+    networking.firewall.extraStopCommands = ''
+      iptables -D nixos-fw -i docker0 -p tcp --dport 41230 -j nixos-fw-accept || true
+      iptables -D nixos-fw -i br-+    -p tcp --dport 41230 -j nixos-fw-accept || true
+    '';
+
     services.gitea-actions-runner = {
       package = pkgs.forgejo-runner;
       instances.${config.networking.hostName} = {
@@ -33,6 +43,10 @@ in
         settings = {
           runner.fetch_interval = "15s";
           container.docker_host = "automount";
+          cache = {
+            enabled = true;
+            port = 41230;
+          };
         };
         labels = [
           "alpine:docker://alpine:3.23.4"
