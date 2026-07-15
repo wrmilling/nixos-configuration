@@ -52,7 +52,7 @@ let
     install -m 0640 -o root -g nginx "$tmpdir/key.pem" ${filebrowserTlsKey}
 
     if systemctl is-active --quiet nginx.service; then
-      systemctl reload nginx.service
+      systemctl reload --no-block nginx.service
     fi
   '';
 in
