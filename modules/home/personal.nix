@@ -55,6 +55,7 @@ in
         pkgs.libreoffice
         pkgs.chromium # Will not run from nix-shell for some reason
         pkgs.calibre
+        pkgs.deskflow
       ]
     ];
   };
