@@ -15,7 +15,7 @@
 
   claude-desktop = final: _prev: {
     claude-desktop =
-      (import inputs.nixpkgs-claude-desktop { system = final.system; config.allowUnfree = true; }).claude-desktop;
+      (import inputs.nixpkgs-claude-desktop { system = final.stdenv.hostPlatform.system; config.allowUnfree = true; }).claude-desktop;
   };
 
   modifications = final: prev: {
@@ -24,7 +24,7 @@
     # });
 
     filebrowser =
-      (import inputs.nixpkgs-filebrowser { system = final.system; config.allowUnfree = true; }).filebrowser;
+      (import inputs.nixpkgs-filebrowser { system = final.stdenv.hostPlatform.system; config.allowUnfree = true; }).filebrowser;
 
     openldap = prev.openldap.overrideAttrs {
       doCheck = !prev.stdenv.hostPlatform.isi686;
@@ -50,7 +50,7 @@
   # be accessible through 'pkgs.stable'
   stable-packages = final: _prev: {
     stable = import inputs.nixpkgs-stable {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config.allowUnfree = true;
     };
   };
@@ -59,7 +59,7 @@
   # will be accessible through 'pkgs.unstable-small'
   unstable-small-packages = final: _prev: {
     unstable-small = import inputs.nixpkgs-unstable-small {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config.allowUnfree = true;
     };
   };
