@@ -41,6 +41,7 @@ in
         outputs.overlays.stable-packages
         outputs.overlays.unstable-small-packages
         outputs.overlays.claude-code
+        outputs.overlays.claude-desktop
       ];
       config = {
         allowUnfree = true;

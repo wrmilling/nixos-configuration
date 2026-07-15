@@ -26,6 +26,7 @@ Nix flake managing NixOS, nix-darwin, and Home Manager configurations.
 
 ## Conventions
 - Minimal, localized edits; mirror nearby patterns and naming.
+- Code should be self-explanatory; don't add comments to document intent that the code itself already makes clear.
 - Format with `nix fmt` (nixfmt) before finishing.
 - Verify: `nix eval` the affected config, e.g. `nix eval .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath` or `.#homeConfigurations."w4cbe@<host>".activationPackage.drvPath`.
 - Rebuilds (user runs): `nh os switch .`, `nh darwin switch .`, `nh home switch .`.

@@ -44,6 +44,7 @@ in
       (lib.mkIf pkgs.stdenv.isx86_64 [ pkgs.slack ])
       (lib.mkIf pkgs.stdenv.isAarch64 [ ])
       [
+        pkgs.claude-desktop
         pkgs.element-desktop
         pkgs.signal-desktop
         pkgs.gomuks-desktop

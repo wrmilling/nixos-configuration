@@ -13,6 +13,11 @@
   # configurations without touching NixOS hosts.
   claude-code = inputs.claude-code-nix.overlays.default;
 
+  claude-desktop = final: _prev: {
+    claude-desktop =
+      (import inputs.nixpkgs-claude-desktop { system = final.system; config.allowUnfree = true; }).claude-desktop;
+  };
+
   modifications = final: prev: {
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...

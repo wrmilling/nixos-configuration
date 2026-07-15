@@ -7,6 +7,7 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixpkgs-filebrowser.url = "github:nixos/nixpkgs/b503dde361500433ca25a32e8f4d218bf58fb659";
+    nixpkgs-claude-desktop.url = "github:NixOS/nixpkgs/aedcc9cdf90fe3944b1cae11f96ace0990772ff3";
 
     # Hardware
     hardware.url = "github:NixOS/nixos-hardware";

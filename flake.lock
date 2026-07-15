@@ -324,6 +324,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-claude-desktop": {
+      "locked": {
+        "lastModified": 1784044510,
+        "narHash": "sha256-j1FeWIOlVQYioqKZXoBdcaqLNw6/7JVJFx7zGTii5rs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "aedcc9cdf90fe3944b1cae11f96ace0990772ff3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "aedcc9cdf90fe3944b1cae11f96ace0990772ff3",
+        "type": "github"
+      }
+    },
     "nixpkgs-filebrowser": {
       "locked": {
         "lastModified": 1781141223,
@@ -419,6 +435,7 @@
         "lanzaboote": "lanzaboote",
         "nix-citizen": "nix-citizen",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-claude-desktop": "nixpkgs-claude-desktop",
         "nixpkgs-filebrowser": "nixpkgs-filebrowser",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable-small": "nixpkgs-unstable-small",
