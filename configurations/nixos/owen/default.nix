@@ -102,6 +102,7 @@ in
       port = 8080;
       root = "/mnt/media/Society";
       database = "/var/lib/filebrowser/database.db";
+      followExternalSymlinks = true;
     };
   };
 
