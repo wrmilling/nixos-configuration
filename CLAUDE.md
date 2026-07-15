@@ -34,3 +34,12 @@ Nix flake managing NixOS, nix-darwin, and Home Manager configurations.
 ## Shell commands (user runs fish)
 - Interactive commands must be fish-compatible: `(…)` not `$(…)`; `and`/`or` not `&&`/`||`; `set -gx NAME VALUE` not `export`; no `[[ ]]` or `<(…)`. Script files may be bash/POSIX sh.
 - If a task needs a utility that isn't on PATH, run it via `nix-shell -p <pkg> --run '…'` (or `nix run nixpkgs#<pkg>`). Never install temporary utilities globally or into a configuration just for a task.
+
+## CodeGraph
+
+If `.codegraph/` exists at the repo root, prefer CodeGraph over grep/find/Read for understanding or locating code:
+
+- **MCP** (if loaded): `codegraph_explore("<names or question>")` — one call returns verbatim source, call paths, and dynamic-dispatch hops grep misses. If deferred, load it via tool search first.
+- **Shell** (fallback): `codegraph explore "<names or question>"`.
+
+No `.codegraph/` directory → skip CodeGraph.
