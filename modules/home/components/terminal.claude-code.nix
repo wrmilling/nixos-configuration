@@ -242,7 +242,7 @@ let
     add_newline = false;
     command_timeout = 500;
     format =
-      "$directory$git_branch$git_status$nix_shell"
+      "$directory$git_branch$git_status$nix_shell$kubernetes"
       + "\${custom.model}\${custom.output_style}\${custom.agents}\${custom.cost}"
       + "\${custom.ctx_low}\${custom.ctx_med}\${custom.ctx_high}"
       + "\${custom.limit_5h_low}\${custom.limit_5h_med}\${custom.limit_5h_high}"
@@ -260,6 +260,10 @@ let
     nix_shell = {
       symbol = " ";
       format = "[$symbol$state]($style) ";
+    };
+    kubernetes = {
+      symbol = "⎈ ";
+      disabled = false;
     };
 
     custom = {
