@@ -22,6 +22,8 @@
     nixos.starCitizen.enable = true;
     nixos.k8sUtils.enable = true;
     nixos.nvidia.enable = true;
+    nixos.ollama.enable = true;
+    nixos.ollama.acceleration = "cuda";
     nixos.printing.enable = true;
     nixos.secureboot.enable = true;
     nixos.smartcard.enable = true;
