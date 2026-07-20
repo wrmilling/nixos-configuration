@@ -27,6 +27,7 @@
   vulkan-loader,
   lz4,
   libxxf86vm,
+  libglvnd,
 }:
 
 let
@@ -69,6 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     vulkan-loader
     lz4
     libxxf86vm
+    libglvnd
   ];
 
   dontBuild = true;
@@ -89,9 +91,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    # Add missing libraries to appflowy using the ones it comes with
+    # Add missing libraries to appflowy using the ones it comes with, plus
+    # libglvnd: the Flutter engine dlopen()s libGLESv2.so.2 at runtime rather
+    # than linking it, so autoPatchelf's static RPATH scan never covers it --
+    # without this on the LD_LIBRARY_PATH, GL context creation aborts.
     makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
-      --set LD_LIBRARY_PATH "$out/opt/lib/" \
+      --set LD_LIBRARY_PATH "$out/opt/lib:${lib.makeLibraryPath [ libglvnd ]}" \
       --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
   '';
 
