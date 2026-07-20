@@ -14,9 +14,11 @@
       "homebrew/bundle"
       "homebrew/cask-fonts"
       "homebrew/services"
+      "deskflow/tap"
     ];
     casks = [
       "appflowy"
+      "deskflow"
       "flameshot"
       "microsoft-remote-desktop"
       "obs"

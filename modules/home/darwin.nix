@@ -40,7 +40,6 @@ in
       pkgs.shiftleft-sl
       pkgs.slides-git
       pkgs.graph-easy
-      pkgs.deskflow
     ];
   };
 }
