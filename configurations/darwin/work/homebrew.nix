@@ -16,6 +16,7 @@
       "homebrew/services"
     ];
     casks = [
+      "appflowy"
       "flameshot"
       "microsoft-remote-desktop"
       "obs"
