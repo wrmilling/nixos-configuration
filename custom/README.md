@@ -19,6 +19,7 @@ Definition of custom packages which are generally not yet available in upstream 
   - `dataview` — Data index and query language over Markdown notes.
   - `advanced-tables` — Improved table navigation, formatting, and manipulation.
   - `tasks` — Track tasks across a vault, with due dates, recurrence, and filtering.
+  - `fit` — Sync a vault across devices via a GitHub repo, with client-side encryption support.
 
 ## Updating packages
 
