@@ -1,0 +1,79 @@
+name: Build and Cache Custom Packages
+run-name: Build and Cache Custom Packages at commit ${{ github.sha }}
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - custom/pkgs/**
+      - flake.lock
+      - .github/workflows/build-and-cache.yml
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - system: x86_64-linux
+            runner: ubuntu-latest
+          - system: aarch64-linux
+            runner: ubuntu-24.04-arm
+          - system: aarch64-darwin
+            runner: macos-latest
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+
+      - name: Configure cache access
+        env:
+          NIXCACHE_URL: ${{ secrets.NIXCACHE_URL }}
+          NIXCACHE_PUBLIC_KEY: ${{ secrets.NIXCACHE_PUBLIC_KEY }}
+          NIXCACHE_UPLOAD_USER: ${{ secrets.NIXCACHE_UPLOAD_USER }}
+          NIXCACHE_UPLOAD_PASSWORD: ${{ secrets.NIXCACHE_UPLOAD_PASSWORD }}
+        run: |
+          set -euo pipefail
+          host=$(printf '%s\n' "$NIXCACHE_URL" | sed -E 's#^[a-zA-Z]+://##; s#/.*##')
+          printf 'machine %s\nlogin %s\npassword %s\n' \
+            "$host" "$NIXCACHE_UPLOAD_USER" "$NIXCACHE_UPLOAD_PASSWORD" > /tmp/nixcache.netrc
+          chmod 600 /tmp/nixcache.netrc
+          {
+            echo "NIX_CONFIG<<NIXCONF_EOF"
+            echo "extra-substituters = $NIXCACHE_URL"
+            echo "extra-trusted-public-keys = $NIXCACHE_PUBLIC_KEY"
+            echo "netrc-file = /tmp/nixcache.netrc"
+            echo "NIXCONF_EOF"
+          } >> "$GITHUB_ENV"
+
+      - name: Build and push packages
+        env:
+          SYSTEM: ${{ matrix.system }}
+          NIXCACHE_URL: ${{ secrets.NIXCACHE_URL }}
+        run: |
+          set -uo pipefail
+          packages=$(nix eval ".#packages.$SYSTEM" --apply builtins.attrNames --json)
+          failures=0
+          for pkg in $(echo "$packages" | jq -r '.[]'); do
+            echo "::group::$pkg ($SYSTEM)"
+            if out=$(nix build ".#packages.$SYSTEM.$pkg" --no-link --print-out-paths 2>/tmp/build.log); then
+              # shellcheck disable=SC2086 # nix store paths never contain spaces/glob chars; splitting is intentional for multi-output derivations
+              if nix copy --to "$NIXCACHE_URL" $out; then
+                echo "pushed $pkg -> $NIXCACHE_URL"
+              else
+                echo "::warning::failed to push $pkg ($SYSTEM) to nixcache"
+                failures=1
+              fi
+            else
+              echo "::warning::$pkg failed to build on $SYSTEM (may not support this platform)"
+              cat /tmp/build.log
+            fi
+            echo "::endgroup::"
+          done
+          exit $failures

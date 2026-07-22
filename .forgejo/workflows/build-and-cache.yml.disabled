@@ -1,0 +1,79 @@
+name: Build and Cache Custom Packages
+run-name: Build and Cache Custom Packages at commit ${{ github.sha }}
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - custom/pkgs/**
+      - flake.lock
+      - .forgejo/workflows/build-and-cache.yml
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - system: x86_64-linux
+            runner: alpine-tokyo
+          # No runner currently advertises these labels - jobs below will
+          # queue until a suitable aarch64-linux/darwin runner is registered.
+          - system: aarch64-linux
+            runner: aarch64-linux
+          - system: aarch64-darwin
+            runner: aarch64-darwin
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Configure cache access
+        env:
+          NIXCACHE_URL: ${{ secrets.NIXCACHE_URL }}
+          NIXCACHE_PUBLIC_KEY: ${{ secrets.NIXCACHE_PUBLIC_KEY }}
+          NIXCACHE_UPLOAD_USER: ${{ secrets.NIXCACHE_UPLOAD_USER }}
+          NIXCACHE_UPLOAD_PASSWORD: ${{ secrets.NIXCACHE_UPLOAD_PASSWORD }}
+        run: |
+          set -euo pipefail
+          host=$(printf '%s\n' "$NIXCACHE_URL" | sed -E 's#^[a-zA-Z]+://##; s#/.*##')
+          printf 'machine %s\nlogin %s\npassword %s\n' \
+            "$host" "$NIXCACHE_UPLOAD_USER" "$NIXCACHE_UPLOAD_PASSWORD" > /tmp/nixcache.netrc
+          chmod 600 /tmp/nixcache.netrc
+          {
+            echo "NIX_CONFIG<<NIXCONF_EOF"
+            echo "extra-substituters = $NIXCACHE_URL"
+            echo "extra-trusted-public-keys = $NIXCACHE_PUBLIC_KEY"
+            echo "netrc-file = /tmp/nixcache.netrc"
+            echo "NIXCONF_EOF"
+          } >> "$GITHUB_ENV"
+
+      - name: Build and push packages
+        env:
+          SYSTEM: ${{ matrix.system }}
+          NIXCACHE_URL: ${{ secrets.NIXCACHE_URL }}
+        run: |
+          set -uo pipefail
+          packages=$(nix eval ".#packages.$SYSTEM" --apply builtins.attrNames --json)
+          failures=0
+          for pkg in $(echo "$packages" | jq -r '.[]'); do
+            echo "::group::$pkg ($SYSTEM)"
+            if out=$(nix build ".#packages.$SYSTEM.$pkg" --no-link --print-out-paths 2>/tmp/build.log); then
+              # shellcheck disable=SC2086 # nix store paths never contain spaces/glob chars; splitting is intentional for multi-output derivations
+              if nix copy --to "$NIXCACHE_URL" $out; then
+                echo "pushed $pkg -> $NIXCACHE_URL"
+              else
+                echo "::warning::failed to push $pkg ($SYSTEM) to nixcache"
+                failures=1
+              fi
+            else
+              echo "::warning::$pkg failed to build on $SYSTEM (may not support this platform)"
+              cat /tmp/build.log
+            fi
+            echo "::endgroup::"
+          done
+          exit $failures
