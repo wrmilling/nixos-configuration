@@ -17,6 +17,7 @@ in
       home.base.enable = true;
       home.sops.enable = true;
       home.graphical.alacritty.enable = true;
+      home.graphical.obsidian.enable = true;
       home.graphical.xresources.enable = true;
       home.terminal.atuin.enable = true;
       home.terminal.claude-code = {
