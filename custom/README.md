@@ -18,6 +18,7 @@ Definition of custom packages which are generally not yet available in upstream 
   - `pandoc` — Export notes via Pandoc (DOCX, ePub, PDF, ...).
   - `dataview` — Data index and query language over Markdown notes.
   - `advanced-tables` — Improved table navigation, formatting, and manipulation.
+  - `tasks` — Track tasks across a vault, with due dates, recurrence, and filtering.
 
 ## Updating packages
 

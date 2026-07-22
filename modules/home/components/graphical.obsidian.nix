@@ -33,6 +33,7 @@ in
         { pkg = pkgs.obsidianPlugins.pandoc; }
         { pkg = pkgs.obsidianPlugins.dataview; }
         { pkg = pkgs.obsidianPlugins.advanced-tables; }
+        { pkg = pkgs.obsidianPlugins.tasks; }
       ];
 
       vaults = lib.mkMerge [
