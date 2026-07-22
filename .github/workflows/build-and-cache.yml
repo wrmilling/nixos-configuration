@@ -34,20 +34,19 @@ jobs:
 
       - name: Configure cache access
         env:
-          NIXCACHE_URL: ${{ secrets.NIXCACHE_URL }}
-          NIXCACHE_PUBLIC_KEY: ${{ secrets.NIXCACHE_PUBLIC_KEY }}
-          NIXCACHE_UPLOAD_USER: ${{ secrets.NIXCACHE_UPLOAD_USER }}
-          NIXCACHE_UPLOAD_PASSWORD: ${{ secrets.NIXCACHE_UPLOAD_PASSWORD }}
+          CACHE_HOST: ${{ secrets.CACHE_HOST }}
+          CACHE_PUBLIC_KEY: ${{ secrets.CACHE_PUBLIC_KEY }}
+          CACHE_USER: ${{ secrets.CACHE_USER }}
+          CACHE_PASSWORD: ${{ secrets.CACHE_PASSWORD }}
         run: |
           set -euo pipefail
-          host=$(printf '%s\n' "$NIXCACHE_URL" | sed -E 's#^[a-zA-Z]+://##; s#/.*##')
           printf 'machine %s\nlogin %s\npassword %s\n' \
-            "$host" "$NIXCACHE_UPLOAD_USER" "$NIXCACHE_UPLOAD_PASSWORD" > /tmp/nixcache.netrc
+            "$CACHE_HOST" "$CACHE_USER" "$CACHE_PASSWORD" > /tmp/nixcache.netrc
           chmod 600 /tmp/nixcache.netrc
           {
             echo "NIX_CONFIG<<NIXCONF_EOF"
-            echo "extra-substituters = $NIXCACHE_URL"
-            echo "extra-trusted-public-keys = $NIXCACHE_PUBLIC_KEY"
+            echo "extra-substituters = https://$CACHE_HOST"
+            echo "extra-trusted-public-keys = $CACHE_PUBLIC_KEY"
             echo "netrc-file = /tmp/nixcache.netrc"
             echo "NIXCONF_EOF"
           } >> "$GITHUB_ENV"
@@ -55,7 +54,7 @@ jobs:
       - name: Build and push packages
         env:
           SYSTEM: ${{ matrix.system }}
-          NIXCACHE_URL: ${{ secrets.NIXCACHE_URL }}
+          CACHE_HOST: ${{ secrets.CACHE_HOST }}
         run: |
           set -uo pipefail
           packages=$(nix eval ".#packages.$SYSTEM" --apply builtins.attrNames --json)
@@ -64,8 +63,8 @@ jobs:
             echo "::group::$pkg ($SYSTEM)"
             if out=$(nix build ".#packages.$SYSTEM.$pkg" --no-link --print-out-paths 2>/tmp/build.log); then
               # shellcheck disable=SC2086 # nix store paths never contain spaces/glob chars; splitting is intentional for multi-output derivations
-              if nix copy --to "$NIXCACHE_URL" $out; then
-                echo "pushed $pkg -> $NIXCACHE_URL"
+              if nix copy --to "https://$CACHE_HOST" $out; then
+                echo "pushed $pkg -> $CACHE_HOST"
               else
                 echo "::warning::failed to push $pkg ($SYSTEM) to nixcache"
                 failures=1
