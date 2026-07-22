@@ -55,13 +55,73 @@ jobs:
         env:
           SYSTEM: ${{ matrix.system }}
           CACHE_HOST: ${{ secrets.CACHE_HOST }}
+          NIXPKGS_ALLOW_UNFREE: "1"
         run: |
           set -uo pipefail
-          packages=$(nix eval ".#packages.$SYSTEM" --apply builtins.attrNames --json)
+          # Discover every package, descending into namespaced sets (e.g.
+          # obsidianPlugins.<name>) the same way custom/pkgs/update.sh does,
+          # and report whether each one's meta.platforms/badPlatforms
+          # actually covers $SYSTEM instead of just trying and failing.
+          # --impure is needed both to read $SYSTEM via getEnv and to honor
+          # NIXPKGS_ALLOW_UNFREE while merely inspecting unfree packages.
+          # shellcheck disable=SC2016 # single-quoted nix expression; ${...} below is Nix interpolation, not bash
+          entries=$(nix eval ".#packages.$SYSTEM" --json --impure --apply '
+            pkgs:
+            let
+              system = builtins.getEnv "SYSTEM";
+              isDerivation = v: builtins.isAttrs v && (v.type or null) == "derivation";
+              platformOk = v:
+                let
+                  meta = v.meta or { };
+                  platforms = meta.platforms or null;
+                  badPlatforms = meta.badPlatforms or [ ];
+                in
+                (platforms == null || builtins.elem system platforms)
+                && !(builtins.elem system badPlatforms);
+              flatten = prefix: attrs:
+                builtins.concatMap (
+                  name:
+                  let
+                    path = if prefix == "" then name else "${prefix}.${name}";
+                    tried = builtins.tryEval (
+                      let
+                        v = attrs.${name};
+                      in
+                      if isDerivation v then
+                        { kind = "leaf"; supported = platformOk v; }
+                      else if builtins.isAttrs v then
+                        { kind = "namespace"; }
+                      else
+                        { kind = "skip"; }
+                    );
+                  in
+                  if !tried.success then
+                    [ { inherit path; supported = false; error = true; } ]
+                  else if tried.value.kind == "leaf" then
+                    [ { inherit path; supported = tried.value.supported; error = false; } ]
+                  else if tried.value.kind == "namespace" then
+                    flatten path attrs.${name}
+                  else
+                    [ ]
+                ) (builtins.attrNames attrs);
+            in
+            flatten "" pkgs
+          ')
           failures=0
-          for pkg in $(echo "$packages" | jq -r '.[]'); do
+          while IFS=$'\t' read -r pkg supported error; do
             echo "::group::$pkg ($SYSTEM)"
-            if out=$(nix build ".#packages.$SYSTEM.$pkg" --no-link --print-out-paths 2>/tmp/build.log); then
+            if [[ "$error" == "true" ]]; then
+              echo "::warning::$pkg failed to evaluate on $SYSTEM (broken Nix expression, not a platform issue)"
+              failures=1
+              echo "::endgroup::"
+              continue
+            fi
+            if [[ "$supported" != "true" ]]; then
+              echo "skipping $pkg: not built for $SYSTEM (meta.platforms/badPlatforms)"
+              echo "::endgroup::"
+              continue
+            fi
+            if out=$(nix build ".#packages.$SYSTEM.$pkg" --no-link --print-out-paths --impure 2>/tmp/build.log); then
               # shellcheck disable=SC2086 # nix store paths never contain spaces/glob chars; splitting is intentional for multi-output derivations
               if nix copy --to "https://$CACHE_HOST" $out; then
                 echo "pushed $pkg -> $CACHE_HOST"
@@ -70,9 +130,9 @@ jobs:
                 failures=1
               fi
             else
-              echo "::warning::$pkg failed to build on $SYSTEM (may not support this platform)"
+              echo "::warning::$pkg failed to build on $SYSTEM"
               cat /tmp/build.log
             fi
             echo "::endgroup::"
-          done
+          done < <(echo "$entries" | jq -r '.[] | "\(.path)\t\(.supported)\t\(.error)"')
           exit $failures

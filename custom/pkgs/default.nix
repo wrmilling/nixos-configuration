@@ -3,11 +3,11 @@
 {
   pkgs ? import <nixpkgs> { },
 }:
-{
+rec {
   slides-git = pkgs.callPackage ./slides-git { };
   cc9s = pkgs.callPackage ./cc9s { };
   mcpelauncher-client-git = pkgs.callPackage ./mcpelauncher-client { };
-  mcpelauncher-ui-qt-git = pkgs.callPackage ./mcpelauncher-ui-qt { };
+  mcpelauncher-ui-qt-git = pkgs.callPackage ./mcpelauncher-ui-qt { inherit mcpelauncher-client-git; };
   kubernetes-mcp-server = pkgs.callPackage ./kubernetes-mcp-server { };
   flux-operator-mcp = pkgs.callPackage ./flux-operator-mcp { };
   gomuks-desktop = pkgs.callPackage ./gomuks-desktop { };
