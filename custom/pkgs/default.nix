@@ -15,4 +15,5 @@
   shiftleft-sl = pkgs.callPackage ./shiftleft-sl { };
   m5burner = pkgs.callPackage ./m5burner { };
   appflowy = pkgs.callPackage ./appflowy { };
+  obsidianPlugins = import ./obsidianPlugins { inherit pkgs; };
 }

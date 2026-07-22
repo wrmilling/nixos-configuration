@@ -13,16 +13,22 @@ Definition of custom packages which are generally not yet available in upstream 
 - [shiftleft-sl](pkgs/shiftleft-sl) — ShiftLeft CLI for code security analysis.
 - [m5burner](pkgs/m5burner) — M5Stack firmware burning tool.
 - [appflowy](pkgs/appflowy) — Open-source Notion alternative (tracked ahead of the nixpkgs-provided version).
+- [obsidianPlugins](pkgs/obsidianPlugins) — Obsidian community plugins, namespaced under `pkgs.obsidianPlugins.<name>` since none are packaged in nixpkgs:
+  - `base-board` — Property-driven Kanban board view powered by Bases.
+  - `pandoc` — Export notes via Pandoc (DOCX, ePub, PDF, ...).
+  - `dataview` — Data index and query language over Markdown notes.
+  - `advanced-tables` — Improved table navigation, formatting, and manipulation.
 
 ## Updating packages
 
 ```sh
-custom/pkgs/update.sh          # update every package
-custom/pkgs/update.sh <name>   # update one, e.g. codegraph, slides-git, m5burner
+custom/pkgs/update.sh                        # update every package
+custom/pkgs/update.sh <name>                 # update one, e.g. codegraph, slides-git, m5burner
+custom/pkgs/update.sh obsidianPlugins/<name> # update one plugin under a namespace, e.g. obsidianPlugins/dataview
 ```
 
 Prints what it did (or "already up to date") per package; review the diff and
-build (`nix build .#packages.<system>.<name>`) before committing.
+build (`nix build .#packages.<system>.<name>`, e.g. `.#obsidianPlugins.dataview`) before committing.
 
 ## Overlays
 
