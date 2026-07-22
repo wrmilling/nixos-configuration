@@ -38,6 +38,7 @@ in
       # home.graphical.keybase.enable = true;
       home.graphical.minecraft-client.enable = true;
       home.graphical.obsidian.enable = true;
+      home.graphical.obsidian.vaults.personal.enable = true;
       home.graphical.xresources.enable = true;
     };
 

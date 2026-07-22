@@ -10,6 +10,11 @@ in
 {
   options.modules.home.graphical.obsidian = {
     enable = lib.mkEnableOption "obsidian packages / settings";
+
+    vaults = {
+      personal.enable = lib.mkEnableOption "personal obsidian vault at ~/.obsidian/personal";
+      work.enable = lib.mkEnableOption "work obsidian vault at ~/.obsidian/work";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -30,10 +35,14 @@ in
         { pkg = pkgs.obsidianPlugins.advanced-tables; }
       ];
 
-      vaults = {
-        personal.target = ".obsidian/personal";
-        work.target = ".obsidian/work";
-      };
+      vaults = lib.mkMerge [
+        (lib.mkIf cfg.vaults.personal.enable {
+          personal.target = ".obsidian/personal";
+        })
+        (lib.mkIf cfg.vaults.work.enable {
+          work.target = ".obsidian/work";
+        })
+      ];
     };
   };
 }
