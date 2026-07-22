@@ -123,7 +123,7 @@ jobs:
             fi
             if out=$(nix build ".#packages.$SYSTEM.$pkg" --no-link --print-out-paths --impure 2>/tmp/build.log); then
               # shellcheck disable=SC2086 # nix store paths never contain spaces/glob chars; splitting is intentional for multi-output derivations
-              if nix copy --to "https://$CACHE_HOST" $out; then
+              if nix copy --to "https://$CACHE_HOST/upload" $out; then
                 echo "pushed $pkg -> $CACHE_HOST"
               else
                 echo "::warning::failed to push $pkg ($SYSTEM) to nixcache"
