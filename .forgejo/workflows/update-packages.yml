@@ -22,50 +22,6 @@ jobs:
           json=$(custom/pkgs/update.sh --list | jq -R -s -c 'split("\n")[:-1]')
           echo "packages=$json" >> "$GITHUB_OUTPUT"
 
-      - name: Configure cache access
-        env:
-          CACHE_HOST: ${{ secrets.CACHE_HOST }}
-          CACHE_PUBLIC_KEY: ${{ secrets.CACHE_PUBLIC_KEY }}
-        run: |
-          set -euo pipefail
-          {
-            echo "NIX_CONFIG<<NIXCONF_EOF"
-            echo "experimental-features = nix-command flakes"
-            echo "extra-substituters = https://$CACHE_HOST"
-            echo "extra-trusted-public-keys = $CACHE_PUBLIC_KEY"
-            echo "NIXCONF_EOF"
-          } >> "$GITHUB_ENV"
-
-      # Every update.sh shells out to `nix shell nixpkgs#jq` repeatedly, and
-      # every matrix job below starts from an empty ephemeral filesystem --
-      # so without this, ~14 parallel jobs each independently re-fetch the
-      # same jq closure over the WAN (ncps included; it's a remote cache, not
-      # LAN). Export it once here to a local file:// binary cache and let the
-      # matrix jobs restore + substitute from that instead. The cache key
-      # rotates weekly with a prefix fallback so it self-refreshes without
-      # ever going fully cold; a stale or missing entry just falls through to
-      # ncps/cache.nixos.org like normal, so this is a pure speed optimization
-      # with no correctness impact if it's ever empty or out of date.
-      - name: Compute nix-tools cache key
-        id: nix-tools-key
-        run: echo "key=nix-tools-jq-$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
-
-      - name: Restore/warm shared nix-tools cache
-        id: nix-tools-cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: /tmp/nix-tools-cache
-          key: ${{ steps.nix-tools-key.outputs.key }}
-          restore-keys: |
-            nix-tools-jq-
-
-      - name: Populate nix-tools cache
-        if: steps.nix-tools-cache.outputs.cache-hit != 'true'
-        run: |
-          set -euo pipefail
-          mkdir -p /tmp/nix-tools-cache
-          nix copy --to file:///tmp/nix-tools-cache nixpkgs#jq
-
   update:
     needs: discover
     if: needs.discover.outputs.packages != '[]'
@@ -83,18 +39,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Read-only: the discover job already populated (or refreshed) this
-      # under this week's key. `key` here is intentionally never an exact
-      # match -- this only ever wants the restore-keys prefix fallback, and
-      # never needs to save its own copy.
-      - name: Restore shared nix-tools cache
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: /tmp/nix-tools-cache
-          key: nix-tools-jq-restore
-          restore-keys: |
-            nix-tools-jq-
-
       - name: Configure cache access
         env:
           CACHE_HOST: ${{ secrets.CACHE_HOST }}
@@ -104,7 +48,7 @@ jobs:
           {
             echo "NIX_CONFIG<<NIXCONF_EOF"
             echo "experimental-features = nix-command flakes"
-            echo "extra-substituters = file:///tmp/nix-tools-cache https://$CACHE_HOST"
+            echo "extra-substituters = https://$CACHE_HOST"
             echo "extra-trusted-public-keys = $CACHE_PUBLIC_KEY"
             echo "NIXCONF_EOF"
           } >> "$GITHUB_ENV"
