@@ -2,9 +2,9 @@
 # Update one (or every) package in custom/pkgs, regardless of which update
 # mechanism it uses under the hood:
 #   - most packages have a plain custom/pkgs/<name>/update.sh -- run directly
-#   - codegraph exposes its update script as a real derivation
-#     (passthru.updateScript, ported from the upstream nixpkgs package)
-#     instead, which has to be built before it can run
+#   - a package ported from a nixpkgs derivation that itself exposes
+#     passthru.updateScript as a real derivation (rather than a repo script)
+#     falls back to building that derivation and running the result
 #   - some packages are grouped under a namespace directory instead of being
 #     flat (e.g. obsidianPlugins/<name>) -- descend into those
 #

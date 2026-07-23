@@ -5,7 +5,7 @@ dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 versions_file="$dir/versions.json"
 
 current_version=$(nix shell nixpkgs#jq -c jq -r '.version' "$versions_file")
-new_version=$(curl --silent -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/obsidian-tasks-group/obsidian-tasks/releases/latest" | sed -n 's#.*/releases/tag/##p')
+new_version=$(gh api repos/obsidian-tasks-group/obsidian-tasks/releases/latest --jq .tag_name)
 
 if [[ "$new_version" == "$current_version" ]]; then
   echo "obsidian-tasks already up to date at $current_version"

@@ -12,14 +12,12 @@ Definition of custom packages which are generally not yet available in upstream 
 - [codegraph](pkgs/codegraph) — Local code knowledge graph MCP server for AI coding agents (tracked ahead of the nixpkgs-provided version).
 - [shiftleft-sl](pkgs/shiftleft-sl) — ShiftLeft CLI for code security analysis.
 - [m5burner](pkgs/m5burner) — M5Stack firmware burning tool.
-- [appflowy](pkgs/appflowy) — Open-source Notion alternative (tracked ahead of the nixpkgs-provided version).
 - [obsidianPlugins](pkgs/obsidianPlugins) — Obsidian community plugins, namespaced under `pkgs.obsidianPlugins.<name>` since none are packaged in nixpkgs:
   - `base-board` — Property-driven Kanban board view powered by Bases.
   - `pandoc` — Export notes via Pandoc (DOCX, ePub, PDF, ...).
   - `dataview` — Data index and query language over Markdown notes.
   - `advanced-tables` — Improved table navigation, formatting, and manipulation.
   - `tasks` — Track tasks across a vault, with due dates, recurrence, and filtering.
-  - `fit` — Sync a vault across devices via a GitHub repo, with client-side encryption support.
 
 ## Updating packages
 

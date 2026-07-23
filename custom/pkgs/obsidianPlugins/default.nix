@@ -7,5 +7,4 @@
   dataview = pkgs.callPackage ./dataview { };
   advanced-tables = pkgs.callPackage ./advanced-tables { };
   tasks = pkgs.callPackage ./tasks { };
-  fit = pkgs.callPackage ./fit { };
 }

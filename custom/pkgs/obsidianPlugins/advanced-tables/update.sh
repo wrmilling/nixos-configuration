@@ -5,7 +5,7 @@ dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 versions_file="$dir/versions.json"
 
 current_version=$(nix shell nixpkgs#jq -c jq -r '.version' "$versions_file")
-new_version=$(curl --silent -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/tgrosinger/advanced-tables-obsidian/releases/latest" | sed -n 's#.*/releases/tag/##p')
+new_version=$(gh api repos/tgrosinger/advanced-tables-obsidian/releases/latest --jq .tag_name)
 
 if [[ "$new_version" == "$current_version" ]]; then
   echo "advanced-tables-obsidian already up to date at $current_version"

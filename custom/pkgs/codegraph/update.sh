@@ -5,7 +5,7 @@ dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 versions_file="$dir/versions.json"
 
 current_version=$(nix shell nixpkgs#jq -c jq -r '.version' "$versions_file")
-new_version=$(curl --silent -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/colbymchenry/codegraph/releases/latest" | sed -n 's#.*/releases/tag/v##p')
+new_version=$(gh api repos/colbymchenry/codegraph/releases/latest --jq .tag_name | sed 's/^v//')
 
 if [[ "$new_version" == "$current_version" ]]; then
   echo "codegraph already up to date at $current_version"

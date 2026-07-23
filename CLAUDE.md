@@ -12,8 +12,7 @@ Nix flake managing NixOS, nix-darwin, and Home Manager configurations.
   - Darwin modules mostly reuse `modules/nixos/components/*`.
 
 ## Custom packages & overlays
-- Check nixpkgs first (including the rev pinned in `flake.lock`) before writing a custom package; when porting, base it on the upstream nixpkgs derivation.
-- `custom/pkgs/<name>/`: `default.nix` + `versions.json` (never hardcode versions) + `update.sh`. Wire into `custom/pkgs/default.nix`; document in `custom/README.md`. `custom/pkgs/update.sh [name]` updates one/all.
+- Adding, updating, or porting a package under `custom/pkgs` (including Obsidian community plugins under `pkgs.obsidianPlugins`): see the `custom-packaging` skill (`.claude/skills/custom-packaging/SKILL.md`).
 - Overlays: `custom/overlays/`, wired via `custom/overlays/default.nix`.
 
 ## Secrets
