@@ -36,17 +36,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Restores /nix + ~/.cache/nix with paths re-registered as valid; each
-      # package saves its own key but restores from any package's cache too.
+      # Exact-key only: this Forgejo's cache backend 404s on the prefix/purge
+      # search endpoints, so no restore-prefixes-*/purge here.
       - name: Restore/save Nix store cache
         uses: actions/cache-nix-action@7df957e333c1e5da7721f60227dbba6d06080569 # v7.0.2
         with:
           primary-key: nix-store-${{ matrix.package }}
-          restore-prefixes-all-matches: |
-            nix-store-
           gc-max-store-size-linux: 3G
-          purge: true
-          purge-primary-key: always
 
       - name: Configure cache access
         env:
