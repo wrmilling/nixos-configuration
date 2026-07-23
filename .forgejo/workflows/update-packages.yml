@@ -30,6 +30,7 @@ jobs:
           set -euo pipefail
           {
             echo "NIX_CONFIG<<NIXCONF_EOF"
+            echo "experimental-features = nix-command flakes"
             echo "extra-substituters = https://$CACHE_HOST"
             echo "extra-trusted-public-keys = $CACHE_PUBLIC_KEY"
             echo "NIXCONF_EOF"
@@ -102,6 +103,7 @@ jobs:
           set -euo pipefail
           {
             echo "NIX_CONFIG<<NIXCONF_EOF"
+            echo "experimental-features = nix-command flakes"
             echo "extra-substituters = file:///tmp/nix-tools-cache https://$CACHE_HOST"
             echo "extra-trusted-public-keys = $CACHE_PUBLIC_KEY"
             echo "NIXCONF_EOF"
