@@ -214,6 +214,7 @@ ls $(readlink -f <out>/home-files)/.obsidian/<vault>/.obsidian/plugins/<manifest
 custom/pkgs/update.sh                        # every package
 custom/pkgs/update.sh <name>                  # one flat package
 custom/pkgs/update.sh obsidianPlugins/<name>  # one namespaced package
+custom/pkgs/update.sh --list                  # print discovered package names, update nothing
 ```
 
 **Never run the bare no-arg form just to test a change to `update.sh`
@@ -221,3 +222,12 @@ itself** — it updates every real package in the repo, which is almost
 certainly not what you want mid-task. Target a specific package instead.
 Review the `versions.json` diff and `nix build` the package before
 committing.
+
+`--list` is what `.forgejo/workflows/update-packages.yml`'s `discover` job
+reads its matrix from — it's the one place that knows how to expand a
+namespace directory into its members and skip delegation wrappers. If you
+ever touch package discovery, change it here and nowhere else; a CI step
+that reimplements this listing instead of calling `--list` will silently
+drift out of sync with new namespaces (this happened once already, when
+`obsidianPlugins` was added: CI's own copy of the loop didn't know to
+descend into it and tried to update the namespace directory itself).
