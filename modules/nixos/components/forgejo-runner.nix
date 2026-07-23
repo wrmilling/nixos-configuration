@@ -51,7 +51,7 @@ in
         labels = [
           "alpine:docker://alpine:3.23.4"
           "alpine-latest:docker://alpine:latest"
-          "alpine-tokyo:docker://${cfg.domain}/wrmilling/alpine-tokyo:3.23.4-3"
+          "alpine-tokyo:docker://${cfg.domain}/wrmilling/alpine-tokyo:3.23.4-5"
           "alpine-tokyo-latest:docker://${cfg.domain}/wrmilling/alpine-tokyo:latest"
           "ubuntu-latest:docker://node:18-bullseye"
         ];
