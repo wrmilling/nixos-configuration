@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
-# Update one (or every) package in custom/pkgs, regardless of which update
-# mechanism it uses under the hood:
-#   - most packages have a plain custom/pkgs/<name>/update.sh -- run directly
-#   - a package ported from a nixpkgs derivation that itself exposes
-#     passthru.updateScript as a real derivation (rather than a repo script)
-#     falls back to building that derivation and running the result
-#   - some packages are grouped under a namespace directory instead of being
-#     flat (e.g. obsidianPlugins/<name>) -- descend into those
-#
-# Usage:
-#   custom/pkgs/update.sh                     # update every package
-#   custom/pkgs/update.sh <name>               # update one package, e.g. codegraph
-#   custom/pkgs/update.sh <namespace>/<name>   # update one namespaced package, e.g. obsidianPlugins/dataview
-#   custom/pkgs/update.sh --list               # print discovered package names, one per line, update nothing
-#                                                 (this is the source of truth CI's discover job reads from --
-#                                                 don't reimplement this listing logic elsewhere)
 set -euo pipefail
+
+print_help() {
+  cat <<'EOF'
+usage: update.sh [<name>|<namespace>/<name>|--list|-h|--help]
+
+Update one (or every) package in custom/pkgs; see custom/README.md and the
+custom-packaging skill for details.
+
+  (no args)            update every package
+  <name>               update one package, e.g. codegraph
+  <namespace>/<name>   update one namespaced package, e.g. obsidianPlugins/dataview
+  --list               print discovered package names, one per line; update nothing
+EOF
+}
 
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 system=$(nix eval --raw --impure --expr 'builtins.currentSystem')
@@ -33,11 +31,7 @@ update_one() {
   fi
 }
 
-# A package whose update.sh is a pure `exec ".../update.sh"` delegation to a
-# sibling (e.g. mcpelauncher-ui-qt-git -> mcpelauncher-client's script)
-# doesn't need its own entry: the package it delegates to already covers it
-# in one run, and updating both would just do redundant work (and, in CI,
-# open two conflicting PRs for the same change).
+# Packages whose update.sh just delegates to a sibling's (e.g. mcpelauncher-ui-qt-git) don't need their own entry.
 is_delegate() {
   local pkg_dir="$1"
   [[ -x "$pkg_dir/update.sh" ]] && grep -qE '^exec ".*/update\.sh"' "$pkg_dir/update.sh"
@@ -58,12 +52,19 @@ list_all() {
   done
 }
 
-if [[ "${1:-}" == "--list" ]]; then
-  list_all
-elif [[ $# -eq 0 ]]; then
-  while IFS= read -r name; do
-    update_one "$name"
-  done < <(list_all)
-else
-  update_one "$1"
-fi
+case "${1:-}" in
+  -h | --help)
+    print_help
+    ;;
+  --list)
+    list_all
+    ;;
+  "")
+    while IFS= read -r name; do
+      update_one "$name"
+    done < <(list_all)
+    ;;
+  *)
+    update_one "$1"
+    ;;
+esac

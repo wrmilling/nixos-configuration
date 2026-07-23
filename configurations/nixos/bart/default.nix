@@ -109,6 +109,10 @@
               alias = "actions/docker-build-push-action";
               upstream = "docker/build-push-action";
             }
+            {
+              alias = "actions/cache-nix-action";
+              upstream = "nix-community/cache-nix-action";
+            }
           ];
         in
         map (a: {

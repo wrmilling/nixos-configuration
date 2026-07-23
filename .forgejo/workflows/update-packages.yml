@@ -15,10 +15,7 @@ jobs:
         id: list
         run: |
           set -euo pipefail
-          # custom/pkgs/update.sh --list is the single source of truth for
-          # this listing (it already knows how to descend into namespaced
-          # packages like obsidianPlugins/<name> and skip delegation
-          # wrappers) -- don't reimplement it here, it'll drift.
+          # Single source of truth for this listing -- don't reimplement it here.
           json=$(custom/pkgs/update.sh --list | jq -R -s -c 'split("\n")[:-1]')
           echo "packages=$json" >> "$GITHUB_OUTPUT"
 
@@ -38,6 +35,18 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+
+      # Restores /nix + ~/.cache/nix with paths re-registered as valid; each
+      # package saves its own key but restores from any package's cache too.
+      - name: Restore/save Nix store cache
+        uses: actions/cache-nix-action@7df957e333c1e5da7721f60227dbba6d06080569 # v7.0.2
+        with:
+          primary-key: nix-store-${{ matrix.package }}
+          restore-prefixes-all-matches: |
+            nix-store-
+          gc-max-store-size-linux: 3G
+          purge: true
+          purge-primary-key: always
 
       - name: Configure cache access
         env:

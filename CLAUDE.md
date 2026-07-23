@@ -26,6 +26,8 @@ Nix flake managing NixOS, nix-darwin, and Home Manager configurations.
 ## Conventions
 - Minimal, localized edits; mirror nearby patterns and naming.
 - Code should be self-explanatory; don't add comments to document intent that the code itself already makes clear.
+- Keep comments to a line or two; don't write large explanatory comment blocks, even for non-obvious rationale — put lengthy reasoning in the commit/PR description instead.
+- Scripts meant to be run directly by a user (`custom/pkgs/update.sh`, `modules/home/components/scripts.*.nix`, etc.): usage belongs in a `-h`/`--help` output, not a comment.
 - Format with `nix fmt` (nixfmt) before finishing.
 - Verify: `nix eval` the affected config, e.g. `nix eval .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath` or `.#homeConfigurations."w4cbe@<host>".activationPackage.drvPath`.
 - Rebuilds (user runs): `nh os switch .`, `nh darwin switch .`, `nh home switch .`.

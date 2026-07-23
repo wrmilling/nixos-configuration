@@ -8,10 +8,18 @@ let
   cfg = config.modules.home.scripts.cv;
   cv = pkgs.writeScriptBin "cv" ''
     #!${pkgs.fish}/bin/fish
-    # Push a file to an attached Android device via adb.
-    # Usage: cv [file]
-    #   If no file is given, the latest screenshot on the Desktop is used.
-    #   Screenshots match the pattern: Screenshot YYYY-MM-DD at HH.MM.SS AM/PM.png
+    function print_help
+      echo "usage: cv [file]"
+      echo ""
+      echo "Push a file to an attached Android device via adb."
+      echo "If no file is given, the latest screenshot on the Desktop is used"
+      echo "(matching: Screenshot YYYY-MM-DD at HH.MM.SS AM/PM.png)."
+    end
+
+    if set -q argv[1]; and contains -- $argv[1] -h --help
+      print_help
+      exit 0
+    end
 
     if set -q argv[1]
       set target $argv[1]
