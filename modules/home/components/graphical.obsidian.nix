@@ -22,6 +22,14 @@ in
       enable = true;
       package = pkgs.obsidian;
 
+      defaultSettings.communityPlugins = [
+        { pkg = pkgs.obsidianPlugins.trietment-kanban; }
+        { pkg = pkgs.obsidianPlugins.pandoc; }
+        { pkg = pkgs.obsidianPlugins.dataview; }
+        { pkg = pkgs.obsidianPlugins.advanced-tables; }
+        { pkg = pkgs.obsidianPlugins.tasks; }
+      ];
+
       vaults = lib.mkMerge [
         (lib.mkIf cfg.vaults.personal.enable {
           personal.target = ".obsidian/personal";

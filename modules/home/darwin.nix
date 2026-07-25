@@ -42,14 +42,6 @@ in
       tabSize = 2;
     };
 
-    programs.obsidian.defaultSettings.communityPlugins = [
-      { pkg = pkgs.obsidianPlugins.trietment-kanban; }
-      { pkg = pkgs.obsidianPlugins.pandoc; }
-      { pkg = pkgs.obsidianPlugins.dataview; }
-      { pkg = pkgs.obsidianPlugins.advanced-tables; }
-      { pkg = pkgs.obsidianPlugins.tasks; }
-    ];
-
     home.packages = [
       pkgs.cloudfoundry-cli
       pkgs.rancher
