@@ -2,7 +2,7 @@
 # packaged in nixpkgs. Exposed as pkgs.obsidianPlugins.<name>.
 { pkgs }:
 {
-  base-board = pkgs.callPackage ./base-board { };
+  trietment-kanban = pkgs.callPackage ./trietment-kanban { };
   pandoc = pkgs.callPackage ./pandoc { };
   dataview = pkgs.callPackage ./dataview { };
   advanced-tables = pkgs.callPackage ./advanced-tables { };

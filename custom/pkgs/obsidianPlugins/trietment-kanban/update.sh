@@ -5,10 +5,10 @@ dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 versions_file="$dir/versions.json"
 
 current_version=$(nix shell nixpkgs#jq -c jq -r '.version' "$versions_file")
-new_version=$(gh api repos/mderazon/obsidian-base-board/releases/latest --jq .tag_name)
+new_version=$(gh api repos/Trietment/obsidian-kanban/releases/latest --jq .tag_name)
 
 if [[ "$new_version" == "$current_version" ]]; then
-  echo "obsidian-base-board already up to date at $current_version"
+  echo "obsidian-trietment-kanban already up to date at $current_version"
   exit 0
 fi
 
@@ -21,7 +21,7 @@ styles styles.css
 hashes_json="{}"
 while read -r key asset; do
   [ -z "$key" ] && continue
-  url="https://github.com/mderazon/obsidian-base-board/releases/download/${new_version}/${asset}"
+  url="https://github.com/Trietment/obsidian-kanban/releases/download/${new_version}/${asset}"
   new_hash=$(nix --extra-experimental-features nix-command store prefetch-file --hash-type sha256 --json "$url" | nix shell nixpkgs#jq -c jq -r '.hash')
   hashes_json=$(printf '%s' "$hashes_json" | nix shell nixpkgs#jq -c jq --arg key "$key" --arg hash "$new_hash" '.[$key] = $hash')
   echo "$key: $new_hash"
@@ -35,4 +35,4 @@ nix shell nixpkgs#jq -c jq \
 mv "$versions_file.tmp" "$versions_file"
 
 echo "Written to ${versions_file}"
-echo "Updated obsidian-base-board $current_version -> $new_version"
+echo "Updated obsidian-trietment-kanban $current_version -> $new_version"

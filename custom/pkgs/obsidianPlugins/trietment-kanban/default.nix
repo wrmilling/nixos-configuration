@@ -10,21 +10,21 @@ let
   inherit (versions) version;
 in
 stdenvNoCC.mkDerivation {
-  pname = "obsidian-base-board";
+  pname = "obsidian-trietment-kanban";
   inherit version;
 
   dontUnpack = true;
 
   manifest = fetchurl {
-    url = "https://github.com/mderazon/obsidian-base-board/releases/download/${version}/manifest.json";
+    url = "https://github.com/Trietment/obsidian-kanban/releases/download/${version}/manifest.json";
     hash = versions.hashes.manifest;
   };
   main = fetchurl {
-    url = "https://github.com/mderazon/obsidian-base-board/releases/download/${version}/main.js";
+    url = "https://github.com/Trietment/obsidian-kanban/releases/download/${version}/main.js";
     hash = versions.hashes.main;
   };
   styles = fetchurl {
-    url = "https://github.com/mderazon/obsidian-base-board/releases/download/${version}/styles.css";
+    url = "https://github.com/Trietment/obsidian-kanban/releases/download/${version}/styles.css";
     hash = versions.hashes.styles;
   };
 
@@ -42,9 +42,9 @@ stdenvNoCC.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "Property-driven Kanban board view for Obsidian Bases";
-    homepage = "https://github.com/mderazon/obsidian-base-board";
-    changelog = "https://github.com/mderazon/obsidian-base-board/releases/tag/${version}";
+    description = "Vault-wide Kanban board collecting tagged tasks as draggable cards, with projects, clients, priorities, recurrence and optional Outlook calendar sync";
+    homepage = "https://github.com/Trietment/obsidian-kanban";
+    changelog = "https://github.com/Trietment/obsidian-kanban/releases/tag/${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };

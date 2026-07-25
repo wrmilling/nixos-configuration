@@ -13,7 +13,7 @@ Definition of custom packages which are generally not yet available in upstream 
 - [shiftleft-sl](pkgs/shiftleft-sl) — ShiftLeft CLI for code security analysis.
 - [m5burner](pkgs/m5burner) — M5Stack firmware burning tool.
 - [obsidianPlugins](pkgs/obsidianPlugins) — Obsidian community plugins, namespaced under `pkgs.obsidianPlugins.<name>` since none are packaged in nixpkgs:
-  - `base-board` — Property-driven Kanban board view powered by Bases.
+  - `trietment-kanban` — Vault-wide Kanban board of tagged tasks, with projects, clients, priorities, and optional Outlook sync.
   - `pandoc` — Export notes via Pandoc (DOCX, ePub, PDF, ...).
   - `dataview` — Data index and query language over Markdown notes.
   - `advanced-tables` — Improved table navigation, formatting, and manipulation.

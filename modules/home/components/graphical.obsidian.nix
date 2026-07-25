@@ -28,8 +28,40 @@ in
         tabSize = 2;
       };
 
+      defaultSettings.corePlugins = [
+        "backlink"
+        "bases"
+        "bookmarks"
+        "canvas"
+        "command-palette"
+        "daily-notes"
+        "editor-status"
+        "file-explorer"
+        "file-recovery"
+        "global-search"
+        "graph"
+        "note-composer"
+        "outgoing-link"
+        "outline"
+        "page-preview"
+        "properties"
+        "slash-command"
+        "slides"
+        "switcher"
+        "sync"
+        "tag-pane"
+        {
+          name = "templates";
+          settings.folder = "Backmatter/Templates";
+        }
+        "webviewer"
+        "word-count"
+        "workspaces"
+        "zk-prefixer"
+      ];
+
       defaultSettings.communityPlugins = [
-        { pkg = pkgs.obsidianPlugins.base-board; }
+        { pkg = pkgs.obsidianPlugins.trietment-kanban; }
         { pkg = pkgs.obsidianPlugins.pandoc; }
         { pkg = pkgs.obsidianPlugins.dataview; }
         { pkg = pkgs.obsidianPlugins.advanced-tables; }
