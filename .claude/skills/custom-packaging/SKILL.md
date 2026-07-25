@@ -106,7 +106,10 @@ Every archetype ends with `passthru.updateScript = ./update.sh;` and a
 `meta` block (`description`, `homepage`, `changelog` when there's a
 releases page, `license`, `platforms` or `mainProgram`, plus
 `sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];` for
-anything shipped as a prebuilt binary blob).
+anything shipped as a prebuilt binary blob). Set `platforms`/`badPlatforms`
+accurately for anything that isn't portable (e.g. a prebuilt x86_64 binary,
+see `custom/pkgs/m5burner`) — CI's `update.sh --matrix` reads them to route
+the package's update job to a runner that can actually build it.
 
 ## `update.sh` conventions
 
@@ -215,6 +218,7 @@ custom/pkgs/update.sh                        # every package
 custom/pkgs/update.sh <name>                  # one flat package
 custom/pkgs/update.sh obsidianPlugins/<name>  # one namespaced package
 custom/pkgs/update.sh --list                  # print discovered package names, update nothing
+custom/pkgs/update.sh --matrix                # print [{package, system}, ...] JSON for CI, update nothing
 ```
 
 **Never run the bare no-arg form just to test a change to `update.sh`
@@ -223,11 +227,15 @@ certainly not what you want mid-task. Target a specific package instead.
 Review the `versions.json` diff and `nix build` the package before
 committing.
 
-`--list` is what `.forgejo/workflows/update-packages.yml`'s `discover` job
-reads its matrix from — it's the one place that knows how to expand a
-namespace directory into its members and skip delegation wrappers. If you
-ever touch package discovery, change it here and nowhere else; a CI step
-that reimplements this listing instead of calling `--list` will silently
-drift out of sync with new namespaces (this happened once already, when
-`obsidianPlugins` was added: CI's own copy of the loop didn't know to
-descend into it and tried to update the namespace directory itself).
+`--matrix` is what `.forgejo/workflows/update-packages.yml`'s `discover` job
+reads its matrix from — it wraps the same discovery as `--list` (the one
+place that knows how to expand a namespace directory into its members and
+skip delegation wrappers) and additionally resolves, per package, which
+Forgejo runner architecture(s) it's eligible for from its `meta.platforms`/
+`meta.badPlatforms`: `alpine-tokyo` (any runner) if eligible on both
+`x86_64-linux` and `aarch64-linux`, otherwise the specific arch label. If you
+ever touch package discovery, change `list_all` here and nowhere else; a CI
+step that reimplements this listing instead of calling `--list`/`--matrix`
+will silently drift out of sync with new namespaces (this happened once
+already, when `obsidianPlugins` was added: CI's own copy of the loop didn't
+know to descend into it and tried to update the namespace directory itself).

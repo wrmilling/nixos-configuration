@@ -16,7 +16,7 @@ jobs:
         run: |
           set -euo pipefail
           # Single source of truth for this listing -- don't reimplement it here.
-          json=$(custom/pkgs/update.sh --list | jq -R -s -c 'split("\n")[:-1]')
+          json=$(custom/pkgs/update.sh --matrix)
           echo "packages=$json" >> "$GITHUB_OUTPUT"
 
   update:
@@ -25,8 +25,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ fromJSON(needs.discover.outputs.packages) }}
-    runs-on: alpine-tokyo
+        include: ${{ fromJSON(needs.discover.outputs.packages) }}
+    runs-on: ${{ matrix.system }}
     concurrency:
       group: pkg-update-${{ matrix.package }}
       cancel-in-progress: false
@@ -41,7 +41,7 @@ jobs:
       - name: Restore/save Nix store cache
         uses: actions/cache-nix-action@7df957e333c1e5da7721f60227dbba6d06080569 # v7.0.2
         with:
-          primary-key: nix-store-${{ matrix.package }}
+          primary-key: nix-store-${{ matrix.package }}-${{ matrix.system }}
           gc-max-store-size-linux: 3G
 
       - name: Configure cache access
