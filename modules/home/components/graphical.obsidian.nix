@@ -34,7 +34,10 @@ in
         "bookmarks"
         "canvas"
         "command-palette"
-        "daily-notes"
+        {
+          name = "daily-notes";
+          settings.template = "Backmatter/Templates/Daily";
+        }
         "editor-status"
         "file-explorer"
         "file-recovery"
@@ -57,7 +60,6 @@ in
         "webviewer"
         "word-count"
         "workspaces"
-        "zk-prefixer"
       ];
 
       defaultSettings.communityPlugins = [
