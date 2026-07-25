@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.modules.nixos.forgejoRunner;
+  alpineTokyoVersion = "3.23.4-5";
 in
 {
   options.modules.nixos.forgejoRunner = {
@@ -51,9 +52,11 @@ in
         labels = [
           "alpine:docker://alpine:3.23.4"
           "alpine-latest:docker://alpine:latest"
-          "alpine-tokyo:docker://${cfg.domain}/wrmilling/alpine-tokyo:3.23.4-5"
-          "alpine-tokyo-latest:docker://${cfg.domain}/wrmilling/alpine-tokyo:latest"
           "ubuntu-latest:docker://node:18-bullseye"
+          "alpine-tokyo:docker://${cfg.domain}/wrmilling/alpine-tokyo:${alpineTokyoVersion}"
+          "${pkgs.stdenv.hostPlatform.system}:docker://${cfg.domain}/wrmilling/alpine-tokyo:${alpineTokyoVersion}"
+          "alpine-tokyo-latest:docker://${cfg.domain}/wrmilling/alpine-tokyo:latest"
+          "${pkgs.stdenv.hostPlatform.system}-latest:docker://${cfg.domain}/wrmilling/alpine-tokyo:latest"
         ];
         url = "https://${cfg.domain}";
         tokenFile = cfg.runnerTokenFile;
