@@ -35,6 +35,15 @@
       secretKeyPath = config.sops.secrets."ncps/private_key".path;
       uploadAuthFile = config.sops.secrets."ncps/upload_auth".path;
     };
+    nixos.forgejoRunner = {
+      enable = true;
+      domain = secrets.forgejo.domain;
+      runnerTokenFile = config.sops.secrets."forgejo/runnerToken".path;
+    };
+  };
+
+  sops.secrets."forgejo/runnerToken" = {
+    sopsFile = ../../../secrets/forgejo.yaml;
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
