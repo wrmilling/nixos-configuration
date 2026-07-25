@@ -24,7 +24,7 @@
     nixos.flipper.enable = true;
     nixos.gaming.enable = true;
     nixos.k8sUtils.enable = true;
-    nixos.ollama.enable = true;
+    # nixos.ollama.enable = true;
     nixos.printing.enable = true;
     nixos.secureboot.enable = true;
     nixos.smartcard.enable = true;
