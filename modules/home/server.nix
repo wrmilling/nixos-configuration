@@ -18,6 +18,7 @@ in
       home.terminal.fish.enable = true;
       home.terminal.starship.enable = true;
       home.terminal.vim.enable = true;
+      home.scripts.vps-bench.enable = true;
     };
   };
 }
