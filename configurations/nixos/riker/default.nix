@@ -34,6 +34,16 @@
   boot.loader.efi.canTouchEfiVariables = false;
   boot.kernelParams = lib.mkAfter [ "console=tty0" ];
 
+  # The EDK2/TianoCore UEFI firmware on this Pinebook Pro loads the device
+  # tree from a fixed firmware-level path rather than a per-generation
+  # devicetree= entry, so nothing normally keeps it in sync with the active
+  # kernel. Refresh it from the current generation's own kernel package on
+  # every bootloader install.
+  boot.loader.systemd-boot.extraInstallCommands = ''
+    mkdir -p /boot/dtb/rockchip
+    cp ${config.boot.kernelPackages.kernel}/dtbs/rockchip/rk3399-pinebook-pro.dtb /boot/dtb/rockchip/rk3399-pinebook-pro.dtb
+  '';
+
   boot.initrd.luks.devices = {
     cryptroot = {
       device = "/dev/disk/by-uuid/ddce2ffe-beb7-4e54-a2ff-f0759d15d55d";
