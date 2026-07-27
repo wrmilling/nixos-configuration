@@ -15,7 +15,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       pkgs.chirp
-      pkgs.svxlink
+      # pkgs.svxlink
     ];
   };
 }
