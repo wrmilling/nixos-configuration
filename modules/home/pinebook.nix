@@ -29,7 +29,7 @@ in
       # home.graphical.keybase.enable = true;
       home.graphical.legcord.enable = true;
       home.graphical.xresources.enable = true;
-
+      home.terminal.claude-code.enable = true;
     };
 
     home.packages = lib.mkMerge [
