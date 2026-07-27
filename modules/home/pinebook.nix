@@ -28,6 +28,7 @@ in
       home.graphical.firefox.enable = true;
       # home.graphical.keybase.enable = true;
       home.graphical.legcord.enable = true;
+      home.graphical.sway.enable = true;
       home.graphical.xresources.enable = true;
       home.terminal.claude-code.enable = true;
     };

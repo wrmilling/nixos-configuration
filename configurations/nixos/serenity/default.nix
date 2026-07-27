@@ -18,6 +18,7 @@
     machineType.laptop.enable = true;
     nixos.development.enable = true;
     nixos.k8sUtils.enable = true;
+    nixos.sway.enable = true;
     nixos.tailscale.enable = true;
     nixos.virtualization.enable = true;
     nixos.zram.enable = true;
