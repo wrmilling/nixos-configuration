@@ -7,6 +7,21 @@
   pkgs,
   ...
 }:
+let
+  # riker's CPU/GPU operating-point overclock/undervolt curve. Patches the
+  # *current* kernel's own stock dtb on every build, so it tracks kernel
+  # updates instead of freezing a fixed dtb blob.
+  overclockedDtb = pkgs.runCommand "rk3399-pinebook-pro-overclocked.dtb" {
+    nativeBuildInputs = [
+      pkgs.dtc
+      pkgs.python3
+    ];
+  } ''
+    dtc -I dtb -O dts -o base.dts ${config.boot.kernelPackages.kernel}/dtbs/rockchip/rk3399-pinebook-pro.dtb
+    python3 ${./dtb-overclock/patch-opp-tables.py} base.dts patched.dts
+    dtc -I dts -O dtb -o $out patched.dts
+  '';
+in
 {
   imports = [
     inputs.hardware.nixosModules.pine64-pinebook-pro
@@ -41,7 +56,7 @@
   # every bootloader install.
   boot.loader.systemd-boot.extraInstallCommands = ''
     mkdir -p /boot/dtb/rockchip
-    cp ${config.boot.kernelPackages.kernel}/dtbs/rockchip/rk3399-pinebook-pro.dtb /boot/dtb/rockchip/rk3399-pinebook-pro.dtb
+    cp ${overclockedDtb} /boot/dtb/rockchip/rk3399-pinebook-pro.dtb
   '';
 
   boot.initrd.luks.devices = {
