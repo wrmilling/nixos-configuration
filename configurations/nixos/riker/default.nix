@@ -36,6 +36,7 @@ in
     nixos.k8sUtils.enable = true;
     nixos.tailscale.enable = true;
     #nixos.virtualization.enable = true;
+    nixos.sway.enable = true;
     nixos.visualBoot.enable = true;
     nixos.zram.enable = true;
   };
