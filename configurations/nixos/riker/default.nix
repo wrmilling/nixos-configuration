@@ -20,7 +20,7 @@
     nixos.development.enable = true;
     nixos.k8sUtils.enable = true;
     nixos.tailscale.enable = true;
-    nixos.virtualization.enable = true;
+    #nixos.virtualization.enable = true;
     nixos.visualBoot.enable = true;
     nixos.zram.enable = true;
   };
