@@ -15,7 +15,7 @@ in
   config = lib.mkIf cfg.enable {
     services.mullvad-vpn = {
       enable = true;
-      package = pkgs.mullvad-vpn;
+      gui.enable = true;
     };
   };
 }
