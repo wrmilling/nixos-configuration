@@ -21,6 +21,9 @@ in
       # Mouse options
       set -g mouse on
 
+      # Forward clipboard writes (copy-mode yank, OSC 52 from inner apps) to the terminal
+      set -s set-clipboard on
+
       ## Start counting windows from 1
       set -g base-index 1
       setw -g mode-keys vi
