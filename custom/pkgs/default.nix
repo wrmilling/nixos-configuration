@@ -6,7 +6,6 @@
 rec {
   slides-git = pkgs.callPackage ./slides-git { };
   cc9s = pkgs.callPackage ./cc9s { };
-  agent-manager = pkgs.callPackage ./agent-manager { };
   mcpelauncher-client-git = pkgs.callPackage ./mcpelauncher-client { };
   mcpelauncher-ui-qt-git = pkgs.callPackage ./mcpelauncher-ui-qt { inherit mcpelauncher-client-git; };
   kubernetes-mcp-server = pkgs.callPackage ./kubernetes-mcp-server { };

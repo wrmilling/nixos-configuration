@@ -12,7 +12,6 @@ Definition of custom packages which are generally not yet available in upstream 
 - [codegraph](pkgs/codegraph) — Local code knowledge graph MCP server for AI coding agents (tracked ahead of the nixpkgs-provided version).
 - [shiftleft-sl](pkgs/shiftleft-sl) — ShiftLeft CLI for code security analysis.
 - [m5burner](pkgs/m5burner) — M5Stack firmware burning tool.
-- [agent-manager](pkgs/agent-manager) — Terminal UI for managing multiple AI coding-agent sessions in tmux.
 - [obsidianPlugins](pkgs/obsidianPlugins) — Obsidian community plugins, namespaced under `pkgs.obsidianPlugins.<name>` since none are packaged in nixpkgs:
   - `trietment-kanban` — Vault-wide Kanban board of tagged tasks, with projects, clients, priorities, and optional Outlook sync.
   - `pandoc` — Export notes via Pandoc (DOCX, ePub, PDF, ...).
