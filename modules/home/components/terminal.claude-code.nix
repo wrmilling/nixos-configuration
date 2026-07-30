@@ -412,7 +412,7 @@ let
       };
     };
   };
-  
+
   # zclaude: launches Claude Code against z.ai's Anthropic-compatible endpoint
   # using GLM models. The z.ai API key is read from its sops-decrypted file at
   # runtime so the plaintext never enters the world-readable Nix store.
@@ -549,6 +549,8 @@ in
     home.packages = [
       pkgs.codegraph
       pkgs.cc9s
+      pkgs.agent-manager
+      pkgs.herdr
     ]
     ++ lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage;
 

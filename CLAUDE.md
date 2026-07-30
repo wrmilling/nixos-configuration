@@ -12,7 +12,7 @@ Nix flake managing NixOS, nix-darwin, and Home Manager configurations.
   - Darwin modules mostly reuse `modules/nixos/components/*`.
 
 ## Custom packages & overlays
-- Adding, updating, or porting a package under `custom/pkgs` (including Obsidian community plugins under `pkgs.obsidianPlugins`): see the `custom-packaging` skill (`.claude/skills/custom-packaging/SKILL.md`).
+- Adding, updating, or porting a package under `custom/pkgs` (including Obsidian community plugins under `pkgs.obsidianPlugins`): invoke the `custom-packaging` skill yourself before writing files — don't substitute a subagent's paraphrase of `.claude/skills/custom-packaging/SKILL.md` for actually loading it.
 - Overlays: `custom/overlays/`, wired via `custom/overlays/default.nix`.
 
 ## Secrets
