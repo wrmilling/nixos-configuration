@@ -6,6 +6,32 @@
 }:
 let
   cfg = config.modules.home.terminal.tmux;
+
+  batteryStatus = pkgs.writeShellScriptBin "tmux-battery-status" ''
+    bat=/sys/class/power_supply/BAT0
+    [ -d "$bat" ] || exit 0
+
+    capacity=$(cat "$bat/capacity")
+    status=$(cat "$bat/status")
+
+    case "$status" in
+      Charging)
+        icon=$'' ;;
+      Full|"Not charging")
+        icon=$'' ;;
+      *)
+        if [ "$capacity" -ge 60 ]; then
+          icon=$''
+        elif [ "$capacity" -ge 30 ]; then
+          icon=$''
+        else
+          icon=$''
+        fi
+        ;;
+    esac
+
+    printf '%s %s%%' "$icon" "$capacity"
+  '';
 in
 {
   options.modules.home.terminal.tmux = {
@@ -16,6 +42,7 @@ in
     home.packages = [
       pkgs.tmux
       pkgs.tmuxPlugins.better-mouse-mode
+      batteryStatus
     ];
     home.file.".tmux.conf".text = ''
       # Mouse options
@@ -129,7 +156,7 @@ in
       # Right side of status bar
       set -g status-right-style bg=colour233,fg=colour243
       set -g status-right-length 150
-      set -g status-right "#[fg=colour235,bg=colour233]#[fg=colour240,bg=colour235] %H:%M:%S #[fg=colour240,bg=colour235]#[fg=colour233,bg=colour240] %d-%b-%y #[fg=colour245,bg=colour240]#[fg=colour232,bg=colour245,bold] #H "
+      set -g status-right "#[fg=colour235,bg=colour233]#[fg=colour240,bg=colour235] %H:%M:%S #[fg=colour240,bg=colour235]#[fg=colour233,bg=colour240] %d-%b-%y #[fg=colour238,bg=colour240]#[fg=colour252,bg=colour238] #(${batteryStatus}/bin/tmux-battery-status) #[fg=colour245,bg=colour238]#[fg=colour232,bg=colour245,bold] #H "
 
       # Window status
       set -g window-status-format " #I:#W#F "

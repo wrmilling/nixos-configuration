@@ -39,6 +39,7 @@ in
       home.graphical.minecraft-client.enable = true;
       home.graphical.obsidian.enable = true;
       home.graphical.obsidian.vaults.personal.enable = true;
+      home.graphical.sway.enable = true;
       home.graphical.xresources.enable = true;
     };
 
