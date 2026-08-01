@@ -30,7 +30,7 @@ let
         ;;
     esac
 
-    printf '%s %s%%' "$icon" "$capacity"
+    printf '%s  %s%%' "$icon" "$capacity"
   '';
 in
 {
