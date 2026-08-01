@@ -69,7 +69,12 @@ in
         # No bar: nothing stays on screen unless explicitly invoked.
         bars = [ ];
 
-        gaps.inner = 5;
+        window = {
+          titlebar = false;
+          border = 1;
+        };
+
+        floating.titlebar = false;
 
         input = {
           "type:touchpad" = {
