@@ -28,6 +28,7 @@ in
         { pkg = pkgs.obsidianPlugins.dataview; }
         { pkg = pkgs.obsidianPlugins.advanced-tables; }
         { pkg = pkgs.obsidianPlugins.tasks; }
+        { pkg = pkgs.obsidianPlugins.project-manager; }
       ];
 
       vaults = lib.mkMerge [

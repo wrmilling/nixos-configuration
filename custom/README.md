@@ -18,6 +18,7 @@ Definition of custom packages which are generally not yet available in upstream 
   - `dataview` — Data index and query language over Markdown notes.
   - `advanced-tables` — Improved table navigation, formatting, and manipulation.
   - `tasks` — Track tasks across a vault, with due dates, recurrence, and filtering.
+  - `project-manager` — Project management with Gantt charts, Kanban boards, and Table views.
 
 ## Updating packages
 

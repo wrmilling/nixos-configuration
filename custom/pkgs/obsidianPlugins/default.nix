@@ -7,4 +7,5 @@
   dataview = pkgs.callPackage ./dataview { };
   advanced-tables = pkgs.callPackage ./advanced-tables { };
   tasks = pkgs.callPackage ./tasks { };
+  project-manager = pkgs.callPackage ./project-manager { };
 }
