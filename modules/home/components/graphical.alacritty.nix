@@ -36,6 +36,13 @@ in
           };
           size = lib.mkDefault 11;
         };
+        window = {
+          padding = {
+            x = 0;
+            y = 0;
+          };
+          dynamic_padding = true;
+        };
         keyboard = {
           bindings = [
             {

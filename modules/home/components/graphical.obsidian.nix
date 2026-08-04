@@ -18,6 +18,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Required by the pandoc community plugin, which shells out to it.
+    home.packages = [ pkgs.pandoc ];
+
     programs.obsidian = {
       enable = true;
       package = pkgs.obsidian;
