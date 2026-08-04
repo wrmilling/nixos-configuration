@@ -19,6 +19,7 @@ Definition of custom packages which are generally not yet available in upstream 
   - `advanced-tables` — Improved table navigation, formatting, and manipulation.
   - `tasks` — Track tasks across a vault, with due dates, recurrence, and filtering.
   - `project-manager` — Project management with Gantt charts, Kanban boards, and Table views.
+  - `tasknotes` — Note-based task management with calendar, kanban, pomodoro, and time-tracking integration.
 
 ## Updating packages
 

@@ -4,4 +4,4 @@ set -euo pipefail
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$dir/../lib/update-loose-assets.sh"
 
-update_obsidian_plugin "blacksmithgu/obsidian-dataview" "obsidian-dataview"
+update_obsidian_plugin "callumalpass/tasknotes" "obsidian-tasknotes"

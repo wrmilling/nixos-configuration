@@ -32,6 +32,7 @@ in
         { pkg = pkgs.obsidianPlugins.advanced-tables; }
         { pkg = pkgs.obsidianPlugins.tasks; }
         { pkg = pkgs.obsidianPlugins.project-manager; }
+        { pkg = pkgs.obsidianPlugins.tasknotes; }
       ];
 
       vaults = lib.mkMerge [

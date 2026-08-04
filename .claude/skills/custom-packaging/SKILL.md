@@ -162,8 +162,9 @@ one-off utilities.
      pairs, or system/os/arch triples) building up a `hashes_json` object
      via repeated `jq '.[$key] = $hash'`, then merge it into
      `versions.json` in one final `jq` call — see
-     `custom/pkgs/obsidianPlugins/dataview/update.sh` or
-     `custom/pkgs/shiftleft-sl/update.sh`.
+     `custom/pkgs/shiftleft-sl/update.sh`. For an Obsidian plugin
+     specifically, don't write this loop by hand — see "Obsidian plugins
+     specifically" below.
 5. Write back through a `$versions_file.tmp` + `mv`, never edit in place
    with `jq -i` (jq has no in-place flag).
 6. Finish with `echo "Updated <name> $old -> $new"`.
@@ -190,6 +191,16 @@ one-off utilities.
   `manifest.json`, `main.js`, `styles.css`, but not every plugin ships a
   `styles.css`; drop that `fetchurl`/`cp` pair for a plugin that doesn't
   publish one rather than fetching a 404.
+- `update.sh` is a 6-line wrapper, not a hand-written script: source
+  `custom/pkgs/obsidianPlugins/lib/update-loose-assets.sh` and call
+  `update_obsidian_plugin "<owner>/<repo>" "<pname>"`. The helper covers
+  version lookup, the bail-out-if-unchanged check, per-asset hash
+  resolution, and the `versions.json` write-back. Only pass extra
+  `key:filename` args if the release doesn't publish the standard
+  manifest/main/styles trio (see the helper's own header comment for the
+  syntax). Copy `custom/pkgs/obsidianPlugins/tasknotes/update.sh` as the
+  literal template — every other plugin in the namespace uses the same
+  wrapper shape.
 - After packaging, add it to `defaultSettings.communityPlugins` in
   `modules/home/components/graphical.obsidian.nix`:
   `{ pkg = pkgs.obsidianPlugins.<name>; }`.
