@@ -7,7 +7,7 @@
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
-  
+
   # Provides pkgs.claude-code from the sadjow/claude-code-nix flake.
   # Kept as a separate overlay so it can be selectively applied to home
   # configurations without touching NixOS hosts.
@@ -15,7 +15,10 @@
 
   claude-desktop = final: _prev: {
     claude-desktop =
-      (import inputs.nixpkgs-claude-desktop { system = final.stdenv.hostPlatform.system; config.allowUnfree = true; }).claude-desktop;
+      (import inputs.nixpkgs-claude-desktop {
+        system = final.stdenv.hostPlatform.system;
+        config.allowUnfree = true;
+      }).claude-desktop;
   };
 
   modifications = final: prev: {
@@ -24,7 +27,10 @@
     # });
 
     filebrowser =
-      (import inputs.nixpkgs-filebrowser { system = final.stdenv.hostPlatform.system; config.allowUnfree = true; }).filebrowser;
+      (import inputs.nixpkgs-filebrowser {
+        system = final.stdenv.hostPlatform.system;
+        config.allowUnfree = true;
+      }).filebrowser;
 
     openldap = prev.openldap.overrideAttrs {
       doCheck = !prev.stdenv.hostPlatform.isi686;

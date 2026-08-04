@@ -4,7 +4,8 @@
   buildGoModule,
   fetchFromGitHub,
   go,
-}: let
+}:
+let
   versions = lib.importJSON ./versions.json;
   inherit (versions) version rev vendorHash;
 in

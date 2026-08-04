@@ -29,7 +29,8 @@ in
       home = "/home/child";
       description = "Child Milling";
       extraGroups = [
-      ] ++ ifTheyExist [
+      ]
+      ++ ifTheyExist [
         "networkmanager"
         "audio"
         "video"

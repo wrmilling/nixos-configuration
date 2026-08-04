@@ -30,7 +30,8 @@ in
       description = "Winston R. Milling";
       extraGroups = [
         "wheel"
-      ] ++ ifTheyExist [
+      ]
+      ++ ifTheyExist [
         "networkmanager"
         "audio"
         "uucp"

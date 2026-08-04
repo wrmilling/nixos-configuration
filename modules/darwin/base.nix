@@ -20,7 +20,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # Default 
+    # Default
     modules = {
       nixos.terminal.enable = true;
       nixos.k8sUtils.enable = true;

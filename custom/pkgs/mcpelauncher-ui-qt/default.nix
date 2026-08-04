@@ -11,7 +11,8 @@
   protobuf,
   qt6,
   glfw,
-}: let
+}:
+let
   versions = lib.importJSON ./versions.json;
 in
 stdenv.mkDerivation (finalAttrs: {

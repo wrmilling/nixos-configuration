@@ -12,7 +12,8 @@
   cctools,
   darwin,
   rcodesign,
-}: let
+}:
+let
   versions = lib.importJSON ./versions.json;
   inherit (versions) version;
 in

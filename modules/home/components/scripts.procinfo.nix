@@ -53,7 +53,7 @@ in
 {
   options.modules.home.scripts.procinfo = {
     enable = lib.mkEnableOption "procinfo packages / settings";
-    
+
   };
 
   config = lib.mkIf cfg.enable {

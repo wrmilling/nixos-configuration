@@ -56,18 +56,18 @@
         eval (/opt/homebrew/bin/brew shellenv)
       ''
       +
-      # Add custom local paths
-      ''
-        fish_add_path $HOME/.rd/bin
-      ''
+        # Add custom local paths
+        ''
+          fish_add_path $HOME/.rd/bin
+        ''
       +
-      # Work-only extra fish config (aliases/functions), loaded from a sops secret
-      # so nothing company-internal lands in the repo in plaintext.
-      ''
-        if test -e ${config.sops.secrets."fish/extraConfig".path}
-          source ${config.sops.secrets."fish/extraConfig".path}
-        end
-      '';
+        # Work-only extra fish config (aliases/functions), loaded from a sops secret
+        # so nothing company-internal lands in the repo in plaintext.
+        ''
+          if test -e ${config.sops.secrets."fish/extraConfig".path}
+            source ${config.sops.secrets."fish/extraConfig".path}
+          end
+        '';
   };
 
   # Alacritty Font Fixes

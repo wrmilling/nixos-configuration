@@ -24,7 +24,7 @@ in
       qemu = {
         vhostUserPackages = with pkgs; [ virtiofsd ];
         swtpm.enable = true;
-      };  
+      };
     };
 
     programs.virt-manager.enable = true;

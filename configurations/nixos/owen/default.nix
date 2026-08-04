@@ -14,12 +14,14 @@ let
   updateFilebrowserTlsCertificate = pkgs.writeShellScript "update-filebrowser-tls-certificate" ''
     set -euo pipefail
 
-    export PATH=${lib.makeBinPath [
-      config.services.tailscale.package
-      pkgs.coreutils
-      pkgs.jq
-      pkgs.systemd
-    ]}
+    export PATH=${
+      lib.makeBinPath [
+        config.services.tailscale.package
+        pkgs.coreutils
+        pkgs.jq
+        pkgs.systemd
+      ]
+    }
 
     install -d -m 0750 -o root -g nginx ${filebrowserTlsDir}
 

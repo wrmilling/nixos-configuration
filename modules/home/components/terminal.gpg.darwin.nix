@@ -15,8 +15,8 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [ pkgs.pinentry_mac ];
 
-  programs.gpg = {
-    enable = true;
+    programs.gpg = {
+      enable = true;
       mutableKeys = true;
       mutableTrust = true;
       publicKeys = [

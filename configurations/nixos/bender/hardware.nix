@@ -27,7 +27,8 @@
     "acpi_mask_gpe=0x06"
   ];
 
-  nixpkgs.config.allowInsecurePredicate = pkg:
+  nixpkgs.config.allowInsecurePredicate =
+    pkg:
     builtins.elem (lib.getName pkg) [
       "broadcom-sta" # aka “wl”
     ];

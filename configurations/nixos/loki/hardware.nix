@@ -18,7 +18,10 @@
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" "zenpower" ]; # Added zenpower
+  boot.kernelModules = [
+    "kvm-amd"
+    "zenpower"
+  ]; # Added zenpower
   boot.extraModulePackages = [ config.boot.kernelPackages.zenpower ]; # Added zenpower
   boot.blacklistedKernelModules = [ "k10temp" ]; # Added zenpower
 
@@ -50,4 +53,3 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
-

@@ -38,10 +38,12 @@
     domain = secrets.hosts.common.p_domain;
     nameservers = secrets.hosts.common.nameservers;
     interfaces.eth0 = {
-      ipv4.addresses = [{
-        address = secrets.hosts.linus.ipAddress;
-        prefixLength = secrets.hosts.linus.prefixLength;
-      }];
+      ipv4.addresses = [
+        {
+          address = secrets.hosts.linus.ipAddress;
+          prefixLength = secrets.hosts.linus.prefixLength;
+        }
+      ];
     };
     defaultGateway = {
       address = secrets.hosts.linus.gateway;

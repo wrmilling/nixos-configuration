@@ -11,12 +11,9 @@ let
   cfg = config.modules.nixos.base;
 in
 {
-  imports = lib.filter
-    (n: lib.strings.hasSuffix ".nix" n)
-    (lib.filesystem.listFilesRecursive ./components)
-    ++ lib.filter
-    (n: lib.strings.hasSuffix ".nix" n)
-    (lib.filesystem.listFilesRecursive ./users);
+  imports =
+    lib.filter (n: lib.strings.hasSuffix ".nix" n) (lib.filesystem.listFilesRecursive ./components)
+    ++ lib.filter (n: lib.strings.hasSuffix ".nix" n) (lib.filesystem.listFilesRecursive ./users);
 
   options.modules.nixos.base = {
     enable = lib.mkEnableOption "base NixOS configuration";
@@ -35,7 +32,10 @@ in
       package = pkgs.lix;
       settings = {
         auto-optimise-store = lib.mkDefault true;
-        experimental-features = [ "nix-command" "flakes" ];
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
         substituters = [
           secrets.nixcache.hostname
         ];

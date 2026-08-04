@@ -47,7 +47,8 @@
     };
   };
 
-  security.acme.certs."irc.${secrets.hosts.common.c_domain}".postRun = "cat /var/lib/acme/irc.${secrets.hosts.common.c_domain}/{privkey,fullchain}.pem > /var/lib/znc/znc.pem && chown znc:znc /var/lib/znc/znc.pem";
+  security.acme.certs."irc.${secrets.hosts.common.c_domain}".postRun =
+    "cat /var/lib/acme/irc.${secrets.hosts.common.c_domain}/{privkey,fullchain}.pem > /var/lib/znc/znc.pem && chown znc:znc /var/lib/znc/znc.pem";
 
   networking.firewall.allowedTCPPorts = [
     secrets.hosts.khan.zncPort

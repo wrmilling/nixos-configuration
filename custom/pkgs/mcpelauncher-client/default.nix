@@ -21,7 +21,8 @@
   zenity,
   xdg-utils,
   sdl3,
-}: let
+}:
+let
   versions = lib.importJSON ./versions.json;
   inherit (versions) version;
 in

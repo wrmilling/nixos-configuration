@@ -33,7 +33,8 @@
   pango,
   python3,
   udev,
-}: let
+}:
+let
   versions = lib.importJSON ./versions.json;
   inherit (versions) version;
 in
