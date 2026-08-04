@@ -1,0 +1,4 @@
+/* Matches the border-top above the Kanban "+" add-task button. */
+.tasknotes-plugin .kanban-view__card-wrapper:not(:first-child) {
+  border-top: 1px solid color-mix(in srgb, var(--tn-border-color) 72%, transparent);
+}
