@@ -26,12 +26,10 @@ in
       package = pkgs.obsidian;
 
       defaultSettings.communityPlugins = [
-        { pkg = pkgs.obsidianPlugins.trietment-kanban; }
         { pkg = pkgs.obsidianPlugins.pandoc; }
         { pkg = pkgs.obsidianPlugins.dataview; }
         { pkg = pkgs.obsidianPlugins.advanced-tables; }
         { pkg = pkgs.obsidianPlugins.tasks; }
-        { pkg = pkgs.obsidianPlugins.project-manager; }
         { pkg = pkgs.obsidianPlugins.tasknotes; }
       ];
 
