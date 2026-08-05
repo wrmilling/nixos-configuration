@@ -28,7 +28,6 @@
     nixos.printing.enable = true;
     nixos.secureboot.enable = true;
     nixos.smartcard.enable = true;
-    nixos.sway.enable = true;
     nixos.tailscale.enable = true;
     nixos.virtualization.enable = true;
     nixos.visualBoot.enable = true;
