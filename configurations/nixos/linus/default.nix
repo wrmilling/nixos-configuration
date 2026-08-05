@@ -18,7 +18,7 @@
     sopsFile = ../../../secrets/linus.yaml;
   };
 
-  sops.secrets."headplane/headscale_psk" = {
+  sops.secrets."headplane/headscale_api_key" = {
     owner = "headscale";
     sopsFile = ../../../secrets/linus.yaml;
   };
@@ -77,7 +77,9 @@
       settings = {
         integration.agent = {
           enabled = true;
-          pre_authkey_path = config.sops.secrets."headplane/headscale_psk".path;
+        };
+        headscale = {
+          api_key_path = config.sops.secrets."headplane/headscale_api_key".path;
         };
         server = {
           cookie_secret_path = config.sops.secrets."headplane/cookie_secret_path".path;
