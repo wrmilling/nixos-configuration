@@ -89,6 +89,12 @@ creation_rules:
           - *primary
         age:
           - *bob
+  - path_regex: secrets/gatus.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *bob
   - path_regex: secrets/nixbuild-arm.yaml$
     key_groups:
       - pgp:

@@ -27,6 +27,10 @@ in
     sopsFile = ../../../secrets/ncps.yaml;
   };
 
+  sops.secrets."gatus/env" = {
+    sopsFile = ../../../secrets/gatus.yaml;
+  };
+
   modules = {
     machineType.server.enable = true;
     nixos.sshd.banner = "${secrets.sshd.banner}";
@@ -77,6 +81,7 @@ in
   services.gatus = {
     enable = true;
     package = pkgs.gatus;
+    environmentFile = config.sops.secrets."gatus/env".path;
     settings = {
       ui = {
         title = secrets.gatus.title;
@@ -91,6 +96,18 @@ in
         };
         default-sort-by = "name";
       };
+      alerting = {
+        matrix = {
+          server-url = "https://synapse.${secrets.hosts.common.domain}";
+          access-token = "\${GATUS_MATRIX_ACCESS_TOKEN}";
+          internal-room-id = "\${GATUS_MATRIX_ROOM_ID}";
+          default-alert = {
+            failure-threshold = 3;
+            success-threshold = 2;
+            send-on-resolved = true;
+          };
+        };
+      };
       storage = {
         type = "sqlite";
         path = "/var/lib/gatus/data.db";
@@ -104,6 +121,7 @@ in
               ui.hide-hostname = true;
               ui.hide-port = true;
               ui.hide-url = true;
+              alerts = [ { type = "matrix"; } ];
             }
           )
           [
