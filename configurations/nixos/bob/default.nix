@@ -89,7 +89,7 @@ in
           size16x16 = "https://status.${secrets.hosts.common.domain}/logo.png";
           size32x32 = "https://status.${secrets.hosts.common.domain}/logo.png";
         };
-        default-sort-by = "group";
+        default-sort-by = "name";
       };
       storage = {
         type = "sqlite";
@@ -154,7 +154,7 @@ in
               name = "Calibre";
               group = "Services";
               url = "https://lib.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [ "[STATUS] == any(200, 302, 401)" ];
             }
             {
               name = "Forgejo";
