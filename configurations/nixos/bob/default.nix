@@ -7,6 +7,10 @@
   secrets,
   ...
 }:
+let
+  # The custom logo uploaded to the Uptime Kuma status page (/upload/logo1.png), carried over for Gatus's ui.logo/favicon.
+  gatusLogo = ./assets/gatus-logo.png;
+in
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
@@ -70,9 +74,194 @@
     ];
   };
 
-  services.uptime-kuma = {
+  services.gatus = {
     enable = true;
-    package = pkgs.uptime-kuma;
+    package = pkgs.gatus;
+    settings = {
+      ui = {
+        title = secrets.gatus.title;
+        header = secrets.gatus.title;
+        dashboard-heading = "External Service Health";
+        dashboard-subheading = "";
+        logo = "https://status.${secrets.hosts.common.domain}/logo.png";
+        favicon = {
+          default = "https://status.${secrets.hosts.common.domain}/logo.png";
+          size16x16 = "https://status.${secrets.hosts.common.domain}/logo.png";
+          size32x32 = "https://status.${secrets.hosts.common.domain}/logo.png";
+        };
+        default-sort-by = "group";
+      };
+      storage = {
+        type = "sqlite";
+        path = "/var/lib/gatus/data.db";
+      };
+      endpoints =
+        map
+          (
+            endpoint:
+            endpoint
+            // {
+              ui.hide-hostname = true;
+              ui.hide-port = true;
+              ui.hide-url = true;
+            }
+          )
+          [
+            {
+              name = "Bart";
+              group = "Servers";
+              url = "icmp://bart.${secrets.hosts.common.domain}";
+              conditions = [ "[CONNECTED] == true" ];
+            }
+            {
+              name = "Bob";
+              group = "Servers";
+              url = "icmp://bob.${secrets.hosts.common.domain}";
+              conditions = [ "[CONNECTED] == true" ];
+            }
+            {
+              name = "Goku";
+              group = "Servers";
+              url = "icmp://goku.${secrets.hosts.common.domain}";
+              conditions = [ "[CONNECTED] == true" ];
+            }
+            {
+              name = "Khan";
+              group = "Servers";
+              url = "icmp://${secrets.hosts.common.c_domain}";
+              conditions = [ "[CONNECTED] == true" ];
+            }
+            {
+              name = "Linus";
+              group = "Servers";
+              url = "icmp://${secrets.hosts.common.p_domain}";
+              conditions = [ "[CONNECTED] == true" ];
+            }
+
+            {
+              name = "Atuin";
+              group = "Services";
+              url = "https://atuin.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Authelia";
+              group = "Services";
+              url = "https://auth.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Calibre";
+              group = "Services";
+              url = "https://lib.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Forgejo";
+              group = "Services";
+              url = "https://git.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Home Assistant";
+              group = "Services";
+              url = "https://hass.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Immich";
+              group = "Services";
+              url = "https://photos.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Mastodon";
+              group = "Services";
+              url = "https://mastodon.${secrets.hosts.common.domain}/";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              # Bridge only serves its API paths; the root path legitimately 404s.
+              name = "Mautrix (Slack)";
+              group = "Services";
+              url = "https://mbridge-slack.${secrets.hosts.common.domain}/";
+              conditions = [ "[STATUS] == any(200, 404)" ];
+            }
+            {
+              name = "Media Requests";
+              group = "Services";
+              url = "https://requests.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "OpenGist";
+              group = "Services";
+              url = "https://gist.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Plex";
+              group = "Services";
+              url = "https://plex.${secrets.hosts.common.domain}/web/index.html#!/";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Synapse (MAS)";
+              group = "Services";
+              url = "https://mas.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Synapse (Server)";
+              group = "Services";
+              url = "https://synapse.${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+
+            {
+              name = "Cowboy";
+              group = "Sites";
+              url = "https://${secrets.hosts.common.c_domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Homelab";
+              group = "Sites";
+              url = "https://${secrets.hosts.common.domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Personal";
+              group = "Sites";
+              url = "https://${secrets.hosts.common.b_domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Personal (Development)";
+              group = "Sites";
+              url = "https://${secrets.hosts.common.d_domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Personal (Radio)";
+              group = "Sites";
+              url = "https://${secrets.hosts.common.h_domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Personal (Resume)";
+              group = "Sites";
+              url = "https://${secrets.hosts.common.w_domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+            {
+              name = "Small";
+              group = "Sites";
+              url = "https://${secrets.hosts.common.a_domain}";
+              conditions = [ "[STATUS] < 300" ];
+            }
+          ];
+    };
   };
 
   services.nginx = {
@@ -203,9 +392,9 @@
       "status.${secrets.hosts.common.domain}" = {
         forceSSL = true;
         enableACME = true;
+        locations."= /logo.png".alias = "${gatusLogo}";
         locations."/" = {
-          proxyPass = "http://localhost:3001/";
-          proxyWebsockets = true;
+          proxyPass = "http://localhost:${toString config.services.gatus.settings.web.port}/";
         };
       };
 
