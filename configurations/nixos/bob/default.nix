@@ -183,123 +183,183 @@ in
               name = "Atuin";
               group = "Services";
               url = "https://atuin.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Authelia";
               group = "Services";
               url = "https://auth.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Calibre";
               group = "Services";
               url = "https://lib.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] == any(200, 302, 401)" ];
+              conditions = [
+                "[STATUS] == any(200, 302, 401)"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Forgejo";
               group = "Services";
               url = "https://git.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Home Assistant";
               group = "Services";
               url = "https://hass.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Immich";
               group = "Services";
               url = "https://photos.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Mastodon";
               group = "Services";
               url = "https://mastodon.${secrets.hosts.common.domain}/";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               # Bridge only serves its API paths; the root path legitimately 404s.
               name = "Mautrix (Slack)";
               group = "Services";
               url = "https://mbridge-slack.${secrets.hosts.common.domain}/";
-              conditions = [ "[STATUS] == any(200, 404)" ];
+              conditions = [
+                "[STATUS] == any(200, 404)"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Media Requests";
               group = "Services";
               url = "https://requests.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "OpenGist";
               group = "Services";
               url = "https://gist.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Plex";
               group = "Services";
               url = "https://plex.${secrets.hosts.common.domain}/web/index.html#!/";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Synapse (MAS)";
               group = "Services";
               url = "https://mas.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Synapse (Server)";
               group = "Services";
               url = "https://synapse.${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
 
             {
               name = "Cowboy";
               group = "Sites";
               url = "https://${secrets.hosts.common.c_domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Homelab";
               group = "Sites";
               url = "https://${secrets.hosts.common.domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Personal";
               group = "Sites";
               url = "https://${secrets.hosts.common.b_domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Personal (Development)";
               group = "Sites";
               url = "https://${secrets.hosts.common.d_domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Personal (Radio)";
               group = "Sites";
               url = "https://${secrets.hosts.common.h_domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Personal (Resume)";
               group = "Sites";
               url = "https://${secrets.hosts.common.w_domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
             {
               name = "Small";
               group = "Sites";
               url = "https://${secrets.hosts.common.a_domain}";
-              conditions = [ "[STATUS] < 300" ];
+              conditions = [
+                "[STATUS] < 300"
+                "[CONNECTED] == true"
+              ];
             }
           ];
     };
