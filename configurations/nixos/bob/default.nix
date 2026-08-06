@@ -108,6 +108,13 @@ in
           )
           [
             {
+              name = "Homelab Connection";
+              group = "Backbone";
+              url = "icmp://ipv4.${secrets.hosts.common.domain}";
+              conditions = [ "[CONNECTED] == true" ];
+            }
+
+            {
               name = "Bart";
               group = "Servers";
               url = "icmp://bart.${secrets.hosts.common.domain}";
