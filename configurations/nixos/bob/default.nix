@@ -100,7 +100,7 @@ in
         matrix = {
           server-url = "https://synapse.${secrets.hosts.common.domain}";
           access-token = "\${GATUS_MATRIX_ACCESS_TOKEN}";
-          internal-room-id = "\${GATUS_MATRIX_ROOM_ID}";
+          internal-room-id = secrets.gatus.matrixRoomId;
           default-alert = {
             failure-threshold = 3;
             success-threshold = 2;
