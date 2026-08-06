@@ -107,6 +107,19 @@ in
             send-on-resolved = true;
           };
         };
+        email = {
+          from = "\${GATUS_EMAIL_FROM}";
+          host = "\${GATUS_EMAIL_HOST}";
+          port = 465;
+          to = "\${GATUS_EMAIL_TO}";
+          username = "\${GATUS_EMAIL_USERNAME}";
+          password = "\${GATUS_EMAIL_PASSWORD}";
+          default-alert = {
+            failure-threshold = 3;
+            success-threshold = 2;
+            send-on-resolved = true;
+          };
+        };
       };
       storage = {
         type = "sqlite";
@@ -121,7 +134,10 @@ in
               ui.hide-hostname = true;
               ui.hide-port = true;
               ui.hide-url = true;
-              alerts = [ { type = "matrix"; } ];
+              alerts = [
+                { type = "matrix"; }
+                { type = "email"; }
+              ];
             }
           )
           [
