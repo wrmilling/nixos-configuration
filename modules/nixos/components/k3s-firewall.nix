@@ -30,7 +30,7 @@ in
       9080 # CSI RBD Plugin Metrics (TCP)
       9090 # CSI RBD Plugin GRPC Metrics (TCP)
       9100 # Node Exporter Metrics (TCP)
-      9130 # MetalLB Metrics Export (TCP)
+      9120 # MetalLB Metrics Export (TCP)
       9617 # PiHole Metrics Exporter (TCP)
       10250 # K3s Metrics Server (TCP)
       12321 # HASS VSCode (TCP)
