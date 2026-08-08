@@ -13,6 +13,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.xr-video-player ];
+
     services.monado = {
       enable = true;
       # /etc default plus an active per-user override, since a prior SteamVR
