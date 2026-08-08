@@ -35,6 +35,7 @@ in
     # still tries to run inference on the resulting invalid session.
     systemd.user.services.monado.environment = {
       LH_HANDTRACKING = "OFF";
+      XRT_COMPOSITOR_SCALE_PERCENTAGE = "90";
     };
 
     # Let OpenXR-native games launched through Steam's sandbox see the
