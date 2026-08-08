@@ -1,0 +1,45 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index b0bec84..a60fb06 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -1497,7 +1497,8 @@ int CMainApplication::RunMainLoop()
+ 		if (!xr_check(instance, result, "xrWaitFrame() was not successful, exiting..."))
+ 			break;
+ 
+-
++		// xrWaitFrame paces to the real compositor cadence; treat its return as the vsync tick.
++		mpv.report_swap();
+ 
+ 		// --- Create projection matrices and view matrices for each eye
+ 		XrViewLocateInfo view_locate_info = {.type = XR_TYPE_VIEW_LOCATE_INFO,
+diff --git a/src/mpv.cpp b/src/mpv.cpp
+index 321056a..475c60a 100644
+--- a/src/mpv.cpp
++++ b/src/mpv.cpp
+@@ -307,6 +307,13 @@ void Mpv::draw(unsigned int framebuffer_id, int width, int height) {
+ 	//fprintf(stderr, "draw mpv: %d\n", res);
+ }
+ 
++void Mpv::report_swap() {
++	if(!created)
++		return;
++
++	mpv_render_context_report_swap(mpv_gl);
++}
++
+ bool Mpv::take_render_update() {
+ 	std::lock_guard<std::mutex> lock(render_update_mutex);
+ 	bool should_update = render_update;
+diff --git a/src/mpv.hpp b/src/mpv.hpp
+index 571becd..493f814 100644
+--- a/src/mpv.hpp
++++ b/src/mpv.hpp
+@@ -25,6 +25,8 @@ public:
+ 	void seek(double seconds);
+ 	void toggle_pause();
+ 	void draw(unsigned int framebuffer_id, int width, int height);
++	// Call once per XR frame so mpv's frame-pacing can calibrate to the real compositor cadence.
++	void report_swap();
+ 	bool take_render_update();
+ 	void set_render_update();
+ 	void set_running(bool value);

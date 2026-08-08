@@ -13,7 +13,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.xr-video-player ];
+    environment.systemPackages = [
+      pkgs.xr-video-player
+      pkgs.wayvr
+    ];
 
     services.monado = {
       enable = true;

@@ -31,6 +31,10 @@ stdenv.mkDerivation {
     hash = versions.hash;
   };
 
+  # Upstream never reports real vsyncs to mpv, so its frame pacing can't
+  # calibrate to the XR compositor's actual cadence, causing missed frames.
+  patches = [ ./report-swap-sync.patch ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
