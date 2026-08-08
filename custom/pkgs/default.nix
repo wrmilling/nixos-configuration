@@ -14,5 +14,6 @@ rec {
   codegraph = pkgs.callPackage ./codegraph { };
   shiftleft-sl = pkgs.callPackage ./shiftleft-sl { };
   m5burner = pkgs.callPackage ./m5burner { };
+  xr-video-player = pkgs.callPackage ./xr-video-player { };
   obsidianPlugins = import ./obsidianPlugins { inherit pkgs; };
 }

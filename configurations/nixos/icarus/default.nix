@@ -37,6 +37,8 @@
     nixos.onedrive.enable = true;
   };
 
+  environment.systemPackages = [ pkgs.xr-video-player ];
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Enabled lanzaboote through secureboot.nix optional import.
