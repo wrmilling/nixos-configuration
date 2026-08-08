@@ -15,6 +15,10 @@ in
   config = lib.mkIf cfg.enable {
     programs.steam.enable = true;
 
+    # Udev rules for Steam Controller / Vive / Index hardware, so SteamVR
+    # doesn't need to self-elevate via sudo to install them on first run.
+    hardware.steam-hardware.enable = true;
+
     networking.firewall.allowedTCPPorts = [
       27036 # Steam Remote Play
       27037 # Steam Remote Play
