@@ -28,6 +28,13 @@ in
     # STEAMVR_LH_ENABLE segfaults monado-service (null HmdDriverFactory call
     # in steamvr_lh_create_devices); libsurvive tracks the Index fine without it.
 
+    # Mercury (camera hand tracking) segfaults in onnxruntime: nixpkgs' monado
+    # doesn't ship its ONNX models, so the model load fails and the driver
+    # still tries to run inference on the resulting invalid session.
+    systemd.user.services.monado.environment = {
+      LH_HANDTRACKING = "OFF";
+    };
+
     # Let OpenXR-native games launched through Steam's sandbox see the
     # host's active runtime (Monado) instead of requiring SteamVR's own.
     # Assumes modules.nixos.gaming.enable (or another `programs.steam.enable`)
