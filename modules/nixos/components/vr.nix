@@ -25,22 +25,8 @@ in
       highPriority = true;
     };
 
-    # Lighthouse tracking (Index/Vive base stations) via SteamVR's driver
-    # instead of Monado's default libsurvive.
-    systemd.user.services.monado.environment = {
-      STEAMVR_LH_ENABLE = "1";
-      # SteamVR's driver_lighthouse.so is a prebuilt vendor binary expecting
-      # FHS-style library paths; outside Steam's own sandbox (which Monado
-      # runs entirely outside of) those aren't on the linker's search path,
-      # so dlopen-ing it segfaults through an unresolved symbol. Point the
-      # linker at Nix store equivalents instead of patching SteamVR's own
-      # binary, since Steam re-downloads/overwrites that on its own updates.
-      LD_LIBRARY_PATH = lib.makeLibraryPath [
-        pkgs.SDL2
-        pkgs.zlib
-        pkgs.systemd
-      ];
-    };
+    # STEAMVR_LH_ENABLE segfaults monado-service (null HmdDriverFactory call
+    # in steamvr_lh_create_devices); libsurvive tracks the Index fine without it.
 
     # Let OpenXR-native games launched through Steam's sandbox see the
     # host's active runtime (Monado) instead of requiring SteamVR's own.
