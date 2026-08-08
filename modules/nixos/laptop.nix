@@ -25,5 +25,6 @@ in
     };
 
     networking.networkmanager.enable = true;
+    services.hardware.bolt.enable = true;
   };
 }
