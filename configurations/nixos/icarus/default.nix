@@ -25,6 +25,7 @@
     nixos.gaming.enable = true;
     nixos.vr.enable = true;
     nixos.k8sUtils.enable = true;
+    nixos.nzbget.enable = true;
     # nixos.ollama.enable = true;
     nixos.printing.enable = true;
     nixos.secureboot.enable = true;
