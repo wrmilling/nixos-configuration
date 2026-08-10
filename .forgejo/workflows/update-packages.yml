@@ -107,7 +107,7 @@ jobs:
       - name: Commit, push, and open/update PR
         if: steps.diff.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ secrets.ACTIONS_PAT }}
         run: |
           set -euo pipefail
 
