@@ -1,0 +1,201 @@
+name: Review Package Update PRs
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    if: startsWith(github.event.pull_request.head.ref, 'pkg-update/') && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: alpine-tokyo
+    timeout-minutes: 20
+    concurrency:
+      group: pkg-review-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Gather PR context
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API: ${{ github.api_url }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+
+          pr_json=$(curl -sf -H "Authorization: token $GH_TOKEN" "$API/repos/$REPO/pulls/$PR")
+          {
+            echo "# PR Context"
+            echo
+            echo "## Title"
+            echo "$pr_json" | jq -r '.title'
+            echo
+            echo "## Body"
+            echo "$pr_json" | jq -r '.body // ""'
+            echo
+            echo "## Diff"
+          } > pr-context.md
+          git diff "$BASE_SHA...HEAD" >> pr-context.md
+
+      - name: Run Claude review
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          CLAUDE_REVIEWER_TOKEN: ${{ secrets.CLAUDE_REVIEWER_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          cat > /tmp/prompt.md <<'PROMPT_EOF'
+          You are reviewing an automated Nix package-update pull request in a
+          personal Nix flake repo (NixOS/nix-darwin/home-manager configs). You
+          research the upgrade and submit exactly one PR review with your
+          findings. You do not edit files, do not merge, and do not run
+          `nix build`/`nixos-rebuild`/deployment commands. You investigate and
+          report only.
+
+          REPO: ${{ github.repository }}
+          PR: #${{ github.event.pull_request.number }}
+          FORGEJO_API: ${{ github.api_url }}
+
+          ## Repo context
+
+          Packages live under `custom/pkgs/<name>/` (or
+          `custom/pkgs/<namespace>/<name>/` for grouped sets like Obsidian
+          plugins), each with:
+          - `default.nix` — takes `lib.importJSON ./versions.json`, never
+            hardcodes a version or hash inline.
+          - `versions.json` — version + hash(es); shape depends on the fetcher:
+            - single file: `{"version", "hash"}` (or `"sha256"`)
+            - multiple loose assets (Obsidian plugins):
+              `{"version", "hashes": {"manifest", "main", "styles"}}`
+            - multiple platforms:
+              `{"version", "hashes": {"x86_64-linux", "aarch64-darwin", ...}}`
+            - built from source (buildGoModule + fetchFromGitHub): also
+              carries `"rev"` and `"vendorHash"`.
+          - `update.sh` — bumps `versions.json`; this PR is its automated
+            output, opened by `.forgejo/workflows/update-packages.yml` on a
+            schedule.
+
+          `pr-context.md` in the repo root already has the PR title, body, and
+          full diff — Read it first instead of re-fetching it yourself.
+
+          ## What to check
+
+          1. Identify which package changed and the old -> new version from
+             `pr-context.md`.
+          2. Confirm the diff is what you'd expect from a routine version
+             bump: normally only `versions.json` changes (version + hash(es)).
+             If `default.nix` or another file changed too, scrutinize why —
+             that's unusual for this update flow.
+          3. Sanity-check the new hash(es): the right shape for the fetcher
+             used in `default.nix` (single `hash`/`sha256`, per-platform
+             `hashes` dict, or per-asset `hashes` dict), all expected keys
+             present, and none look truncated, empty, or identical to the old
+             value despite the version bump.
+          4. Research the upstream release (check `default.nix`/`update.sh`
+             for the upstream repo URL) via WebFetch/WebSearch for breaking
+             changes, deprecations, or security advisories between the old and
+             new version.
+          5. Read `custom/pkgs/<package>/default.nix` to judge whether
+             anything upstream changed would break the build — a renamed
+             release asset, a changed archive layout, a new required build
+             dependency, a changed binary/install path.
+
+          ## Tool notes
+
+          - `Bash(curl:*)` is your only way to talk to the Forgejo API — there
+            is no `gh` CLI available in this environment; it does not work
+            against this Forgejo instance's API.
+          - Use `WebFetch`/`WebSearch` for upstream changelogs/releases, not
+            `curl`, since `curl` here is scoped for the Forgejo API only.
+
+          ## Submitting the review
+
+          Post **exactly one** review via curl, then stop — do not call the
+          reviews endpoint again even if you keep researching afterward:
+
+          curl -sf -X POST \
+            -H "Authorization: token $CLAUDE_REVIEWER_TOKEN" \
+            -H "Content-Type: application/json" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews" \
+            -d @- <<'REVIEW_EOF'
+          {"event": "APPROVED", "body": "..."}
+          REVIEW_EOF
+
+          Use `"event": "APPROVED"` if the bump looks safe (hashes
+          well-formed and complete, no undocumented breaking changes that
+          affect how this repo uses the package). Use
+          `"event": "REQUEST_CHANGES"` if hashes are malformed/missing, the
+          diff touches more than expected, or upstream has breaking changes
+          not accounted for. JSON-escape the body string properly (newlines
+          as `\n`, quotes escaped) since it's inline JSON, not a heredoc body.
+
+          Structure the review body as markdown:
+
+          ### <package>: <old> -> <new>
+
+          **Verdict**: Safe to merge | Changes required before merge
+
+          **Findings**:
+          - ...
+
+          **Sources consulted**:
+          - ...
+          PROMPT_EOF
+
+          nix run github:sadjow/claude-code-nix -- \
+            -p "$(cat /tmp/prompt.md)" \
+            --model sonnet \
+            --max-turns 25 \
+            --output-format json \
+            --allowedTools "Read,Glob,Grep,Bash(git log:*),Bash(git show:*),Bash(curl:*),WebFetch,WebSearch" \
+            --disallowedTools "Task,Agent" \
+            > /tmp/claude-result.json
+
+      - name: Log usage
+        if: always()
+        env:
+          CLAUDE_REVIEWER_TOKEN: ${{ secrets.CLAUDE_REVIEWER_TOKEN }}
+          API: ${{ github.api_url }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! -s /tmp/claude-result.json ]]; then
+            echo "No Claude result to log; skipping usage comment."
+            exit 0
+          fi
+
+          cost=$(jq -r '.total_cost_usd // "n/a"' /tmp/claude-result.json)
+          turns=$(jq -r '.num_turns // "n/a"' /tmp/claude-result.json)
+          model=$(jq -r '.model // "sonnet"' /tmp/claude-result.json)
+          when=$(date -u +"%Y-%m-%d %H:%M UTC")
+          row="| $when | $model | $turns | \$$cost |"
+
+          marker="<!-- claude-usage-report -->"
+          header=$(printf '%s\n\n### Claude usage\n\n| When | Model | Turns | Cost |\n| --- | --- | --- | --- |' "$marker")
+
+          comments=$(curl -sf -H "Authorization: token $CLAUDE_REVIEWER_TOKEN" "$API/repos/$REPO/issues/$PR/comments")
+          comment_id=$(echo "$comments" | jq -r --arg m "$marker" '[.[] | select(.body | startswith($m))][0].id // empty')
+
+          if [[ -n "$comment_id" ]]; then
+            old_body=$(echo "$comments" | jq -r --arg id "$comment_id" '.[] | select(.id == ($id | tonumber)) | .body')
+            old_rows=$(echo "$old_body" | tail -n +7)
+          else
+            old_rows=""
+          fi
+
+          new_rows=$(printf '%s\n%s\n' "$old_rows" "$row" | grep -v '^$' | tail -n 30)
+          body=$(printf '%s\n%s\n' "$header" "$new_rows")
+          payload=$(jq -n --arg b "$body" '{body: $b}')
+
+          if [[ -n "$comment_id" ]]; then
+            curl -sf -X PATCH -H "Authorization: token $CLAUDE_REVIEWER_TOKEN" -H "Content-Type: application/json" \
+              "$API/repos/$REPO/issues/comments/$comment_id" -d "$payload"
+          else
+            curl -sf -X POST -H "Authorization: token $CLAUDE_REVIEWER_TOKEN" -H "Content-Type: application/json" \
+              "$API/repos/$REPO/issues/$PR/comments" -d "$payload"
+          fi
