@@ -177,6 +177,7 @@ jobs:
             --max-turns 25 \
             --output-format stream-json \
             --verbose \
+            --permission-mode auto \
             --allowedTools "Read,Glob,Grep,Bash(git log:*),Bash(git show:*),Bash(curl:*),WebFetch,WebSearch" \
             --disallowedTools "Task,Agent" \
             | tee /tmp/claude-transcript.jsonl \
