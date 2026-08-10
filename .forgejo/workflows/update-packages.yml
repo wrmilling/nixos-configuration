@@ -11,6 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      # Every update.sh calls `nix shell nixpkgs#jq` repeatedly, which re-fetches
+      # the unpinned nixpkgs-unstable registry entry on a miss. Warm it once here
+      # (discover always runs before the matrix) so no update job pays for it.
+      - name: Restore/save shared nixpkgs tooling cache
+        uses: actions/cache-nix-action@7df957e333c1e5da7721f60227dbba6d06080569 # v7.0.2
+        with:
+          primary-key: nix-shared-tooling
+
       - name: List updatable packages
         id: list
         run: |
@@ -35,6 +43,14 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+
+      # Populated once by discover's identical step; avoids every matrix job
+      # independently re-fetching nixpkgs-unstable for `nix shell nixpkgs#jq`.
+      - name: Restore shared nixpkgs tooling cache
+        uses: actions/cache-nix-action@7df957e333c1e5da7721f60227dbba6d06080569 # v7.0.2
+        with:
+          primary-key: nix-shared-tooling
+          save: false
 
       # Exact-key only: this Forgejo's cache backend 404s on the prefix/purge
       # search endpoints, so no restore-prefixes-*/purge here.
