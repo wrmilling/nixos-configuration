@@ -114,23 +114,26 @@ jobs:
           ## Submitting the review
 
           Post **exactly one** review via curl, then stop — do not call the
-          reviews endpoint again even if you keep researching afterward:
+          reviews endpoint again even if you keep researching afterward.
 
+          Build the JSON payload with `jq --arg`, not a hand-written heredoc —
+          a heredoc containing multi-line markdown text produces invalid JSON
+          (raw newlines aren't valid inside a JSON string):
+
+          payload=$(jq -n --arg event "APPROVED" --arg body "$REVIEW_BODY" \
+            '{event: $event, body: $body}')
           curl -sf -X POST \
             -H "Authorization: token $CLAUDE_REVIEWER_TOKEN" \
             -H "Content-Type: application/json" \
             "${{ github.api_url }}/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews" \
-            -d @- <<'REVIEW_EOF'
-          {"event": "APPROVED", "body": "..."}
-          REVIEW_EOF
+            -d "$payload"
 
           Use `"event": "APPROVED"` if the bump looks safe (hashes
           well-formed and complete, no undocumented breaking changes that
           affect how this repo uses the package). Use
           `"event": "REQUEST_CHANGES"` if hashes are malformed/missing, the
           diff touches more than expected, or upstream has breaking changes
-          not accounted for. JSON-escape the body string properly (newlines
-          as `\n`, quotes escaped) since it's inline JSON, not a heredoc body.
+          not accounted for.
 
           Structure the review body as markdown:
 
