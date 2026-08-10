@@ -43,6 +43,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
 
       # Populated once by discover's identical step; avoids every matrix job
       # independently re-fetching nixpkgs-unstable for `nix shell nixpkgs#jq`.
@@ -107,7 +108,7 @@ jobs:
       - name: Commit, push, and open/update PR
         if: steps.diff.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           set -euo pipefail
 
