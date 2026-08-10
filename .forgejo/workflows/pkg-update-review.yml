@@ -8,6 +8,11 @@ on:
         description: PR number to review
         required: true
         type: string
+      log_transcript:
+        description: Push a redacted Claude transcript to the private log repo
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   review:
@@ -184,7 +189,7 @@ jobs:
             | tail -1 > /tmp/claude-result.json
 
       - name: Redact transcript
-        if: always()
+        if: always() && inputs.log_transcript == true
         env:
           CLAUDE_REVIEWER_TOKEN: ${{ secrets.CLAUDE_REVIEWER_TOKEN }}
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -207,7 +212,7 @@ jobs:
           redact "$CLAUDE_CODE_OAUTH_TOKEN"
 
       - name: Push transcript to private log repo
-        if: always()
+        if: always() && inputs.log_transcript == true
         env:
           LOG_REPO_TOKEN: ${{ secrets.LOG_REPO_TOKEN }}
           API: ${{ github.api_url }}
