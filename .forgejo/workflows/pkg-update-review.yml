@@ -2,27 +2,50 @@ name: Review Package Update PRs
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to review
+        required: true
+        type: string
 
 jobs:
   review:
-    if: startsWith(github.event.pull_request.head.ref, 'pkg-update/') && github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'workflow_dispatch' || (startsWith(github.event.pull_request.head.ref, 'pkg-update/') && github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: alpine-tokyo
     timeout-minutes: 20
     concurrency:
-      group: pkg-review-${{ github.event.pull_request.number }}
+      group: pkg-review-${{ github.event.pull_request.number || inputs.pr_number }}
       cancel-in-progress: true
     steps:
+      - name: Resolve PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API: ${{ github.api_url }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number || inputs.pr_number }}
+        run: |
+          set -euo pipefail
+          pr_json=$(curl -sf -H "Authorization: token $GH_TOKEN" "$API/repos/$REPO/pulls/$PR")
+          {
+            echo "number=$PR"
+            echo "head_ref=$(echo "$pr_json" | jq -r '.head.ref')"
+            echo "base_sha=$(echo "$pr_json" | jq -r '.base.sha')"
+          } >> "$GITHUB_OUTPUT"
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          ref: ${{ steps.pr.outputs.head_ref }}
 
       - name: Gather PR context
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           API: ${{ github.api_url }}
           REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR: ${{ steps.pr.outputs.number }}
+          BASE_SHA: ${{ steps.pr.outputs.base_sha }}
         run: |
           set -euo pipefail
 
@@ -56,7 +79,7 @@ jobs:
           report only.
 
           REPO: ${{ github.repository }}
-          PR: #${{ github.event.pull_request.number }}
+          PR: #${{ steps.pr.outputs.number }}
           FORGEJO_API: ${{ github.api_url }}
 
           ## Repo context
@@ -125,7 +148,7 @@ jobs:
           curl -sf -X POST \
             -H "Authorization: token $CLAUDE_REVIEWER_TOKEN" \
             -H "Content-Type: application/json" \
-            "${{ github.api_url }}/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/pulls/${{ steps.pr.outputs.number }}/reviews" \
             -d "$payload"
 
           Use `"event": "APPROVED"` if the bump looks safe (hashes
@@ -163,7 +186,7 @@ jobs:
           CLAUDE_REVIEWER_TOKEN: ${{ secrets.CLAUDE_REVIEWER_TOKEN }}
           API: ${{ github.api_url }}
           REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
+          PR: ${{ steps.pr.outputs.number }}
         run: |
           set -euo pipefail
 
