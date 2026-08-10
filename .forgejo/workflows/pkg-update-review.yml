@@ -222,17 +222,17 @@ jobs:
           fi
 
           path="pkg-update-review/pr-${PR}/${RUN_ID}.jsonl"
-          content_b64=$(base64 < /tmp/claude-transcript.jsonl | tr -d '\n')
-          payload=$(jq -n \
-            --arg content "$content_b64" \
+          base64 < /tmp/claude-transcript.jsonl | tr -d '\n' > /tmp/transcript.b64
+          jq -n \
+            --rawfile content /tmp/transcript.b64 \
             --arg message "Transcript: pkg-update-review PR #${PR} run ${RUN_ID}" \
-            '{content: $content, message: $message}')
+            '{content: $content, message: $message}' > /tmp/payload.json
 
           curl -sf -X POST \
             -H "Authorization: token $LOG_REPO_TOKEN" \
             -H "Content-Type: application/json" \
             "$API/repos/$LOG_REPO/contents/${path}" \
-            -d "$payload"
+            -d @/tmp/payload.json
 
       - name: Log usage
         if: always()
