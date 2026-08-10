@@ -175,10 +175,64 @@ jobs:
             -p "$(cat /tmp/prompt.md)" \
             --model sonnet \
             --max-turns 25 \
-            --output-format json \
+            --output-format stream-json \
+            --verbose \
             --allowedTools "Read,Glob,Grep,Bash(git log:*),Bash(git show:*),Bash(curl:*),WebFetch,WebSearch" \
             --disallowedTools "Task,Agent" \
-            > /tmp/claude-result.json
+            | tee /tmp/claude-transcript.jsonl \
+            | tail -1 > /tmp/claude-result.json
+
+      - name: Redact transcript
+        if: always()
+        env:
+          CLAUDE_REVIEWER_TOKEN: ${{ secrets.CLAUDE_REVIEWER_TOKEN }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! -s /tmp/claude-transcript.jsonl ]]; then
+            echo "No transcript to redact."
+            exit 0
+          fi
+
+          redact() {
+            local value escaped
+            value="$1"
+            [[ -n "$value" ]] || return 0
+            escaped=$(printf '%s' "$value" | sed -e 's/[.[\*^$\/]/\\&/g')
+            sed -i "s/${escaped}/[REDACTED]/g" /tmp/claude-transcript.jsonl
+          }
+          redact "$CLAUDE_REVIEWER_TOKEN"
+          redact "$CLAUDE_CODE_OAUTH_TOKEN"
+
+      - name: Push transcript to private log repo
+        if: always()
+        env:
+          LOG_REPO_TOKEN: ${{ secrets.LOG_REPO_TOKEN }}
+          API: ${{ github.api_url }}
+          LOG_REPO: wrmilling/ci-transcripts
+          PR: ${{ steps.pr.outputs.number }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! -s /tmp/claude-transcript.jsonl ]]; then
+            echo "No transcript to push."
+            exit 0
+          fi
+
+          path="pkg-update-review/pr-${PR}/${RUN_ID}.jsonl"
+          content_b64=$(base64 < /tmp/claude-transcript.jsonl | tr -d '\n')
+          payload=$(jq -n \
+            --arg content "$content_b64" \
+            --arg message "Transcript: pkg-update-review PR #${PR} run ${RUN_ID}" \
+            '{content: $content, message: $message}')
+
+          curl -sf -X POST \
+            -H "Authorization: token $LOG_REPO_TOKEN" \
+            -H "Content-Type: application/json" \
+            "$API/repos/$LOG_REPO/contents/${path}" \
+            -d "$payload"
 
       - name: Log usage
         if: always()
