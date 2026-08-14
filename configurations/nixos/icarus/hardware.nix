@@ -27,6 +27,11 @@
   services.fprintd.tod.enable = true;
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
 
+  # Boot greeter uses the "login" PAM service; fprintd there blocks password
+  # login for its full timeout when the sensor isn't touched. Screen unlock
+  # still gets fingerprint via the separate kde/kde-fingerprint services.
+  security.pam.services.login.fprintAuth = false;
+
   fileSystems."/" = {
     device = "/dev/mapper/cryptroot";
     fsType = "ext4";
