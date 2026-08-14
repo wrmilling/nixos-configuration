@@ -45,6 +45,10 @@ in
       batteryStatus
     ];
     home.file.".tmux.conf".text = ''
+      # Default to fish regardless of the account's login shell (nix-darwin
+      # won't change an existing macOS user's shell, so this matters there)
+      set -g default-shell "${pkgs.fish}/bin/fish"
+
       # Mouse options
       set -g mouse on
 
