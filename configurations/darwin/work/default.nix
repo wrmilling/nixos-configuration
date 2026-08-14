@@ -44,6 +44,7 @@
         secrets.nixcache.public_key
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       ];
+      ssl-cert-file = "/usr/local/munki/thd_certs.pem";
       warn-dirty = false;
       sandbox = "relaxed";
       trusted-users = [
