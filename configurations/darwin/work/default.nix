@@ -91,6 +91,5 @@
   # Use touch ID for sudo auth
   security.pam.services.sudo_local.touchIdAuth = true;
 
-  ids.gids.nixbld = 30000;
   system.stateVersion = 5;
 }
