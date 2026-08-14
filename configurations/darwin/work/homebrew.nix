@@ -11,9 +11,6 @@
       "scrcpy"
     ];
     taps = [
-      "homebrew/bundle"
-      "homebrew/cask-fonts"
-      "homebrew/services"
       "deskflow/tap"
     ];
     casks = [
