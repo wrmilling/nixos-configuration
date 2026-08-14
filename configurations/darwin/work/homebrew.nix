@@ -17,7 +17,6 @@
       "deskflow/tap"
     ];
     casks = [
-      "appflowy"
       "deskflow/tap/deskflow"
       "flameshot"
       "microsoft-remote-desktop"
