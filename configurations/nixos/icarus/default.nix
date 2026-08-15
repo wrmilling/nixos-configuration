@@ -22,6 +22,7 @@
     nixos.development.enable = true;
     nixos.dockerRootless.enable = true;
     nixos.flipper.enable = true;
+    nixos.fusion360.enable = true;
     nixos.gaming.enable = true;
     nixos.vr.enable = true;
     nixos.k8sUtils.enable = true;
