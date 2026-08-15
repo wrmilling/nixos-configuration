@@ -33,7 +33,6 @@
     nixos.tailscale.enable = true;
     nixos.virtualization.enable = true;
     nixos.visualBoot.enable = true;
-    nixos.vpn.enable = true;
     nixos.wireshark.enable = true;
     nixos.onedrive.enable = true;
   };
