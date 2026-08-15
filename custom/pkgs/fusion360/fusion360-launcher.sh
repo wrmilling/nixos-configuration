@@ -188,11 +188,26 @@ if [ -z "$launcher_exe" ]; then
     curl --fail --location --progress-bar --output "$installer" "$installer_url"
   fi
 
+  # "Fusion Admin Install.exe" is a 7z SFX wrapping a self-contained Python
+  # "streaming installer" (streamer.exe + an embedded CPython runtime), not a
+  # native installer. Running the SFX itself under Wine fails ("Can't load
+  # config info"), and even running streamer.exe directly fails to find its
+  # own stdlib if invoked from outside the prefix's drive_c -- Wine can't map
+  # that to a drive letter, so it hands the app a "\\?\unix\..." path that
+  # Python's own bootstrap can't parse. Extract with a native Linux 7z instead
+  # of Wine, into drive_c, and run streamer.exe from there with a plain
+  # relative path so Wine gives it an ordinary C:\... path.
+  extract_dir="$prefix/drive_c/fusion-installer"
+  rm -rf "$extract_dir"
+  mkdir -p "$extract_dir"
+  7z x -o"$extract_dir" -y "$installer" >/dev/null
+
   echo "==> Installing Autodesk Fusion 360 (silent, two-pass; this can take a while)..." >&2
-  timeout -k 10m 9m wine "$installer" --quiet || true
+  (cd "$extract_dir" && timeout -k 10m 9m wine streamer.exe --quiet) || true
   sleep 5
-  timeout -k 5m 1m wine "$installer" --quiet || true
+  (cd "$extract_dir" && timeout -k 5m 1m wine streamer.exe --quiet) || true
   wineserver --wait
+  rm -rf "$extract_dir"
 
   launcher_exe="$(find_launcher)"
   if [ -z "$launcher_exe" ]; then

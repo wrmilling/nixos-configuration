@@ -12,6 +12,7 @@
   pciutils,
   mesa-demos,
   mokutil,
+  p7zip,
 }:
 
 stdenv.mkDerivation {
@@ -43,6 +44,7 @@ stdenv.mkDerivation {
             pciutils
             mesa-demos
             mokutil
+            p7zip
           ]
         } \
         --set FUSION360_DXVK_X32 ${dxvk.bin}/x32 \
