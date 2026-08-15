@@ -45,8 +45,8 @@ stdenv.mkDerivation {
             mokutil
           ]
         } \
-        --set FUSION360_DXVK_X32 ${dxvk}/x32 \
-        --set FUSION360_DXVK_X64 ${dxvk}/x64 \
+        --set FUSION360_DXVK_X32 ${dxvk.bin}/x32 \
+        --set FUSION360_DXVK_X64 ${dxvk.bin}/x64 \
         --set FUSION360_MACHINE_OPTIONS_XML_DXVK ${./NMachineSpecificOptions-dxvk.xml} \
         --set FUSION360_MACHINE_OPTIONS_XML_OPENGL ${./NMachineSpecificOptions-opengl.xml} \
         --set SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt

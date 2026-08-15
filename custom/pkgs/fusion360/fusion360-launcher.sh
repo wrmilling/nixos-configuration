@@ -6,8 +6,10 @@ prefix="$data_root/wineprefix"
 downloads="$data_root/downloads"
 installer="$downloads/Fusion Admin Install.exe"
 installer_url="https://dl.appstreaming.autodesk.com/production/installers/Fusion%20Admin%20Install.exe"
-webview2_installer="$downloads/MicrosoftEdgeWebView2RuntimeInstallerX64.exe"
-webview2_url="https://go.microsoft.com/fwlink/?linkid=2124701"
+webview2_installer="$downloads/MicrosoftEdgeWebview2Setup.exe"
+# The small Evergreen Bootstrapper (~2MB); linkid=2124701 resolves to the much
+# larger (~200MB) Standalone installer instead, which fails under Wine.
+webview2_url="https://go.microsoft.com/fwlink/p/?LinkId=2124703"
 
 export WINEARCH=win64
 export WINEPREFIX="$prefix"
@@ -136,11 +138,23 @@ if [ ! -f "$webview2_marker" ]; then
   if [ ! -f "$webview2_installer" ]; then
     curl --fail --location --progress-bar --output "$webview2_installer" "$webview2_url"
   fi
-  if wine "$webview2_installer" /silent /install; then
+  wine "$webview2_installer" /silent /install || true
+
+  # Wine bug 53925: the edgeupdate service is left running and keeps the
+  # prefix alive indefinitely. Set it to manual startup and kill the
+  # installer-spawned instance, matching winetricks' own webview2 verb.
+  wine reg add 'HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\edgeupdate' \
+    /v Start /t REG_DWORD /d 3 /f >/dev/null
+  pkill -KILL -f 'MicrosoftEdgeUpdate.exe /c' 2>/dev/null || true
+  # Wine bug 58921: msedgewebview2.exe needs Windows 7 compatibility mode.
+  wine reg add 'HKEY_CURRENT_USER\Software\Wine\AppDefaults\msedgewebview2.exe' \
+    /v Version /d win7 /f >/dev/null
+
+  if find "$prefix" -ipath '*/Microsoft/EdgeUpdate/MicrosoftEdgeUpdate.exe' -print -quit 2>/dev/null | grep -q .; then
     touch "$webview2_marker"
   else
-    echo "warning: WebView2 install failed (exit $?) -- Fusion's sign-in UI may not" >&2
-    echo "         render correctly. Will retry on the next launch." >&2
+    echo "warning: WebView2 install failed -- Fusion's sign-in UI may not render" >&2
+    echo "         correctly. Will retry on the next launch." >&2
   fi
 fi
 
