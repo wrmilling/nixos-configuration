@@ -131,6 +131,13 @@ reg_override mfc140u native
 reg_override bcp47langs ""
 wine reg add 'HKEY_CURRENT_USER\Software\Wine\X11 Driver' /v Managed /d Y /f >/dev/null
 wine reg add 'HKEY_CURRENT_USER\Software\Wine\X11 Driver' /v Decorated /d Y /f >/dev/null
+# Prefer IPv4 over IPv6 (Microsoft's documented DisabledComponents=0x20,
+# https://learn.microsoft.com/troubleshoot/windows-server/networking/configure-ipv6-in-windows).
+# Autodesk's cloud endpoints are dual-stack; on a host with no real IPv6
+# route, trying every AAAA record before falling back to IPv4 can stall
+# sign-in/data-sync for minutes. This doesn't disable IPv6, just deprioritizes it.
+wine reg add 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters' \
+  /v DisabledComponents /t REG_DWORD /d 0x20 /f >/dev/null
 
 webview2_marker="$data_root/.webview2-installed"
 if [ ! -f "$webview2_marker" ]; then
