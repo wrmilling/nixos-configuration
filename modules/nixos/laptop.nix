@@ -26,5 +26,6 @@ in
 
     networking.networkmanager.enable = true;
     services.hardware.bolt.enable = true;
+    boot.loader.timeout = 1;
   };
 }

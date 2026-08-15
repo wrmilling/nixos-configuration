@@ -22,5 +22,7 @@ in
       nixos.network.enable = true;
       nixos.plasma6.enable = true;
     };
+
+    boot.loader.timeout = 1;
   };
 }
