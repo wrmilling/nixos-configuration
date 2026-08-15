@@ -87,11 +87,18 @@ select_gpu_driver() {
 gpu_driver=DXVK
 select_gpu_driver
 
+# Each step below is independently idempotent and checks its own completion,
+# rather than being gated on one all-or-nothing "first run" flag -- a step
+# that fails partway (network hiccup, a flaky installer under Wine, ...)
+# must not permanently skip everything after it on the next launch.
+
 if [ ! -f "$prefix/system.reg" ]; then
   echo "==> Setting up the Fusion 360 Wine prefix (first run only)..." >&2
   wineboot --init
   wineserver --wait
+fi
 
+if ! grep -qx sandbox "$prefix/winetricks.log" 2>/dev/null; then
   # The sandbox verb strips the prefix's Z: drive and home-directory symlinks
   # (Desktop, Downloads, ...) for isolation, so re-link Downloads afterward --
   # installers we run expect it to resolve to a real, writable location.
@@ -99,50 +106,60 @@ if [ ! -f "$prefix/system.reg" ]; then
   win_downloads="$prefix/drive_c/users/$USER/Downloads"
   rm -rf "$win_downloads"
   ln -s "$downloads" "$win_downloads"
+fi
 
+if ! grep -qx win11 "$prefix/winetricks.log" 2>/dev/null; then
   echo "==> Installing Windows compatibility components via winetricks..." >&2
   winetricks -q atmlib gdiplus corefonts cjkfonts dotnet20 dotnet48 \
     msxml4 msxml6 vcrun2022 fontsmooth=rgb winhttp win10 win11
   # cjkfonts and win10/win11 are sometimes reset by the verbs above; reapply.
   winetricks -q cjkfonts
   winetricks -q win11
+fi
 
-  echo "==> Applying Fusion-specific Wine registry tweaks..." >&2
-  # Disable Autodesk's telemetry client ("calling home").
-  reg_override adpclientservice.exe native
-  # The nav bar renders incorrectly with anything but Wine's builtin browser.
-  reg_override AdCefWebBrowser.exe builtin
-  # Prefer the VC++ redist DLLs Fusion bundles with itself over Wine's own.
-  reg_override msvcp140 native
-  reg_override mfc140u native
-  # Without this override, sign-in fails.
-  reg_override bcp47langs ""
-  wine reg add 'HKEY_CURRENT_USER\Software\Wine\X11 Driver' /v Managed /d Y /f >/dev/null
-  wine reg add 'HKEY_CURRENT_USER\Software\Wine\X11 Driver' /v Decorated /d Y /f >/dev/null
+echo "==> Applying Fusion-specific Wine registry tweaks..." >&2
+# Disable Autodesk's telemetry client ("calling home").
+reg_override adpclientservice.exe native
+# The nav bar renders incorrectly with anything but Wine's builtin browser.
+reg_override AdCefWebBrowser.exe builtin
+# Prefer the VC++ redist DLLs Fusion bundles with itself over Wine's own.
+reg_override msvcp140 native
+reg_override mfc140u native
+# Without this override, sign-in fails.
+reg_override bcp47langs ""
+wine reg add 'HKEY_CURRENT_USER\Software\Wine\X11 Driver' /v Managed /d Y /f >/dev/null
+wine reg add 'HKEY_CURRENT_USER\Software\Wine\X11 Driver' /v Decorated /d Y /f >/dev/null
 
+webview2_marker="$data_root/.webview2-installed"
+if [ ! -f "$webview2_marker" ]; then
   echo "==> Installing the Microsoft Edge WebView2 runtime (used by Fusion's sign-in UI)..." >&2
   if [ ! -f "$webview2_installer" ]; then
     curl --fail --location --progress-bar --output "$webview2_installer" "$webview2_url"
   fi
-  wine "$webview2_installer" /silent /install || true
-
-  if [ "$gpu_driver" = DXVK ]; then
-    echo "==> Installing DXVK (Direct3D-to-Vulkan translation)..." >&2
-    install -d "$prefix/drive_c/windows/system32" "$prefix/drive_c/windows/syswow64"
-    for dll in d3d10core d3d11 dxgi; do
-      cp -f "$FUSION360_DXVK_X64/$dll.dll" "$prefix/drive_c/windows/system32/"
-      cp -f "$FUSION360_DXVK_X32/$dll.dll" "$prefix/drive_c/windows/syswow64/"
-      # The leading "*" makes the override apply no matter how the DLL is
-      # loaded (bare name, relative, or absolute path) -- winetricks' own
-      # DXVK helper and upstream's DXVK.reg both rely on it; without it,
-      # Fusion can load the real system DLL instead of DXVK's.
-      reg_override "*$dll" native
-    done
-    # Fusion doesn't use d3d9, but upstream pins it to Wine's builtin explicitly.
-    reg_override '*d3d9' builtin
+  if wine "$webview2_installer" /silent /install; then
+    touch "$webview2_marker"
+  else
+    echo "warning: WebView2 install failed (exit $?) -- Fusion's sign-in UI may not" >&2
+    echo "         render correctly. Will retry on the next launch." >&2
   fi
-  wineserver --wait
 fi
+
+if [ "$gpu_driver" = DXVK ]; then
+  echo "==> Installing DXVK (Direct3D-to-Vulkan translation)..." >&2
+  install -d "$prefix/drive_c/windows/system32" "$prefix/drive_c/windows/syswow64"
+  for dll in d3d10core d3d11 dxgi; do
+    cp -f "$FUSION360_DXVK_X64/$dll.dll" "$prefix/drive_c/windows/system32/"
+    cp -f "$FUSION360_DXVK_X32/$dll.dll" "$prefix/drive_c/windows/syswow64/"
+    # The leading "*" makes the override apply no matter how the DLL is
+    # loaded (bare name, relative, or absolute path) -- winetricks' own
+    # DXVK helper and upstream's DXVK.reg both rely on it; without it,
+    # Fusion can load the real system DLL instead of DXVK's.
+    reg_override "*$dll" native
+  done
+  # Fusion doesn't use d3d9, but upstream pins it to Wine's builtin explicitly.
+  reg_override '*d3d9' builtin
+fi
+wineserver --wait
 
 find_launcher() {
   find "$prefix" -iname Fusion360.exe -printf '%T@ %p\n' 2>/dev/null |
