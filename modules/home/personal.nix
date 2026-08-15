@@ -43,8 +43,8 @@ in
     };
 
     home.packages = lib.mkMerge [
-      (lib.mkIf pkgs.stdenv.isx86_64 [ pkgs.slack ])
-      (lib.mkIf pkgs.stdenv.isAarch64 [ ])
+      (lib.mkIf pkgs.stdenv.hostPlatform.isx86_64 [ pkgs.slack ])
+      (lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 [ ])
       [
         pkgs.claude-desktop
         pkgs.element-desktop
