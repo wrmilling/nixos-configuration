@@ -32,6 +32,14 @@
   # still gets fingerprint via the separate kde/kde-fingerprint services.
   security.pam.services.login.fprintAuth = false;
 
+  # Goodix reader (06cb:00df) drops off the bus under USB autosuspend, breaking lock-screen unlock.
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="06cb", ATTR{idProduct}=="00df", TEST=="power/control", ATTR{power/control}="on"
+  '';
+
+  # filesystem.nix enables rpcbind for NFS hosts; icarus has no NFS mounts and doesn't need it exposed.
+  services.rpcbind.enable = lib.mkForce false;
+
   fileSystems."/" = {
     device = "/dev/mapper/cryptroot";
     fsType = "ext4";
