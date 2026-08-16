@@ -18,13 +18,13 @@ in
       pkgs.go-task # task runner
       # pkgs.k9s # kubernetes viewer tool (Check home-manager)
       pkgs.kail # kubernetes tail
-      pkgs.ktop # kubernetes top
       pkgs.kubectl # kubernetes CLI
+      pkgs.kubectl-cnpg # CNPG Plugin for kubectl
       pkgs.kubectl-doctor # kubernetes doctor
       pkgs.kubectl-example # output example kubernetes types
+      pkgs.kubectl-ktop # kubernetes top
       # pkgs.kubectl-view-allocations # view kubernetes allocations
       pkgs.kubectl-view-secret # view kubernetes secrets without piping and decoding
-      pkgs.kubectl-cnpg # CNPG Plugin for kubectl
       pkgs.kubecolor # colorize kubectl output
       # pkgs.kubernetes-helm # helm CLI
       pkgs.kustomize # kustomize CLI for sadists
