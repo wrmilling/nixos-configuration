@@ -72,6 +72,9 @@ jobs:
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           CLAUDE_REVIEWER_TOKEN: ${{ secrets.CLAUDE_REVIEWER_TOKEN }}
+          API: ${{ github.api_url }}
+          REPO: ${{ github.repository }}
+          PR: ${{ steps.pr.outputs.number }}
         run: |
           set -euo pipefail
 
@@ -133,35 +136,27 @@ jobs:
 
           ## Tool notes
 
-          - `Bash(curl:*)` is your only way to talk to the Forgejo API — there
-            is no `gh` CLI available in this environment; it does not work
-            against this Forgejo instance's API.
-          - Use `WebFetch`/`WebSearch` for upstream changelogs/releases, not
-            `curl`, since `curl` here is scoped for the Forgejo API only.
+          - There is no `gh` CLI or direct Forgejo API access in this
+            environment. Posting the review is wrapped in a script (see
+            below), so you should not need `curl` at all.
+          - Use `WebFetch`/`WebSearch` for upstream changelogs/releases.
 
           ## Submitting the review
 
-          Post **exactly one** review via curl, then stop — do not call the
-          reviews endpoint again even if you keep researching afterward.
+          Submit your findings as **exactly one** PR review, then stop. This is two tool calls:
 
-          Build the JSON payload with `jq --arg`, not a hand-written heredoc —
-          a heredoc containing multi-line markdown text produces invalid JSON
-          (raw newlines aren't valid inside a JSON string):
+          1. `Write` your review body (the markdown template below) to `/tmp/review-body.md`.
+          2. Run this single Bash command:
+             ```
+             bash .forgejo/scripts/post-review.sh <EVENT> /tmp/review-body.md
+             ```
+             where `<EVENT>` is `APPROVED` if the bump looks safe (hashes well-formed and
+             complete, no undocumented breaking changes that affect how this repo uses the
+             package), or `REQUEST_CHANGES` if hashes are malformed/missing, the diff touches
+             more than expected, or upstream has breaking changes not accounted for.
 
-          payload=$(jq -n --arg event "APPROVED" --arg body "$REVIEW_BODY" \
-            '{event: $event, body: $body}')
-          curl -sf -X POST \
-            -H "Authorization: token $CLAUDE_REVIEWER_TOKEN" \
-            -H "Content-Type: application/json" \
-            "${{ github.api_url }}/repos/${{ github.repository }}/pulls/${{ steps.pr.outputs.number }}/reviews" \
-            -d "$payload"
-
-          Use `"event": "APPROVED"` if the bump looks safe (hashes
-          well-formed and complete, no undocumented breaking changes that
-          affect how this repo uses the package). Use
-          `"event": "REQUEST_CHANGES"` if hashes are malformed/missing, the
-          diff touches more than expected, or upstream has breaking changes
-          not accounted for.
+          Once that call succeeds, your work is done — do not make any further tool calls, and
+          do not run it a second time even if you keep researching afterward.
 
           Structure the review body as markdown:
 
@@ -183,7 +178,7 @@ jobs:
             --output-format stream-json \
             --verbose \
             --permission-mode auto \
-            --allowedTools "Read,Glob,Grep,Bash(git log:*),Bash(git show:*),Bash(curl:*),WebFetch,WebSearch" \
+            --allowedTools "Read,Write,Glob,Grep,Bash(git log:*),Bash(git show:*),Bash(bash .forgejo/scripts/post-review.sh:*),WebFetch,WebSearch" \
             --disallowedTools "Task,Agent" \
             | tee /tmp/claude-transcript.jsonl \
             | tail -1 > /tmp/claude-result.json
