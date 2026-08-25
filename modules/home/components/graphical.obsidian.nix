@@ -33,9 +33,9 @@ in
         { pkg = pkgs.obsidianPlugins.tasknotes; }
       ];
 
-      defaultSettings.cssSnippets = [
-        { source = ./assets/tasknotes-kanban.css; }
-      ];
+      # defaultSettings.cssSnippets = [
+      #   { source = ./assets/tasknotes-kanban.css; }
+      # ];
 
       vaults = lib.mkMerge [
         (lib.mkIf cfg.vaults.personal.enable {
