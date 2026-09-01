@@ -36,6 +36,11 @@
       doCheck = !prev.stdenv.hostPlatform.isi686;
     };
 
+    # Go test suite tries to bind a TCP listener, wish the build sandbox blocks
+    rancher = prev.rancher.overrideAttrs {
+      doCheck = false;
+    }
+
     # nixpkgs PR #510918: linuxPackages.facetimehd 0.6.13 -> 0.7.0.1
     linuxPackagesFor =
       kernel:
