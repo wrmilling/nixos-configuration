@@ -19,6 +19,9 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || (startsWith(github.event.pull_request.head.ref, 'pkg-update/') && github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: alpine-tokyo
     timeout-minutes: 20
+    env:
+      # Force transcript logging regardless of log_transcript.
+      FORCE_TRANSCRIPT_LOGGING: "false"
     concurrency:
       group: pkg-review-${{ github.event.pull_request.number || inputs.pr_number }}
       cancel-in-progress: true
@@ -184,7 +187,7 @@ jobs:
             | tail -1 > /tmp/claude-result.json
 
       - name: Redact transcript
-        if: always() && inputs.log_transcript == true
+        if: always() && (env.FORCE_TRANSCRIPT_LOGGING == 'true' || inputs.log_transcript == true)
         env:
           CLAUDE_REVIEWER_TOKEN: ${{ secrets.CLAUDE_REVIEWER_TOKEN }}
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -207,7 +210,7 @@ jobs:
           redact "$CLAUDE_CODE_OAUTH_TOKEN"
 
       - name: Push transcript to private log repo
-        if: always() && inputs.log_transcript == true
+        if: always() && (env.FORCE_TRANSCRIPT_LOGGING == 'true' || inputs.log_transcript == true)
         env:
           LOG_REPO_TOKEN: ${{ secrets.LOG_REPO_TOKEN }}
           API: ${{ github.api_url }}
