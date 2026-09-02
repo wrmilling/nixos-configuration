@@ -15,12 +15,10 @@ Definition of custom packages which are generally not yet available in upstream 
 - [xr-video-player](pkgs/xr-video-player) — OpenXR/Wayland VR video player, built from git (no upstream releases yet).
 - [fusion360](pkgs/fusion360) — Launcher that sets up a Wine/DXVK prefix and installs Autodesk Fusion 360 (proprietary, Windows-only) from Autodesk's own installer on first run; no upstream binary is fetched or pinned by Nix.
 - [obsidianPlugins](pkgs/obsidianPlugins) — Obsidian community plugins, namespaced under `pkgs.obsidianPlugins.<name>` since none are packaged in nixpkgs:
-  - `trietment-kanban` — Vault-wide Kanban board of tagged tasks, with projects, clients, priorities, and optional Outlook sync.
   - `pandoc` — Export notes via Pandoc (DOCX, ePub, PDF, ...).
   - `dataview` — Data index and query language over Markdown notes.
   - `advanced-tables` — Improved table navigation, formatting, and manipulation.
   - `tasks` — Track tasks across a vault, with due dates, recurrence, and filtering.
-  - `project-manager` — Project management with Gantt charts, Kanban boards, and Table views.
   - `tasknotes` — Note-based task management with calendar, kanban, pomodoro, and time-tracking integration.
 
 ## Updating packages
