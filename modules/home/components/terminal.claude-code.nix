@@ -549,6 +549,7 @@ in
     home.packages = [
       pkgs.codegraph
       pkgs.cc9s
+      pkgs.fast-resume
       pkgs.herdr
     ]
     ++ lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage;

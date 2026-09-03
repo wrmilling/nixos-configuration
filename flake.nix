@@ -37,6 +37,10 @@
     claude-code-nix.url = "github:sadjow/claude-code-nix";
     claude-code-nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # fast-resume TUI (upstream ships and maintains its own nix package)
+    fast-resume.url = "github:angristan/fast-resume";
+    fast-resume.inputs.nixpkgs.follows = "nixpkgs";
+
     # Star Citizen
     nix-citizen.url = "github:LovingMelody/nix-citizen";
     nix-citizen.inputs.nixpkgs.follows = "nixpkgs";

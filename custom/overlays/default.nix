@@ -13,6 +13,12 @@
   # configurations without touching NixOS hosts.
   claude-code = inputs.claude-code-nix.overlays.default;
 
+  # Provides pkgs.fast-resume from the angristan/fast-resume flake's own
+  # package output (no overlays output upstream, unlike claude-code-nix).
+  fast-resume = final: _prev: {
+    fast-resume = inputs.fast-resume.packages.${final.stdenv.hostPlatform.system}.default;
+  };
+
   claude-desktop = final: _prev: {
     claude-desktop =
       (import inputs.nixpkgs-claude-desktop {

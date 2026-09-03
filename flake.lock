@@ -57,6 +57,26 @@
         "type": "github"
       }
     },
+    "fast-resume": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788354593,
+        "narHash": "sha256-IApxU7smV/4lmpbdrCW8rQcsuJ/G2VRVo8pxWQoMKp8=",
+        "owner": "angristan",
+        "repo": "fast-resume",
+        "rev": "adc2ff743d943712cc83dc070d87c33ff878c297",
+        "type": "github"
+      },
+      "original": {
+        "owner": "angristan",
+        "repo": "fast-resume",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -411,6 +431,7 @@
       "inputs": {
         "claude-code-nix": "claude-code-nix",
         "darwin": "darwin",
+        "fast-resume": "fast-resume",
         "hardware": "hardware",
         "home-manager": "home-manager",
         "jovian": "jovian",

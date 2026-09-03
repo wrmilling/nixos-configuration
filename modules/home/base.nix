@@ -42,6 +42,7 @@ in
         outputs.overlays.unstable-small-packages
         outputs.overlays.claude-code
         outputs.overlays.claude-desktop
+        outputs.overlays.fast-resume
       ];
       config = {
         allowUnfree = true;
