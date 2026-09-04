@@ -8,10 +8,7 @@ let
     nameValuePair
     hasSuffix
     removeSuffix
-    attrNames
     pathExists
-    concatMapAttrs
-    elem
     ;
   inherit (builtins) readDir;
 
@@ -21,13 +18,8 @@ let
     filterAttrs pred (mapAttrs' f attrs);
 
   # Helper: Check if path is a valid nix file or directory with default.nix
-  isNixEntry =
-    name: type:
-    (type == "regular" && hasSuffix ".nix" name && name != "default.nix")
-    || (type == "directory" && pathExists (name + "/default.nix"));
 
   # Helper: Get configuration name from filename or directory
-  getConfigName = name: type: if type == "directory" then name else removeSuffix ".nix" name;
 
   # Safely read directory, returning empty set if path doesn't exist
   safeReadDir = dir: if pathExists dir then readDir dir else { };

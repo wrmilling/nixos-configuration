@@ -1,10 +1,7 @@
 {
-  config,
   inputs,
-  outputs,
   secrets,
   lib,
-  pkgs,
   ...
 }:
 {

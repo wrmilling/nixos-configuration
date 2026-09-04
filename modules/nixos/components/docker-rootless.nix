@@ -19,7 +19,7 @@ in
         enable = true;
         setSocketVariable = true;
         package = (
-          pkgs.docker.override (args: {
+          pkgs.docker.override (_args: {
             buildxSupport = true;
           })
         );

@@ -51,7 +51,7 @@
     linuxPackagesFor =
       kernel:
       (prev.linuxPackagesFor kernel).extend (
-        lpFinal: lpPrev: {
+        _lpFinal: lpPrev: {
           facetimehd = lpPrev.facetimehd.overrideAttrs (oldAttrs: {
             version = "0.7.0.1";
             src = oldAttrs.src.override {

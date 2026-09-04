@@ -7,7 +7,6 @@
 let
   cfg = config.modules.home.terminal.fish;
   hasPackage = pname: lib.any (p: p ? pname && p.pname == pname) config.home.packages;
-  hasRipgrep = hasPackage "ripgrep";
   hasExa = hasPackage "exa";
   hasNeovim = config.programs.neovim.enable;
   hasAnyNixShell = hasPackage "any-nix-shell";
