@@ -13,6 +13,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    home.packages = [
+      pkgs.lazygit
+    ];
+
     programs.git = {
       enable = true;
       package = pkgs.gitFull;
