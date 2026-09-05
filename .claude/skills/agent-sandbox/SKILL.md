@@ -125,6 +125,16 @@ Two distinctions worth keeping straight:
   mounted read-only, but what bounds it is RBAC: the kubeconfig holds a
   `view`-scoped ServiceAccount token (`kube-system/agent-readonly` in the
   `k3s-gitops` repo), not the host's `system:admin` config.
+- **A sops-nix secret's `path` is always a symlink** into a per-generation
+  `$XDG_RUNTIME_DIR/secrets.d/<n>` directory — setting a custom `path` just
+  adds another symlink hop, it never becomes a real file. virtiofs shares a
+  symlink as a symlink, so a share source that's an unresolved sops path is a
+  dangling link in the guest pointing at a host-only runtime directory. This
+  is why the `kube` share's source isn't the sops secret's own path: a
+  `home.activation` step in `modules/home/personal.nix` (ordered
+  `entryAfter [ "sops-nix" ]`) dereferences it and `install`s the real bytes
+  at the fixed shared path instead. Any future secret shared into the guest
+  needs the same copy step, not a raw `sops.secrets.<name>.path`.
 - **Forwarded agent ≠ standing credential.** Both gpg sockets round-trip to
   the host's real agent, so every signature and every git push needs a PIN
   and a physical touch on the host. The guest holds no key material.

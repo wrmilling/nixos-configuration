@@ -20,7 +20,7 @@
       enable = true;
       extraShares = [
         {
-          # Matches the path in modules/home/personal.nix's sops secret.
+          # Matches the path modules/home/personal.nix's activation script copies to.
           source = "/home/w4cbe/.config/agent-sandbox/kube";
           mountPoint = "/home/w4cbe/.kube";
           tag = "kube";

@@ -24,12 +24,21 @@ in
     };
 
     # Read-only in-cluster credential for the agent sandbox (k3s-gitops:kube-system/agent-readonly).
-    # Decrypted here, at the fixed path the sandbox's extraShares mount as ~/.kube in the guest.
     sops.secrets."sandbox/kubeconfig" = {
       sopsFile = ../../secrets/agents.yaml;
-      path = "/home/w4cbe/.config/agent-sandbox/kube/config";
       mode = "0400";
     };
+
+    # sops-nix's `path` is always a symlink into a per-generation runtime
+    # directory, which virtiofs shares as a dangling symlink in the guest
+    # (the target only means something on the host). Copy the real,
+    # dereferenced bytes to the fixed path the sandbox's extraShares mounts
+    # as ~/.kube instead.
+    home.activation.agentSandboxKubeconfig = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+      run ${pkgs.coreutils}/bin/install -Dm0400 \
+        ${config.sops.secrets."sandbox/kubeconfig".path} \
+        "/home/w4cbe/.config/agent-sandbox/kube/config"
+    '';
 
     modules = {
       home.base.enable = true;
