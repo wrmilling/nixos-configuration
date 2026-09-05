@@ -31,6 +31,7 @@
     domain = secrets.hosts.common.domain;
     nameservers = secrets.hosts.common.nameservers;
     interfaces.eth0 = {
+      useDHCP = false;
       ipv4.addresses = [
         {
           address = secrets.hosts.goku.ipAddress;
