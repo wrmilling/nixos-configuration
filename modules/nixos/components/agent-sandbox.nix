@@ -126,6 +126,7 @@ in
           StrictHostKeyChecking accept-new
           ForwardAgent yes
           RemoteForward ${sandboxLib.guestGpgAgentSocket} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.extra
+          RemoteForward ${sandboxLib.guestSshAgentSocket} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
       '';
 
       # Let wheel members start/stop/restart the sandbox VM without a sudo password prompt.

@@ -48,9 +48,13 @@ in
   # gpg-agent socket can bind on reconnect.
   services.openssh.settings.StreamLocalBindUnlink = true;
 
-  # sshd binds the forwarded gpg-agent socket here; nothing else creates the
+  # sshd binds the forwarded gpg-agent sockets here; nothing else creates the
   # directory because no local gpg-agent runs in the guest.
   systemd.user.tmpfiles.rules = [ "d %t/gnupg 0700 - - -" ];
+
+  # Points at the forwarded ssh-support socket (RemoteForward, host side), so
+  # git push/pull in the guest authenticate with the host's YubiKey.
+  environment.variables.SSH_AUTH_SOCK = sandboxLib.guestSshAgentSocket;
 
   # Paths in the shared store are unknown to the guest's Nix database until the
   # closure is registered. microvm.nix does this from boot.postBootCommands,

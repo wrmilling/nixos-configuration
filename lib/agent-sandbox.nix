@@ -19,9 +19,10 @@ rec {
   sshIdentityFile = "~/.config/sops-nix/secrets/${sshSecretName}";
 
   # RemoteForward expands no tokens for the remote path, so the guest uid is
-  # pinned to keep its gpg-agent socket path predictable.
+  # pinned to keep its gpg-agent socket paths predictable.
   guestUid = 1000;
   guestGpgAgentSocket = "/run/user/${toString guestUid}/gnupg/S.gpg-agent";
+  guestSshAgentSocket = "/run/user/${toString guestUid}/gnupg/S.gpg-agent.ssh";
 
   shareType = lib.types.submodule {
     options = {
