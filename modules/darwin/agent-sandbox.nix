@@ -6,11 +6,11 @@
   ...
 }:
 let
-  cfg = config.modules.darwin.claudeSandbox;
-  sandboxLib = import ../../lib/claude-sandbox.nix { inherit lib; };
+  cfg = config.modules.darwin.agentSandbox;
+  sandboxLib = import ../../lib/agent-sandbox.nix { inherit lib; };
 in
 {
-  options.modules.darwin.claudeSandbox = {
+  options.modules.darwin.agentSandbox = {
     enable = lib.mkEnableOption "Claude Code microVM sandbox";
 
     vcpu = lib.mkOption {
@@ -25,7 +25,7 @@ in
 
     diskSizeMB = lib.mkOption {
       type = lib.types.int;
-      default = 8192;
+      default = 32768;
     };
 
     workspaceDir = lib.mkOption {
@@ -46,7 +46,7 @@ in
 
     guestHost = lib.mkOption {
       type = lib.types.str;
-      default = "claude-sandbox-aarch64";
+      default = "agent-sandbox-aarch64";
       description = "Which `nixosConfigurations` entry to use as the guest.";
     };
 
@@ -59,7 +59,7 @@ in
 
   config = lib.mkMerge [
     {
-      modules.darwin.claudeSandbox.runner =
+      modules.darwin.agentSandbox.runner =
         (outputs.nixosConfigurations.${cfg.guestHost}.extendModules {
           modules = [
             {
@@ -84,7 +84,7 @@ in
 
       environment.systemPackages = [
         (pkgs.writeShellApplication {
-          name = "claude-sandbox";
+          name = "agent-sandbox";
           text = ''
             cleanup() { stty "$(stty -g)" 2>/dev/null || true; }
             trap cleanup EXIT

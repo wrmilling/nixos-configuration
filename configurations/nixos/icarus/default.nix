@@ -16,7 +16,7 @@
     nixos.threeDPrinting.enable = true;
     nixos.amateurRadio.enable = true;
     nixos.appimage.enable = true;
-    nixos.claudeSandbox = {
+    nixos.agentSandbox = {
       enable = true;
       extraShares = [
         {

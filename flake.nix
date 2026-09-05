@@ -132,8 +132,8 @@
             import ./custom/pkgs { inherit pkgs; }
           ))
           {
-            aarch64-darwin.claude-sandbox-vm =
-              self.darwinConfigurations.${secrets.hosts.work-mac.hostname}.config.modules.darwin.claudeSandbox.runner;
+            aarch64-darwin.agent-sandbox-vm =
+              self.darwinConfigurations.${secrets.hosts.work-mac.hostname}.config.modules.darwin.agentSandbox.runner;
           };
 
       # Formatter for your nix files, available through 'nix fmt'

@@ -8,7 +8,7 @@
   ...
 }:
 let
-  sandboxLib = import ../../../lib/claude-sandbox.nix { inherit lib; };
+  sandboxLib = import ../../../lib/agent-sandbox.nix { inherit lib; };
 in
 {
   imports = [
@@ -22,7 +22,10 @@ in
     sshd.enable = true;
     chrony.enable = true;
     k8sUtils.enable = true;
-    development.enable = true;
+    development = {
+      enable = true;
+      graphical.enable = false;
+    };
   };
 
   networking.hostName = "sandbox";
@@ -91,9 +94,9 @@ in
     users.w4cbe = {
       imports = [
         ../../../modules/home/base.nix
-        ../../../modules/home/claude-sandbox.nix
+        ../../../modules/home/agent-sandbox.nix
       ];
-      modules.homeType.claudeSandbox.enable = true;
+      modules.homeType.agentSandbox.enable = true;
       home.stateVersion = "26.05";
       # modules/home/base.nix and home-manager's NixOS integration both set nix.package.
       nix.package = lib.mkForce pkgs.lix;

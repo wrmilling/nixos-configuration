@@ -13,7 +13,7 @@
   modules = {
     machineType.desktop.enable = true;
     nixos.appimage.enable = true;
-    nixos.claudeSandbox = {
+    nixos.agentSandbox = {
       enable = true;
       extraShares = [
         {

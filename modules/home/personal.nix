@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.modules.homeType.personal;
-  sandboxLib = import ../../lib/claude-sandbox.nix { inherit lib; };
+  sandboxLib = import ../../lib/agent-sandbox.nix { inherit lib; };
 in
 {
   options.modules.homeType.personal = {

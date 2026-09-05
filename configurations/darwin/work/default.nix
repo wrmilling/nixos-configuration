@@ -11,7 +11,7 @@
 
   modules = {
     darwin.work.enable = true;
-    darwin.claudeSandbox = {
+    darwin.agentSandbox = {
       enable = true;
       workspaceDir = "/Users/${secrets.hosts.work-mac.username}/workspace";
       extraShares = [

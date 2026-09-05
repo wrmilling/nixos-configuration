@@ -61,7 +61,7 @@ rec {
 
   mkVolumes = diskSizeMB: [
     {
-      image = "claude-sandbox.img";
+      image = "agent-sandbox.img";
       mountPoint = "/";
       size = diskSizeMB;
     }

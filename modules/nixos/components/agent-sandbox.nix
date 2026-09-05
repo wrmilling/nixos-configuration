@@ -7,16 +7,16 @@
   ...
 }:
 let
-  cfg = config.modules.nixos.claudeSandbox;
-  sandboxLib = import ../../../lib/claude-sandbox.nix { inherit lib; };
+  cfg = config.modules.nixos.agentSandbox;
+  sandboxLib = import ../../../lib/agent-sandbox.nix { inherit lib; };
 
-  vmName = "claude-sandbox";
+  vmName = "agent-sandbox";
   unit = "microvm@${vmName}.service";
 in
 {
   imports = [ inputs.microvm.nixosModules.host ];
 
-  options.modules.nixos.claudeSandbox = {
+  options.modules.nixos.agentSandbox = {
     enable = lib.mkEnableOption "Claude Code microVM sandbox";
 
     vcpu = lib.mkOption {
@@ -31,7 +31,7 @@ in
 
     diskSizeMB = lib.mkOption {
       type = lib.types.int;
-      default = 8192;
+      default = 32768;
     };
 
     workspaceDir = lib.mkOption {
@@ -55,10 +55,10 @@ in
 
     guestHost = lib.mkOption {
       type = lib.types.str;
-      default = "claude-sandbox";
+      default = "agent-sandbox";
       description = ''
         Which `nixosConfigurations` entry to use as the guest -- the
-        x86_64-linux `claude-sandbox` by default, or `claude-sandbox-aarch64`
+        x86_64-linux `agent-sandbox` by default, or `agent-sandbox-aarch64`
         on an aarch64-linux host (e.g. a Raspberry Pi or Pinebook) that can
         run it under a native (non-vfkit) hypervisor.
       '';

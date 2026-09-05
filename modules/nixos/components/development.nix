@@ -10,11 +10,15 @@ in
 {
   options.modules.nixos.development = {
     enable = lib.mkEnableOption "development packages / settings";
+    graphical.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Include development tools that need a display. Set false on headless hosts.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      pkgs.vscode
       pkgs.dtc
       pkgs.nixpkgs-review
       pkgs.go
@@ -22,6 +26,9 @@ in
       pkgs.gh
       pkgs.diffoscopeMinimal
       pkgs.jq
+    ]
+    ++ lib.optionals cfg.graphical.enable [
+      pkgs.vscode
     ];
   };
 }

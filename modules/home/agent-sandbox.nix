@@ -4,10 +4,10 @@
   ...
 }:
 let
-  cfg = config.modules.homeType.claudeSandbox;
+  cfg = config.modules.homeType.agentSandbox;
 in
 {
-  options.modules.homeType.claudeSandbox = {
+  options.modules.homeType.agentSandbox = {
     enable = lib.mkEnableOption "Claude Code microVM guest home-manager modules";
   };
 
