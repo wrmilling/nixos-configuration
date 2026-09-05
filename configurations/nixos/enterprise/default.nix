@@ -17,7 +17,8 @@
       enable = true;
       extraShares = [
         {
-          source = "/home/w4cbe/.kube";
+          # Matches the path in modules/home/personal.nix's sops secret.
+          source = "/home/w4cbe/.config/agent-sandbox/kube";
           mountPoint = "/home/w4cbe/.kube";
           tag = "kube";
           readOnly = true;

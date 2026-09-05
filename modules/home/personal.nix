@@ -23,6 +23,14 @@ in
       mode = "0400";
     };
 
+    # Read-only in-cluster credential for the agent sandbox (k3s-gitops:kube-system/agent-readonly).
+    # Decrypted here, at the fixed path the sandbox's extraShares mount as ~/.kube in the guest.
+    sops.secrets."sandbox/kubeconfig" = {
+      sopsFile = ../../secrets/agents.yaml;
+      path = "/home/w4cbe/.config/agent-sandbox/kube/config";
+      mode = "0400";
+    };
+
     modules = {
       home.base.enable = true;
       home.sops.enable = true;
