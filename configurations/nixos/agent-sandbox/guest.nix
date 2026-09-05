@@ -110,7 +110,6 @@ in
       # $SSH_CONNECTION set, so they're unaffected.
       programs.fish.loginShellInit = ''
         if test -z "$SSH_CONNECTION"
-          cd ~/workspace
           exec herdr
         end
       '';

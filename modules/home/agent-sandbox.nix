@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -28,5 +29,20 @@ in
     # gpg uses the agent socket forwarded from the host, which holds the
     # smartcard. A local agent would bind that path first.
     services.gpg-agent.enable = lib.mkForce false;
+
+    # Runs herdr as a supervised service instead of an ad-hoc ssh/console
+    # foreground process, so systemd can run `herdr server stop` on guest
+    # shutdown -- otherwise the VM powering off kills the server before it
+    # can flush pane cwd state to session.json.
+    systemd.user.services.herdr = {
+      Unit.Description = "Herdr headless server";
+      Install.WantedBy = [ "default.target" ];
+      Service = {
+        ExecStart = "${pkgs.herdr}/bin/herdr server";
+        ExecStop = "${pkgs.herdr}/bin/herdr server stop";
+        WorkingDirectory = "/home/w4cbe/workspace";
+        Restart = "on-failure";
+      };
+    };
   };
 }

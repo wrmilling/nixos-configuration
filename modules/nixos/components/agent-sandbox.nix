@@ -163,8 +163,7 @@ in
               sleep 1
             done
 
-            dir=''${1:-workspace}
-            exec ssh -t ${vmName} "cd \"$dir\" && exec herdr"
+            exec ssh -t ${vmName} herdr
           '';
         })
       ];
