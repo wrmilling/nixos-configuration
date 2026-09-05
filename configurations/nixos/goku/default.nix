@@ -30,6 +30,18 @@
     hostName = "goku"; # Define your hostname.
     domain = secrets.hosts.common.domain;
     nameservers = secrets.hosts.common.nameservers;
+    interfaces.eth0 = {
+      ipv4.addresses = [
+        {
+          address = secrets.hosts.goku.ipAddress;
+          prefixLength = secrets.hosts.goku.prefixLength;
+        }
+      ];
+    };
+    defaultGateway = {
+      address = secrets.hosts.goku.gateway;
+      interface = "eth0";
+    };
   };
 
   sops.secrets."forgejo/runnerToken" = {
