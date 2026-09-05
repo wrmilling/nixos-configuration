@@ -72,7 +72,7 @@ in
         pkgs.claude-desktop
         pkgs.element-desktop
         pkgs.signal-desktop
-        pkgs.gomuks-desktop
+        # pkgs.gomuks-desktop
         pkgs.gparted
         pkgs.keepassxc
         pkgs.vlc
