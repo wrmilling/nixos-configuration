@@ -16,6 +16,17 @@
     nixos.threeDPrinting.enable = true;
     nixos.amateurRadio.enable = true;
     nixos.appimage.enable = true;
+    nixos.claudeSandbox = {
+      enable = true;
+      extraShares = [
+        {
+          source = "/home/w4cbe/.kube";
+          mountPoint = "/home/w4cbe/.kube";
+          tag = "kube";
+          readOnly = true;
+        }
+      ];
+    };
     nixos.development.enable = true;
     nixos.dockerRootless.enable = true;
     nixos.flipper.enable = true;

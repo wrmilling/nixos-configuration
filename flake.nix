@@ -44,6 +44,10 @@
     # Star Citizen
     nix-citizen.url = "github:LovingMelody/nix-citizen";
     nix-citizen.inputs.nixpkgs.follows = "nixpkgs";
+
+    # microVMs (Claude Code sandbox)
+    microvm.url = "github:microvm-nix/microvm.nix";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -118,13 +122,19 @@
     in
     rec {
       # Custom Packages
-      packages = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        import ./custom/pkgs { inherit pkgs; }
-      );
+      packages =
+        lib.recursiveUpdate
+          (forAllSystems (
+            system:
+            let
+              pkgs = nixpkgs.legacyPackages.${system};
+            in
+            import ./custom/pkgs { inherit pkgs; }
+          ))
+          {
+            aarch64-darwin.claude-sandbox-vm =
+              self.darwinConfigurations.${secrets.hosts.work-mac.hostname}.config.modules.darwin.claudeSandbox.runner;
+          };
 
       # Formatter for your nix files, available through 'nix fmt'
       # Other options beside 'alejandra' include 'nixpkgs-fmt'

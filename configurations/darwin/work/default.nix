@@ -11,6 +11,17 @@
 
   modules = {
     darwin.work.enable = true;
+    darwin.claudeSandbox = {
+      enable = true;
+      workspaceDir = "/Users/${secrets.hosts.work-mac.username}/workspace";
+      extraShares = [
+        {
+          source = "/Users/${secrets.hosts.work-mac.username}/.config/gcloud";
+          mountPoint = "/home/w4cbe/.config/gcloud";
+          tag = "gcloud";
+        }
+      ];
+    };
   };
 
   security.pki.certificateFiles = [ ../../../secrets/certs/cert.pem ];

@@ -79,6 +79,9 @@ in
       enable = true;
       enableScDaemon = true;
       enableSshSupport = true;
+      # Restricted socket for forwarding into the Claude Code sandbox: it allows
+      # signing but refuses key management.
+      enableExtraSocket = true;
       defaultCacheTtl = 60;
       maxCacheTtl = 120;
       pinentry = {

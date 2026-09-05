@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.modules.homeType.personal;
+  sandboxLib = import ../../lib/claude-sandbox.nix { inherit lib; };
 in
 {
   options.modules.homeType.personal = {
@@ -15,6 +16,11 @@ in
   config = lib.mkIf cfg.enable {
     sops.secrets."providers/z-ai/apiKey" = {
       sopsFile = ../../secrets/agents.yaml;
+    };
+
+    sops.secrets.${sandboxLib.sshSecretName} = {
+      sopsFile = ../../secrets/agents.yaml;
+      mode = "0400";
     };
 
     modules = {
