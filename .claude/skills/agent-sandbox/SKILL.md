@@ -43,7 +43,7 @@ host platforms need lives here so qemu and vfkit can't diverge.
 
 - **New knob → an option on `modules.{nixos,darwin}.agentSandbox`**, with
   defaults kept identical across the two platforms (`vcpu = 4`,
-  `memoryMB = 4096`, `diskSizeMB = 32768`). If you change one, change both.
+  `memoryMB = 8192`, `diskSizeMB = 32768`). If you change one, change both.
 - **Per-host shares go in the host's own `configurations/nixos/<host>/default.nix`**
   via `extraShares`, not in the component. The workspace share is always
   present via `mkShares`; `extraShares` is for everything else.
@@ -63,6 +63,23 @@ host platforms need lives here so qemu and vfkit can't diverge.
 - The Darwin module exposes `runner` as a `readOnly` option; `flake.nix`
   re-exports it as `packages.aarch64-darwin.agent-sandbox-vm`. Keep that
   indirection — it's what keeps `flake.nix` to one line.
+- **The `agent-sandbox` command is one shared shape, two backends.**
+  `sandboxLib.mkCommandScript` owns the dispatch (`start`/`stop`/`status`/
+  `help`, no-args = start + enter) and the help text; each platform module
+  supplies its own `start`/`stop`/`status`/`enter` shell snippets and stays
+  the only place that knows the mechanics:
+  - **NixOS/qemu**: `systemctl {start,stop,is-active}` on
+    `microvm@agent-sandbox.service`; enter polls SSH then execs into it.
+  - **Darwin/vfkit**: there is no daemon and no networking to SSH over —
+    `microvm-run` *is* the VM, its stdio *is* the console. `dtach` stands in
+    for both: `dtach -n <socket> ... microvm-run` backgrounds it, `dtach -a`
+    reattaches, and the socket's mere existence *is* the running/stopped
+    check (dtach removes it when the child exits — verified empirically,
+    dtach is portable and this doesn't need a Mac to test). `stop` calls the
+    upstream-generated `microvm-shutdown`, which only exists because
+    `microvm.socket` is set on the vfkit config (enables vfkit's
+    `--restful-uri`) — don't remove that option thinking it's unused, it's
+    what makes `stop` graceful instead of a bare kill.
 
 ## Guest design decisions
 

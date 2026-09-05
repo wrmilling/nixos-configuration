@@ -153,18 +153,26 @@ in
             pkgs.openssh
             pkgs.systemd
           ];
-          text = ''
-            systemctl start "${unit}"
+          text = sandboxLib.mkCommandScript {
+            name = vmName;
+            start = ''systemctl start "${unit}"'';
+            stop = ''systemctl stop "${unit}"'';
+            status = ''
+              state=$(systemctl is-active "${unit}" || true)
+              echo "$state"
+              [ "$state" = "active" ]
+            '';
+            enter = ''
+              for _ in $(seq 1 30); do
+                if ssh -o ConnectTimeout=1 -o BatchMode=yes ${vmName} true 2>/dev/null; then
+                  break
+                fi
+                sleep 1
+              done
 
-            for _ in $(seq 1 30); do
-              if ssh -o ConnectTimeout=1 -o BatchMode=yes ${vmName} true 2>/dev/null; then
-                break
-              fi
-              sleep 1
-            done
-
-            exec ssh -t ${vmName} herdr
-          '';
+              exec ssh -t ${vmName} herdr
+            '';
+          };
         })
       ];
     })

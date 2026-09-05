@@ -67,4 +67,54 @@ rec {
       size = diskSizeMB;
     }
   ];
+
+  # Shared CLI shape for the per-platform `agent-sandbox` command. Each
+  # platform supplies its own start/stop/status/enter shell snippets -- the
+  # underlying mechanics (systemd+ssh vs. dtach+vfkit) don't unify, only the
+  # command surface does.
+  mkCommandScript =
+    {
+      name,
+      start,
+      stop,
+      status,
+      enter,
+    }:
+    ''
+      usage() {
+        cat <<USAGE
+      Usage: ${name} [start|stop|status|help]
+
+        (no args)  Start the sandbox if needed, then enter it.
+        start      Start the sandbox without entering it.
+        stop       Stop the sandbox.
+        status     Report whether the sandbox is running.
+        help       Show this help.
+      USAGE
+      }
+
+      case ''${1:-} in
+        start)
+          ${start}
+          ;;
+        stop)
+          ${stop}
+          ;;
+        status)
+          ${status}
+          ;;
+        help | -h | --help)
+          usage
+          ;;
+        "")
+          ${start}
+          ${enter}
+          ;;
+        *)
+          echo "Unknown command: $1" >&2
+          usage >&2
+          exit 1
+          ;;
+      esac
+    '';
 }

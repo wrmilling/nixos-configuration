@@ -8,6 +8,14 @@
 let
   cfg = config.modules.darwin.agentSandbox;
   sandboxLib = import ../../lib/agent-sandbox.nix { inherit lib; };
+
+  # vfkit's console is the microvm-run process's own stdio, with no daemon
+  # supervising it -- dtach stands in for that, and its socket doubles as our
+  # "is it running" check. The vfkit socket is separate: it's what makes
+  # `microvm.socket != null` true, which is what gets microvm.nix to generate
+  # a real microvm-shutdown script instead of just a foreground process to kill.
+  dtachSocket = "/tmp/agent-sandbox-console.dtach";
+  vfkitSocket = "/tmp/agent-sandbox-vfkit.sock";
 in
 {
   options.modules.darwin.agentSandbox = {
@@ -68,6 +76,9 @@ in
                 vmHostPackages = pkgs;
                 vcpu = cfg.vcpu;
                 mem = cfg.memoryMB;
+                # Enables vfkit's --restful-uri, which is what lets
+                # microvm.nix generate a real microvm-shutdown script.
+                socket = vfkitSocket;
                 volumes = sandboxLib.mkVolumes cfg.diskSizeMB;
                 shares = sandboxLib.mkShares { inherit (cfg) workspaceDir extraShares; };
               };
@@ -85,13 +96,34 @@ in
       environment.systemPackages = [
         (pkgs.writeShellApplication {
           name = "agent-sandbox";
-          text = ''
-            cleanup() { stty "$(stty -g)" 2>/dev/null || true; }
-            trap cleanup EXIT
-            stty intr ^] susp ^] quit ^] 2>/dev/null || true
-
-            exec ${cfg.runner}/bin/microvm-run
-          '';
+          runtimeInputs = [ pkgs.dtach ];
+          text = sandboxLib.mkCommandScript {
+            name = "agent-sandbox";
+            start = ''
+              if [ -S "${dtachSocket}" ]; then
+                echo "agent-sandbox is already running"
+              else
+                dtach -n "${dtachSocket}" ${cfg.runner}/bin/microvm-run
+              fi
+            '';
+            stop = "${cfg.runner}/bin/microvm-shutdown";
+            status = ''
+              if [ -S "${dtachSocket}" ]; then
+                echo "running"
+              else
+                echo "stopped"
+                exit 1
+              fi
+            '';
+            enter = ''
+              for _ in $(seq 1 30); do
+                [ -S "${dtachSocket}" ] && break
+                sleep 1
+              done
+              echo 'Attached to the sandbox console. Ctrl+\ detaches without stopping the VM.' >&2
+              exec dtach -a "${dtachSocket}" -r winch
+            '';
+          };
         })
       ];
     })
