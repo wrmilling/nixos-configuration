@@ -11,7 +11,7 @@ let
 in
 {
   options.modules.darwin.agentSandbox = {
-    enable = lib.mkEnableOption "Claude Code microVM sandbox";
+    enable = lib.mkEnableOption "agent sandbox microVM";
 
     vcpu = lib.mkOption {
       type = lib.types.int;
@@ -20,7 +20,7 @@ in
 
     memoryMB = lib.mkOption {
       type = lib.types.int;
-      default = 4096;
+      default = 8192;
     };
 
     diskSizeMB = lib.mkOption {

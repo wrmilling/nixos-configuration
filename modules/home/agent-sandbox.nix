@@ -8,7 +8,7 @@ let
 in
 {
   options.modules.homeType.agentSandbox = {
-    enable = lib.mkEnableOption "Claude Code microVM guest home-manager modules";
+    enable = lib.mkEnableOption "agent sandbox guest home-manager modules";
   };
 
   config = lib.mkIf cfg.enable {

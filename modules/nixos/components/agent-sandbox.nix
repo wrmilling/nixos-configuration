@@ -17,7 +17,7 @@ in
   imports = [ inputs.microvm.nixosModules.host ];
 
   options.modules.nixos.agentSandbox = {
-    enable = lib.mkEnableOption "Claude Code microVM sandbox";
+    enable = lib.mkEnableOption "agent sandbox microVM";
 
     vcpu = lib.mkOption {
       type = lib.types.int;
@@ -26,7 +26,7 @@ in
 
     memoryMB = lib.mkOption {
       type = lib.types.int;
-      default = 4096;
+      default = 8192;
     };
 
     diskSizeMB = lib.mkOption {
@@ -81,6 +81,12 @@ in
               microvm = {
                 vcpu = cfg.vcpu;
                 mem = cfg.memoryMB;
+
+                # Lets the host reclaim memory the guest isn't using; does not
+                # raise the guest's own ceiling (that's memoryMB). vfkit has no
+                # equivalent, so this stays qemu-only -- do not move it into
+                # guest.nix, which the Darwin module also extends.
+                balloon = true;
 
                 interfaces = [
                   {
