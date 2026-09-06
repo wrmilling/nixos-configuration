@@ -104,6 +104,20 @@ revisiting them.
 - `users.users.w4cbe.uid` is pinned to `sandboxLib.guestUid` (1000):
   `RemoteForward` expands no tokens for the remote path, so the forwarded
   socket paths must be predictable at eval time.
+- **Garbage collection is automatic and guest-only.** The guest's `/nix/store`
+  is an overlay: the read-only lower layer is the host's real store, so
+  nothing the guest does can free or endanger those bytes — deleting a
+  lower-layer path just writes an overlayfs whiteout in the guest's own
+  overlay. GC in the guest only ever reclaims the writable upper layer
+  (`/nix/.rw-store`, backed by `agent-sandbox.img`): guest-local builds and
+  home-manager generations. The interactive `ncl` abbreviation
+  (`modules/home/components/terminal.fish.nix`) doesn't work here — its
+  `sudo nix-collect-garbage -d` step stalls on the password nobody's there to
+  type — so `guest.nix` sets `nix.gc = { automatic = true; dates = "weekly";
+  options = "-d"; }` (a systemd timer, no sudo involved) and
+  `modules/home/agent-sandbox.nix` sets
+  `services.home-manager.autoExpire.enable = true` on the same cadence, since
+  an unexpired generation is itself a GC root the timer can't touch.
 
 ## What crosses the boundary
 

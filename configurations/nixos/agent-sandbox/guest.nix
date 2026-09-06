@@ -35,6 +35,16 @@ in
   microvm.writableStoreOverlay = "/nix/.rw-store";
   nix.settings.auto-optimise-store = lib.mkForce false;
 
+  # Automatic, since nobody's around to type the guest's sudo password for
+  # the interactive `ncl` abbreviation. Only reclaims the writable overlay
+  # (guest-local builds/generations) -- the shared read-only store is the
+  # host's to collect.
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "-d";
+  };
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.getty.autologinUser = "w4cbe";

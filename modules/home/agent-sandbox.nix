@@ -30,6 +30,14 @@ in
     # smartcard. A local agent would bind that path first.
     services.gpg-agent.enable = lib.mkForce false;
 
+    # Expires old generations so the guest's weekly nix.gc.automatic (set on
+    # the NixOS side) can actually collect them -- an unexpired generation is
+    # itself a GC root.
+    services.home-manager.autoExpire = {
+      enable = true;
+      frequency = "weekly";
+    };
+
     # Runs herdr as a supervised service instead of an ad-hoc ssh/console
     # foreground process, so systemd can run `herdr server stop` on guest
     # shutdown -- otherwise the VM powering off kills the server before it
