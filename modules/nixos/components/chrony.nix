@@ -20,6 +20,9 @@ in
         "ohio.time.system76.com"
         "oregon.time.system76.com"
       ];
+      # NTS-KE's TLS handshake validates cert dates against the system clock, so a
+      # dead/missing RTC can deadlock sync entirely; skip that check for the first step.
+      extraConfig = "nocerttimecheck 1";
     };
   };
 }
