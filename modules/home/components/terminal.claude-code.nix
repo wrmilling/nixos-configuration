@@ -132,7 +132,14 @@ let
       # MCP — codegraph (local, read-only code knowledge graph)
       "mcp__codegraph"
     ];
-    deny = [ ];
+    deny = [
+      "Read(**/.git/git-crypt/**)"
+      "Read(**/secrets/**)"
+      "Read(**/.kube/**)"
+      "Read(**/*.pem)"
+      "Read(**/id_*)"
+      "Edit(**/flake.lock)"
+    ];
   };
 
   statuslinePackage = pkgs.writeShellApplication {
