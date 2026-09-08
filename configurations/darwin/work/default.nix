@@ -11,20 +11,25 @@
 
   modules = {
     darwin.work.enable = true;
+    darwin.linuxBuilder.enable = true;
     darwin.agentSandbox = {
       enable = true;
+      hostDocker.enable = true;
       workspaceDir = "/Users/${secrets.hosts.work-mac.username}/workspace";
-      extraShares = [
-        {
-          source = "/Users/${secrets.hosts.work-mac.username}/.config/gcloud";
-          mountPoint = "/home/w4cbe/.config/gcloud";
-          tag = "gcloud";
-        }
-      ];
     };
   };
 
-  security.pki.certificateFiles = [ ../../../secrets/certs/cert.pem ];
+  # Corporate tooling generates this bundle with certs appended without a
+  # separating newline, leaving `-----END X----------BEGIN Y-----` on one line.
+  # nix-darwin only concatenates its inputs, so the break reaches
+  # /etc/ssl/certs/ca-certificates.crt intact -- where curl refuses the file
+  # outright and openssl won't load it. Repaired here rather than in the file,
+  # which is regenerated. A no-op on a well-formed bundle.
+  security.pki.certificates = [
+    (builtins.replaceStrings [ "----------BEGIN " ] [ "-----\n-----BEGIN " ] (
+      builtins.readFile ../../../secrets/certs/cert.pem
+    ))
+  ];
   programs.nix-index.enable = true;
 
   system.primaryUser = "${secrets.hosts.work-mac.username}";

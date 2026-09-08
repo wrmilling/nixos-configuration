@@ -63,8 +63,10 @@ in
   systemd.user.tmpfiles.rules = [ "d %t/gnupg 0700 - - -" ];
 
   # Points at the forwarded ssh-support socket (RemoteForward, host side), so
-  # git push/pull in the guest authenticate with the host's YubiKey.
-  environment.variables.SSH_AUTH_SOCK = sandboxLib.guestSshAgentSocket;
+  # git push/pull in the guest authenticate with the host's YubiKey. Derived
+  # from the user's actual uid rather than sandboxLib's pinned one, since the
+  # Darwin host has to renumber the guest user to match its own account.
+  environment.variables.SSH_AUTH_SOCK = "/run/user/${toString config.users.users.w4cbe.uid}/gnupg/S.gpg-agent.ssh";
 
   # Paths in the shared store are unknown to the guest's Nix database until the
   # closure is registered. microvm.nix does this from boot.postBootCommands,

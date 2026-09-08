@@ -16,13 +16,18 @@ rec {
   # Dedicated keypair for the local sandbox VMs, so logging in does not need a
   # smartcard touch. sops-nix decrypts to ~/.config/sops-nix/secrets/<name>.
   sshSecretName = "sandbox/sshKey";
-  sshIdentityFile = "~/.config/sops-nix/secrets/${sshSecretName}";
+  # ssh_config expands `~` itself; a shell command line does not, so the Darwin
+  # host passes the real home rather than quoting a tilde into oblivion.
+  sshIdentityFileIn = home: "${home}/.config/sops-nix/secrets/${sshSecretName}";
+  sshIdentityFile = sshIdentityFileIn "~";
 
-  # RemoteForward expands no tokens for the remote path, so the guest uid is
-  # pinned to keep its gpg-agent socket paths predictable.
+  # RemoteForward expands no tokens for the remote path, so the guest uid has
+  # to be known at eval time. It is pinned for the Linux hosts, but the Darwin
+  # host renumbers the guest to match its own macOS account, so the socket
+  # paths take the uid rather than assuming it.
   guestUid = 1000;
-  guestGpgAgentSocket = "/run/user/${toString guestUid}/gnupg/S.gpg-agent";
-  guestSshAgentSocket = "/run/user/${toString guestUid}/gnupg/S.gpg-agent.ssh";
+  gpgAgentSocket = uid: "/run/user/${toString uid}/gnupg/S.gpg-agent";
+  sshAgentSocket = uid: "/run/user/${toString uid}/gnupg/S.gpg-agent.ssh";
 
   shareType = lib.types.submodule {
     options = {
@@ -60,13 +65,29 @@ rec {
     ]
     ++ map toVirtiofsShare extraShares;
 
-  mkVolumes = diskSizeMB: [
+  # `dir = null` keeps the image path relative, which is what the qemu host
+  # wants -- microvm's systemd unit sets WorkingDirectory. vfkit is started by
+  # hand from an arbitrary cwd, so the Darwin host passes an absolute dir.
+  mkVolumes =
     {
-      image = "agent-sandbox.img";
-      mountPoint = "/";
-      size = diskSizeMB;
-    }
-  ];
+      diskSizeMB,
+      dir ? null,
+    }:
+    [
+      {
+        image = if dir == null then "agent-sandbox.img" else "${dir}/agent-sandbox.img";
+        mountPoint = "/";
+        size = diskSizeMB;
+      }
+    ];
+
+  # User-mode NAT, the only networking both hypervisors implement. qemu adds
+  # forwardPorts on top of this; vfkit has no equivalent.
+  userInterface = {
+    type = "user";
+    id = "vm-nat";
+    mac = "02:00:00:01:01:01";
+  };
 
   # Shared CLI shape for the per-platform `agent-sandbox` command. Each
   # platform supplies its own start/stop/status/enter shell snippets -- the

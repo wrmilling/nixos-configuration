@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.modules.homeType.darwin;
+  sandboxLib = import ../../lib/agent-sandbox.nix { inherit lib; };
 in
 {
   options.modules.homeType.darwin = {
@@ -13,6 +14,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Login key for the local agent sandbox, so starting it needs no smartcard
+    # touch. modules/darwin/agent-sandbox.nix reads it back via
+    # sandboxLib.sshIdentityFile.
+    sops.secrets.${sandboxLib.sshSecretName} = {
+      sopsFile = ../../secrets/agents.yaml;
+      mode = "0400";
+    };
+
     modules = {
       home.base.enable = true;
       home.sops.enable = true;

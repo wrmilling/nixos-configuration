@@ -88,13 +88,7 @@ in
                 # guest.nix, which the Darwin module also extends.
                 balloon = true;
 
-                interfaces = [
-                  {
-                    type = "user";
-                    id = "vm-nat";
-                    mac = "02:00:00:01:01:01";
-                  }
-                ];
+                interfaces = [ sandboxLib.userInterface ];
 
                 forwardPorts = [
                   {
@@ -105,7 +99,7 @@ in
                   }
                 ];
 
-                volumes = sandboxLib.mkVolumes cfg.diskSizeMB;
+                volumes = sandboxLib.mkVolumes { diskSizeMB = cfg.diskSizeMB; };
 
                 shares = sandboxLib.mkShares { inherit (cfg) workspaceDir extraShares; } ++ [
                   {
@@ -131,8 +125,8 @@ in
           IdentitiesOnly yes
           StrictHostKeyChecking accept-new
           ForwardAgent yes
-          RemoteForward ${sandboxLib.guestGpgAgentSocket} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.extra
-          RemoteForward ${sandboxLib.guestSshAgentSocket} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
+          RemoteForward ${sandboxLib.gpgAgentSocket sandboxLib.guestUid} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.extra
+          RemoteForward ${sandboxLib.sshAgentSocket sandboxLib.guestUid} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
       '';
 
       # Let wheel members start/stop/restart the sandbox VM without a sudo password prompt.
