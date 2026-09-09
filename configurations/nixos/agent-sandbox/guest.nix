@@ -69,8 +69,10 @@ in
   services.fail2ban.enable = lib.mkForce false;
   services.rpcbind.enable = lib.mkForce false;
   services.resolved = {
-    llmnr = "false";
-    settings.Resolve.MulticastDNS = "false";
+    settings.Resolve = {
+      LLMNR = "false";
+      MulticastDNS = "false";
+    };
   };
 
   # Points at the forwarded ssh-support socket (RemoteForward, host side), so
