@@ -54,8 +54,6 @@ let
   # push still round-trips to the host's real agent, so each needs a PIN and a
   # physical touch. The guest holds no key material.
   sshForwardArgs = lib.escapeShellArgs [
-    "-o"
-    "ForwardAgent=yes"
     "-R"
     "${sandboxLib.gpgAgentSocket cfg.guestUid}:${gpgSocketDir}/S.gpg-agent.extra"
     "-R"

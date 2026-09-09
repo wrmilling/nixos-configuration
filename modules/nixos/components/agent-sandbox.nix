@@ -190,7 +190,6 @@ in
           IdentityFile ${sandboxLib.sshIdentityFile}
           IdentitiesOnly yes
           StrictHostKeyChecking accept-new
-          ForwardAgent yes
           RemoteForward ${sandboxLib.gpgAgentSocket sandboxLib.guestUid} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.extra
           RemoteForward ${sandboxLib.sshAgentSocket sandboxLib.guestUid} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
       '';
