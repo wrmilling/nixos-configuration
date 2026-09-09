@@ -33,7 +33,10 @@ in
   # microvm.nix masks nix-daemon without a writable store, which breaks
   # home-manager activation and any in-guest nix build.
   microvm.writableStoreOverlay = "/nix/.rw-store";
-  nix.settings.auto-optimise-store = lib.mkForce false;
+  nix.settings = {
+    auto-optimise-store = lib.mkForce false;
+    trusted-users = lib.mkForce = [ "root" ];
+  };
 
   # Automatic, since nobody's around to type the guest's sudo password for
   # the interactive `ncl` abbreviation. Only reclaims the writable overlay
