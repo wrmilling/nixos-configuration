@@ -89,6 +89,50 @@ rec {
     mac = "02:00:00:01:01:01";
   };
 
+  # A real Docker daemon inside the guest -- no relay, no path back to
+  # host-only files, at the cost of a separate image/layer cache from
+  # whatever the host itself runs.
+  guestDockerModule =
+    { pkgs, ... }:
+    {
+      virtualisation.docker.enable = true;
+      users.users.w4cbe.extraGroups = [ "docker" ];
+      environment.systemPackages = [ pkgs.docker-compose ];
+    };
+
+  # The guest-side half of a hostDocker relay: CLI packages plus a unit that
+  # turns a TCP connection to `address:port` back into the unix socket the
+  # docker CLI already looks for. Shared because it's identical regardless of
+  # how `address:port` gets there -- vfkit's shared vmnet on Darwin, qemu's
+  # guestfwd on NixOS -- only the host-side plumbing differs.
+  mkHostDockerGuestModule =
+    { address, port }:
+    { pkgs, lib, ... }:
+    {
+      environment.systemPackages = [
+        pkgs.docker-client
+        pkgs.docker-compose
+      ];
+      users.groups.docker = { };
+      users.users.w4cbe.extraGroups = [ "docker" ];
+
+      systemd.services.host-docker-relay = {
+        description = "Relay the host's Docker socket into the guest";
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        serviceConfig = {
+          ExecStart = lib.concatStringsSep " " [
+            (lib.getExe pkgs.socat)
+            "UNIX-LISTEN:/run/docker.sock,fork,unlink-early,mode=0660,group=docker"
+            "TCP:${address}:${toString port}"
+          ];
+          Restart = "always";
+          RestartSec = 5;
+        };
+      };
+    };
+
   # Shared CLI shape for the per-platform `agent-sandbox` command. Each
   # platform supplies its own start/stop/status/enter shell snippets -- the
   # underlying mechanics (systemd+ssh vs. dtach+vfkit) don't unify, only the

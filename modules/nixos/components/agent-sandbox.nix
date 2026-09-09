@@ -34,6 +34,58 @@ in
       default = 32768;
     };
 
+    guestDocker = {
+      enable = lib.mkEnableOption ''
+        a real Docker daemon running inside the guest itself, instead of
+        relaying the host's (see hostDocker). No path back to host-only
+        files -- at the cost of a separate image/layer cache from whatever
+        the host runs.
+      '';
+    };
+
+    hostDocker = {
+      enable = lib.mkEnableOption ''
+        the host's Docker daemon in the guest.
+
+        virtiofs does not proxy AF_UNIX, so the socket cannot simply be
+        shared. Unlike Darwin's vfkit, this guest has no subnet shared with
+        the host to relay over directly -- it sits behind qemu's SLIRP
+        user-mode NAT. qemu's `guestfwd` covers the gap instead: a
+        connection the guest makes to `guestAddress:port` is intercepted
+        inside the qemu process itself and piped to `nc 127.0.0.1 port` on
+        the host, with no real network traffic involved. A user unit on
+        each side turns that TCP round-trip back into a unix socket.
+
+        This widens the sandbox: the Docker API is root-equivalent on
+        whatever runs the host's daemon.
+      '';
+
+      socketPath = lib.mkOption {
+        type = lib.types.str;
+        default = "/run/user/${toString config.users.users.w4cbe.uid}/docker.sock";
+        description = "Host-side Docker socket to relay. Default matches dockerRootless's socket.";
+      };
+
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 2375;
+        description = "TCP port used for the guestfwd relay.";
+      };
+
+      guestAddress = lib.mkOption {
+        type = lib.types.str;
+        default = "10.0.2.100";
+        description = ''
+          Virtual address the guest dials to reach the relay -- qemu's
+          guestfwd intercepts traffic addressed here and pipes it to the
+          host, rather than anything actually listening at this address.
+          Must sit inside the "user" interface's 10.0.2.0/24 VLAN and avoid
+          SLIRP's own reserved addresses (.2 gateway, .3 dns, .15 guest
+          DHCP lease).
+        '';
+      };
+    };
+
     workspaceDir = lib.mkOption {
       type = lib.types.str;
       default = "/home/w4cbe/workspace";
@@ -97,7 +149,14 @@ in
                     host.port = cfg.sshForwardPort;
                     guest.port = 22;
                   }
-                ];
+                ]
+                ++ lib.optional cfg.hostDocker.enable {
+                  from = "guest";
+                  guest.address = cfg.hostDocker.guestAddress;
+                  guest.port = cfg.hostDocker.port;
+                  host.address = "127.0.0.1";
+                  host.port = cfg.hostDocker.port;
+                };
 
                 volumes = sandboxLib.mkVolumes { diskSizeMB = cfg.diskSizeMB; };
 
@@ -112,7 +171,14 @@ in
                 ];
               };
             }
-          ];
+          ]
+          ++ lib.optional cfg.hostDocker.enable (
+            sandboxLib.mkHostDockerGuestModule {
+              address = cfg.hostDocker.guestAddress;
+              inherit (cfg.hostDocker) port;
+            }
+          )
+          ++ lib.optional cfg.guestDocker.enable sandboxLib.guestDockerModule;
         };
       };
 
@@ -139,6 +205,13 @@ in
           }
         });
       '';
+
+      assertions = [
+        {
+          assertion = !(cfg.hostDocker.enable && cfg.guestDocker.enable);
+          message = "modules.nixos.agentSandbox: hostDocker and guestDocker both bind /run/docker.sock in the guest -- enable only one.";
+        }
+      ];
 
       environment.systemPackages = [
         (pkgs.writeShellApplication {
@@ -169,6 +242,23 @@ in
           };
         })
       ];
+    })
+
+    (lib.mkIf (cfg.enable && cfg.hostDocker.enable) {
+      # A user unit, not a system one: the socket it relays belongs to
+      # whichever user is running dockerRootless, and the relay has no
+      # business running before that user has a session.
+      systemd.user.services.agent-sandbox-docker-relay = {
+        description = "Relay this user's Docker socket into the agent-sandbox guest";
+        wantedBy = [ "default.target" ];
+        serviceConfig = {
+          # Retries rather than fails outright: the rootless docker socket
+          # may not exist yet if the user hasn't started it this session.
+          ExecStart = "${lib.getExe pkgs.socat} TCP-LISTEN:${toString cfg.hostDocker.port},bind=127.0.0.1,fork,reuseaddr UNIX-CONNECT:${cfg.hostDocker.socketPath}";
+          Restart = "always";
+          RestartSec = 5;
+        };
+      };
     })
   ];
 }

@@ -14,7 +14,8 @@
     darwin.linuxBuilder.enable = true;
     darwin.agentSandbox = {
       enable = true;
-      hostDocker.enable = true;
+      hostDocker.enable = false;
+      guestDocker.enable = true;
       workspaceDir = "/Users/${secrets.hosts.work-mac.username}/workspace";
     };
   };

@@ -152,6 +152,15 @@ in
       };
     };
 
+    guestDocker = {
+      enable = lib.mkEnableOption ''
+        a real Docker daemon running inside the guest itself, instead of
+        relaying the host's (see hostDocker). No path back to host-only
+        files -- at the cost of a separate image/layer cache from whatever
+        the host runs.
+      '';
+    };
+
     workspaceDir = lib.mkOption {
       type = lib.types.str;
       description = "Host path shared into the guest as its workspace.";
@@ -230,46 +239,33 @@ in
               };
             }
           ]
+          # Binding at the path the docker CLI already defaults to means no
+          # DOCKER_HOST, so compose and testcontainers work untouched. Dials
+          # the same address the host binds to -- the guest has no business
+          # resolving it independently, since a gateway that disagreed with
+          # the host's bind address would be unreachable either way.
+          #
+          # socat's listener survives a dead host relay: each connection
+          # forks, and a child that cannot reach the host just exits, so
+          # docker reports a connection error instead of the unit flapping.
           ++ lib.optional cfg.hostDocker.enable (
-            { pkgs, ... }:
-            {
-              # CLI only -- the daemon is the host's. modules/nixos/users/w4cbe.nix
-              # adds the user to `docker` on its own once the group exists.
-              environment.systemPackages = [
-                pkgs.docker-client
-                pkgs.docker-compose
-              ];
-              users.groups.docker = { };
-
-              # Binding at the path the docker CLI already defaults to means no
-              # DOCKER_HOST, so compose and testcontainers work untouched.
-              # Dials the same address the host binds to -- the guest has no
-              # business resolving it independently, since a gateway that
-              # disagreed with the host's bind address would be unreachable
-              # either way.
-              #
-              # socat's listener survives a dead host relay: each connection
-              # forks, and a child that cannot reach the host just exits, so
-              # docker reports a connection error instead of the unit flapping.
-              systemd.services.host-docker-relay = {
-                description = "Relay the host's Docker socket into the guest";
-                wantedBy = [ "multi-user.target" ];
-                wants = [ "network-online.target" ];
-                after = [ "network-online.target" ];
-                serviceConfig = {
-                  ExecStart = lib.concatStringsSep " " [
-                    (lib.getExe pkgs.socat)
-                    "UNIX-LISTEN:/run/docker.sock,fork,unlink-early,mode=0660,group=docker"
-                    "TCP:${cfg.hostDocker.listenAddress}:${toString cfg.hostDocker.port}"
-                  ];
-                  Restart = "always";
-                  RestartSec = 5;
-                };
-              };
+            sandboxLib.mkHostDockerGuestModule {
+              address = cfg.hostDocker.listenAddress;
+              inherit (cfg.hostDocker) port;
             }
-          );
+          )
+          ++ lib.optional cfg.guestDocker.enable sandboxLib.guestDockerModule;
         }).config.microvm.runner.vfkit;
     }
+
+    (lib.mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = !(cfg.hostDocker.enable && cfg.guestDocker.enable);
+          message = "modules.darwin.agentSandbox: hostDocker and guestDocker both bind /run/docker.sock in the guest -- enable only one.";
+        }
+      ];
+    })
 
     (lib.mkIf (cfg.enable && cfg.hostDocker.enable) {
       launchd.user.agents.agent-sandbox-docker-relay.serviceConfig = {

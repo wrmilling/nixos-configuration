@@ -86,12 +86,34 @@ Two of those take platform differences as arguments rather than forking:
   in any option docs, and don't rely on it for the Mac.
 - **virtiofs does not proxy `AF_UNIX`.** Sharing a socket gets the guest an
   inode it cannot connect to, so anything socket-shaped (the Docker socket,
-  say) needs a TCP relay on both sides, not a share. Bind the host end to the
-  vmnet gateway (`hostDocker.listenAddress`, `192.168.64.1`) rather than a
-  wildcard, and have both ends read that same option -- an address that
-  disagreed with the host's bind would be unreachable however the guest
-  arrived at it, so resolving it guest-side from the default route buys
-  nothing and only adds dependencies.
+  say) needs a TCP relay on both sides, not a share. The two platforms get
+  there differently, since only Darwin's guest shares a real subnet with the
+  host:
+  - **Darwin**: bind the host end to the vmnet gateway
+    (`hostDocker.listenAddress`, `192.168.64.1`) rather than a wildcard, and
+    have both ends read that same option -- an address that disagreed with
+    the host's bind would be unreachable however the guest arrived at it, so
+    resolving it guest-side from the default route buys nothing and only
+    adds dependencies.
+  - **NixOS/qemu**: there is no shared subnet, so it rides on qemu's
+    `guestfwd` instead (`microvm.forwardPorts` entries with `from = "guest"`)
+    -- a connection the guest makes to `hostDocker.guestAddress:port` is
+    intercepted inside the qemu process itself and piped to `nc 127.0.0.1
+    port` on the host. No real network traffic is involved, so the host-side
+    relay only needs to bind loopback; the guest never gets a real route to
+    it. `guestAddress` just has to be a VLAN address SLIRP hasn't already
+    claimed (`.2` gateway, `.3` dns, `.15` guest DHCP).
+  Either way, the shared guest-side half (CLI packages, the `docker` group,
+  the socket-relaying unit) lives once in `lib/agent-sandbox.nix` as
+  `mkHostDockerGuestModule { address; port; }`, parameterized on whatever
+  address each platform's mechanism hands it.
+- **A real daemon inside the guest is `guestDocker`, not `hostDocker`.**
+  `virtualisation.docker.enable = true` straight in the guest (shared as
+  `sandboxLib.guestDockerModule`) needs no relay at all -- no shared subnet,
+  no guestfwd, nothing crossing the boundary. The trade-off is a separate
+  image/layer cache from whatever the host itself runs. The two options are
+  mutually exclusive (both would bind `/run/docker.sock` in the guest); each
+  platform module asserts against enabling both.
 - **A unit's `script` gets a deliberately minimal PATH**: `coreutils`,
   `findutils`, `gnugrep`, `gnused`, `systemd`, and nothing else
   (`nixos/lib/systemd-lib.nix`, `stage2ServiceConfig`). No `gawk` -- an `awk`
@@ -99,11 +121,13 @@ Two of those take platform differences as arguments rather than forking:
   absolute store path (`lib.getExe`) over a `script` plus a `path` list; it
   cannot fail that way, and it generates no wrapper derivation.
 - Some knobs have no counterpart on the other platform and are deliberately
-  Darwin-only: `hostDocker`, `stateDir` (where the disk image and both sockets live — vfkit
+  Darwin-only: `stateDir` (where the disk image and both sockets live — vfkit
   has no systemd unit to anchor relative paths, so without it the image lands
   in whatever cwd `agent-sandbox` was run from) and `guestUid` (see the guest
   section). The "keep defaults identical" rule applies to knobs both platforms
-  actually have.
+  actually have. `hostDocker` and `guestDocker` exist on both platforms with
+  the same shape and the same default (off) -- only their host-side
+  mechanics differ, per the `AF_UNIX` bullet above.
 - **The Mac needs an aarch64-linux builder, and it lives in its own module.**
   The guest is a Linux closure, so `darwin-rebuild` cannot build the runner
   unaided. `modules/darwin/linuxBuilder` is deliberately independent of
@@ -267,7 +291,8 @@ These channels are deliberate:
 | gpg-agent ssh socket | forwarded; the guest's `SSH_AUTH_SOCK` points at it, so `git push`/`pull` authenticate as the host's YubiKey. |
 | network | User-mode NAT via `sandboxLib.userInterface`. Outbound works on both. **Linux hosts:** slirp, with one inbound path (host `127.0.0.1:2222` → guest `22`) and gateway `10.0.2.2` mapping to the host's **loopback**. **Darwin:** vmnet NAT — no port forwarding, but host and guest share the `192.168.64.0/24` subnet, so each reaches the other directly (host is `.1`, on `bridge100`). |
 | corporate CA | Darwin only: the guest inherits the host's `security.pki.certificates` plus `NODE_EXTRA_CA_CERTS`/`REQUESTS_CA_BUNDLE`, because guest traffic NATs out through the host's stack and meets the same TLS interception the Mac does. The Linux sandbox is left alone. See the CA-bundle trap below. |
-| host Docker | Darwin only, opt-in via `hostDocker.enable`. TCP relay in two hops: a launchd agent on the host (`socat` from the Rancher Desktop socket to the vmnet gateway) and a guest unit relaying it back to `/run/docker.sock`. The guest gets `docker-client` (CLI, no daemon) and compose. **This is the widest channel here** — the Docker API is root-equivalent on whatever runs the daemon, and Rancher's VM mounts the macOS home directory, so it defeats workspace-only sharing. |
+| host Docker | Opt-in via `hostDocker.enable`, off by default on both platforms. TCP relay in two hops: a user-level relay on the host (`socat` from the host's real docker socket to a TCP endpoint) and a guest unit relaying it back to `/run/docker.sock`. The guest gets `docker-client` (CLI, no daemon) and compose. **Darwin:** launchd user agent, relay bound to the vmnet gateway, guest dials that same address (defaults to Rancher Desktop's socket). **NixOS/qemu:** `systemd.user.services.agent-sandbox-docker-relay`, bound to loopback, reached via qemu `guestfwd` rather than a real route (defaults to `dockerRootless`'s socket). **This is the widest channel here** — the Docker API is root-equivalent on whatever runs the host's daemon, and on Darwin, Rancher's VM also mounts the macOS home directory, so it defeats workspace-only sharing. |
+| guest Docker | Opt-in via `guestDocker.enable`, off by default on both platforms, mutually exclusive with `hostDocker` (both would bind `/run/docker.sock` in the guest). A real `virtualisation.docker.enable = true` inside the guest — no relay, nothing crossing the boundary. Trade-off: a separate image/layer cache from whatever the host itself runs. |
 
 Two distinctions worth keeping straight:
 
