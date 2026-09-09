@@ -29,6 +29,8 @@ in
   };
 
   networking.hostName = "sandbox";
+  # IPv4-only guest; drops the vmnet ULA that would otherwise re-expose port 22.
+  networking.enableIPv6 = false;
 
   # microvm.nix masks nix-daemon without a writable store, which breaks
   # home-manager activation and any in-guest nix build.

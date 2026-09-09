@@ -60,6 +60,23 @@ let
     "${sandboxLib.sshAgentSocket cfg.guestUid}:${gpgSocketDir}/S.gpg-agent.ssh"
   ];
 
+  # Shared by `stop` and `reset`; no early exit, so reset still deletes when
+  # the VM is already stopped.
+  stopIfRunning = ''
+    if [ -S "${dtachSocket}" ]; then
+      curl --fail --silent --show-error \
+        --unix-socket "${vfkitSocket}" \
+        -X POST -H 'Content-Type: application/json' \
+        -d '{"state":"Stop"}' \
+        http://localhost/vm/state
+
+      for _ in $(seq 1 30); do
+        [ -S "${dtachSocket}" ] || break
+        sleep 1
+      done
+    fi
+  '';
+
   consoleScript = pkgs.writeShellScript "agent-sandbox-console" ''
     ${pkgs.coreutils}/bin/stty raw -echo
     exec ${cfg.runner}/bin/microvm-run
@@ -220,9 +237,12 @@ in
                 REQUESTS_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt";
               };
 
-              # Only allow SSH from the host on mac's VMNet
-              networking.firewall.extraInputRules = ''
-                ip saddr != 192.168.64.1 tcp dport 22 drop
+              # Restrict SSH to the host; iptables backend, so -I ahead of the dport 22 accept.
+              networking.firewall.extraCommands = ''
+                iptables -I nixos-fw -p tcp --dport 22 ! -s 192.168.64.1 -j DROP
+              '';
+              networking.firewall.extraStopCommands = ''
+                iptables -D nixos-fw -p tcp --dport 22 ! -s 192.168.64.1 -j DROP 2>/dev/null || true
               '';
 
               microvm = {
@@ -318,16 +338,7 @@ in
                 exit 0
               fi
 
-              curl --fail --silent --show-error \
-                --unix-socket "${vfkitSocket}" \
-                -X POST -H 'Content-Type: application/json' \
-                -d '{"state":"Stop"}' \
-                http://localhost/vm/state
-
-              for _ in $(seq 1 30); do
-                [ -S "${dtachSocket}" ] || break
-                sleep 1
-              done
+              ${stopIfRunning}
             '';
             status = ''
               if [ -S "${dtachSocket}" ]; then
@@ -379,6 +390,12 @@ in
               fi
 
               exec ssh ${sshBaseArgs} ${sshForwardArgs} -t "w4cbe@$address" herdr
+            '';
+            # known_hosts goes too: a new image means a new guest host key.
+            reset = ''
+              ${stopIfRunning}
+              rm -f "${cfg.stateDir}/${sandboxLib.imageName}" "${cfg.stateDir}/known_hosts"
+              echo "agent-sandbox reset; the disk image is recreated on next start."
             '';
           };
         })

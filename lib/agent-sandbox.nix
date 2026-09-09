@@ -26,6 +26,7 @@ rec {
   # host renumbers the guest to match its own macOS account, so the socket
   # paths take the uid rather than assuming it.
   guestUid = 1000;
+  imageName = "agent-sandbox.img";
   gpgAgentSocket = uid: "/run/user/${toString uid}/gnupg/S.gpg-agent";
   sshAgentSocket = uid: "/run/user/${toString uid}/gnupg/S.gpg-agent.ssh";
 
@@ -75,7 +76,7 @@ rec {
     }:
     [
       {
-        image = if dir == null then "agent-sandbox.img" else "${dir}/agent-sandbox.img";
+        image = if dir == null then imageName else "${dir}/${imageName}";
         mountPoint = "/";
         size = diskSizeMB;
       }
@@ -144,16 +145,19 @@ rec {
       stop,
       status,
       enter,
+      reset,
     }:
     ''
       usage() {
         cat <<USAGE
-      Usage: ${name} [start|stop|status|help]
+      Usage: ${name} [start|stop|status|reset|help]
 
         (no args)  Start the sandbox if needed, then enter it.
         start      Start the sandbox without entering it.
         stop       Stop the sandbox.
         status     Report whether the sandbox is running.
+        reset      Stop the sandbox and delete its disk image. Guest home,
+                   credentials and history are lost. Pass -f to skip the prompt.
         help       Show this help.
       USAGE
       }
@@ -167,6 +171,20 @@ rec {
           ;;
         status)
           ${status}
+          ;;
+        reset)
+          if [ "''${2:-}" != "-f" ] && [ "''${2:-}" != "--force" ]; then
+            printf 'Delete the sandbox disk image? Guest home, credentials and history are lost. [y/N] '
+            read -r reply
+            case "$reply" in
+              [yY] | [yY][eE][sS]) ;;
+              *)
+                echo "Aborted." >&2
+                exit 1
+                ;;
+            esac
+          fi
+          ${reset}
           ;;
         help | -h | --help)
           usage

@@ -40,6 +40,9 @@ in
         "/home/w4cbe/.config/agent-sandbox/kube/config"
     '';
 
+    # Host-only; the shared workspace's .codegraph is guest-writable.
+    home.sessionVariables.CODEGRAPH_NO_PROMPT_HOOK = "1";
+
     modules = {
       home.base.enable = true;
       home.sops.enable = true;

@@ -65,6 +65,13 @@ in
         ".direnv"
         "result"
       ];
+      # Neutralize hooks the sandbox guest could plant in shared trees.
+      includes = [
+        {
+          condition = "gitdir:~/workspace/";
+          contents.core.hooksPath = "${pkgs.emptyDirectory}";
+        }
+      ];
     };
   };
 }

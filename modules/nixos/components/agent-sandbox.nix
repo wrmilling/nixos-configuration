@@ -216,6 +216,7 @@ in
         (pkgs.writeShellApplication {
           name = vmName;
           runtimeInputs = [
+            pkgs.coreutils
             pkgs.openssh
             pkgs.systemd
           ];
@@ -237,6 +238,14 @@ in
               done
 
               exec ssh -t ${vmName} herdr
+            '';
+            # The image is root-owned under microvm's stateDir, so this is the one
+            # subcommand that needs sudo; the host key changes with the new image.
+            reset = ''
+              systemctl stop "${unit}" || true
+              ${config.security.wrapperDir}/sudo rm -f "${config.microvm.stateDir}/${vmName}/${sandboxLib.imageName}"
+              ssh-keygen -R "[localhost]:${toString cfg.sshForwardPort}" >/dev/null 2>&1 || true
+              echo "${vmName} reset; the disk image is recreated on next start."
             '';
           };
         })

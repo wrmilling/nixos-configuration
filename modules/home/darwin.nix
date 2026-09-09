@@ -22,6 +22,9 @@ in
       mode = "0400";
     };
 
+    # Host-only; the shared workspace's .codegraph is guest-writable.
+    home.sessionVariables.CODEGRAPH_NO_PROMPT_HOOK = "1";
+
     modules = {
       home.base.enable = true;
       home.sops.enable = true;
