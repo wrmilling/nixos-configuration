@@ -70,7 +70,7 @@ in
   services.rpcbind.enable = lib.mkForce false;
   services.resolved = {
     llmnr = "false";
-    extraConfig = "MulticastDNS=no";
+    settings.Resolve.MulticastDNS = "false";
   };
 
   # Points at the forwarded ssh-support socket (RemoteForward, host side), so
