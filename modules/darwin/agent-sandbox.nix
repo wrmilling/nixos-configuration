@@ -222,6 +222,11 @@ in
                 REQUESTS_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt";
               };
 
+              # Only allow SSH from the host on mac's VMNet
+              networking.firewall.extraInputRules = ''
+                ip saddr != 192.168.64.1 tcp dport 22 drop
+              '';
+
               microvm = {
                 hypervisor = "vfkit";
                 vmHostPackages = pkgs;

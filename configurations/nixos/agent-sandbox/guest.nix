@@ -54,7 +54,7 @@ in
 
   users.users.w4cbe = {
     uid = sandboxLib.guestUid;
-    openssh.authorizedKeys.keys = [ secrets.sandbox.sshPublicKey ];
+    openssh.authorizedKeys.keys = lib.mkForce [ secrets.sandbox.sshPublicKey ];
   };
 
   # Replace a stale socket left by a previous session so the forwarded
@@ -64,6 +64,14 @@ in
   # sshd binds the forwarded gpg-agent sockets here; nothing else creates the
   # directory because no local gpg-agent runs in the guest.
   systemd.user.tmpfiles.rules = [ "d %t/gnupg 0700 - - -" ];
+
+  # Disable services not needed within guest
+  services.fail2ban.enable = lib.mkForce false;
+  services.rpcbind.enable = lib.mkForce false;
+  service.resolved = {
+    llmnr = "false";
+    extraConfig = "MulticastDNS=no";
+  };
 
   # Points at the forwarded ssh-support socket (RemoteForward, host side), so
   # git push/pull in the guest authenticate with the host's YubiKey. Derived
