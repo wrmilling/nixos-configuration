@@ -35,7 +35,7 @@ in
   microvm.writableStoreOverlay = "/nix/.rw-store";
   nix.settings = {
     auto-optimise-store = lib.mkForce false;
-    trusted-users = lib.mkForce = [ "root" ];
+    trusted-users = lib.mkForce [ "root" ];
   };
 
   # Automatic, since nobody's around to type the guest's sudo password for
