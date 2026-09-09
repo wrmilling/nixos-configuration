@@ -68,7 +68,7 @@ in
   # Disable services not needed within guest
   services.fail2ban.enable = lib.mkForce false;
   services.rpcbind.enable = lib.mkForce false;
-  service.resolved = {
+  services.resolved = {
     llmnr = "false";
     extraConfig = "MulticastDNS=no";
   };
