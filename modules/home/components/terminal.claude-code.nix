@@ -577,6 +577,7 @@ in
         // {
           model = cfg.defaultModel;
           fallbackModel = cfg.fallbackModels;
+          outputStyle = "concise";
           env.CLAUDE_CODE_SUBAGENT_MODEL = cfg.subagentModel;
           permissions = {
             defaultMode = cfg.extraPermissions.defaultMode;
