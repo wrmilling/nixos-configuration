@@ -16,7 +16,7 @@ in
     environment.systemPackages = [
       pkgs.fluxcd # flux CLI
       pkgs.go-task # task runner
-      # pkgs.k9s # kubernetes viewer tool (Check home-manager)
+      # pkgs.sofka # kubernetes viewer tool (Check home-manager)
       pkgs.kail # kubernetes tail
       pkgs.kubectl # kubernetes CLI
       pkgs.kubectl-cnpg # CNPG Plugin for kubectl

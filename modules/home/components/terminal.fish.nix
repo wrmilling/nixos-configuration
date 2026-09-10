@@ -126,6 +126,7 @@ in
         ks = "kubeseal";
         kgn = "kubectl get nodes -o wide --sort-by=.metadata.name";
         kge = "kubectl get events -A -w | grep -v \"61m\"";
+        k9s = "sofka -A";
 
         # other
         df = "df -h";

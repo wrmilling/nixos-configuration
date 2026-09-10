@@ -29,7 +29,7 @@ Nix flake managing NixOS, nix-darwin, and Home Manager configurations.
 - Keep comments to a line or two; don't write large explanatory comment blocks, even for non-obvious rationale — put lengthy reasoning in the commit/PR description instead.
 - Scripts meant to be run directly by a user (`custom/pkgs/update.sh`, `modules/home/components/scripts.*.nix`, etc.): usage belongs in a `-h`/`--help` output, not a comment.
 - Format with `nix fmt` (nixfmt) before finishing.
-- Verify: `nix eval` the affected config, e.g. `nix eval .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath` or `.#homeConfigurations."w4cbe@<host>".activationPackage.drvPath`.
+- Verify: `nix eval` the affected config, e.g. `nix eval .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath` or `.#homeConfigurations."w4cbe@<host>".activationPackage.drvPath`. For a simple, localized change to a shared module that reaches many hosts (e.g. swapping one home-manager program for another), it's enough to eval the current machine's own config plus the darwin config if the change touches darwin-relevant code — no need to eval every host the change happens to reach. Still call out the full blast radius (which homeTypes/hosts are affected) when describing the change. Eval more broadly for larger or cross-cutting changes.
 - Rebuilds (user runs): `nh os switch .`, `nh darwin switch .`, `nh home switch .`.
 - CI: Forgejo workflows in `.forgejo/workflows/`; reference actions as plain `actions/<name>` (no `${{ github.server_url }}`).
 

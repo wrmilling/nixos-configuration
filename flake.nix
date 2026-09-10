@@ -41,6 +41,10 @@
     fast-resume.url = "github:angristan/fast-resume";
     fast-resume.inputs.nixpkgs.follows = "nixpkgs";
 
+    # sofka TUI (k9s alternative; upstream ships and maintains its own nix package)
+    sofka.url = "github:nklmilojevic/sofka";
+    sofka.inputs.nixpkgs.follows = "nixpkgs";
+
     # Star Citizen
     nix-citizen.url = "github:LovingMelody/nix-citizen";
     nix-citizen.inputs.nixpkgs.follows = "nixpkgs";

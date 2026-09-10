@@ -1,33 +1,27 @@
 {
   config,
   lib,
+  inputs,
   ...
 }:
 let
   cfg = config.modules.home.terminal.k8s-utils;
 in
 {
+  imports = [ inputs.sofka.homeManagerModules.default ];
+
   options.modules.home.terminal.k8s-utils = {
     enable = lib.mkEnableOption "k8s-utils packages / settings";
   };
 
   config = lib.mkIf cfg.enable {
-    programs.k9s = {
+    # :debug on a pod/node covers k9s's old debug-container plugin natively
+    # (https://github.com/derailed/k9s/blob/master/plugins/debug-container.yaml).
+    programs.sofka = {
       enable = true;
-      plugins = {
-        # https://github.com/derailed/k9s/blob/master/plugins/debug-container.yaml
-        debug = {
-          shortCut = "Shift-D";
-          description = "Add debug container";
-          dangerous = true;
-          scopes = [ "containers" ];
-          command = "bash";
-          background = false;
-          args = [
-            "-c"
-            "kubectl debug -it --context $CONTEXT -n=$NAMESPACE $POD --target=$NAME --image=nicolaka/netshoot:v0.12 --share-processes -- bash"
-          ];
-        };
+      settings = {
+        skin.name = "tokyo-night";
+        debug.image = "nicolaka/netshoot:v0.12";
       };
     };
   };
