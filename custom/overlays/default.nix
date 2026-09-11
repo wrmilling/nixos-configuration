@@ -32,12 +32,6 @@
     # ...
     # });
 
-    filebrowser =
-      (import inputs.nixpkgs-filebrowser {
-        system = final.stdenv.hostPlatform.system;
-        config.allowUnfree = true;
-      }).filebrowser;
-
     openldap = prev.openldap.overrideAttrs {
       doCheck = !prev.stdenv.hostPlatform.isi686;
     };

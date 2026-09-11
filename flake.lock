@@ -356,48 +356,29 @@
     "nixpkgs": {
       "locked": {
         "lastModified": 1789006805,
-        "narHash": "sha256-xB8mKMOx1IA9vTDNLmJZ6n4wCMq/cuWBBOzGCRnqxrU=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
+        "narHash": "sha256-q+GdZ3yq4Y2LXHRK0vKTM32Hwy7RCgUgy+hjwZLI5pY=",
         "rev": "8ce4ef6cb6f871616146b9fe26d2a5ae594e94fe",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1070770.8ce4ef6cb6f8/nixexprs.tar.zst?lastModified=1789006805&rev=8ce4ef6cb6f871616146b9fe26d2a5ae594e94fe"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst"
       }
     },
     "nixpkgs-claude-desktop": {
       "locked": {
-        "lastModified": 1784044510,
-        "narHash": "sha256-j1FeWIOlVQYioqKZXoBdcaqLNw6/7JVJFx7zGTii5rs=",
-        "owner": "NixOS",
+        "lastModified": 1786376003,
+        "narHash": "sha256-BpcaCTQDi5kgLdDD3HUGbUoPBXhTSry3eTIpeJ1XP6E=",
+        "owner": "minegameYTB",
         "repo": "nixpkgs",
-        "rev": "aedcc9cdf90fe3944b1cae11f96ace0990772ff3",
+        "rev": "c6fdb764a39b26dae69aa468427985a0ea4d4c7b",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
+        "owner": "minegameYTB",
         "repo": "nixpkgs",
-        "rev": "aedcc9cdf90fe3944b1cae11f96ace0990772ff3",
-        "type": "github"
-      }
-    },
-    "nixpkgs-filebrowser": {
-      "locked": {
-        "lastModified": 1783440588,
-        "narHash": "sha256-YI9zqZvM/iimakOGedvEAc4v6l64KoDlsTVgI1Enuhs=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "eef8a4246e493b8bb814ffcc74375e6818f20732",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "eef8a4246e493b8bb814ffcc74375e6818f20732",
+        "rev": "c6fdb764a39b26dae69aa468427985a0ea4d4c7b",
         "type": "github"
       }
     },
@@ -418,34 +399,28 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1782847189,
-        "narHash": "sha256-twXPFqFsrrY5r28Zh7Homgcp2gUMBgQ6WDS98Q/3xFI=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "b6018f87da91d19d0ab4cf979885689b469cdd41",
-        "type": "github"
+        "lastModified": 1789114715,
+        "narHash": "sha256-eeH+/1GxEjw8NCObjaHVIy3YvCQ4Qckrx4LZj5xBaU4=",
+        "rev": "21a67dc470149f337cecafbe965d8d252a390518",
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.9592.21a67dc47014/nixexprs.tar.zst?lastModified=1789114715&rev=21a67dc470149f337cecafbe965d8d252a390518"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-25.11",
-        "repo": "nixpkgs",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst"
       }
     },
     "nixpkgs-unstable-small": {
       "locked": {
         "lastModified": 1789149629,
-        "narHash": "sha256-H6GwaZzZf+4npqv0tph94w9tZddSjFjmQrVsW0z78uk=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
+        "narHash": "sha256-tSsHrrX3FPaoQguUTU45HW5vw5daiNxrSBQBEmeCivw=",
         "rev": "eaad089433ca2bb662274377d33df3d0e51ef28b",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1072397.eaad089433ca/nixexprs.tar.zst?lastModified=1789149629&rev=eaad089433ca2bb662274377d33df3d0e51ef28b"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable-small",
-        "repo": "nixpkgs",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://channels.nixos.org/nixos-unstable-small/nixexprs.tar.zst"
       }
     },
     "pre-commit": {
@@ -483,7 +458,6 @@
         "nix-citizen": "nix-citizen",
         "nixpkgs": "nixpkgs",
         "nixpkgs-claude-desktop": "nixpkgs-claude-desktop",
-        "nixpkgs-filebrowser": "nixpkgs-filebrowser",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable-small": "nixpkgs-unstable-small",
         "sofka": "sofka",

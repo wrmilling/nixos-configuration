@@ -3,11 +3,10 @@
 
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
-    nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    nixpkgs-filebrowser.url = "github:NixOS/nixpkgs/eef8a4246e493b8bb814ffcc74375e6818f20732";
-    nixpkgs-claude-desktop.url = "github:NixOS/nixpkgs/aedcc9cdf90fe3944b1cae11f96ace0990772ff3";
+    nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
+    nixpkgs-stable.url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst";
+    nixpkgs-unstable-small.url = "https://channels.nixos.org/nixos-unstable-small/nixexprs.tar.zst";
+    nixpkgs-claude-desktop.url = "github:minegameYTB/nixpkgs/c6fdb764a39b26dae69aa468427985a0ea4d4c7b";
 
     # Hardware
     hardware.url = "github:NixOS/nixos-hardware";
