@@ -179,11 +179,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789235087,
-        "narHash": "sha256-6hZ6Gy8isRQsWdI4l81Egag/PUIh68nSmFr2maInUNg=",
+        "lastModified": 1789320570,
+        "narHash": "sha256-1Js4AJiWLV7U1SF3ok0J2tKbBEJYE5YpElGU+7fMbfo=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "fe48612c5321a2cc09b0f563757a9c9733d641f8",
+        "rev": "87b3c74df02a2b2e691a24f3c82774f48a70c1bd",
         "type": "github"
       },
       "original": {
@@ -268,11 +268,11 @@
         "spectrum": "spectrum"
       },
       "locked": {
-        "lastModified": 1789237993,
-        "narHash": "sha256-RAdzfDzSYSN9l51H+XrbEwWHQ6rq/zqCvQJXtMXmBEM=",
+        "lastModified": 1789252264,
+        "narHash": "sha256-IyOsrL64VjSHJKdzvQQcgNJtrSd4/jDa7vhlFa9libM=",
         "owner": "microvm-nix",
         "repo": "microvm.nix",
-        "rev": "c344219b88c8f630efff501a53ce4ef54ad73f76",
+        "rev": "e7e1c7aba5cb04644cfd6afe7e98cb87d76ac64f",
         "type": "github"
       },
       "original": {
@@ -412,11 +412,11 @@
     },
     "nixpkgs-unstable-small": {
       "locked": {
-        "lastModified": 1789181251,
-        "narHash": "sha256-R0SKMbE4+OWNaJ89DKnhl50dKt9w4jBr1JuZVjS3eHw=",
-        "rev": "f496248152e1ad8c61b59a6739cc499b447168e4",
+        "lastModified": 1789316821,
+        "narHash": "sha256-kx86c+7jKVTNzVPKMvAaa+two9DniVCugkQ6tXVLoeI=",
+        "rev": "231dbe51694763527c3e565929ff5a4384ba7f65",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1072599.f496248152e1/nixexprs.tar.zst"
+        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1073207.231dbe516947/nixexprs.tar.zst"
       },
       "original": {
         "type": "tarball",
@@ -493,11 +493,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789229621,
-        "narHash": "sha256-yF8CmtOC66ip0lgNVyk9FI3a4K2aH/CHGlwYNBa/enQ=",
+        "lastModified": 1789326476,
+        "narHash": "sha256-BMevL6un7InPCrhWmyEgY4UlooHe6oVGL/jRu/FmCxo=",
         "owner": "nklmilojevic",
         "repo": "sofka",
-        "rev": "801358e47df2d5d3f8f9dbdc782846c5e425ac1a",
+        "rev": "793b8a2a53bc7cfe021bddc75b260f2b00c9672f",
         "type": "github"
       },
       "original": {
