@@ -527,10 +527,6 @@ in
     };
 
     zclaude = {
-      enable = lib.mkEnableOption "" // {
-        default = true;
-      };
-
       apiKeyFile = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
