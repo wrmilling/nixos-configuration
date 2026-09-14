@@ -20,7 +20,14 @@ in
     base.enable = true;
     filesystem.enable = true;
     sshd.enable = true;
-    chrony.enable = true;
+    chrony = {
+      enable = true;
+      # VM guests (microvm/qemu) can have a clock that's arbitrarily wrong at any
+      # point in their lifetime, not just at first boot (stale image, host suspend,
+      # no reliable RTC). The default limit of 3 steps gets exhausted correcting a
+      # multi-day offset, after which chronyd only slews and never catches up.
+      makestepLimit = 1000000;
+    };
     k8sUtils.enable = true;
     development = {
       enable = true;
