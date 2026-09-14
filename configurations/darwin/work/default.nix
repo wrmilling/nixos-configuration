@@ -17,6 +17,10 @@
       hostDocker.enable = false;
       guestDocker.enable = true;
       workspaceDir = "/Users/${secrets.hosts.work-mac.username}/workspace";
+      # M5 Pro, 6+12 CPU / 24GB RAM -- double the module default vcpu (4),
+      # and 12GB of the 24GB RAM for now, leaving 10 cores and 12GB for the host.
+      vcpu = 8;
+      memoryMB = 12288;
     };
   };
 
