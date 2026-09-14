@@ -1,6 +1,8 @@
 {
   config,
   lib,
+  pkgs,
+  inputs,
   ...
 }:
 let
@@ -18,6 +20,14 @@ in
     nix.linux-builder = {
       enable = true;
       systems = [ "aarch64-linux" ];
+
+      # nixpkgs-unstable currently has qemu-vm's shared directories on virtiofsd,
+      # which has no Darwin build (NixOS/nixpkgs#552774) and breaks eval here until
+      # the revert (NixOS/nixpkgs#562444) reaches our pin. Build the builder itself
+      # from the frozen nixpkgs-stable input instead; it only affects the builder
+      # VM's own toolchain, not what gets built on it.
+      package =
+        inputs.nixpkgs-stable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.darwin.linux-builder;
 
       # The builder's qcow2 grows on demand and never shrinks, and its in-guest
       # auto-GC only fires below nix.settings.min-free (1GiB), so left alone it
