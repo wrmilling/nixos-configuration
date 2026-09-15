@@ -26,6 +26,13 @@
           tag = "kube";
           readOnly = true;
         }
+        {
+          # Matches the path modules/home/personal.nix's activation script copies to.
+          source = "/home/w4cbe/.config/agent-sandbox/zai";
+          mountPoint = "/home/w4cbe/.config/agent-sandbox/zai";
+          tag = "zai";
+          readOnly = true;
+        }
       ];
     };
     nixos.development.enable = true;

@@ -10,47 +10,60 @@ in
 {
   options.modules.homeType.agentSandbox = {
     enable = lib.mkEnableOption "agent sandbox guest home-manager modules";
+
+    zai = {
+      enable = lib.mkEnableOption ''
+        zclaude (z.ai GLM models) in the sandbox guest. Requires the host to
+        share its z-ai key -- see modules/home/personal.nix.
+      '';
+    };
   };
 
-  config = lib.mkIf cfg.enable {
-    modules = {
-      home.base.enable = true;
-      home.terminal.fish.enable = true;
-      home.terminal.general.enable = true;
-      home.terminal.git.enable = true;
-      home.terminal.gpg.enable = true;
-      home.terminal.k8s-utils.enable = true;
-      home.terminal.development.enable = true;
-      home.terminal.starship.enable = true;
-      home.terminal.vim.enable = true;
-      home.terminal.claude-code.enable = true;
-    };
-
-    # gpg uses the agent socket forwarded from the host, which holds the
-    # smartcard. A local agent would bind that path first.
-    services.gpg-agent.enable = lib.mkForce false;
-
-    # Expires old generations so the guest's weekly nix.gc.automatic (set on
-    # the NixOS side) can actually collect them -- an unexpired generation is
-    # itself a GC root.
-    services.home-manager.autoExpire = {
-      enable = true;
-      frequency = "weekly";
-    };
-
-    # Runs herdr as a supervised service instead of an ad-hoc ssh/console
-    # foreground process, so systemd can run `herdr server stop` on guest
-    # shutdown -- otherwise the VM powering off kills the server before it
-    # can flush pane cwd state to session.json.
-    systemd.user.services.herdr = {
-      Unit.Description = "Herdr headless server";
-      Install.WantedBy = [ "default.target" ];
-      Service = {
-        ExecStart = "${pkgs.herdr}/bin/herdr server";
-        ExecStop = "${pkgs.herdr}/bin/herdr server stop";
-        WorkingDirectory = "/home/w4cbe/workspace";
-        Restart = "on-failure";
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      modules = {
+        home.base.enable = true;
+        home.terminal.fish.enable = true;
+        home.terminal.general.enable = true;
+        home.terminal.git.enable = true;
+        home.terminal.gpg.enable = true;
+        home.terminal.k8s-utils.enable = true;
+        home.terminal.development.enable = true;
+        home.terminal.starship.enable = true;
+        home.terminal.vim.enable = true;
+        home.terminal.claude-code.enable = true;
       };
-    };
-  };
+
+      # gpg uses the agent socket forwarded from the host, which holds the
+      # smartcard. A local agent would bind that path first.
+      services.gpg-agent.enable = lib.mkForce false;
+
+      # Expires old generations so the guest's weekly nix.gc.automatic (set on
+      # the NixOS side) can actually collect them -- an unexpired generation is
+      # itself a GC root.
+      services.home-manager.autoExpire = {
+        enable = true;
+        frequency = "weekly";
+      };
+
+      # Runs herdr as a supervised service instead of an ad-hoc ssh/console
+      # foreground process, so systemd can run `herdr server stop` on guest
+      # shutdown -- otherwise the VM powering off kills the server before it
+      # can flush pane cwd state to session.json.
+      systemd.user.services.herdr = {
+        Unit.Description = "Herdr headless server";
+        Install.WantedBy = [ "default.target" ];
+        Service = {
+          ExecStart = "${pkgs.herdr}/bin/herdr server";
+          ExecStop = "${pkgs.herdr}/bin/herdr server stop";
+          WorkingDirectory = "/home/w4cbe/workspace";
+          Restart = "on-failure";
+        };
+      };
+    })
+
+    (lib.mkIf cfg.zai.enable {
+      modules.home.terminal.claude-code.zclaude.apiKeyFile = "/home/w4cbe/.config/agent-sandbox/zai/api-key";
+    })
+  ];
 }

@@ -40,6 +40,14 @@ in
         "/home/w4cbe/.config/agent-sandbox/kube/config"
     '';
 
+    # Same dereferencing as the kubeconfig above -- gives the sandbox's
+    # extraShares a fixed, non-symlink path to mount z.ai's API key from.
+    home.activation.agentSandboxZaiKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+      run ${pkgs.coreutils}/bin/install -Dm0400 \
+        ${config.sops.secrets."providers/z-ai/apiKey".path} \
+        "/home/w4cbe/.config/agent-sandbox/zai/api-key"
+    '';
+
     # Host-only; the shared workspace's .codegraph is guest-writable.
     home.sessionVariables.CODEGRAPH_NO_PROMPT_HOOK = "1";
 
