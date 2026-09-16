@@ -224,6 +224,10 @@ in
             name = vmName;
             start = ''systemctl start "${unit}"'';
             stop = ''systemctl stop "${unit}"'';
+            # Signals the unit's main process directly, skipping systemd's own
+            # graceful-then-escalate wait. `|| true` keeps it a no-op, not an
+            # error, when the unit is already stopped.
+            stopForce = ''systemctl kill --signal=SIGKILL "${unit}" || true'';
             status = ''
               state=$(systemctl is-active "${unit}" || true)
               echo "$state"

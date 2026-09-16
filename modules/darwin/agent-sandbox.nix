@@ -61,13 +61,14 @@ let
   ];
 
   # Shared by `stop` and `reset`; no early exit, so reset still deletes when
-  # the VM is already stopped.
-  stopIfRunning = ''
+  # the VM is already stopped. `state` is a vfkit VM-state: "Stop" requests a
+  # guest ACPI shutdown, "HardStop" kills the VM process immediately.
+  mkStopIfRunning = state: ''
     if [ -S "${dtachSocket}" ]; then
       curl --fail --silent --show-error \
         --unix-socket "${vfkitSocket}" \
         -X POST -H 'Content-Type: application/json' \
-        -d '{"state":"Stop"}' \
+        -d '{"state":"${state}"}' \
         http://localhost/vm/state
 
       for _ in $(seq 1 30); do
@@ -76,6 +77,8 @@ let
       done
     fi
   '';
+  stopIfRunning = mkStopIfRunning "Stop";
+  stopIfRunningForce = mkStopIfRunning "HardStop";
 
   consoleScript = pkgs.writeShellScript "agent-sandbox-console" ''
     ${pkgs.coreutils}/bin/stty raw -echo
@@ -339,6 +342,14 @@ in
               fi
 
               ${stopIfRunning}
+            '';
+            stopForce = ''
+              if [ ! -S "${dtachSocket}" ]; then
+                echo "agent-sandbox is not running"
+                exit 0
+              fi
+
+              ${stopIfRunningForce}
             '';
             status = ''
               if [ -S "${dtachSocket}" ]; then
