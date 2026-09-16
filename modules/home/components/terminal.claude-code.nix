@@ -141,9 +141,66 @@ let
     ];
   };
 
+  zaiKeyFileArg =
+    if cfg.zclaude.apiKeyFile != null then lib.escapeShellArg (toString cfg.zclaude.apiKeyFile) else "";
+
+  opencodeKeyFileArg =
+    if cfg.oclaude.apiKeyFile != null then lib.escapeShellArg (toString cfg.oclaude.apiKeyFile) else "";
+
+  # Shared by the statusline: fills the caller's lim5h/lim7d (already-set
+  # values win) from a provider's own usage API, since only Claude's native
+  # endpoint reports rate_limits in the session payload. Cached for 1800s,
+  # with a background refresh throttled to once per 60s.
+  usageLibFile = pkgs.writeText "claude-code-usage-lib.sh" ''
+    fetch_provider_usage() {
+      keyfile=$1 cache_json=$2 cache_ts=$3 url=$4 five_h_jq=$5 seven_d_jq=$6
+
+      [ -n "$keyfile" ] && [ -r "$keyfile" ] || return 0
+
+      now=$(date +%s)
+      ts=0
+      if [ -f "$cache_ts" ]; then
+        ts=$(cat "$cache_ts" 2>/dev/null || echo 0)
+        case "$ts" in '''|*[!0-9]*) ts=0 ;; esac
+      fi
+
+      if [ -s "$cache_json" ] && [ $(( now - ts )) -lt 1800 ]; then
+        v5h=$(jq -r "$five_h_jq" "$cache_json" 2>/dev/null || true)
+        v7d=$(jq -r "$seven_d_jq" "$cache_json" 2>/dev/null || true)
+        [ -z "$lim5h" ] && [ -n "$v5h" ] && lim5h=$(printf '%s' "$v5h" | awk '{printf "%d", $1+0}')
+        [ -z "$lim7d" ] && [ -n "$v7d" ] && lim7d=$(printf '%s' "$v7d" | awk '{printf "%d", $1+0}')
+      fi
+
+      if [ $(( now - ts )) -ge 60 ]; then
+        date +%s > "$cache_ts" 2>/dev/null || true
+        (
+          curl -sS -m 5 -H "Authorization: Bearer $(cat "$keyfile")" \
+            "$url" \
+            -o "$cache_json.$$" \
+            && mv "$cache_json.$$" "$cache_json"
+        ) > /dev/null 2>&1 &
+      fi
+    }
+
+    fetch_zai_usage() {
+      fetch_provider_usage "$1" "$2" "$3" \
+        "https://api.z.ai/api/monitor/usage/quota/limit" \
+        '[.data.limits[]? | select(.type == "TOKENS_LIMIT" and .unit == 3) | .percentage][0] // empty' \
+        '[.data.limits[]? | select(.type == "TOKENS_LIMIT" and .unit == 6) | .percentage][0] // empty'
+    }
+
+    fetch_opencode_usage() {
+      fetch_provider_usage "$1" "$2" "$3" \
+        "https://opencode.ai/zen/go/v1/usage" \
+        '.usage.rolling.percent // empty' \
+        '.usage.weekly.percent // empty'
+    }
+  '';
+
   statuslinePackage = pkgs.writeShellApplication {
     name = "claude-statusline";
     runtimeInputs = with pkgs; [
+      curl
       jq
       starship
       coreutils
@@ -152,6 +209,12 @@ let
     ];
     text = ''
       payload=$(cat)
+      ZAI_KEYFILE=${zaiKeyFileArg}
+      ZAI_CACHE_JSON="/tmp/zai-quota-cache.json"
+      ZAI_CACHE_TS="/tmp/zai-quota-cache.ts"
+      OPENCODE_KEYFILE=${opencodeKeyFileArg}
+      OPENCODE_CACHE_JSON="/tmp/opencode-quota-cache.json"
+      OPENCODE_CACHE_TS="/tmp/opencode-quota-cache.ts"
       cwd=$(printf '%s' "$payload" | jq -r '.workspace.current_dir // .cwd // "."')
       pct=$(printf '%s' "$payload" | jq -r '.context_window.used_percentage // 0' | awk '{printf "%d", $1+0}')
       [ -z "$pct" ] && pct=0
@@ -188,6 +251,29 @@ let
 
       lim5h=$(printf '%s' "$payload" | jq -r '.rate_limits.five_hour.used_percentage // empty' | awk 'NF{printf "%d", $1+0}')
       lim7d=$(printf '%s' "$payload" | jq -r '.rate_limits.seven_day.used_percentage // empty' | awk 'NF{printf "%d", $1+0}')
+
+      provider=claude
+      if [ -z "$lim5h" ] || [ -z "$lim7d" ]; then
+        case "''${ANTHROPIC_BASE_URL:-}" in
+          *api.z.ai*) provider=zai ;;
+          *opencode.ai*) provider=opencode ;;
+          *)
+            case "$(printf '%s' "$payload" | jq -r '.model.id // ""')" in
+              glm*) provider=zai ;;
+            esac
+            ;;
+        esac
+      fi
+
+      if [ "$provider" != claude ]; then
+        # shellcheck source=/dev/null
+        . ${usageLibFile}
+        case "$provider" in
+          zai) fetch_zai_usage "$ZAI_KEYFILE" "$ZAI_CACHE_JSON" "$ZAI_CACHE_TS" ;;
+          opencode) fetch_opencode_usage "$OPENCODE_KEYFILE" "$OPENCODE_CACHE_JSON" "$OPENCODE_CACHE_TS" ;;
+        esac
+      fi
+
       export CLAUDE_LIMIT_5H_PCT="$lim5h"
       export CLAUDE_LIMIT_7D_PCT="$lim7d"
 
@@ -420,9 +506,7 @@ let
   };
 
   # zclaude: launches Claude Code against z.ai's Anthropic-compatible endpoint
-  # using GLM models. The z.ai API key is read from its sops-decrypted file at
-  # runtime so the plaintext never enters the world-readable Nix store.
-  # See: https://docs.z.ai/devpack/tool/claude
+  # using GLM models.
   zclaudePackage = pkgs.writeShellApplication {
     name = "zclaude";
     runtimeInputs = [
@@ -444,9 +528,35 @@ let
       export ANTHROPIC_DEFAULT_OPUS_MODEL="glm-5.3[1m]"
       export ANTHROPIC_DEFAULT_SONNET_MODEL="glm-5.3-flash[1m]"
       export ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-5.3-flash"
-      # Override the global subagent model (set to a Claude id below) with a
-      # valid z.ai model so subagents stay on GLM when launched via zclaude.
       export CLAUDE_CODE_SUBAGENT_MODEL="glm-5.3-flash"
+
+      exec claude "$@"
+    '';
+  };
+
+  # oclaude: launches Claude Code against OpenCode Go's Anthropic-compatible
+  # endpoint.
+  oclaudePackage = pkgs.writeShellApplication {
+    name = "oclaude";
+    runtimeInputs = [
+      pkgs.claude-code
+      pkgs.coreutils
+    ];
+    text = ''
+      keyfile=${lib.escapeShellArg (toString cfg.oclaude.apiKeyFile)}
+      if [ ! -r "$keyfile" ]; then
+        echo "oclaude: OpenCode Go API key not readable at $keyfile" >&2
+        echo "oclaude: ensure sops-nix is active and the providers/opencode-go/apiKey secret is configured." >&2
+        exit 1
+      fi
+
+      ANTHROPIC_API_KEY="$(cat "$keyfile")"
+      export ANTHROPIC_API_KEY
+      export ANTHROPIC_BASE_URL="https://opencode.ai/zen/go/"
+      export ANTHROPIC_DEFAULT_OPUS_MODEL="minimax-m3"
+      export ANTHROPIC_DEFAULT_SONNET_MODEL="minimax-m3"
+      export ANTHROPIC_DEFAULT_HAIKU_MODEL="minimax-m3"
+      export CLAUDE_CODE_SUBAGENT_MODEL="minimax-m3"
 
       exec claude "$@"
     '';
@@ -537,8 +647,23 @@ in
 
           When set, a `zclaude` wrapper is added to the environment that launches
           Claude Code against z.ai's Anthropic-compatible endpoint using GLM
-          models. The key is read from this file at runtime so the plaintext
-          never lands in the world-readable Nix store.
+          models.
+        '';
+      };
+    };
+
+    oclaude = {
+      apiKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Optional path to a file containing an OpenCode Go API key (e.g. a
+          sops-nix decrypted secret path such as
+          config.sops.secrets."providers/opencode-go/apiKey".path).
+
+          When set, an `oclaude` wrapper is added to the environment that
+          launches Claude Code against OpenCode Go's Anthropic-compatible
+          endpoint.
         '';
       };
     };
@@ -554,7 +679,8 @@ in
       pkgs.fast-resume
       pkgs.herdr
     ]
-    ++ lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage;
+    ++ lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage
+    ++ lib.optional (cfg.oclaude.apiKeyFile != null) oclaudePackage;
 
     # Disable codegraph's telemetry universally -- the MCP server entry below
     # also sets this explicitly (belt-and-suspenders in case a subprocess

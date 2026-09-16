@@ -18,6 +18,10 @@ in
       sopsFile = ../../secrets/agents.yaml;
     };
 
+    sops.secrets."providers/opencode-go/apiKey" = {
+      sopsFile = ../../secrets/agents.yaml;
+    };
+
     sops.secrets.${sandboxLib.sshSecretName} = {
       sopsFile = ../../secrets/agents.yaml;
       mode = "0400";
@@ -57,6 +61,8 @@ in
       home.terminal.atuin.enable = true;
       home.terminal.claude-code.enable = true;
       home.terminal.claude-code.zclaude.apiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
+      home.terminal.claude-code.oclaude.apiKeyFile =
+        config.sops.secrets."providers/opencode-go/apiKey".path;
       home.terminal.development.enable = true;
       home.terminal.fish.enable = true;
       home.terminal.general.enable = true;
