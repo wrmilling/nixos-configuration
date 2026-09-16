@@ -531,7 +531,7 @@ let
       export ANTHROPIC_DEFAULT_OPUS_MODEL="glm-5.3[1m]"
       export ANTHROPIC_DEFAULT_SONNET_MODEL="glm-5.3-flash[1m]"
       export ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-5.3-flash"
-      export CLAUDE_CODE_SUBAGENT_MODEL="glm-5.3-flash"
+      export CLAUDE_CODE_SUBAGENT_MODEL="glm-5.3-flash[1m]"
 
       exec claude "$@"
     '';
@@ -556,10 +556,10 @@ let
       ANTHROPIC_API_KEY="$(cat "$keyfile")"
       export ANTHROPIC_API_KEY
       export ANTHROPIC_BASE_URL="https://opencode.ai/zen/go/"
-      export ANTHROPIC_DEFAULT_OPUS_MODEL="minimax-m3"
-      export ANTHROPIC_DEFAULT_SONNET_MODEL="minimax-m3"
+      export ANTHROPIC_DEFAULT_OPUS_MODEL="minimax-m3[1m]"
+      export ANTHROPIC_DEFAULT_SONNET_MODEL="minimax-m3[1m]"
       export ANTHROPIC_DEFAULT_HAIKU_MODEL="minimax-m3"
-      export CLAUDE_CODE_SUBAGENT_MODEL="minimax-m3"
+      export CLAUDE_CODE_SUBAGENT_MODEL="minimax-m3[1m]"
 
       exec claude "$@"
     '';
