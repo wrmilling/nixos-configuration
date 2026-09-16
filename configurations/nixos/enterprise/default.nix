@@ -27,9 +27,16 @@
         }
         {
           # Matches the path modules/home/personal.nix's activation script copies to.
-          source = "/home/w4cbe/.config/agent-sandbox/zai";
-          mountPoint = "/home/w4cbe/.config/agent-sandbox/zai";
-          tag = "zai";
+          source = "/home/w4cbe/.config/agent-sandbox/zclaude";
+          mountPoint = "/home/w4cbe/.config/agent-sandbox/zclaude";
+          tag = "zclaude";
+          readOnly = true;
+        }
+        {
+          # Matches the path modules/home/personal.nix's activation script copies to.
+          source = "/home/w4cbe/.config/agent-sandbox/oclaude";
+          mountPoint = "/home/w4cbe/.config/agent-sandbox/oclaude";
+          tag = "oclaude";
           readOnly = true;
         }
       ];

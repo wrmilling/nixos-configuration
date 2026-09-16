@@ -141,10 +141,10 @@ let
     ];
   };
 
-  zaiKeyFileArg =
+  zclaudeKeyFileArg =
     if cfg.zclaude.apiKeyFile != null then lib.escapeShellArg (toString cfg.zclaude.apiKeyFile) else "";
 
-  opencodeKeyFileArg =
+  oclaudeKeyFileArg =
     if cfg.oclaude.apiKeyFile != null then lib.escapeShellArg (toString cfg.oclaude.apiKeyFile) else "";
 
   # Shared by the statusline: fills the caller's lim5h/lim7d (already-set
@@ -182,14 +182,14 @@ let
       fi
     }
 
-    fetch_zai_usage() {
+    fetch_zclaude_usage() {
       fetch_provider_usage "$1" "$2" "$3" \
         "https://api.z.ai/api/monitor/usage/quota/limit" \
         '[.data.limits[]? | select(.type == "TOKENS_LIMIT" and .unit == 3) | .percentage][0] // empty' \
         '[.data.limits[]? | select(.type == "TOKENS_LIMIT" and .unit == 6) | .percentage][0] // empty'
     }
 
-    fetch_opencode_usage() {
+    fetch_oclaude_usage() {
       fetch_provider_usage "$1" "$2" "$3" \
         "https://opencode.ai/zen/go/v1/usage" \
         '.usage.rolling.percent // empty' \
@@ -209,12 +209,12 @@ let
     ];
     text = ''
       payload=$(cat)
-      ZAI_KEYFILE=${zaiKeyFileArg}
-      ZAI_CACHE_JSON="/tmp/zai-quota-cache.json"
-      ZAI_CACHE_TS="/tmp/zai-quota-cache.ts"
-      OPENCODE_KEYFILE=${opencodeKeyFileArg}
-      OPENCODE_CACHE_JSON="/tmp/opencode-quota-cache.json"
-      OPENCODE_CACHE_TS="/tmp/opencode-quota-cache.ts"
+      ZCLAUDE_KEYFILE=${zclaudeKeyFileArg}
+      ZCLAUDE_CACHE_JSON="/tmp/zclaude-quota-cache.json"
+      ZCLAUDE_CACHE_TS="/tmp/zclaude-quota-cache.ts"
+      OCLAUDE_KEYFILE=${oclaudeKeyFileArg}
+      OCLAUDE_CACHE_JSON="/tmp/oclaude-quota-cache.json"
+      OCLAUDE_CACHE_TS="/tmp/oclaude-quota-cache.ts"
       cwd=$(printf '%s' "$payload" | jq -r '.workspace.current_dir // .cwd // "."')
       pct=$(printf '%s' "$payload" | jq -r '.context_window.used_percentage // 0' | awk '{printf "%d", $1+0}')
       [ -z "$pct" ] && pct=0
@@ -255,11 +255,11 @@ let
       provider=claude
       if [ -z "$lim5h" ] || [ -z "$lim7d" ]; then
         case "''${ANTHROPIC_BASE_URL:-}" in
-          *api.z.ai*) provider=zai ;;
-          *opencode.ai*) provider=opencode ;;
+          *api.z.ai*) provider=zclaude ;;
+          *opencode.ai*) provider=oclaude ;;
           *)
             case "$(printf '%s' "$payload" | jq -r '.model.id // ""')" in
-              glm*) provider=zai ;;
+              glm*) provider=zclaude ;;
             esac
             ;;
         esac
@@ -269,8 +269,8 @@ let
         # shellcheck source=/dev/null
         . ${usageLibFile}
         case "$provider" in
-          zai) fetch_zai_usage "$ZAI_KEYFILE" "$ZAI_CACHE_JSON" "$ZAI_CACHE_TS" ;;
-          opencode) fetch_opencode_usage "$OPENCODE_KEYFILE" "$OPENCODE_CACHE_JSON" "$OPENCODE_CACHE_TS" ;;
+          zclaude) fetch_zclaude_usage "$ZCLAUDE_KEYFILE" "$ZCLAUDE_CACHE_JSON" "$ZCLAUDE_CACHE_TS" ;;
+          oclaude) fetch_oclaude_usage "$OCLAUDE_KEYFILE" "$OCLAUDE_CACHE_JSON" "$OCLAUDE_CACHE_TS" ;;
         esac
       fi
 

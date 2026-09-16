@@ -46,10 +46,18 @@ in
 
     # Same dereferencing as the kubeconfig above -- gives the sandbox's
     # extraShares a fixed, non-symlink path to mount z.ai's API key from.
-    home.activation.agentSandboxZaiKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+    home.activation.agentSandboxZclaudeKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
       run ${pkgs.coreutils}/bin/install -Dm0400 \
         ${config.sops.secrets."providers/z-ai/apiKey".path} \
-        "/home/w4cbe/.config/agent-sandbox/zai/api-key"
+        "/home/w4cbe/.config/agent-sandbox/zclaude/api-key"
+    '';
+
+    # Same dereferencing as the zclaude key above -- gives the sandbox's
+    # extraShares a fixed, non-symlink path to mount OpenCode Go's API key from.
+    home.activation.agentSandboxOclaudeKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+      run ${pkgs.coreutils}/bin/install -Dm0400 \
+        ${config.sops.secrets."providers/opencode-go/apiKey".path} \
+        "/home/w4cbe/.config/agent-sandbox/oclaude/api-key"
     '';
 
     # Host-only; the shared workspace's .codegraph is guest-writable.

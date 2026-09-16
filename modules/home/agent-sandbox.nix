@@ -11,10 +11,17 @@ in
   options.modules.homeType.agentSandbox = {
     enable = lib.mkEnableOption "agent sandbox guest home-manager modules";
 
-    zai = {
+    zclaude = {
       enable = lib.mkEnableOption ''
         zclaude (z.ai GLM models) in the sandbox guest. Requires the host to
         share its z-ai key -- see modules/home/personal.nix.
+      '';
+    };
+
+    oclaude = {
+      enable = lib.mkEnableOption ''
+        oclaude (OpenCode Go) in the sandbox guest. Requires the host to
+        share its OpenCode Go key -- see modules/home/personal.nix.
       '';
     };
   };
@@ -62,9 +69,14 @@ in
       };
     })
 
-    (lib.mkIf cfg.zai.enable {
+    (lib.mkIf cfg.zclaude.enable {
       modules.home.terminal.claude-code.zclaude.apiKeyFile =
-        "/home/w4cbe/.config/agent-sandbox/zai/api-key";
+        "/home/w4cbe/.config/agent-sandbox/zclaude/api-key";
+    })
+
+    (lib.mkIf cfg.oclaude.enable {
+      modules.home.terminal.claude-code.oclaude.apiKeyFile =
+        "/home/w4cbe/.config/agent-sandbox/oclaude/api-key";
     })
   ];
 }

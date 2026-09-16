@@ -6,5 +6,6 @@
 
   # Enables only on personal machines for now, expects the
   # personal home manager config to have the api key set.
-  home-manager.users.w4cbe.modules.homeType.agentSandbox.zai.enable = true;
+  home-manager.users.w4cbe.modules.homeType.agentSandbox.zclaude.enable = true;
+  home-manager.users.w4cbe.modules.homeType.agentSandbox.oclaude.enable = true;
 }
