@@ -63,7 +63,8 @@ in
     })
 
     (lib.mkIf cfg.zai.enable {
-      modules.home.terminal.claude-code.zclaude.apiKeyFile = "/home/w4cbe/.config/agent-sandbox/zai/api-key";
+      modules.home.terminal.claude-code.zclaude.apiKeyFile =
+        "/home/w4cbe/.config/agent-sandbox/zai/api-key";
     })
   ];
 }
