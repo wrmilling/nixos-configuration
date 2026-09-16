@@ -150,11 +150,13 @@ rec {
     ''
       usage() {
         cat <<USAGE
-      Usage: ${name} [start|stop|status|reset|help]
+      Usage: ${name} [start|stop|restart [-j|--join]|status|reset|help]
 
         (no args)  Start the sandbox if needed, then enter it.
         start      Start the sandbox without entering it.
         stop       Stop the sandbox.
+        restart    Stop the sandbox, then start it again. Pass -j/--join to
+                   enter it afterward.
         status     Report whether the sandbox is running.
         reset      Stop the sandbox and delete its disk image. Guest home,
                    credentials and history are lost. Pass -f to skip the prompt.
@@ -168,6 +170,13 @@ rec {
           ;;
         stop)
           ${stop}
+          ;;
+        restart)
+          ${stop}
+          ${start}
+          if [ "''${2:-}" = "-j" ] || [ "''${2:-}" = "--join" ]; then
+            ${enter}
+          fi
           ;;
         status)
           ${status}
