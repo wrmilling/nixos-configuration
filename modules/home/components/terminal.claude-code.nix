@@ -141,11 +141,14 @@ let
     ];
   };
 
+  zclaudeEnable = cfg.zclaude.apiKeyFile != null;
+  oclaudeEnable = cfg.oclaude.apiKeyFile != null;
+
   zclaudeKeyFileArg =
-    if cfg.zclaude.apiKeyFile != null then lib.escapeShellArg (toString cfg.zclaude.apiKeyFile) else "";
+    if zclaudeEnable then lib.escapeShellArg (toString cfg.zclaude.apiKeyFile) else "";
 
   oclaudeKeyFileArg =
-    if cfg.oclaude.apiKeyFile != null then lib.escapeShellArg (toString cfg.oclaude.apiKeyFile) else "";
+    if oclaudeEnable then lib.escapeShellArg (toString cfg.oclaude.apiKeyFile) else "";
 
   # Shared by the statusline: fills the caller's lim5h/lim7d (already-set
   # values win) from a provider's own usage API, since only Claude's native
@@ -679,8 +682,11 @@ in
       pkgs.fast-resume
       pkgs.herdr
     ]
-    ++ lib.optional (cfg.zclaude.apiKeyFile != null) zclaudePackage
-    ++ lib.optional (cfg.oclaude.apiKeyFile != null) oclaudePackage;
+    ++ lib.optional (zclaudeEnable) zclaudePackage
+    ++ lib.optional (oclaudeEnable) oclaudePackage;
+
+    modules.home.scripts.zfr.enable = zclaudeEnable;
+    modules.home.scripts.ofr.enable = oclaudeEnable;
 
     # Disable codegraph's telemetry universally -- the MCP server entry below
     # also sets this explicitly (belt-and-suspenders in case a subprocess
