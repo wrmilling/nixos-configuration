@@ -441,12 +441,12 @@ let
       export ANTHROPIC_AUTH_TOKEN
       export ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic"
       export API_TIMEOUT_MS="3000000"
-      export ANTHROPIC_DEFAULT_OPUS_MODEL="glm-5.2[1m]"
-      export ANTHROPIC_DEFAULT_SONNET_MODEL="glm-4.7"
-      export ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-4.5-air"
+      export ANTHROPIC_DEFAULT_OPUS_MODEL="glm-5.3[1m]"
+      export ANTHROPIC_DEFAULT_SONNET_MODEL="glm-5.3-flash[1m]"
+      export ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-5.3-flash"
       # Override the global subagent model (set to a Claude id below) with a
       # valid z.ai model so subagents stay on GLM when launched via zclaude.
-      export CLAUDE_CODE_SUBAGENT_MODEL="glm-4.5-air"
+      export CLAUDE_CODE_SUBAGENT_MODEL="glm-5.3-flash"
 
       exec claude "$@"
     '';
