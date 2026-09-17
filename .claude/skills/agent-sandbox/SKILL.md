@@ -212,6 +212,38 @@ Two helpers take the platform difference as an argument:
 
 ### Errors to avoid
 
+- **`guest.nix` forces systemd stage 1; without that the two platforms differ.**
+  microvm.nix's `nixos-modules/microvm/optimization.nix` sets
+  `boot.initrd.systemd.enable = lib.mkDefault (elem cfg.hypervisor [ "qemu"
+  "cloud-hypervisor" "firecracker" "stratovirt" ])`. `vfkit` is not in that
+  list, so by default the Darwin guest would boot **scripted** stage 1 while
+  the NixOS/qemu guests boot **systemd** stage 1. That split is a trap,
+  because an initrd hook then needs a variant for each:
+  `boot.initrd.postDeviceCommands` *asserts* under systemd stage 1, so writing
+  only that one fails the qemu hosts' evaluation, and writing only a
+  `boot.initrd.systemd.services` unit is silently dead on vfkit. `guest.nix`
+  therefore sets `boot.initrd.systemd.enable = true` for both. This is
+  verified: the vfkit guest boots to `Welcome to NixOS` and
+  `Reached target Multi-User System` in about 10 seconds with no failed
+  units. vfkit's absence from the allowlist reads as untested rather than
+  broken — the TODO beside it names crosvm and kvmtool. The scripted
+  `postDeviceCommands` branch is kept, gated on
+  `!config.boot.initrd.systemd.enable`, so the sweep survives reverting that
+  line; it contributes nothing to the build while systemd stage 1 is on.
+
+  Two further notes for anything added to the initrd here. A bare
+  `Type = "oneshot"` unit goes inactive when it finishes and
+  `initrd-cleanup.service` then re-pulls it, so it runs a second time *after*
+  `/sysroot/nix/store` is mounted — set `RemainAfterExit = true`. And a
+  snippet shared with `postDeviceCommands` must not call `exit`, because that
+  text is inlined into the scripted stage-1 script, where an exit ends stage 1
+  itself; set a flag and branch on it. A bare
+  `nix eval` of `nixosConfigurations.agent-sandbox{,-aarch64}` also hides the
+  hypervisor-specific behaviour, because those use the default hypervisor;
+  only the host configurations supply `vfkit`. Under scripted stage 1 the
+  guest has no root volume until the host module adds one, so
+  `fileSystems."/"` there is microvm's tmpfs default.
+
 - **`networking.firewall.extraInputRules` works only with the nftables
   backend.** The guest uses the iptables backend. The option is a valid string
   there, but nothing applies it. An SSH source restriction written this way
@@ -327,16 +359,61 @@ Each decision below has a reason. Keep it unless you intend to change it.
     Darwin guest therefore has no subuid or subgid range, and
     `virtualisation.docker.rootless` cannot work there until you set the range
     explicitly. The NixOS guest already has a range.
-- **Garbage collection is automatic and affects the guest only.** The guest
-  `/nix/store` is an overlay. The guest cannot damage the read-only lower
-  layer. On the NixOS hosts that layer is a virtiofs share of the host store.
-  On the Darwin host it is an erofs image, built by `microvm.storeOnDisk`.
-  That option enables itself because the Darwin host shares no `ro-store`; the
-  macOS store holds darwin paths. In both cases, a delete of a lower-layer
-  path only writes an overlayfs whiteout in the guest overlay. Guest GC
-  therefore reclaims only the writable upper layer, `/nix/.rw-store`, which
-  `agent-sandbox.img` backs. This holds guest-local builds and home-manager
+- **Garbage collection is automatic and reclaims only the guest's upper
+  layer.** The guest `/nix/store` is an overlay. On the NixOS hosts the lower
+  layer is a virtiofs share of the host store. On the Darwin host it is an
+  erofs image, built by `microvm.storeOnDisk`. That option enables itself
+  because the Darwin host shares no `ro-store`; the macOS store holds darwin
+  paths. In both cases a delete of a lower-layer path frees no bytes, because
+  the upper layer, `/nix/.rw-store` on `agent-sandbox.img`, is the only layer
+  the guest can write. That layer holds guest-local builds and home-manager
   generations.
+
+  **A delete of a lower-layer path is not harmless, though.** It writes an
+  overlayfs whiteout into the upper layer, and that whiteout persists on the
+  disk image across every reboot, rebuild and `stop`/`start`. It then masks
+  that exact store path in any later boot whose closure contains it, and store
+  paths are content-addressed, so an unchanged package keeps the same path
+  across a nixpkgs bump. A whiteout over an immutable store path is never
+  meaningful, so `guest.nix` sweeps the upper store dir for character devices
+  before `/nix/store` is mounted. Under systemd stage 1 that is
+  `sweep-store-whiteouts.service`, ordered
+  `After=initrd-root-fs.target Before=sysroot-nix-store.mount initrd-fs.target`;
+  see the stage 1 note under "Errors to avoid" for the scripted fallback and
+  the two ways this unit can go wrong. Overlayfs forbids changing the layers
+  underneath a mounted overlay, so the sweep cannot move to a stage 2 unit,
+  and it guards on `/proc/self/mountinfo` in case it runs late anyway.
+
+  This already happened once, on 2026-09-15: `nix-gc.timer` is `weekly` and
+  `Persistent`, so on a VM that is off most of the time it fires seconds after
+  boot, and it was unordered against `register-store-closure.service`. It won
+  the race, `/run/current-system` was therefore not a valid path in the guest
+  Nix database and so was skipped as a GC root, and
+  `nix-collect-garbage -d` collected 1148 of the running system's own 1232
+  closure paths. `bash-interactive`, the `#!` interpreter of
+  `<toplevel>/init`, was among them, so `execve` returned ENOENT and stage 1
+  died with `switch_root: can't execute '<toplevel>/init': No such file or
+  directory` on every boot. `guest.nix` now orders `nix-gc.service` after
+  `register-store-closure.service` and `requires` it, and that unit fails
+  loudly when the kernel command line carries no `regInfo=`. Note that
+  microvm.nix's own registration, in `boot.postBootCommands`, cannot be relied
+  on: it calls `nix-store --load-db` with no `--store local`, so nix picks the
+  daemon and refuses the command.
+
+  To repair an image that already carries whiteouts, either `agent-sandbox
+  reset`, or, to keep the guest's `/home`, unlink them from the host with
+  `debugfs` while the VM is stopped. They are character devices `0:0`,
+  hardlinked to one inode, directly in `/nix/.rw-store/store`:
+  ```
+  agent-sandbox stop -f
+  e2fsck -fy agent-sandbox.img   # a force stop leaves a dirty journal
+  debugfs -R 'ls -l /nix/.rw-store/store' agent-sandbox.img \
+    | awk '$2=="20000"{print "rm /nix/.rw-store/store/" $NF}' > rm.cmds
+  debugfs -w -f rm.cmds agent-sandbox.img
+  e2fsck -fy agent-sandbox.img
+  ```
+  Clone the image first with `/bin/cp -c` on APFS; it is free and instant. The
+  nix `cp` on PATH is GNU coreutils and has no `-c`.
 
   The interactive `ncl` abbreviation in
   `modules/home/components/terminal.fish.nix` does not work in the guest. Its

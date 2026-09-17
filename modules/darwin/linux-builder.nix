@@ -21,23 +21,17 @@ in
       enable = true;
       systems = [ "aarch64-linux" ];
 
-      # nixpkgs-unstable currently has qemu-vm's shared directories on virtiofsd,
-      # which has no Darwin build (NixOS/nixpkgs#552774) and breaks eval here until
-      # the revert (NixOS/nixpkgs#562444) reaches our pin. Build the builder itself
-      # from the frozen nixpkgs-stable input instead; it only affects the builder
-      # VM's own toolchain, not what gets built on it.
+      # unstable puts qemu-vm shares on virtiofsd, which has no Darwin build, so
+      # eval breaks until the revert lands. NixOS/nixpkgs#552774, #562444.
       package =
         inputs.nixpkgs-stable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.darwin.linux-builder;
 
-      # The builder's qcow2 grows on demand and never shrinks, and its in-guest
-      # auto-GC only fires below nix.settings.min-free (1GiB), so left alone it
-      # creeps up to diskSize and stays there. Raising min-free would rebuild
-      # the aarch64-linux guest; wiping the image will not.
+      # The qcow2 only grows, and in-guest auto-GC fires too late to stop it.
+      # Raising min-free would rebuild the aarch64-linux guest; a wipe will not.
       ephemeral = true;
 
-      # Only knobs that leave the guest's toplevel untouched belong here --
-      # anything guest-side (nix.settings, extra substituters, packages) has to
-      # be built for aarch64-linux, which is what this builder exists to enable.
+      # Darwin-side knobs only: anything guest-side needs an aarch64-linux build,
+      # which is what this builder exists to provide.
       config = {
         virtualisation.cores = 8;
         virtualisation.darwin-builder = {

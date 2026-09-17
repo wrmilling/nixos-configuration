@@ -134,10 +134,8 @@ in
                 vcpu = cfg.vcpu;
                 mem = cfg.memoryMB;
 
-                # Lets the host reclaim memory the guest isn't using; does not
-                # raise the guest's own ceiling (that's memoryMB). vfkit has no
-                # equivalent, so this stays qemu-only -- do not move it into
-                # guest.nix, which the Darwin module also extends.
+                # qemu-only; vfkit rejects it, so keep it out of guest.nix, which
+                # the Darwin module also extends. Does not raise the guest ceiling.
                 balloon = true;
 
                 interfaces = [ sandboxLib.userInterface ];

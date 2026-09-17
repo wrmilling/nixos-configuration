@@ -21,10 +21,8 @@ rec {
   sshIdentityFileIn = home: "${home}/.config/sops-nix/secrets/${sshSecretName}";
   sshIdentityFile = sshIdentityFileIn "~";
 
-  # RemoteForward expands no tokens for the remote path, so the guest uid has
-  # to be known at eval time. It is pinned for the Linux hosts, but the Darwin
-  # host renumbers the guest to match its own macOS account, so the socket
-  # paths take the uid rather than assuming it.
+  # RemoteForward expands no tokens, so the uid must be known at eval time.
+  # The Darwin host renumbers it, hence the socket paths take it as an argument.
   guestUid = 1000;
   imageName = "agent-sandbox.img";
   gpgAgentSocket = uid: "/run/user/${toString uid}/gnupg/S.gpg-agent";
@@ -101,11 +99,8 @@ rec {
       environment.systemPackages = [ pkgs.docker-compose ];
     };
 
-  # The guest-side half of a hostDocker relay: CLI packages plus a unit that
-  # turns a TCP connection to `address:port` back into the unix socket the
-  # docker CLI already looks for. Shared because it's identical regardless of
-  # how `address:port` gets there -- vfkit's shared vmnet on Darwin, qemu's
-  # guestfwd on NixOS -- only the host-side plumbing differs.
+  # Guest half of the hostDocker relay. Shared because it is identical however
+  # address:port arrives -- only the host-side plumbing differs per platform.
   mkHostDockerGuestModule =
     { address, port }:
     { pkgs, lib, ... }:
@@ -134,10 +129,8 @@ rec {
       };
     };
 
-  # Shared CLI shape for the per-platform `agent-sandbox` command. Each
-  # platform supplies its own start/stop/status/enter shell snippets -- the
-  # underlying mechanics (systemd+ssh vs. dtach+vfkit) don't unify, only the
-  # command surface does.
+  # Shared CLI shape only; each platform supplies its own snippets, because
+  # systemd+ssh and dtach+vfkit mechanics do not unify.
   mkCommandScript =
     {
       name,

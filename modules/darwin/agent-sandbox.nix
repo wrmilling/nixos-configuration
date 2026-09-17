@@ -9,28 +9,15 @@ let
   cfg = config.modules.darwin.agentSandbox;
   sandboxLib = import ../../lib/agent-sandbox.nix { inherit lib; };
 
-  # vfkit's console is the microvm-run process's own stdio, with no daemon
-  # supervising it -- dtach stands in for that, and its socket doubles as our
-  # "is it running" check. The vfkit socket is separate: it's what makes
-  # `microvm.socket != null` true, which is what gets microvm.nix to generate
-  # a real microvm-shutdown script instead of just a foreground process to kill.
+  # No daemon supervises vfkit, so dtach stands in and its socket is the
+  # running check. The vfkit socket is what makes microvm.socket non-null.
   dtachSocket = "${cfg.stateDir}/console.dtach";
   vfkitSocket = "${cfg.stateDir}/vfkit.sock";
 
-  # dtach gives the child pty the invoking terminal's termios verbatim
-  # (master.c: `the_pty.term = orig_term`), so ISIG stays on and Ctrl+C would
-  # SIGINT vfkit -- taking the whole VM down -- rather than reaching the guest.
-  # Raw mode makes it a plain byte that vfkit forwards to hvc0, where the
-  # guest's own line discipline turns it into SIGINT for whatever the agent is
-  # running. The attacher already clears ISIG on the local terminal, so the
-  # byte does arrive, and dtach never rewrites the child pty after creation.
   guestHostName = outputs.nixosConfigurations.${cfg.guestHost}.config.networking.hostName;
 
-  # vfkit cannot forward ports (that is qemu-only), but Apple's shared vmnet
-  # puts host and guest on one subnet, so the guest is directly reachable -- at
-  # a DHCP-assigned address, which is why it gets looked up rather than
-  # hardcoded. bootpd records the guest's own DHCP hostname here, and the file
-  # outlives VM restarts.
+  # vfkit has no port forwarding, but shared vmnet makes the guest directly
+  # reachable at a DHCP address; bootpd keys this file by the guest hostname.
   leaseFile = "/var/db/dhcpd_leases";
 
   # macOS keeps the agent sockets in ~/.gnupg, not the XDG runtime dir the
@@ -80,6 +67,8 @@ let
   stopIfRunning = mkStopIfRunning "Stop";
   stopIfRunningForce = mkStopIfRunning "HardStop";
 
+  # dtach copies the invoking terminal's termios, so without raw mode ISIG
+  # stays on and Ctrl+C SIGINTs vfkit instead of reaching the guest.
   consoleScript = pkgs.writeShellScript "agent-sandbox-console" ''
     ${pkgs.coreutils}/bin/stty raw -echo
     exec ${cfg.runner}/bin/microvm-run
@@ -214,10 +203,8 @@ in
         (outputs.nixosConfigurations.${cfg.guestHost}.extendModules {
           modules = [
             {
-              # The guest's own uid is pinned for the Linux hosts; on macOS it
-              # has to follow the host account instead. NixOS refuses a uid
-              # below 1000 on a normal user, so the user becomes a system user
-              # and restates what isNormalUser was providing.
+              # virtiofs passes the host uid through unmapped, so the guest has to
+              # follow it. NixOS rejects <1000 on a normal user, hence isSystemUser.
               users.users.w4cbe = {
                 isNormalUser = lib.mkForce false;
                 isSystemUser = true;
@@ -226,14 +213,8 @@ in
                 createHome = true;
               };
 
-              # The guest NATs out through the host's network stack, so it
-              # meets the same TLS interception the Mac does -- so it trusts
-              # exactly what the host trusts. Inherited rather than re-read so
-              # the delimiter repair in the host's own `security.pki.certificates`
-              # (see configurations/darwin/work) stays the single source of
-              # truth: NixOS rebuilds nss-cacert through buildcatrust, whose
-              # delimiters are line-anchored, and an unrepaired bundle fails
-              # the build outright.
+              # The guest meets the same TLS interception as the host. Inherited,
+              # not re-read, so the delimiter repair stays in one place.
               security.pki.certificates = config.security.pki.certificates;
               environment.variables = {
                 NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-bundle.crt";
@@ -265,15 +246,8 @@ in
               };
             }
           ]
-          # Binding at the path the docker CLI already defaults to means no
-          # DOCKER_HOST, so compose and testcontainers work untouched. Dials
-          # the same address the host binds to -- the guest has no business
-          # resolving it independently, since a gateway that disagreed with
-          # the host's bind address would be unreachable either way.
-          #
-          # socat's listener survives a dead host relay: each connection
-          # forks, and a child that cannot reach the host just exits, so
-          # docker reports a connection error instead of the unit flapping.
+          # Binds the CLI's default socket path, so no DOCKER_HOST is needed, and
+          # dials the same address the host binds -- both ends read one option.
           ++ lib.optional cfg.hostDocker.enable (
             sandboxLib.mkHostDockerGuestModule {
               address = cfg.hostDocker.listenAddress;
@@ -330,11 +304,8 @@ in
                 dtach -n "${dtachSocket}" ${consoleScript}
               fi
             '';
-            # Not ${cfg.runner}/bin/microvm-shutdown: microvm.nix pipes bare
-            # JSON into the socket, but --restful-uri serves HTTP there, so
-            # vfkit answers 400 and the VM keeps running. Same request, as an
-            # actual POST. Then wait, so a stop/start pair cannot race two
-            # vfkit processes onto one disk image.
+            # Not microvm-shutdown: it sends bare JSON where vfkit serves HTTP, so
+            # vfkit answers 400. Waits, so stop/start cannot race two processes.
             stop = ''
               if [ ! -S "${dtachSocket}" ]; then
                 echo "agent-sandbox is not running"

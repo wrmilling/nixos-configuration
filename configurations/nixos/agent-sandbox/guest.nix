@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   inputs,
   outputs,
   secrets,
@@ -9,6 +10,21 @@
 }:
 let
   sandboxLib = import ../../../lib/agent-sandbox.nix { inherit lib; };
+
+  rootFs = config.fileSystems."/";
+  # overlayfs forbids changing a layer under a live mount, hence the guard.
+  # Flags rather than exits: inlined into stage 1, where exit would end it.
+  sweepWhiteouts = root: ''
+    storeMounted=
+    while read -r _ _ _ _ mountPoint _; do
+      if [ "$mountPoint" = "${root}/nix/store" ]; then storeMounted=1; fi
+    done < /proc/self/mountinfo
+    if [ -z "$storeMounted" ]; then
+      for path in ${root}${config.microvm.writableStoreOverlay}/store/*; do
+        if [ -c "$path" ]; then rm -f "$path"; fi
+      done
+    fi
+  '';
 in
 {
   imports = [
@@ -22,10 +38,8 @@ in
     sshd.enable = true;
     chrony = {
       enable = true;
-      # VM guests (microvm/qemu) can have a clock that's arbitrarily wrong at any
-      # point in their lifetime, not just at first boot (stale image, host suspend,
-      # no reliable RTC). The default limit of 3 steps gets exhausted correcting a
-      # multi-day offset, after which chronyd only slews and never catches up.
+      # A VM clock can be arbitrarily wrong at any time, not just first boot, and
+      # the default 3 steps get exhausted on a multi-day offset.
       makestepLimit = 1000000;
     };
     k8sUtils.enable = true;
@@ -48,14 +62,51 @@ in
     trusted-users = lib.mkForce [ "root" ];
   };
 
-  # Automatic, since nobody's around to type the guest's sudo password for
-  # the interactive `ncl` abbreviation. Only reclaims the writable overlay
-  # (guest-local builds/generations) -- the shared read-only store is the
-  # host's to collect.
+  # microvm leaves vfkit off its allowlist, which would split stage 1 per platform.
+  boot.initrd.systemd.enable = true;
+
+  # A lower-layer delete frees nothing but leaves a whiteout that persists on the
+  # image and masks that path in any later boot whose closure contains it.
+  boot.initrd.systemd.services.sweep-store-whiteouts = lib.mkIf config.boot.initrd.systemd.enable {
+    description = "Remove overlayfs whiteouts from the writable store overlay";
+    unitConfig.DefaultDependencies = false;
+    after = [ "initrd-root-fs.target" ];
+    before = [
+      "${utils.escapeSystemdPath "/sysroot/nix/store"}.mount"
+      "initrd-fs.target"
+    ];
+    requiredBy = [ "initrd-fs.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      # Else initrd-cleanup re-pulls it, after /nix/store is already mounted.
+      RemainAfterExit = true;
+    };
+    script = sweepWhiteouts "/sysroot";
+  };
+
+  boot.initrd.postDeviceCommands =
+    lib.mkIf (!config.boot.initrd.systemd.enable && lib.hasPrefix "/dev/" rootFs.device)
+      ''
+        mkdir -p /sweep
+        if mount -t ${rootFs.fsType} ${rootFs.device} /sweep; then
+          ${sweepWhiteouts "/sweep"}
+          umount /sweep
+        fi
+      '';
+
+  # Automatic because `ncl` needs a sudo password nobody can type. Reclaims only
+  # the writable overlay; the read-only store is the host's to collect.
   nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "-d";
+  };
+
+  # The timer is Persistent, so it fires seconds after boot; unordered it beats
+  # registration and collects the running closure as an unrooted path.
+  systemd.services.nix-gc = {
+    after = [ "register-store-closure.service" ];
+    requires = [ "register-store-closure.service" ];
   };
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -85,17 +136,12 @@ in
     };
   };
 
-  # Points at the forwarded ssh-support socket (RemoteForward, host side), so
-  # git push/pull in the guest authenticate with the host's YubiKey. Derived
-  # from the user's actual uid rather than sandboxLib's pinned one, since the
-  # Darwin host has to renumber the guest user to match its own account.
+  # The forwarded host agent, so git authenticates with the host's YubiKey. Uses
+  # the actual uid, not sandboxLib's, because Darwin renumbers the guest user.
   environment.variables.SSH_AUTH_SOCK = "/run/user/${toString config.users.users.w4cbe.uid}/gnupg/S.gpg-agent.ssh";
 
-  # Paths in the shared store are unknown to the guest's Nix database until the
-  # closure is registered. microvm.nix does this from boot.postBootCommands,
-  # which is unordered against home-manager activation and its first
-  # `nix-store --realise`. --load-db needs a local store; nix would otherwise
-  # pick the daemon and refuse the command.
+  # microvm.nix registers from postBootCommands, unordered against home-manager,
+  # and without --store local, where nix picks the daemon and refuses.
   systemd.services.register-store-closure = {
     description = "Register the shared store closure in the Nix database";
     wantedBy = [ "multi-user.target" ];
@@ -107,6 +153,9 @@ in
     script = ''
       if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
         ${config.nix.package.out}/bin/nix-store --store local --load-db < "''${BASH_REMATCH[1]}"
+      else
+        echo "no regInfo= on the kernel command line" >&2
+        exit 1
       fi
     '';
   };
