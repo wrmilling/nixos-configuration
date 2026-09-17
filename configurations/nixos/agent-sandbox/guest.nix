@@ -11,7 +11,6 @@
 let
   sandboxLib = import ../../../lib/agent-sandbox.nix { inherit lib; };
 
-  rootFs = config.fileSystems."/";
   # overlayfs forbids changing a layer under a live mount, hence the guard.
   # Flags rather than exits: inlined into stage 1, where exit would end it.
   sweepWhiteouts = root: ''
@@ -67,7 +66,7 @@ in
 
   # A lower-layer delete frees nothing but leaves a whiteout that persists on the
   # image and masks that path in any later boot whose closure contains it.
-  boot.initrd.systemd.services.sweep-store-whiteouts = lib.mkIf config.boot.initrd.systemd.enable {
+  boot.initrd.systemd.services.sweep-store-whiteouts = {
     description = "Remove overlayfs whiteouts from the writable store overlay";
     unitConfig.DefaultDependencies = false;
     after = [ "initrd-root-fs.target" ];
@@ -83,16 +82,6 @@ in
     };
     script = sweepWhiteouts "/sysroot";
   };
-
-  boot.initrd.postDeviceCommands =
-    lib.mkIf (!config.boot.initrd.systemd.enable && lib.hasPrefix "/dev/" rootFs.device)
-      ''
-        mkdir -p /sweep
-        if mount -t ${rootFs.fsType} ${rootFs.device} /sweep; then
-          ${sweepWhiteouts "/sweep"}
-          umount /sweep
-        fi
-      '';
 
   # Automatic because `ncl` needs a sudo password nobody can type. Reclaims only
   # the writable overlay; the read-only store is the host's to collect.
