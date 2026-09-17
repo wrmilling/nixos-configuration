@@ -78,6 +78,14 @@
       gitAuthor = "Renovate Bot <${secrets.forgejo.renovateEmail}>";
       platform = "forgejo";
       autodiscover = true;
+      hostRules = [
+        {
+          # bart's network/DNS is occasionally slow (~5-6s), which trips the
+          # default request timeout and causes flapping PRs (e.g. mau.dev).
+          # No matchHost -> applies to all hosts.
+          timeout = 30000;
+        }
+      ];
       packageRules = [
         {
           # Aliased action names the built-in manager can't resolve; handled by customManagers below.
