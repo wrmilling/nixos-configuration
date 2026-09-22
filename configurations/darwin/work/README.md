@@ -59,8 +59,7 @@ You will also need to define your own secrets file which includes the following 
 Finally you can build/install the flake:
 
 ```
-darwin-rebuild switch --flake ~/.nixos-confiugration/
-home-manager switch --flake ~/.nixos-confiugration/
+darwin-rebuild switch --flake ~/.nixos-configuration/
 ```
 
 ## Other Things

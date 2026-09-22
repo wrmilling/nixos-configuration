@@ -23,12 +23,12 @@ $ sudo fdisk /dev/nvme0n1
 > <enter> (Default End of Disk)
 > w (Write)
 $ sudo mkfs.fat -F 32 /dev/nvme0n1p1
-$ sudo fatlabel /dev/nvm0n1p1 BOOTEFI
-$ sudo cryptsetup luksFormat /dev/nvm0n1p2
+$ sudo fatlabel /dev/nvme0n1p1 BOOTEFI
+$ sudo cryptsetup luksFormat /dev/nvme0n1p2
 > YES
 > <password>
 > <password>
-$ sudo cryptsetup luksOpen /dev/nvm0n1p2 cryptroot
+$ sudo cryptsetup luksOpen /dev/nvme0n1p2 cryptroot
 $ sudo mkfs.ext4 -L nixos /dev/mapper/cryptroot
 $ sudo mount /dev/disk/by-label/nixos /mnt
 $ sudo mkdir -p /mnt/boot
@@ -67,14 +67,14 @@ $ git clone https://github.com/wrmilling/nixos-configuration.git .
 I will then copy in the new machine basic config into a new machine folder and setup the configuration.nix in root. I will then replace the generated config with the new setup.
 
 ```
-$ mkdir -p hosts/donnager
-$ mv ../configuration.nix hosts/donnager/default.nix
-$ mv ../hardware-configuration.nix hosts/donnager/hardware.nix
-$ vim hosts/donnager/default.nix
+$ mkdir -p hosts/enterprise
+$ mv ../configuration.nix hosts/enterprise/default.nix
+$ mv ../hardware-configuration.nix hosts/enterprise/hardware.nix
+$ vim hosts/enterprise/default.nix
 # Update the link to hardware.nix and add all modules/profiles as required.
 ```
 
-I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine. You will need to comment out lanzaboote module in the flake definition for this machine and comment out the secure boot optional import in the hosts/<machine>/default.nix to hve this run successfully prior to onboarding Secure Boot and TPM2 for LUKS.
+I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine. You will need to comment out lanzaboote module in the flake definition for this machine and comment out the secure boot optional import in the hosts/<machine>/default.nix to have this run successfully prior to onboarding Secure Boot and TPM2 for LUKS.
 
 ```
 $ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
@@ -94,7 +94,7 @@ $ bootctl status
 # Create Keys for Secure Boot
 $ sudo sbctl create-keys
 
-# Import Lanzaboote and generate new signed EFI blobs, already done for Icarus
+# Import Lanzaboote and generate new signed EFI blobs, already done for Enterprise
 $ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
 
 # Verify generations and BOOTX64.EFI and systemd-bootx84.efi are signed.

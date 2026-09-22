@@ -8,7 +8,7 @@ This is a Oracle Free Tier VM.Standard.E2.1.Micro system.
 
 Register for Oracle Free tier and create an instance in your desired size running the latest LTS of Ubuntu available as a free-tier image. This may also require setting up an Oracle [VCN](https://www.oracle.com/cloud/networking/virtual-cloud-network/) (its been a minute since I did initial setup) with your desired ports open for the instance, google is a friend here.
 
-For my instance, I built the VVM.Standard.E2.1.Micro with 1 OCPU and 1GB of memory. For my block storage, I chose 50GB to be allocated to this instance, the other 150GB in the free tier being allocated to the also-free ARM64 instance available at Oracle.
+For my instance, I built the VM.Standard.E2.1.Micro with 1 OCPU and 1GB of memory. For my block storage, I chose 50GB to be allocated to this instance, the other 150GB in the free tier being allocated to the also-free ARM64 instance available at Oracle.
 
 Once your machine is created, its time to...
 

@@ -23,12 +23,12 @@ $ sudo fdisk /dev/nvme0n1
 > <enter> (Default End of Disk)
 > w (Write)
 $ sudo mkfs.fat -F 32 /dev/nvme0n1p1
-$ sudo fatlabel /dev/nvm0n1p1 BOOTEFI
-$ sudo cryptsetup luksFormat /dev/nvm0n1p2
+$ sudo fatlabel /dev/nvme0n1p1 BOOTEFI
+$ sudo cryptsetup luksFormat /dev/nvme0n1p2
 > YES
 > <password>
 > <password>
-$ sudo cryptsetup luksOpen /dev/nvm0n1p2 cryptroot
+$ sudo cryptsetup luksOpen /dev/nvme0n1p2 cryptroot
 $ sudo mkfs.ext4 -L nixos /dev/mapper/cryptroot
 $ sudo mount /dev/disk/by-label/nixos /mnt
 $ sudo mkdir -p /mnt/boot
@@ -74,7 +74,7 @@ $ vim hosts/icarus/default.nix
 # Update the link to hardware.nix and add all modules/profiles as required.
 ```
 
-I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine. You will need to comment out lanzaboote module in the flake definition for this machine and comment out the secure boot optional import in the hosts/<machine>/default.nix to hve this run successfully prior to onboarding Secure Boot and TPM2 for LUKS.
+I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine. You will need to comment out lanzaboote module in the flake definition for this machine and comment out the secure boot optional import in the hosts/<machine>/default.nix to have this run successfully prior to onboarding Secure Boot and TPM2 for LUKS.
 
 ```
 $ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."

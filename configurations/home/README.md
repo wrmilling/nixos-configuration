@@ -1,13 +1,12 @@
 # Home Manager
 
-Home of my Home Manager configurations. Still working on getting everything imported and working, then I will focus more on re-use of code to prevent duplication.
+Home Manager configurations. Each directory maps a `homeType` module
+(`modules.home.<type>.enable` in `modules/home/<type>.nix`) and is reused by
+multiple hosts via `homeConfigurations` in `flake.nix`.
 
-The current layout just assumes each machine will have nuances in their named directory with shared functionality being in the common directory.
+## Configurations
 
-##  Configurations
-
-- [work](work) (MacOS Specific Configuration)
-- [riker](riker) (Machine Specific Configuration)
-- [serenity](serenity) (Machine Specific Configuration)
-- [server](server) (Generic Server Configuration)
-- [w4cbe](w4cbe) (User Specific Configuration)
+- [personal](personal) — desktop/laptop hosts (bender, donnager, icarus, enterprise, loki, work-mac)
+- [pinebook](pinebook) — Pinebook Pro hosts (riker, serenity)
+- [server](server) — headless servers (bart, bob, goku, isaac, jack, khan, linus, owen, nk3s-amd64-*)
+- [work](work) — work-mac only

@@ -6,7 +6,9 @@ Each machine has its own directory where main config and hardware specific to it
 
 ##  Configurations
 
+- [agent-sandbox](agent-sandbox) (MicroVM sandbox host; `agent-sandbox-aarch64` reuses its guest config for aarch64)
 - [bart](bart) (Server, KVM 2GB Instance)
+- [bender](bender) (Laptop, Apple Macbook Pro)
 - [bob](bob) (Server, Oracle Free-tier ARM64)
 - [donnager](donnager) (Laptop, Lenovo Legion Y530)
 - [enterprise](enterprise) (Desktop, Custom Built)
@@ -16,7 +18,7 @@ Each machine has its own directory where main config and hardware specific to it
 - [jack](jack) (Server, rPi4 8GB)
 - [khan](khan) (Server, Oracle Free-tier x86_64)
 - [linus](linus) (Server, KVM 2GB Instance)
-- [loki](loki) (Laptop, Lenovo ThinkCentre M715q)
+- [loki](loki) (Desktop, Lenovo ThinkCentre M715q)
 - [nk3s-amd64-0](nk3s-amd64-0) (Server, Virtual on NAS)
 - [nk3s-amd64-a](nk3s-amd64-a) (Server, Minisforum UN100C)
 - [nk3s-amd64-b](nk3s-amd64-b) (Server, Minisforum UN100C)
