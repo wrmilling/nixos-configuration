@@ -1,8 +1,8 @@
 {
-  "version": "4.13.2",
+  "version": "4.13.3",
   "hashes": {
-    "manifest": "sha256-D+J4IJUNo7vXqRb/N3fhrS3hJdqFBFNRhLlhahooIi0=",
-    "main": "sha256-rrG5YqlLCs8zK3Sr8JlGtXGtx6Q0WyCPdAgMUakTaKQ=",
+    "manifest": "sha256-uoNkCcTym9KVjiqA8tqQkkD9ivCOhDQB59IN/iufURc=",
+    "main": "sha256-sC4EKweTGubQJ6RxqQJetSGawdfnNkHtiOikape97Ow=",
     "styles": "sha256-/7Um8ydvW8Ul+GugJMedd/h+CJgfQq3YhLGUzymBS7w="
   }
 }
