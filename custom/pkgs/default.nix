@@ -12,6 +12,7 @@ rec {
   codegraph = pkgs.callPackage ./codegraph { };
   shiftleft-sl = pkgs.callPackage ./shiftleft-sl { };
   m5burner = pkgs.callPackage ./m5burner { };
+  maki = pkgs.callPackage ./maki { };
   xr-video-player = pkgs.callPackage ./xr-video-player { };
   fusion360 = pkgs.callPackage ./fusion360 { };
   obsidianPlugins = import ./obsidianPlugins { inherit pkgs; };

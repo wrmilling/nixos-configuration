@@ -24,6 +24,14 @@ in
         share its OpenCode Go key -- see modules/home/personal.nix.
       '';
     };
+
+    maki = {
+      enable = lib.mkEnableOption ''
+        maki (AI coding agent) in the sandbox guest, pre-configured with the
+        z.ai and OpenCode Go keys shared by the host -- see
+        modules/home/personal.nix.
+      '';
+    };
   };
 
   config = lib.mkMerge [
@@ -74,6 +82,14 @@ in
     (lib.mkIf cfg.oclaude.enable {
       modules.home.terminal.claude-code.oclaude.apiKeyFile =
         "/home/w4cbe/.config/agent-sandbox/oclaude/api-key";
+    })
+
+    (lib.mkIf cfg.maki.enable {
+      modules.home.terminal.maki = {
+        enable = true;
+        zaiApiKeyFile = "/home/w4cbe/.config/agent-sandbox/zclaude/api-key";
+        opencodeApiKeyFile = "/home/w4cbe/.config/agent-sandbox/oclaude/api-key";
+      };
     })
   ];
 }
