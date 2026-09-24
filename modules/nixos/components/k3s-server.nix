@@ -32,7 +32,7 @@ in
       package = k3s-package;
       role = "server";
       tokenFile = cfg.tokenFile;
-      extraFlags = "--tls-san ${hostname}.${domain} --disable servicelb --disable traefik --disable local-storage --flannel-backend=host-gw --node-taint \"node-role.kubernetes.io/master=true:NoSchedule\" --node-label \"k3s-upgrade=false\"";
+      extraFlags = "--tls-san ${hostname}.${domain} --disable servicelb --disable traefik --disable local-storage --disable gateway-api-crd --flannel-backend=host-gw --node-taint \"node-role.kubernetes.io/master=true:NoSchedule\" --node-label \"k3s-upgrade=false\"";
       extraKubeletConfig = {
         imageMaximumGCAge = "168h";
       };
