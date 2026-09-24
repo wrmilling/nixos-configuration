@@ -32,6 +32,22 @@ in
         modules/home/personal.nix.
       '';
     };
+
+    opencode = {
+      enable = lib.mkEnableOption ''
+        opencode (AI coding agent) in the sandbox guest, pre-configured with
+        the OpenCode Go key shared by the host -- see
+        modules/home/personal.nix.
+      '';
+    };
+
+    codex = {
+      enable = lib.mkEnableOption ''
+        codex (OpenAI coding agent) in the sandbox guest, pre-configured with
+        the OpenCode Go key shared by the host -- see
+        modules/home/personal.nix.
+      '';
+    };
   };
 
   config = lib.mkMerge [
@@ -76,19 +92,33 @@ in
 
     (lib.mkIf cfg.zclaude.enable {
       modules.home.terminal.claude-code.zclaude.apiKeyFile =
-        "/home/w4cbe/.config/agent-sandbox/zclaude/api-key";
+        "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
     })
 
     (lib.mkIf cfg.oclaude.enable {
       modules.home.terminal.claude-code.oclaude.apiKeyFile =
-        "/home/w4cbe/.config/agent-sandbox/oclaude/api-key";
+        "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
     })
 
     (lib.mkIf cfg.maki.enable {
       modules.home.terminal.maki = {
         enable = true;
-        zaiApiKeyFile = "/home/w4cbe/.config/agent-sandbox/zclaude/api-key";
-        opencodeApiKeyFile = "/home/w4cbe/.config/agent-sandbox/oclaude/api-key";
+        zaiApiKeyFile = "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
+        opencodeApiKeyFile = "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
+      };
+    })
+
+    (lib.mkIf cfg.opencode.enable {
+      modules.home.terminal.opencode = {
+        opencodeGoApiKeyFile = "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
+        zAiApiKeyFile = "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
+      };
+    })
+
+    (lib.mkIf cfg.codex.enable {
+      modules.home.terminal.codex = {
+        opencodeGoApiKeyFile = "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
+        zAiApiKeyFile = "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
       };
     })
   ];

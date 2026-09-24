@@ -46,18 +46,18 @@ in
 
     # Same dereferencing as the kubeconfig above -- gives the sandbox's
     # extraShares a fixed, non-symlink path to mount z.ai's API key from.
-    home.activation.agentSandboxZclaudeKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+    home.activation.agentSandboxZAiKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
       run ${pkgs.coreutils}/bin/install -Dm0400 \
         ${config.sops.secrets."providers/z-ai/apiKey".path} \
-        "/home/w4cbe/.config/agent-sandbox/zclaude/api-key"
+        "/home/w4cbe/.config/agent-sandbox/z-ai/api-key"
     '';
 
-    # Same dereferencing as the zclaude key above -- gives the sandbox's
+    # Same dereferencing as the z-ai key above -- gives the sandbox's
     # extraShares a fixed, non-symlink path to mount OpenCode Go's API key from.
-    home.activation.agentSandboxOclaudeKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+    home.activation.agentSandboxOpencodeGoKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
       run ${pkgs.coreutils}/bin/install -Dm0400 \
         ${config.sops.secrets."providers/opencode-go/apiKey".path} \
-        "/home/w4cbe/.config/agent-sandbox/oclaude/api-key"
+        "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key"
     '';
 
     # Host-only; the shared workspace's .codegraph is guest-writable.
@@ -67,10 +67,11 @@ in
       home.base.enable = true;
       home.sops.enable = true;
       home.terminal.atuin.enable = true;
-      home.terminal.claude-code.enable = true;
-      home.terminal.claude-code.zclaude.apiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
-      home.terminal.claude-code.oclaude.apiKeyFile =
-        config.sops.secrets."providers/opencode-go/apiKey".path;
+      home.terminal.claude-code = {
+        enable = true;
+        zclaude.apiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
+        oclaude.apiKeyFile = config.sops.secrets."providers/opencode-go/apiKey".path;
+      };
       home.terminal.development.enable = true;
       home.terminal.fish.enable = true;
       home.terminal.general.enable = true;
@@ -80,6 +81,16 @@ in
       home.terminal.starship.enable = true;
       home.terminal.tmux.enable = true;
       home.terminal.vim.enable = true;
+      home.terminal.opencode = {
+        enable = true;
+        opencodeGoApiKeyFile = config.sops.secrets."providers/opencode-go/apiKey".path;
+        zAiApiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
+      };
+      home.terminal.codex = {
+        enable = true;
+        opencodeGoApiKeyFile = config.sops.secrets."providers/opencode-go/apiKey".path;
+        zAiApiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
+      };
       home.graphical.alacritty.enable = true;
       home.graphical.discord.enable = true;
       home.graphical.firefox.enable = true;

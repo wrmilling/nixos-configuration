@@ -9,4 +9,6 @@
   home-manager.users.w4cbe.modules.homeType.agentSandbox.zclaude.enable = true;
   home-manager.users.w4cbe.modules.homeType.agentSandbox.oclaude.enable = true;
   home-manager.users.w4cbe.modules.homeType.agentSandbox.maki.enable = true;
+  home-manager.users.w4cbe.modules.homeType.agentSandbox.opencode.enable = true;
+  home-manager.users.w4cbe.modules.homeType.agentSandbox.codex.enable = true;
 }

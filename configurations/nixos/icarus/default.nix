@@ -30,16 +30,16 @@
         }
         {
           # Matches the path modules/home/personal.nix's activation script copies to.
-          source = "/home/w4cbe/.config/agent-sandbox/zclaude";
-          mountPoint = "/home/w4cbe/.config/agent-sandbox/zclaude";
-          tag = "zclaude";
+          source = "/home/w4cbe/.config/agent-sandbox/z-ai";
+          mountPoint = "/home/w4cbe/.config/agent-sandbox/z-ai";
+          tag = "z-ai";
           readOnly = true;
         }
         {
           # Matches the path modules/home/personal.nix's activation script copies to.
-          source = "/home/w4cbe/.config/agent-sandbox/oclaude";
-          mountPoint = "/home/w4cbe/.config/agent-sandbox/oclaude";
-          tag = "oclaude";
+          source = "/home/w4cbe/.config/agent-sandbox/opencode-go";
+          mountPoint = "/home/w4cbe/.config/agent-sandbox/opencode-go";
+          tag = "opencode-go";
           readOnly = true;
         }
       ];
