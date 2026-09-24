@@ -7,6 +7,11 @@
 let
   cfg = config.modules.homeType.personal;
   sandboxLib = import ../../lib/agent-sandbox.nix { inherit lib; };
+
+  agentProviders = {
+    z-ai.apiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
+    opencode-go.apiKeyFile = config.sops.secrets."providers/opencode-go/apiKey".path;
+  };
 in
 {
   options.modules.homeType.personal = {
@@ -69,8 +74,7 @@ in
       home.terminal.atuin.enable = true;
       home.terminal.claude-code = {
         enable = true;
-        zclaude.apiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
-        oclaude.apiKeyFile = config.sops.secrets."providers/opencode-go/apiKey".path;
+        providers = agentProviders;
       };
       home.terminal.development.enable = true;
       home.terminal.fish.enable = true;
@@ -83,13 +87,15 @@ in
       home.terminal.vim.enable = true;
       home.terminal.opencode = {
         enable = true;
-        opencodeGoApiKeyFile = config.sops.secrets."providers/opencode-go/apiKey".path;
-        zAiApiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
+        providers = agentProviders;
       };
       home.terminal.codex = {
         enable = true;
-        opencodeGoApiKeyFile = config.sops.secrets."providers/opencode-go/apiKey".path;
-        zAiApiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
+        providers = agentProviders;
+      };
+      home.terminal.maki = {
+        enable = true;
+        providers = agentProviders;
       };
       home.graphical.alacritty.enable = true;
       home.graphical.discord.enable = true;

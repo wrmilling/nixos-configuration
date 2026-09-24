@@ -141,14 +141,14 @@ let
     ];
   };
 
-  zclaudeEnable = cfg.zclaude.apiKeyFile != null;
-  oclaudeEnable = cfg.oclaude.apiKeyFile != null;
+  zclaudeEnable = cfg.providers.z-ai.apiKeyFile != null;
+  oclaudeEnable = cfg.providers.opencode-go.apiKeyFile != null;
 
   zclaudeKeyFileArg =
-    if zclaudeEnable then lib.escapeShellArg (toString cfg.zclaude.apiKeyFile) else "";
+    if zclaudeEnable then lib.escapeShellArg (toString cfg.providers.z-ai.apiKeyFile) else "";
 
   oclaudeKeyFileArg =
-    if oclaudeEnable then lib.escapeShellArg (toString cfg.oclaude.apiKeyFile) else "";
+    if oclaudeEnable then lib.escapeShellArg (toString cfg.providers.opencode-go.apiKeyFile) else "";
 
   # Shared by the statusline: fills the caller's lim5h/lim7d (already-set
   # values win) from a provider's own usage API, since only Claude's native
@@ -517,7 +517,7 @@ let
       pkgs.coreutils
     ];
     text = ''
-      keyfile=${lib.escapeShellArg (toString cfg.zclaude.apiKeyFile)}
+      keyfile=${lib.escapeShellArg (toString cfg.providers.z-ai.apiKeyFile)}
       if [ ! -r "$keyfile" ]; then
         echo "zclaude: z.ai API key not readable at $keyfile" >&2
         echo "zclaude: ensure sops-nix is active and the providers/z-ai/apiKey secret is configured." >&2
@@ -546,7 +546,7 @@ let
       pkgs.coreutils
     ];
     text = ''
-      keyfile=${lib.escapeShellArg (toString cfg.oclaude.apiKeyFile)}
+      keyfile=${lib.escapeShellArg (toString cfg.providers.opencode-go.apiKeyFile)}
       if [ ! -r "$keyfile" ]; then
         echo "oclaude: OpenCode Go API key not readable at $keyfile" >&2
         echo "oclaude: ensure sops-nix is active and the providers/opencode-go/apiKey secret is configured." >&2
@@ -639,34 +639,30 @@ in
       };
     };
 
-    zclaude = {
-      apiKeyFile = lib.mkOption {
+    providers = {
+      z-ai.apiKeyFile = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
-          Optional path to a file containing a z.ai API key (e.g. a sops-nix
-          decrypted secret path such as
-          config.sops.secrets."providers/z-ai/apiKey".path).
+          Path to a file holding a z.ai API key, e.g.
+          config.sops.secrets."providers/z-ai/apiKey".path.
 
-          When set, a `zclaude` wrapper is added to the environment that launches
-          Claude Code against z.ai's Anthropic-compatible endpoint using GLM
-          models.
+          When set, run `zclaude` to start Claude Code against z.ai's
+          Anthropic-compatible endpoint (GLM models), or `zfr` to pick and
+          resume a Claude Code or Codex session through it.
         '';
       };
-    };
 
-    oclaude = {
-      apiKeyFile = lib.mkOption {
+      opencode-go.apiKeyFile = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
-          Optional path to a file containing an OpenCode Go API key (e.g. a
-          sops-nix decrypted secret path such as
-          config.sops.secrets."providers/opencode-go/apiKey".path).
+          Path to a file holding an OpenCode Go API key, e.g.
+          config.sops.secrets."providers/opencode-go/apiKey".path.
 
-          When set, an `oclaude` wrapper is added to the environment that
-          launches Claude Code against OpenCode Go's Anthropic-compatible
-          endpoint.
+          When set, run `oclaude` to start Claude Code against OpenCode Go's
+          Anthropic-compatible endpoint (MiniMax models), or `ofr` to pick and
+          resume a Claude Code or Codex session through it.
         '';
       };
     };
@@ -685,8 +681,8 @@ in
     ++ lib.optional (zclaudeEnable) zclaudePackage
     ++ lib.optional (oclaudeEnable) oclaudePackage;
 
-    modules.home.scripts.zfr.enable = zclaudeEnable;
-    modules.home.scripts.ofr.enable = oclaudeEnable;
+    modules.home.scripts.zfr.enable = lib.mkIf zclaudeEnable true;
+    modules.home.scripts.ofr.enable = lib.mkIf oclaudeEnable true;
 
     # Disable codegraph's telemetry universally -- the MCP server entry below
     # also sets this explicitly (belt-and-suspenders in case a subprocess

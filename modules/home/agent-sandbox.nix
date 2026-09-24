@@ -6,46 +6,27 @@
 }:
 let
   cfg = config.modules.homeType.agentSandbox;
+
+  # Matches the paths modules/home/personal.nix's activation scripts copy to,
+  # which the host shares into the guest through extraShares.
+  zAiKey = "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
+  opencodeGoKey = "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
 in
 {
   options.modules.homeType.agentSandbox = {
     enable = lib.mkEnableOption "agent sandbox guest home-manager modules";
 
-    zclaude = {
-      enable = lib.mkEnableOption ''
-        zclaude (z.ai GLM models) in the sandbox guest. Requires the host to
-        share its z-ai key -- see modules/home/personal.nix.
+    providers = {
+      z-ai.enable = lib.mkEnableOption ''
+        the z.ai provider for every harness in the guest (zclaude, zcodex,
+        OpenCode's zai-coding-plan, maki). Requires the host to share its
+        z.ai key -- see modules/home/personal.nix.
       '';
-    };
 
-    oclaude = {
-      enable = lib.mkEnableOption ''
-        oclaude (OpenCode Go) in the sandbox guest. Requires the host to
-        share its OpenCode Go key -- see modules/home/personal.nix.
-      '';
-    };
-
-    maki = {
-      enable = lib.mkEnableOption ''
-        maki (AI coding agent) in the sandbox guest, pre-configured with the
-        z.ai and OpenCode Go keys shared by the host -- see
-        modules/home/personal.nix.
-      '';
-    };
-
-    opencode = {
-      enable = lib.mkEnableOption ''
-        opencode (AI coding agent) in the sandbox guest, pre-configured with
-        the OpenCode Go key shared by the host -- see
-        modules/home/personal.nix.
-      '';
-    };
-
-    codex = {
-      enable = lib.mkEnableOption ''
-        codex (OpenAI coding agent) in the sandbox guest, pre-configured with
-        the OpenCode Go key shared by the host -- see
-        modules/home/personal.nix.
+      opencode-go.enable = lib.mkEnableOption ''
+        the OpenCode Go provider for every harness in the guest (oclaude,
+        ocodex, OpenCode's opencode-go, maki). Requires the host to share its
+        OpenCode Go key -- see modules/home/personal.nix.
       '';
     };
   };
@@ -63,6 +44,9 @@ in
         home.terminal.starship.enable = true;
         home.terminal.vim.enable = true;
         home.terminal.claude-code.enable = true;
+        home.terminal.codex.enable = true;
+        home.terminal.opencode.enable = true;
+        home.terminal.maki.enable = true;
       };
 
       # gpg uses the agent socket forwarded from the host, which holds the
@@ -90,35 +74,21 @@ in
       };
     })
 
-    (lib.mkIf cfg.zclaude.enable {
-      modules.home.terminal.claude-code.zclaude.apiKeyFile =
-        "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
-    })
-
-    (lib.mkIf cfg.oclaude.enable {
-      modules.home.terminal.claude-code.oclaude.apiKeyFile =
-        "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
-    })
-
-    (lib.mkIf cfg.maki.enable {
-      modules.home.terminal.maki = {
-        enable = true;
-        zaiApiKeyFile = "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
-        opencodeApiKeyFile = "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
+    (lib.mkIf cfg.providers.z-ai.enable {
+      modules.home.terminal = {
+        claude-code.providers.z-ai.apiKeyFile = zAiKey;
+        codex.providers.z-ai.apiKeyFile = zAiKey;
+        opencode.providers.z-ai.apiKeyFile = zAiKey;
+        maki.providers.z-ai.apiKeyFile = zAiKey;
       };
     })
 
-    (lib.mkIf cfg.opencode.enable {
-      modules.home.terminal.opencode = {
-        opencodeGoApiKeyFile = "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
-        zAiApiKeyFile = "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
-      };
-    })
-
-    (lib.mkIf cfg.codex.enable {
-      modules.home.terminal.codex = {
-        opencodeGoApiKeyFile = "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
-        zAiApiKeyFile = "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
+    (lib.mkIf cfg.providers.opencode-go.enable {
+      modules.home.terminal = {
+        claude-code.providers.opencode-go.apiKeyFile = opencodeGoKey;
+        codex.providers.opencode-go.apiKeyFile = opencodeGoKey;
+        opencode.providers.opencode-go.apiKeyFile = opencodeGoKey;
+        maki.providers.opencode-go.apiKeyFile = opencodeGoKey;
       };
     })
   ];
