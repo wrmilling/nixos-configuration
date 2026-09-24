@@ -35,7 +35,7 @@ update_one() {
   fi
 }
 
-# Packages whose update.sh just delegates to a sibling's (e.g. mcpelauncher-ui-qt-git) don't need their own entry.
+# Packages whose update.sh just delegates to a sibling's (e.g. gomuks-desktop) don't need their own entry.
 is_delegate() {
   local pkg_dir="$1"
   [[ -x "$pkg_dir/update.sh" ]] && grep -qE '^exec ".*/update\.sh"' "$pkg_dir/update.sh"
@@ -65,7 +65,7 @@ target_system() {
   local meta_expr='p: { platforms = p.meta.platforms or null; badPlatforms = p.meta.badPlatforms or [ ]; }'
   local meta
   # Directory name and flake attribute can diverge for "-git" sourced packages
-  # (e.g. mcpelauncher-client dir vs. mcpelauncher-client-git attr) -- try both.
+  # (e.g. slides-git dir vs. slides-git attr, or future <x>-git dir vs. <x>-git attr) -- try both.
   meta=$(nix eval --json ".#packages.$system.$attr" --apply "$meta_expr" 2>/dev/null) \
     || meta=$(nix eval --json ".#packages.$system.$attr-git" --apply "$meta_expr" 2>/dev/null) \
     || meta='{"platforms":null,"badPlatforms":[]}'

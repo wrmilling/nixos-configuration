@@ -6,8 +6,6 @@ Definition of custom packages which are generally not yet available in upstream 
 
 - [cc9s](pkgs/cc9s) — Kubernetes TUI client (kincoy/cc9s).
 - [slides-git](pkgs/slides-git) — Terminal based presentation tool (upstream build from git).
-- [mcpelauncher-client-git](pkgs/mcpelauncher-client) — Unofficial Minecraft Bedrock Edition launcher with CLI (built from git/tag).
-- [mcpelauncher-ui-qt-git](pkgs/mcpelauncher-ui-qt) — Unofficial Minecraft Bedrock Edition launcher with GUI (Qt frontend).
 - [kubernetes-mcp-server](pkgs/kubernetes-mcp-server) — MCP server for Kubernetes cluster interaction.
 - [flux-operator-mcp](pkgs/flux-operator-mcp) — MCP server for FluxCD GitOps cluster management.
 - [gomuks-desktop](pkgs/gomuks-desktop) — Electron wrapper for gomuks (Matrix client), built from upstream's prebuilt .deb.

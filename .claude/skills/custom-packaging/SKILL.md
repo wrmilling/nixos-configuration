@@ -27,7 +27,7 @@ custom/pkgs/<name>/
   default.nix   # takes standard nixpkgs args + `lib.importJSON ./versions.json`
   versions.json # version + hash(es) — never hardcode these in default.nix
   update.sh     # executable; re-run to bump version.json
-  *.patch       # only if the build needs source patches (see mcpelauncher-client)
+  *.patch       # only if the build needs source patches (see xr-video-player)
 ```
 
 Obsidian plugins live one level deeper, under a namespace directory:
@@ -137,7 +137,7 @@ one-off utilities.
    - No GitHub releases API at all (a non-GitHub CDN, or a repo that only
      tags without publishing Releases) — run the fetched binary's
      `--version` (`custom/pkgs/shiftleft-sl/update.sh`), or query the tags
-     API instead (`custom/pkgs/mcpelauncher-client/update.sh`).
+     API instead.
    - The single latest release isn't guaranteed to have what you need (e.g.
      not every tag ships the asset this package cares about) — list and scan
      recent releases instead of trusting `/latest`
