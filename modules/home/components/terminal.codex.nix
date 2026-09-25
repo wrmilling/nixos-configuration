@@ -15,6 +15,18 @@ let
     homeDir = config.home.homeDirectory;
   };
 
+  # Seeded into ~/.codex/config.toml by the wrapper. `_seed_hash` is a
+  # fingerprint of the body so the wrapper can refresh when MCP defaults
+  # change; codex ignores unknown top-level keys.
+  mcpConfigTomlBody = (pkgs.formats.toml { }).generate "codex-config-body.toml" {
+    mcp_servers = mcpHelper.codex;
+  };
+  mcpConfigToml = (pkgs.formats.toml { }).generate "codex-config.toml" {
+    _seed_hash = builtins.hashFile "sha256" (toString mcpConfigTomlBody);
+    mcp_servers = mcpHelper.codex;
+  };
+  seedHash = builtins.hashFile "sha256" (toString mcpConfigTomlBody);
+
   # Codex only speaks the Responses API. A model outside `responsesModels`
   # is chat/completions-only and is reached through a per-invocation
   # codex-relay; `responsesModels = null` means the provider always needs it.
@@ -28,6 +40,8 @@ let
       apiKeyFile,
       defaultModel,
       responsesModels,
+      seedHash,
+      mcpConfigToml,
     }:
     pkgs.writeShellApplication {
       inherit name;
@@ -47,6 +61,21 @@ let
         fi
         ${envKey}="$(cat "$keyfile")"
         export ${envKey}
+
+        # ~/.codex/config.toml lives in $HOME so codex can write trust
+        # decisions in place; re-seed whenever the Nix-side MCP defaults change.
+        config_dir="''${CODEX_HOME:-$HOME/.codex}"
+        mkdir -p "$config_dir"
+        chmod 700 "$config_dir"
+        config_file="$config_dir/config.toml"
+        expected_hash=${lib.escapeShellArg seedHash}
+        current_hash=""
+        if [ -e "$config_file" ]; then
+          current_hash=$(awk -F'"' '/^_seed_hash *= *"/ { print $2; exit }' "$config_file")
+        fi
+        if [ "$current_hash" != "$expected_hash" ]; then
+          install -m 600 ${mcpConfigToml} "$config_file"
+        fi
 
         model=""
         resume_id=""
@@ -150,6 +179,7 @@ let
     apiKeyFile = toString cfg.providers.z-ai.apiKeyFile;
     defaultModel = "glm-5.3";
     responsesModels = null;
+    inherit seedHash mcpConfigToml;
   };
 
   ocodexPackage = mkCodexWrapper {
@@ -169,11 +199,16 @@ let
       "muse-spark-1.3-contributor"
       "muse-spark-1.2-contributor"
     ];
+    inherit seedHash mcpConfigToml;
   };
 in
 {
   options.modules.home.terminal.codex = {
-    enable = lib.mkEnableOption "Codex CLI configuration";
+    enable = lib.mkEnableOption ''
+      Codex CLI configuration. The wrapper owns ~/.codex/config.toml and
+      re-seeds it whenever the default MCP set changes -- add new MCPs to
+      lib/mcp-servers.nix rather than editing that file directly.
+    '';
 
     providers = {
       z-ai.apiKeyFile = lib.mkOption {
@@ -209,12 +244,6 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = lib.optional zAiEnable zcodexPackage ++ lib.optional opencodeGoEnable ocodexPackage;
-
-    # Static MCP server config. Model providers are passed via -c at runtime,
-    # which overrides anything in this file.
-    home.file.".codex/config.toml".source = (pkgs.formats.toml { }).generate "codex-config.toml" {
-      mcp_servers = mcpHelper.codex;
-    };
 
     modules.home.scripts.zfr.enable = lib.mkIf zAiEnable true;
     modules.home.scripts.ofr.enable = lib.mkIf opencodeGoEnable true;
