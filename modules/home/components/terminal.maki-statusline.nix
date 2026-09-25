@@ -18,7 +18,6 @@ let
       coreutils
     ];
     text = ''
-      set -e
       . ${usageLib.script}
       cache_json="''${MAKI_QUOTA_CACHE_JSON:-/tmp/maki-quota-cache.json}"
       cache_ts="''${MAKI_QUOTA_CACHE_TS:-/tmp/maki-quota-cache.ts}"
@@ -26,13 +25,13 @@ let
       lim5h=""
       lim7d=""
       if [ -n "''${ZHIPU_API_KEY:-}" ]; then
-        fetch_zclaude_usage "" "$cache_json" "$cache_ts"
+        fetch_zclaude_usage "" "$cache_json" "$cache_ts" || true
       elif [ -n "''${OPENCODE_API_KEY:-}" ]; then
-        fetch_oclaude_usage "" "$cache_json" "$cache_ts"
+        fetch_oclaude_usage "" "$cache_json" "$cache_ts" || true
       fi
 
-      [ -n "$lim5h" ] && printf '5h=%s\n' "$lim5h"
-      [ -n "$lim7d" ] && printf '7d=%s\n' "$lim7d"
+      if [ -n "$lim5h" ]; then printf '5h=%s\n' "$lim5h"; fi
+      if [ -n "$lim7d" ]; then printf '7d=%s\n' "$lim7d"; fi
     '';
   };
 
