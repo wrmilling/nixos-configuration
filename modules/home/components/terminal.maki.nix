@@ -7,6 +7,12 @@
 let
   cfg = config.modules.home.terminal.maki;
 
+  mcpHelper = import ../../../lib/mcp-servers.nix {
+    inherit pkgs lib;
+    homeDir = config.home.homeDirectory;
+  };
+  makiMcpToml = (pkgs.formats.toml { }).generate "maki-mcp.toml" { mcp = mcpHelper.maki; };
+
   makiPackage = pkgs.writeShellApplication {
     name = "maki";
     text = ''
@@ -61,5 +67,7 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = [ makiPackage ];
+
+    home.file.".config/maki/mcp.toml".source = makiMcpToml;
   };
 }

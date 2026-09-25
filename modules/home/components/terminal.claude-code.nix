@@ -7,40 +7,11 @@
 let
   cfg = config.modules.home.terminal.claude-code;
 
-  kubernetes-mcp-server = pkgs.kubernetes-mcp-server;
-  flux-operator-mcp = pkgs.flux-operator-mcp;
-
-  # Default MCP servers - mcp-nixos is available in nixpkgs
-  defaultMcpServers = {
-    mcp-nixos = {
-      command = "${pkgs.mcp-nixos}/bin/mcp-nixos";
-      args = [ ];
-    };
-    kubernetes = {
-      command = "${kubernetes-mcp-server}/bin/kubernetes-mcp-server";
-      args = [ ];
-    };
-    flux = {
-      command = "${flux-operator-mcp}/bin/flux-operator-mcp";
-      args = [
-        "serve"
-        "--read-only"
-      ];
-      env = {
-        KUBECONFIG = "${config.home.homeDirectory}/.kube/config";
-      };
-    };
-    codegraph = {
-      command = "${pkgs.codegraph}/bin/codegraph";
-      args = [
-        "serve"
-        "--mcp"
-      ];
-      env = {
-        CODEGRAPH_TELEMETRY = "0";
-      };
-    };
+  mcpHelper = import ../../../lib/mcp-servers.nix {
+    inherit pkgs lib;
+    homeDir = config.home.homeDirectory;
   };
+  defaultMcpServers = mcpHelper.claudeCode;
 
   defaultPermissions = {
     allow = [

@@ -10,6 +10,11 @@ let
   zAiEnable = cfg.providers.z-ai.apiKeyFile != null;
   opencodeGoEnable = cfg.providers.opencode-go.apiKeyFile != null;
 
+  mcpHelper = import ../../../lib/mcp-servers.nix {
+    inherit pkgs lib;
+    homeDir = config.home.homeDirectory;
+  };
+
   # Keys are read by opencode from the file at startup, so they never enter
   # the Nix store or the shell environment.
   providers =
@@ -59,6 +64,7 @@ in
     home.file.".config/opencode/opencode.json".text = builtins.toJSON {
       "$schema" = "https://opencode.ai/config.json";
       provider = providers;
+      mcp = mcpHelper.openCode;
     };
   };
 }

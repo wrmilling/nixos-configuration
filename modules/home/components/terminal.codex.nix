@@ -10,6 +10,11 @@ let
   zAiEnable = cfg.providers.z-ai.apiKeyFile != null;
   opencodeGoEnable = cfg.providers.opencode-go.apiKeyFile != null;
 
+  mcpHelper = import ../../../lib/mcp-servers.nix {
+    inherit pkgs lib;
+    homeDir = config.home.homeDirectory;
+  };
+
   # Codex only speaks the Responses API. A model outside `responsesModels`
   # is chat/completions-only and is reached through a per-invocation
   # codex-relay; `responsesModels = null` means the provider always needs it.
@@ -204,6 +209,12 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = lib.optional zAiEnable zcodexPackage ++ lib.optional opencodeGoEnable ocodexPackage;
+
+    # Static MCP server config. Model providers are passed via -c at runtime,
+    # which overrides anything in this file.
+    home.file.".codex/config.toml".source = (pkgs.formats.toml { }).generate "codex-config.toml" {
+      mcp_servers = mcpHelper.codex;
+    };
 
     modules.home.scripts.zfr.enable = lib.mkIf zAiEnable true;
     modules.home.scripts.ofr.enable = lib.mkIf opencodeGoEnable true;
