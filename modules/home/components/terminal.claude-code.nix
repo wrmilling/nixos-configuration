@@ -123,53 +123,10 @@ let
 
   # Shared by the statusline: fills the caller's lim5h/lim7d (already-set
   # values win) from a provider's own usage API, since only Claude's native
-  # endpoint reports rate_limits in the session payload. Cached for 1800s,
-  # with a background refresh throttled to once per 60s.
-  usageLibFile = pkgs.writeText "claude-code-usage-lib.sh" ''
-    fetch_provider_usage() {
-      keyfile=$1 cache_json=$2 cache_ts=$3 url=$4 five_h_jq=$5 seven_d_jq=$6
-
-      [ -n "$keyfile" ] && [ -r "$keyfile" ] || return 0
-
-      now=$(date +%s)
-      ts=0
-      if [ -f "$cache_ts" ]; then
-        ts=$(cat "$cache_ts" 2>/dev/null || echo 0)
-        case "$ts" in '''|*[!0-9]*) ts=0 ;; esac
-      fi
-
-      if [ -s "$cache_json" ] && [ $(( now - ts )) -lt 1800 ]; then
-        v5h=$(jq -r "$five_h_jq" "$cache_json" 2>/dev/null || true)
-        v7d=$(jq -r "$seven_d_jq" "$cache_json" 2>/dev/null || true)
-        [ -z "$lim5h" ] && [ -n "$v5h" ] && lim5h=$(printf '%s' "$v5h" | awk '{printf "%d", $1+0}')
-        [ -z "$lim7d" ] && [ -n "$v7d" ] && lim7d=$(printf '%s' "$v7d" | awk '{printf "%d", $1+0}')
-      fi
-
-      if [ $(( now - ts )) -ge 60 ]; then
-        date +%s > "$cache_ts" 2>/dev/null || true
-        (
-          curl -sS -m 5 -H "Authorization: Bearer $(cat "$keyfile")" \
-            "$url" \
-            -o "$cache_json.$$" \
-            && mv "$cache_json.$$" "$cache_json"
-        ) > /dev/null 2>&1 &
-      fi
-    }
-
-    fetch_zclaude_usage() {
-      fetch_provider_usage "$1" "$2" "$3" \
-        "https://api.z.ai/api/monitor/usage/quota/limit" \
-        '[.data.limits[]? | select(.type == "TOKENS_LIMIT" and .unit == 3) | .percentage][0] // empty' \
-        '[.data.limits[]? | select(.type == "TOKENS_LIMIT" and .unit == 6) | .percentage][0] // empty'
-    }
-
-    fetch_oclaude_usage() {
-      fetch_provider_usage "$1" "$2" "$3" \
-        "https://opencode.ai/zen/go/v1/usage" \
-        '.usage.rolling.percent // empty' \
-        '.usage.weekly.percent // empty'
-    }
-  '';
+  # endpoint reports rate_limits in the session payload. See
+  # lib/usage-fetch.nix for the bash implementation; the same script is
+  # reused by the maki statusline plugin.
+  usageLib = import ../../../lib/usage-fetch.nix { inherit pkgs; };
 
   statuslinePackage = pkgs.writeShellApplication {
     name = "claude-statusline";
@@ -241,7 +198,7 @@ let
 
       if [ "$provider" != claude ]; then
         # shellcheck source=/dev/null
-        . ${usageLibFile}
+        . ${usageLib.script}
         case "$provider" in
           zclaude) fetch_zclaude_usage "$ZCLAUDE_KEYFILE" "$ZCLAUDE_CACHE_JSON" "$ZCLAUDE_CACHE_TS" ;;
           oclaude) fetch_oclaude_usage "$OCLAUDE_KEYFILE" "$OCLAUDE_CACHE_JSON" "$OCLAUDE_CACHE_TS" ;;

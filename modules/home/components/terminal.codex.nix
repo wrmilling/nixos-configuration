@@ -20,10 +20,20 @@ let
   # change; codex ignores unknown top-level keys.
   mcpConfigTomlBody = (pkgs.formats.toml { }).generate "codex-config-body.toml" {
     mcp_servers = mcpHelper.codex;
+    tui.status_line = [
+      "model"
+      "context-usage"
+      "cost"
+    ];
   };
   mcpConfigToml = (pkgs.formats.toml { }).generate "codex-config.toml" {
     _seed_hash = builtins.hashFile "sha256" (toString mcpConfigTomlBody);
     mcp_servers = mcpHelper.codex;
+    tui.status_line = [
+      "model"
+      "context-usage"
+      "cost"
+    ];
   };
   seedHash = builtins.hashFile "sha256" (toString mcpConfigTomlBody);
 
