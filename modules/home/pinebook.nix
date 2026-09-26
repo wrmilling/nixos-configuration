@@ -13,8 +13,17 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    sops.secrets."providers/z-ai/apiKey" = {
+      sopsFile = ../../secrets/agents.yaml;
+    };
+
+    sops.secrets."providers/opencode-go/apiKey" = {
+      sopsFile = ../../secrets/agents.yaml;
+    };
+
     modules = {
       home.base.enable = true;
+      home.sops.enable = true;
       home.terminal.atuin.enable = true;
       home.terminal.fish.enable = true;
       home.terminal.general.enable = true;
@@ -30,7 +39,13 @@ in
       home.graphical.legcord.enable = true;
       home.graphical.sway.enable = true;
       home.graphical.xresources.enable = true;
-      home.terminal.claude-code.enable = true;
+      home.terminal.claude-code = {
+        enable = true;
+        providers = {
+          z-ai.apiKeyFile = config.sops.secrets."providers/z-ai/apiKey".path;
+          opencode-go.apiKeyFile = config.sops.secrets."providers/opencode-go/apiKey".path;
+        };
+      };
     };
 
     home.packages = lib.mkMerge [
