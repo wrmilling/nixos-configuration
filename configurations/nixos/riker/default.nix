@@ -47,8 +47,8 @@ in
       sshKeyPath = config.sops.secrets."nixbuild/client-ssh-key".path;
     };
     nixos.tailscale.enable = true;
-    #nixos.virtualization.enable = true;
-    nixos.sway.enable = true;
+    # nixos.virtualization.enable = true;
+    # nixos.sway.enable = true;
     nixos.visualBoot.enable = true;
     nixos.zram.enable = true;
   };
