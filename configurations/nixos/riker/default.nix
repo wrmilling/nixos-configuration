@@ -31,11 +31,21 @@ in
     ./hardware.nix
   ];
 
+  sops.secrets."nixbuild/client-ssh-key" = {
+    owner = "root";
+    mode = "0400";
+    sopsFile = ../../../secrets/nixbuild-arm.yaml;
+  };
+
   modules = {
     machineType.laptop.enable = true;
     nixos.amateurRadio.enable = true;
     nixos.development.enable = true;
     nixos.k8sUtils.enable = true;
+    nixos.nixbuild-client = {
+      enable = true;
+      sshKeyPath = config.sops.secrets."nixbuild/client-ssh-key".path;
+    };
     nixos.tailscale.enable = true;
     #nixos.virtualization.enable = true;
     nixos.sway.enable = true;
