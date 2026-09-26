@@ -10,6 +10,12 @@ let
   userBannerFiles = lib.mapAttrs (
     user: text: pkgs.writeText "sshd-banner-${user}" text
   ) cfg.userBanners;
+  userBannerConfig = lib.concatStrings (
+    lib.mapAttrsToList (user: file: ''
+      Match User ${user}
+          Banner ${file}
+    '') userBannerFiles
+  );
 in
 {
   options.modules.nixos.sshd = {
@@ -39,13 +45,7 @@ in
         PermitRootLogin = lib.mkDefault "no";
         PasswordAuthentication = lib.mkDefault false;
       };
-      matchBlocks = lib.mapAttrs' (
-        user: text:
-        lib.nameValuePair "user-${user}" {
-          match = "User ${user}";
-          banner = toString userBannerFiles.${user};
-        }
-      ) cfg.userBanners;
+      extraConfig = userBannerConfig;
     };
 
     services.fail2ban.enable = lib.mkDefault true;
