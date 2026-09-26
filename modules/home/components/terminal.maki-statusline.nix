@@ -18,6 +18,7 @@ let
       coreutils
     ];
     text = ''
+      # shellcheck source=/dev/null
       . ${usageLib.script}
       cache_json="''${MAKI_QUOTA_CACHE_JSON:-/tmp/maki-quota-cache.json}"
       cache_ts="''${MAKI_QUOTA_CACHE_TS:-/tmp/maki-quota-cache.ts}"

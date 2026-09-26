@@ -153,12 +153,21 @@ Two helpers take the platform difference as an argument:
   - Use `virtualisation.darwin-builder.{memorySize,diskSize}`. Do not use
     `virtualisation.{memorySize,diskSize}`. The second form conflicts with the
     definitions in the `nix-builder.nix` profile and needs `lib.mkForce`.
-  - Set `ephemeral = true`. The builder qcow2 image grows on demand and never
-    shrinks. Its internal auto-GC runs only below `min-free`, which is 1 GiB.
-    The image therefore grows to `diskSize` and stays there. A wipe on each
-    restart is the only limit that is not itself an aarch64-linux build. Nix
-    copies outputs back to the Darwin store as each build finishes, so a wipe
-    never forces a rebuild of a path that the host already has.
+  - Keep `ephemeral = false` and use the size-capped wipe. The builder qcow2
+    image grows on demand and never shrinks. Its internal auto-GC runs only
+    below `min-free`, which is 1 GiB, so the image grows to `diskSize` and
+    stays there. The module prepends a check to the launchd `script` that
+    deletes the qcow2 at daemon start once it exceeds 75% of `diskSize`. The
+    check is darwin-side, so it is not an aarch64-linux build. `ephemeral`
+    wiped on every start, meaning every reboot and every nixpkgs-stable
+    bump, and each wipe forced the builder to fetch the whole guest closure
+    again for the next erofs store image.
+  - Keep `nix.settings.builders-use-substitutes = lib.mkForce false`.
+    nix-darwin turns it on, which makes the builder fetch missing inputs from
+    its own substituters: only cache.nixos.org, through the corporate TLS
+    interception. The Mac store already holds the guest closure, because the
+    runner references the toplevel. With the setting off, the Mac substitutes
+    any missing input once and copies it to the builder over loopback ssh-ng.
 - **Keep the `runner` indirection.** The Darwin module exposes `runner` as a
   `readOnly` option. `flake.nix` re-exports it as
   `packages.aarch64-darwin.agent-sandbox-vm`. This indirection keeps the
