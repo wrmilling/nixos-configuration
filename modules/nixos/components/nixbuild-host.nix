@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  secrets,
   ...
 }:
 let
@@ -26,6 +27,8 @@ in
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJg6g95m4hjhES+SZx2fRY2EL6HNFVedpKHOuZuk4c/v nixbuild-client"
       ];
     };
+
+    modules.nixos.sshd.userBanners."nixbuild" = "${secrets.sshd.b_banner}";
 
     nix.settings.trusted-users = lib.mkAfter [ "nixbuild" ];
   };

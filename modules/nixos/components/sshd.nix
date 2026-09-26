@@ -7,6 +7,9 @@
 let
   cfg = config.modules.nixos.sshd;
   bannerFile = pkgs.writeText "sshd-banner" cfg.banner;
+  userBannerFiles = lib.mapAttrs (
+    user: text: pkgs.writeText "sshd-banner-${user}" text
+  ) cfg.userBanners;
 in
 {
   options.modules.nixos.sshd = {
@@ -14,12 +17,21 @@ in
     banner = lib.mkOption {
       type = lib.types.str;
       default = "";
-      description = "text of the sshd banner";
+      description = "text of the sshd banner shown to most users";
+    };
+    userBanners = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example = lib.literalExpression ''
+        {
+          "username" = "banner text shown before authentication for this user";
+        }
+      '';
+      description = "Per-user sshd banner text keyed by SSH user name. Each entry emits a Match User block overriding the default banner for that user.";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    # Enable the OpenSSH daemon.
     services.openssh = {
       enable = lib.mkDefault true;
       settings = {
@@ -27,9 +39,15 @@ in
         PermitRootLogin = lib.mkDefault "no";
         PasswordAuthentication = lib.mkDefault false;
       };
+      matchBlocks = lib.mapAttrs' (
+        user: text:
+        lib.nameValuePair "user-${user}" {
+          match = "User ${user}";
+          banner = toString userBannerFiles.${user};
+        }
+      ) cfg.userBanners;
     };
 
-    # Enable Fail2Ban
     services.fail2ban.enable = lib.mkDefault true;
   };
 }
