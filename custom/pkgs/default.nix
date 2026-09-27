@@ -15,5 +15,7 @@ rec {
   maki = pkgs.callPackage ./maki { };
   xr-video-player = pkgs.callPackage ./xr-video-player { };
   fusion360 = pkgs.callPackage ./fusion360 { };
+  # Not callPackage: NixOS re-overrides the kernel, which needs the kernel's own .override, not callPackage's.
+  linux-pinebook-pro = import ./linux-pinebook-pro { inherit (pkgs) lib linuxPackages_latest; };
   obsidianPlugins = import ./obsidianPlugins { inherit pkgs; };
 }

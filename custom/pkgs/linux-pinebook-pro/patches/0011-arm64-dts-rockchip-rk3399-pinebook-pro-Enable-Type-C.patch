@@ -1,0 +1,88 @@
+From d2a24090904efa3e3e34e63390851f22ff93def2 Mon Sep 17 00:00:00 2001
+From: Winston <winston@milli.ng>
+Date: Sat, 26 Sep 2026 12:39:13 -0500
+Subject: [PATCH 11/11] arm64: dts: rockchip: rk3399-pinebook-pro: Enable
+ Type-C DP alt mode
+
+Enable the CDN-DP controller on tcphy0 and describe the USB-C DP
+altmode, mode-switch and orientation-switch so TCPM can drive the
+Type-C PHY (requires the RK3399 Type-C DP series by Chaoyi Chen).
+---
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts | 33 ++++++++++++++++++-
+ 1 file changed, 32 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+index f21fcdc..f0d7401 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+@@ -375,6 +375,11 @@ mains_charger: dc-charger {
+ 	};
+ };
+ 
++&cdn_dp {
++	phys = <&tcphy0_dp>;
++	status = "okay";
++};
++
+ &cpu_b0 {
+ 	cpu-supply = <&vdd_cpu_b>;
+ };
+@@ -399,6 +404,12 @@ &cpu_l3 {
+ 	cpu-supply = <&vdd_cpu_l>;
+ };
+ 
++&dp_out {
++	dp_controller_output: endpoint {
++		remote-endpoint = <&dp_phy_in>;
++	};
++};
++
+ &edp {
+ 	force-hpd;
+ 	status = "okay";
+@@ -692,6 +703,13 @@ connector {
+ 				<PDO_FIXED(5000, 1400, PDO_FIXED_USB_COMM)>;
+ 			try-power-role = "sink";
+ 
++			altmodes {
++				displayport {
++					svid = /bits/ 16 <0xff01>;
++					vdo = <0x00001c46>;
++				};
++			};
++
+ 			ports {
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+@@ -961,14 +979,27 @@ &tcphy0 {
+ };
+ 
+ &tcphy0_dp {
++	mode-switch;
++
+ 	port {
+-		tcphy0_typec_dp: endpoint {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		tcphy0_typec_dp: endpoint@0 {
++			reg = <0>;
+ 			remote-endpoint = <&usbc_dp>;
+ 		};
++
++		dp_phy_in: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&dp_controller_output>;
++		};
+ 	};
+ };
+ 
+ &tcphy0_usb3 {
++	orientation-switch;
++
+ 	port {
+ 		tcphy0_typec_ss: endpoint {
+ 			remote-endpoint = <&usbc_ss>;
+-- 
+2.55.0
+

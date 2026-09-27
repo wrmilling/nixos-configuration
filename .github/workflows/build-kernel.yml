@@ -1,0 +1,78 @@
+name: Build and Cache Pinebook Pro Kernel
+run-name: Build and Cache Pinebook Pro Kernel at commit ${{ github.sha }}
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - custom/pkgs/linux-pinebook-pro/**
+      - flake.lock
+      - .github/workflows/build-kernel.yml
+  workflow_dispatch:
+
+# Separate from build-and-cache.yml so unrelated package pushes can't cancel a multi-hour kernel build.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
+    timeout-minutes: 360
+    steps:
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache /usr/local/share/boost
+          sudo docker image prune --all --force >/dev/null
+          df -h /
+
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+
+      - name: Configure cache access
+        env:
+          CACHE_HOST: ${{ secrets.CACHE_HOST }}
+          CACHE_PUBLIC_KEY: ${{ secrets.CACHE_PUBLIC_KEY }}
+          CACHE_USER: ${{ secrets.CACHE_USER }}
+          CACHE_PASSWORD: ${{ secrets.CACHE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          printf 'machine %s\nlogin %s\npassword %s\n' \
+            "$CACHE_HOST" "$CACHE_USER" "$CACHE_PASSWORD" > /tmp/nixcache.netrc
+          chmod 600 /tmp/nixcache.netrc
+          {
+            echo "NIX_CONFIG<<NIXCONF_EOF"
+            echo "extra-substituters = https://$CACHE_HOST"
+            echo "extra-trusted-public-keys = $CACHE_PUBLIC_KEY"
+            echo "netrc-file = /tmp/nixcache.netrc"
+            echo "NIXCONF_EOF"
+          } >> "$GITHUB_ENV"
+
+      - name: Build and push kernel
+        env:
+          CACHE_HOST: ${{ secrets.CACHE_HOST }}
+        run: |
+          set -euo pipefail
+          installable=".#packages.aarch64-linux.linux-pinebook-pro^*"
+          if nix path-info --eval-store auto --store "https://$CACHE_HOST" "$installable" >/dev/null 2>&1; then
+            echo "already cached on $CACHE_HOST, nothing to build"
+            exit 0
+          fi
+          # Peak kernel build disk usage is unmeasured; record the free-space low-water mark for tuning.
+          (while sleep 60; do df --output=avail -BG / | tail -1; done > /tmp/df-samples.log) &
+          out=$(nix build "$installable" --no-link --print-out-paths -L)
+          # shellcheck disable=SC2086 # nix store paths never contain spaces/glob chars; splitting covers all outputs
+          nix copy --to "https://$CACHE_HOST/upload" $out
+
+      - name: Report disk low-water mark
+        if: always()
+        run: |
+          df -h /
+          if [[ -s /tmp/df-samples.log ]]; then
+            echo "minimum free during build: $(sort -n /tmp/df-samples.log | head -1)"
+          fi

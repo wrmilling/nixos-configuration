@@ -114,6 +114,11 @@ jobs:
           failures=0
           while IFS=$'\t' read -r pkg supported error; do
             echo "::group::$pkg ($SYSTEM)"
+            if [[ "$pkg" == "linux-pinebook-pro" ]]; then
+              echo "skipping $pkg: built by build-kernel.yml"
+              echo "::endgroup::"
+              continue
+            fi
             if [[ "$error" == "true" ]]; then
               echo "::warning::$pkg failed to evaluate on $SYSTEM (broken Nix expression, not a platform issue)"
               failures=1

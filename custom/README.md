@@ -15,6 +15,7 @@ Definition of custom packages which are generally not yet available in upstream 
 - [maki](pkgs/maki) — AI coding agent extendable by neovim-like Lua plugins (tontinton/maki).
 - [xr-video-player](pkgs/xr-video-player) — OpenXR/Wayland VR video player, built from git (no upstream releases yet).
 - [fusion360](pkgs/fusion360) — Launcher that sets up a Wine/DXVK prefix and installs Autodesk Fusion 360 (proprietary, Windows-only) from Autodesk's own installer on first run; no upstream binary is fetched or pinned by Nix.
+- [linux-pinebook-pro](pkgs/linux-pinebook-pro) — nixpkgs' latest kernel plus out-of-tree RK3399 Type-C DP patches for USB-C DisplayPort alt mode on the Pinebook Pro; version follows nixpkgs (no `update.sh`), built and cached by `.github/workflows/build-kernel.yml`.
 - [obsidianPlugins](pkgs/obsidianPlugins) — Obsidian community plugins, namespaced under `pkgs.obsidianPlugins.<name>` since none are packaged in nixpkgs:
   - `pandoc` — Export notes via Pandoc (DOCX, ePub, PDF, ...).
   - `dataview` — Data index and query language over Markdown notes.

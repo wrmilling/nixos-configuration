@@ -1,0 +1,54 @@
+From d9ee0579cdab2ad9c6cd6c4bbf98ea94a542dab1 Mon Sep 17 00:00:00 2001
+From: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+Date: Wed, 4 Mar 2026 17:41:48 +0800
+Subject: [PATCH 08/11] phy: rockchip: phy-rockchip-typec: Add DRM AUX bridge
+
+Using the DRM_AUX_BRIDGE helper to create the transparent DRM bridge
+device.
+
+Signed-off-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ drivers/phy/rockchip/Kconfig              | 2 ++
+ drivers/phy/rockchip/phy-rockchip-typec.c | 5 +++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
+index db4adc7..bcb5476 100644
+--- a/drivers/phy/rockchip/Kconfig
++++ b/drivers/phy/rockchip/Kconfig
+@@ -120,6 +120,8 @@ config PHY_ROCKCHIP_TYPEC
+ 	tristate "Rockchip TYPEC PHY Driver"
+ 	depends on OF && (ARCH_ROCKCHIP || COMPILE_TEST)
+ 	depends on TYPEC || TYPEC=n
++	depends on DRM || DRM=n
++	select DRM_AUX_BRIDGE if DRM_BRIDGE
+ 	select EXTCON
+ 	select GENERIC_PHY
+ 	select RESET_CONTROLLER
+diff --git a/drivers/phy/rockchip/phy-rockchip-typec.c b/drivers/phy/rockchip/phy-rockchip-typec.c
+index 1f5b414..e31b778 100644
+--- a/drivers/phy/rockchip/phy-rockchip-typec.c
++++ b/drivers/phy/rockchip/phy-rockchip-typec.c
+@@ -56,6 +56,7 @@
+ #include <linux/phy/phy.h>
+ #include <linux/usb/typec_dp.h>
+ #include <linux/usb/typec_mux.h>
++#include <drm/bridge/aux-bridge.h>
+ 
+ #define CMN_SSM_BANDGAP			(0x21 << 2)
+ #define CMN_SSM_BIAS			(0x22 << 2)
+@@ -1312,6 +1313,10 @@ static int tcphy_setup_typec_mux(struct rockchip_typec_phy *tcphy)
+ 	if (!of_property_read_bool(np, "mode-switch"))
+ 		goto put_np;
+ 
++	ret = drm_aux_bridge_register_from_node(tcphy->dev, np);
++	if (ret)
++		goto put_np;
++
+ 	mux_desc.drvdata = tcphy;
+ 	mux_desc.fwnode = device_get_named_child_node(tcphy->dev, "dp-port");
+ 	mux_desc.set = tcphy_typec_mux_set;
+-- 
+2.55.0
+
