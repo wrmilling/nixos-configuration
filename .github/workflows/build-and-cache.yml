@@ -109,7 +109,10 @@ jobs:
                     [ ]
                 ) (builtins.attrNames attrs);
             in
-            flatten "" pkgs
+            # agent-sandbox-vm is built locally on the darwin host only: it needs
+            # secrets/secrets.nix (git-crypt, not unlocked here) and a live
+            # aarch64-linux builder this runner does not have.
+            flatten "" (builtins.removeAttrs pkgs [ "agent-sandbox-vm" ])
           ')
           failures=0
           while IFS=$'\t' read -r pkg supported error; do
