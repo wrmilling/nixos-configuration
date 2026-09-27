@@ -131,8 +131,20 @@
             system:
             let
               pkgs = nixpkgs.legacyPackages.${system};
+              # Re-export input packages for the CI binary cache; inputs don't
+              # all cover every system (fast-resume lacks x86_64-darwin).
+              inputPkgs =
+                (lib.optionalAttrs (inputs.sofka.packages ? ${system}) {
+                  inherit (inputs.sofka.packages.${system}) sofka;
+                })
+                // (lib.optionalAttrs (inputs.claude-code-nix.packages ? ${system}) {
+                  inherit (inputs.claude-code-nix.packages.${system}) claude-code;
+                })
+                // (lib.optionalAttrs (inputs.fast-resume.packages ? ${system}) {
+                  inherit (inputs.fast-resume.packages.${system}) fast-resume;
+                });
             in
-            import ./custom/pkgs { inherit pkgs; }
+            (import ./custom/pkgs { inherit pkgs; }) // inputPkgs
           ))
           {
             aarch64-darwin.agent-sandbox-vm =
