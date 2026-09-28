@@ -76,10 +76,7 @@
       DOCKER_GHCR_IO_PASSWORD = config.sops.secrets."renovate/ghcr_token".path;
     };
     # Anonymous ghcr.io lookups intermittently return no-result, which autocloses PRs.
-    environment = {
-      DOCKER_GHCR_IO_USERNAME = "wrmilling";
-      LOG_LEVEL = "debug";
-    };
+    environment.DOCKER_GHCR_IO_USERNAME = "wrmilling";
     runtimePackages = [
       pkgs.gnupg
     ];
@@ -113,6 +110,7 @@
             "actions/setup-buildx-action"
             "actions/docker-login-action"
             "actions/docker-build-push-action"
+            "actions/cache-nix-action"
           ];
           enabled = false;
         }
