@@ -57,6 +57,10 @@
     sopsFile = ../../../secrets/renovate.yaml;
   };
 
+  sops.secrets."renovate/ghcr_token" = {
+    sopsFile = ../../../secrets/renovate.yaml;
+  };
+
   sops.secrets."renovate/git_private_key" = {
     sopsFile = ../../../secrets/renovate.yaml;
   };
@@ -69,7 +73,10 @@
       RENOVATE_TOKEN = config.sops.secrets."renovate/token".path;
       RENOVATE_GITHUB_COM_TOKEN = config.sops.secrets."renovate/github_token".path;
       RENOVATE_GIT_PRIVATE_KEY = config.sops.secrets."renovate/git_private_key".path;
+      DOCKER_GHCR_IO_PASSWORD = config.sops.secrets."renovate/ghcr_token".path;
     };
+    # Anonymous ghcr.io lookups intermittently return no-result, which autocloses PRs.
+    environment.DOCKER_GHCR_IO_USERNAME = "wrmilling";
     runtimePackages = [
       pkgs.gnupg
     ];
@@ -78,6 +85,7 @@
       gitAuthor = "Renovate Bot <${secrets.forgejo.renovateEmail}>";
       platform = "forgejo";
       autodiscover = true;
+      detectHostRulesFromEnv = true;
       hostRules = [
         {
           # bart's network/DNS is occasionally slow (~5-6s), which trips the
@@ -149,6 +157,9 @@
     # Every 10 minutes
     schedule = "*:0/30";
   };
+
+  # google-auth-library (gcr.io tokens) calls os.networkInterfaces(), which needs netlink.
+  systemd.services.renovate.serviceConfig.RestrictAddressFamilies = [ "AF_NETLINK" ];
 
   system.stateVersion = "25.11";
 }
