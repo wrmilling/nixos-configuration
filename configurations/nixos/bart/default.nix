@@ -96,6 +96,12 @@
           # No matchHost -> applies to all hosts.
           timeout = 30000;
         }
+        {
+          # ghcr.io 429s bursts on the unauthenticated auth probe, causing no-result lookups.
+          matchHost = "ghcr.io";
+          concurrentRequestLimit = 2;
+          maxRequestsPerSecond = 5;
+        }
       ];
       packageRules = [
         {
