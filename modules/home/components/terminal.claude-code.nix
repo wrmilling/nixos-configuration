@@ -499,7 +499,7 @@ in
 
     defaultModel = lib.mkOption {
       type = lib.types.str;
-      default = "sonnet";
+      default = "opus";
       description = "Default model for Claude Code sessions.";
     };
 
