@@ -161,8 +161,8 @@
           versioningTemplate = "semver";
         }) mirroredActions;
     };
-    # Every 10 minutes
-    schedule = "*:0/30";
+    # Every 30 minutes, off the hour: ghcr.io 429s popular repos (immich) at :00.
+    schedule = "*:13/30";
   };
 
   # google-auth-library (gcr.io tokens) calls os.networkInterfaces(), which needs netlink.
