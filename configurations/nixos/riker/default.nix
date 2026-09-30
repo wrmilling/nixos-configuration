@@ -28,6 +28,7 @@
       sshKeyPath = config.sops.secrets."nixbuild/client-ssh-key".path;
     };
     nixos.pinebookPro.enable = true;
+    nixos.steamArm64.enable = true;
     nixos.tailscale.enable = true;
     # nixos.virtualization.enable = true;
     # nixos.sway.enable = true;

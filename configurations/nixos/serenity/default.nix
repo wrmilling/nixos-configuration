@@ -16,6 +16,7 @@
     nixos.development.enable = true;
     nixos.k8sUtils.enable = true;
     nixos.pinebookPro.enable = true;
+    nixos.steamArm64.enable = true;
     nixos.sway.enable = true;
     nixos.tailscale.enable = true;
     nixos.virtualization.enable = true;

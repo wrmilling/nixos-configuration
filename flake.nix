@@ -48,6 +48,10 @@
     nix-citizen.url = "github:LovingMelody/nix-citizen";
     nix-citizen.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Steam (native aarch64 client in a muvm microVM)
+    steam-arm64-nix.url = "github:Daaboulex/steam-arm64-nix";
+    steam-arm64-nix.inputs.nixpkgs.follows = "nixpkgs";
+
     # microVMs (agent sandbox)
     microvm.url = "github:microvm-nix/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
@@ -142,6 +146,9 @@
                 })
                 // (lib.optionalAttrs (inputs.fast-resume.packages ? ${system}) {
                   inherit (inputs.fast-resume.packages.${system}) fast-resume;
+                })
+                // (lib.optionalAttrs (inputs.steam-arm64-nix.packages ? ${system}) {
+                  inherit (inputs.steam-arm64-nix.packages.${system}) steam-arm64;
                 });
             in
             (import ./custom/pkgs { inherit pkgs; }) // inputPkgs
