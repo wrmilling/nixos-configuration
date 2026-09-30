@@ -7,5 +7,6 @@
   environment.systemPackages = [
     pkgs.cloudfoundry-cli
     pkgs.shiftleft-sl
+    pkgs.wizcli
   ];
 }

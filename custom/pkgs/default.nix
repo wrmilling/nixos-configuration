@@ -11,6 +11,7 @@ rec {
   gomuks-desktop = pkgs.callPackage ./gomuks-desktop { };
   codegraph = pkgs.callPackage ./codegraph { };
   shiftleft-sl = pkgs.callPackage ./shiftleft-sl { };
+  wizcli = pkgs.callPackage ./wizcli { };
   m5burner = pkgs.callPackage ./m5burner { };
   maki = pkgs.callPackage ./maki { };
   xr-video-player = pkgs.callPackage ./xr-video-player { };

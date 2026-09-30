@@ -11,6 +11,7 @@ Definition of custom packages which are generally not yet available in upstream 
 - [gomuks-desktop](pkgs/gomuks-desktop) — Electron wrapper for gomuks (Matrix client), built from upstream's prebuilt .deb.
 - [codegraph](pkgs/codegraph) — Local code knowledge graph MCP server for AI coding agents (tracked ahead of the nixpkgs-provided version).
 - [shiftleft-sl](pkgs/shiftleft-sl) — ShiftLeft CLI for code security analysis.
+- [wizcli](pkgs/wizcli) — Wiz CLI for scanning and interacting with the Wiz platform.
 - [m5burner](pkgs/m5burner) — M5Stack firmware burning tool.
 - [maki](pkgs/maki) — AI coding agent extendable by neovim-like Lua plugins (tontinton/maki).
 - [xr-video-player](pkgs/xr-video-player) — OpenXR/Wayland VR video player, built from git (no upstream releases yet).
