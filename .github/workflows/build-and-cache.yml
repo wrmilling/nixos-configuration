@@ -135,7 +135,9 @@ jobs:
             fi
             if out=$(nix build ".#packages.$SYSTEM.$pkg" --no-link --print-out-paths --impure 2>/tmp/build.log); then
               # shellcheck disable=SC2086 # nix store paths never contain spaces/glob chars; splitting is intentional for multi-output derivations
-              if nix copy --to "https://$CACHE_HOST/upload" $out; then
+              # steam-x86-fedora-rootfs.ero (~1.3 GiB) exceeds the nixcache upload limit; clients fetch it from rootfs.fex-emu.gg.
+              if nix path-info --recursive $out | grep -v -- '-steam-x86-fedora-rootfs\.ero$' \
+                | nix copy --no-recursive --stdin --to "https://$CACHE_HOST/upload"; then
                 echo "pushed $pkg -> $CACHE_HOST"
               else
                 echo "::warning::failed to push $pkg ($SYSTEM) to nixcache"
