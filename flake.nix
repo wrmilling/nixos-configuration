@@ -149,6 +149,9 @@
                 })
                 // (lib.optionalAttrs (inputs.steam-arm64-nix.packages ? ${system}) {
                   inherit (inputs.steam-arm64-nix.packages.${system}) steam-arm64;
+                })
+                // (lib.optionalAttrs (inputs.nix-citizen.packages ? ${system}) {
+                  inherit (inputs.nix-citizen.packages.${system}) rsi-launcher lug-helper;
                 });
             in
             (import ./custom/pkgs { inherit pkgs; }) // inputPkgs
