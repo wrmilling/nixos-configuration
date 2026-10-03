@@ -43,7 +43,7 @@ in
     # (the target only means something on the host). Copy the real,
     # dereferenced bytes to the fixed path the sandbox's extraShares mounts
     # as ~/.kube instead.
-    home.activation.agentSandboxKubeconfig = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+    home.activation.agentSandboxKubeconfig = lib.hm.dag.entryAfter [ "reloadSystemd" ] ''
       run ${pkgs.coreutils}/bin/install -Dm0400 \
         ${config.sops.secrets."sandbox/kubeconfig".path} \
         "/home/w4cbe/.config/agent-sandbox/kube/config"
@@ -51,7 +51,7 @@ in
 
     # Same dereferencing as the kubeconfig above -- gives the sandbox's
     # extraShares a fixed, non-symlink path to mount z.ai's API key from.
-    home.activation.agentSandboxZAiKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+    home.activation.agentSandboxZAiKey = lib.hm.dag.entryAfter [ "reloadSystemd" ] ''
       run ${pkgs.coreutils}/bin/install -Dm0400 \
         ${config.sops.secrets."providers/z-ai/apiKey".path} \
         "/home/w4cbe/.config/agent-sandbox/z-ai/api-key"
@@ -59,7 +59,7 @@ in
 
     # Same dereferencing as the z-ai key above -- gives the sandbox's
     # extraShares a fixed, non-symlink path to mount OpenCode Go's API key from.
-    home.activation.agentSandboxOpencodeGoKey = lib.hm.dag.entryAfter [ "sops-nix" ] ''
+    home.activation.agentSandboxOpencodeGoKey = lib.hm.dag.entryAfter [ "reloadSystemd" ] ''
       run ${pkgs.coreutils}/bin/install -Dm0400 \
         ${config.sops.secrets."providers/opencode-go/apiKey".path} \
         "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key"
