@@ -115,6 +115,13 @@ in
   # directory because no local gpg-agent runs in the guest.
   systemd.user.tmpfiles.rules = [ "d %t/gnupg 0700 - - -" ];
 
+  # The hosts' extraShares mount under ~/.config/agent-sandbox, so systemd
+  # creates these parents as root; hand them back before home-manager runs.
+  systemd.tmpfiles.rules = [
+    "d /home/w4cbe/.config 0755 w4cbe users - -"
+    "d /home/w4cbe/.config/agent-sandbox 0700 w4cbe users - -"
+  ];
+
   # Disable services not needed within guest
   services.fail2ban.enable = lib.mkForce false;
   services.rpcbind.enable = lib.mkForce false;
