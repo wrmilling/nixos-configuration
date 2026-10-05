@@ -9,6 +9,9 @@
 let
   cfg = config.modules.nixos.agentSandbox;
   sandboxLib = import ../../../lib/agent-sandbox.nix { inherit lib; };
+  inherit (sandboxLib) sessionSync;
+  syncProfile = cfg.sessionSync.profile;
+  syncSecretKeys = sessionSync.secretKeys config.networking.hostName;
 
   vmName = "agent-sandbox";
   unit = "microvm@${vmName}.service";
@@ -115,6 +118,16 @@ in
         run it under a native (non-vfkit) hypervisor.
       '';
     };
+
+    sessionSync.profile = lib.mkOption {
+      type = lib.types.nullOr (lib.types.enum (lib.attrNames sessionSync.profiles));
+      default = null;
+      description = ''
+        Sync the guest's Claude Code sessions through the syncthingHub under
+        this profile, as the device named after this host. Its identity and the
+        folder password come from secrets/agent-sandbox-<profile>.yaml.
+      '';
+    };
   };
 
   config = lib.mkMerge [
@@ -158,15 +171,21 @@ in
 
                 volumes = sandboxLib.mkVolumes { diskSizeMB = cfg.diskSizeMB; };
 
-                shares = sandboxLib.mkShares { inherit (cfg) workspaceDir extraShares; } ++ [
-                  {
-                    proto = "virtiofs";
-                    tag = "ro-store";
-                    source = "/nix/store";
-                    mountPoint = "/nix/.ro-store";
-                    readOnly = true;
+                shares =
+                  sandboxLib.mkShares {
+                    inherit (cfg) workspaceDir;
+                    extraShares =
+                      cfg.extraShares ++ lib.optional (syncProfile != null) (sessionSync.mkShare sessionSync.guestDir);
                   }
-                ];
+                  ++ [
+                    {
+                      proto = "virtiofs";
+                      tag = "ro-store";
+                      source = "/nix/store";
+                      mountPoint = "/nix/.ro-store";
+                      readOnly = true;
+                    }
+                  ];
               };
             }
           ]
@@ -176,7 +195,10 @@ in
               inherit (cfg.hostDocker) port;
             }
           )
-          ++ lib.optional cfg.guestDocker.enable sandboxLib.guestDockerModule;
+          ++ lib.optional cfg.guestDocker.enable sandboxLib.guestDockerModule
+          ++ lib.optional (syncProfile != null) {
+            home-manager.users.w4cbe.modules.homeType.agentSandbox.sessionSync.profile = syncProfile;
+          };
         };
       };
 
@@ -268,6 +290,39 @@ in
           Restart = "always";
           RestartSec = 5;
         };
+      };
+    })
+
+    (lib.mkIf (cfg.enable && syncProfile != null) {
+      assertions = sessionSync.mkAssertions {
+        option = "modules.nixos.agentSandbox.sessionSync";
+        profile = syncProfile;
+        device = config.networking.hostName;
+      };
+
+      sops.secrets = lib.mapAttrs' (
+        file: key:
+        lib.nameValuePair (sessionSync.secretName file) {
+          sopsFile = ../../../secrets/agent-sandbox-${syncProfile}.yaml;
+          inherit key;
+        }
+      ) syncSecretKeys;
+
+      # Copied rather than shared: virtiofs would pass sops' per-generation
+      # symlinks into the guest dangling.
+      system.activationScripts.agentSandboxSessionSync = {
+        deps = [
+          "setupSecrets"
+          "users"
+        ];
+        text = ''
+          install -d -m0700 -o w4cbe -g users ${sessionSync.guestDir}
+        ''
+        + lib.concatMapStrings (file: ''
+          install -m0400 -o w4cbe -g users \
+            ${config.sops.secrets.${sessionSync.secretName file}.path} \
+            ${sessionSync.guestDir}/${file}
+        '') (lib.attrNames syncSecretKeys);
       };
     })
   ];

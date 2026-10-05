@@ -20,6 +20,7 @@
       enable = true;
       vcpu = 6;
       memoryMB = 12288;
+      sessionSync.profile = "personal";
       extraShares = [
         {
           # Matches the path modules/home/personal.nix's activation script copies to.

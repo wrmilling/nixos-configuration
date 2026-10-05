@@ -21,6 +21,7 @@
       # and 12GB of the 24GB RAM for now, leaving 10 cores and 12GB for the host.
       vcpu = 8;
       memoryMB = 12288;
+      sessionSync.profile = "work";
     };
   };
 

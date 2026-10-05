@@ -8,6 +8,22 @@
 let
   cfg = config.modules.darwin.agentSandbox;
   sandboxLib = import ../../lib/agent-sandbox.nix { inherit lib; };
+  inherit (sandboxLib) sessionSync;
+  syncProfile = cfg.sessionSync.profile;
+
+  # Outside the disk image, so `reset` keeps the guest's Syncthing identity.
+  syncDir = "${cfg.stateDir}/syncthing";
+
+  # At start rather than activation: sops-nix decrypts from a launchd agent
+  # that may not have finished when home-manager activation does.
+  copySyncSecrets = lib.optionalString (syncProfile != null) (
+    ''
+      install -d -m0700 "${syncDir}"
+    ''
+    + lib.concatMapStrings (file: ''
+      install -m0400 "${sandboxLib.sopsSecretPathIn config.system.primaryUserHome (sessionSync.secretName file)}" "${syncDir}/${file}"
+    '') (lib.attrNames (sessionSync.secretKeys cfg.sessionSync.device))
+  );
 
   # No daemon supervises vfkit, so dtach stands in and its socket is the
   # running check. The vfkit socket is what makes microvm.socket non-null.
@@ -190,6 +206,24 @@ in
       description = "Which `nixosConfigurations` entry to use as the guest.";
     };
 
+    sessionSync = {
+      profile = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum (lib.attrNames sessionSync.profiles));
+        default = null;
+        description = ''
+          Sync the guest's Claude Code sessions through the syncthingHub
+          under this profile. The identity and folder password are home-manager
+          sops secrets -- see modules/home/darwin.nix.
+        '';
+      };
+
+      device = lib.mkOption {
+        type = lib.types.str;
+        default = "work-mac";
+        description = "This sandbox's device name within the profile.";
+      };
+    };
+
     runner = lib.mkOption {
       type = lib.types.package;
       readOnly = true;
@@ -242,10 +276,16 @@ in
                   diskSizeMB = cfg.diskSizeMB;
                   dir = cfg.stateDir;
                 };
-                shares = sandboxLib.mkShares { inherit (cfg) workspaceDir extraShares; };
+                shares = sandboxLib.mkShares {
+                  inherit (cfg) workspaceDir;
+                  extraShares = cfg.extraShares ++ lib.optional (syncProfile != null) (sessionSync.mkShare syncDir);
+                };
               };
             }
           ]
+          ++ lib.optional (syncProfile != null) {
+            home-manager.users.w4cbe.modules.homeType.agentSandbox.sessionSync.profile = syncProfile;
+          }
           # Binds the CLI's default socket path, so no DOCKER_HOST is needed, and
           # dials the same address the host binds -- both ends read one option.
           ++ lib.optional cfg.hostDocker.enable (
@@ -264,7 +304,14 @@ in
           assertion = !(cfg.hostDocker.enable && cfg.guestDocker.enable);
           message = "modules.darwin.agentSandbox: hostDocker and guestDocker both bind /run/docker.sock in the guest -- enable only one.";
         }
-      ];
+      ]
+      ++ lib.optionals (syncProfile != null) (
+        sessionSync.mkAssertions {
+          option = "modules.darwin.agentSandbox.sessionSync";
+          profile = syncProfile;
+          inherit (cfg.sessionSync) device;
+        }
+      );
     })
 
     (lib.mkIf (cfg.enable && cfg.hostDocker.enable) {
@@ -301,6 +348,7 @@ in
                 echo "agent-sandbox is already running"
               else
                 mkdir -p "${cfg.stateDir}"
+                ${copySyncSecrets}
                 dtach -n "${dtachSocket}" ${consoleScript}
               fi
             '';

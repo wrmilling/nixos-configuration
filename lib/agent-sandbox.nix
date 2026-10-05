@@ -18,7 +18,8 @@ rec {
   sshSecretName = "sandbox/sshKey";
   # ssh_config expands `~` itself; a shell command line does not, so the Darwin
   # host passes the real home rather than quoting a tilde into oblivion.
-  sshIdentityFileIn = home: "${home}/.config/sops-nix/secrets/${sshSecretName}";
+  sopsSecretPathIn = home: name: "${home}/.config/sops-nix/secrets/${name}";
+  sshIdentityFileIn = home: sopsSecretPathIn home sshSecretName;
   sshIdentityFile = sshIdentityFileIn "~";
 
   # RemoteForward expands no tokens, so the uid must be known at eval time.
@@ -27,6 +28,76 @@ rec {
   imageName = "agent-sandbox.img";
   gpgAgentSocket = uid: "/run/user/${toString uid}/gnupg/S.gpg-agent";
   sshAgentSocket = uid: "/run/user/${toString uid}/gnupg/S.gpg-agent.ssh";
+
+  # Claude Code sessions sync between guests through bob, which holds only the
+  # encrypted copy. Device IDs are null until each identity is created with
+  # `syncthing generate` and its cert/key added to the matching sops file.
+  sessionSync = {
+    hub = {
+      name = "bob";
+      id = "FBHWBCA-CRQD6P3-UB4QCD5-VVNUX3Q-CRUFTML-IW6R3FX-O6F74M2-33FDEA4";
+    };
+    profiles = {
+      personal = {
+        folderId = "claude-sessions-personal";
+        devices = {
+          icarus = "7JOM6J7-DWONIUR-4XSZDWX-6WTULWP-XPADQTK-CFW4AZZ-KEFR6YW-KB4XMQU";
+          enterprise = "OIW6Z7B-FVDMXNJ-PX4GTPO-6CAJ32C-CEAZVRO-UHM4UV3-ACXGR4J-SXWIIAF";
+        };
+      };
+      work = {
+        folderId = "claude-sessions-work";
+        devices.work-mac = "5AWGIKS-45GENV6-M2JWWGY-M4PI3WI-BXMKTON-VUJWSGC-CMRPYPM-DLMOBA4";
+      };
+    };
+    port = 22000;
+
+    # Holds these files, copied out of sops by the host. Each maps to its key in
+    # secrets/agent-sandbox-<profile>.yaml and its sops-nix secret name.
+    guestDir = "/home/w4cbe/.config/agent-sandbox/syncthing";
+    secretKeys = device: {
+      "cert.pem" = "syncthing/${device}/cert";
+      "key.pem" = "syncthing/${device}/key";
+      password = "syncthing/password";
+    };
+    secretName = file: "agent-sandbox/syncthing/${file}";
+    mkShare = source: {
+      tag = "syncthing";
+      inherit source;
+      mountPoint = sessionSync.guestDir;
+      readOnly = true;
+    };
+
+    # The folder root is ~/.claude; only session state syncs, never credentials.
+    ignorePatterns = [
+      "!/projects"
+      "!/projects/**"
+      "!/file-history"
+      "!/file-history/**"
+      "!/plans"
+      "!/plans/**"
+      "!/tasks"
+      "!/tasks/**"
+      "*"
+    ];
+
+    mkAssertions =
+      {
+        option,
+        profile,
+        device,
+      }:
+      [
+        {
+          assertion = sessionSync.hub.id != null;
+          message = "${option}: set sessionSync.hub.id in lib/agent-sandbox.nix to bob's Syncthing device ID.";
+        }
+        {
+          assertion = (sessionSync.profiles.${profile}.devices.${device} or null) != null;
+          message = "${option}: set sessionSync.profiles.${profile}.devices.${device} in lib/agent-sandbox.nix to this sandbox's Syncthing device ID.";
+        }
+      ];
+  };
 
   shareType = lib.types.submodule {
     options = {

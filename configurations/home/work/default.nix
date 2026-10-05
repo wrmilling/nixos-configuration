@@ -7,6 +7,7 @@
 {
   modules = {
     homeType.darwin.enable = true;
+    homeType.darwin.agentSandboxSessionSync.device = "work-mac";
     home.scripts.cv.enable = true;
 
     home.terminal.claude-code.extraMcpServers = {

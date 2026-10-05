@@ -1,6 +1,7 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   secrets,
   ...
@@ -8,6 +9,7 @@
 let
   # The custom logo uploaded to the Uptime Kuma status page (/upload/logo1.png), carried over for Gatus's ui.logo/favicon.
   gatusLogo = ./assets/gatus-logo.png;
+  inherit ((import ../../../lib/agent-sandbox.nix { inherit lib; })) sessionSync;
 in
 {
   imports = [
@@ -29,12 +31,24 @@ in
     sopsFile = ../../../secrets/gatus.yaml;
   };
 
+  sops.secrets."syncthing/cert".sopsFile = ../../../secrets/syncthing-hub.yaml;
+  sops.secrets."syncthing/key".sopsFile = ../../../secrets/syncthing-hub.yaml;
+
   modules = {
     machineType.server.enable = true;
     nixos.sshd.banner = "${secrets.sshd.banner}";
     nixos.nixbuildHost.enable = true;
     nixos.webhost.enable = true;
     nixos.atuin.enable = true;
+    nixos.syncthingHub = {
+      enable = true;
+      certFile = config.sops.secrets."syncthing/cert".path;
+      keyFile = config.sops.secrets."syncthing/key".path;
+      # Agent sandboxes' Claude Code sessions, one folder per profile.
+      folders = lib.mapAttrs' (
+        _: profile: lib.nameValuePair profile.folderId { inherit (profile) devices; }
+      ) sessionSync.profiles;
+    };
     nixos.ncps = {
       enable = true;
       hostName = "nixcache.${secrets.hosts.common.domain}";

@@ -129,3 +129,22 @@ creation_rules:
           - *primary
         age:
           - *work
+  - path_regex: secrets/syncthing-hub.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *bob
+  - path_regex: secrets/agent-sandbox-personal.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *icarus
+          - *enterprise
+  - path_regex: secrets/agent-sandbox-work.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *work

@@ -11,16 +11,38 @@ in
 {
   options.modules.homeType.darwin = {
     enable = lib.mkEnableOption "darwin home-manager modules";
+
+    agentSandboxSessionSync.device = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Decrypt this sandbox device's Syncthing identity and the work folder
+        password, which modules/darwin/agent-sandbox.nix copies into the guest.
+        Must match that module's sessionSync.device.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
-    # Login key for the local agent sandbox, so starting it needs no smartcard
-    # touch. modules/darwin/agent-sandbox.nix reads it back via
-    # sandboxLib.sshIdentityFile.
-    sops.secrets.${sandboxLib.sshSecretName} = {
-      sopsFile = ../../secrets/agents.yaml;
-      mode = "0400";
-    };
+    sops.secrets = {
+      # Login key for the local agent sandbox, so starting it needs no smartcard
+      # touch. modules/darwin/agent-sandbox.nix reads it back via
+      # sandboxLib.sshIdentityFile.
+      ${sandboxLib.sshSecretName} = {
+        sopsFile = ../../secrets/agents.yaml;
+        mode = "0400";
+      };
+    }
+    // lib.optionalAttrs (cfg.agentSandboxSessionSync.device != null) (
+      lib.mapAttrs' (
+        file: key:
+        lib.nameValuePair (sandboxLib.sessionSync.secretName file) {
+          sopsFile = ../../secrets/agent-sandbox-work.yaml;
+          inherit key;
+          mode = "0400";
+        }
+      ) (sandboxLib.sessionSync.secretKeys cfg.agentSandboxSessionSync.device)
+    );
 
     # Host-only; the shared workspace's .codegraph is guest-writable.
     home.sessionVariables.CODEGRAPH_NO_PROMPT_HOOK = "1";

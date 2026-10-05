@@ -2,10 +2,12 @@
   config,
   lib,
   pkgs,
+  secrets,
   ...
 }:
 let
   cfg = config.modules.homeType.agentSandbox;
+  inherit ((import ../../lib/agent-sandbox.nix { inherit lib; })) sessionSync;
 
   # Matches the paths modules/home/personal.nix's activation scripts copy to,
   # which the host shares into the guest through extraShares.
@@ -27,6 +29,16 @@ in
         the OpenCode Go provider for every harness in the guest (oclaude,
         ocodex, OpenCode's opencode-go, maki). Requires the host to share its
         OpenCode Go key -- see modules/home/personal.nix.
+      '';
+    };
+
+    sessionSync.profile = lib.mkOption {
+      type = lib.types.nullOr (lib.types.enum (lib.attrNames sessionSync.profiles));
+      default = null;
+      description = ''
+        The sessionSync profile (lib/agent-sandbox.nix) whose Claude Code
+        sessions this guest syncs through the hub. Set by the host, which also
+        shares in the Syncthing identity and folder password.
       '';
     };
   };
@@ -73,6 +85,50 @@ in
         };
       };
     })
+
+    (lib.mkIf (cfg.sessionSync.profile != null) (
+      let
+        profile = sessionSync.profiles.${cfg.sessionSync.profile};
+        hubAddress = "${sessionSync.hub.name}.${secrets.hosts.common.domain}:${toString sessionSync.port}";
+      in
+      {
+        services.syncthing = {
+          enable = true;
+          cert = "${sessionSync.guestDir}/cert.pem";
+          key = "${sessionSync.guestDir}/key.pem";
+          settings = {
+            options = {
+              localAnnounceEnabled = false;
+              urAccepted = -1;
+            };
+            devices.${sessionSync.hub.name} = {
+              inherit (sessionSync.hub) id;
+              addresses = [
+                "tcp://${hubAddress}"
+                "quic://${hubAddress}"
+                "dynamic"
+              ];
+            };
+            folders.${profile.folderId} = {
+              id = profile.folderId;
+              path = "~/.claude";
+              devices = [
+                {
+                  inherit (sessionSync.hub) name;
+                  encryptionPasswordFile = "${sessionSync.guestDir}/password";
+                }
+              ];
+              inherit (sessionSync) ignorePatterns;
+              # Guest-local undo for deletes and overwrites arriving from the other sandbox.
+              versioning = {
+                type = "trashcan";
+                params.cleanoutDays = "30";
+              };
+            };
+          };
+        };
+      }
+    ))
 
     (lib.mkIf cfg.providers.z-ai.enable {
       modules.home.terminal = {
