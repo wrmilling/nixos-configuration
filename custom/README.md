@@ -10,6 +10,7 @@ Definition of custom packages which are generally not yet available in upstream 
 - [flux-operator-mcp](pkgs/flux-operator-mcp) — MCP server for FluxCD GitOps cluster management.
 - [gomuks-desktop](pkgs/gomuks-desktop) — Electron wrapper for gomuks (Matrix client), built from upstream's prebuilt .deb.
 - [codegraph](pkgs/codegraph) — Local code knowledge graph MCP server for AI coding agents (tracked ahead of the nixpkgs-provided version).
+- [rea](pkgs/rea) — Reverse-engineering MCP server and CLI for coding agents; passthru carries the JADX jar and pinned pwntools Python it expects.
 - [shiftleft-sl](pkgs/shiftleft-sl) — ShiftLeft CLI for code security analysis.
 - [wizcli](pkgs/wizcli) — Wiz CLI for scanning and interacting with the Wiz platform.
 - [m5burner](pkgs/m5burner) — M5Stack firmware burning tool.

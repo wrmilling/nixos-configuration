@@ -10,4 +10,9 @@
     providers.z-ai.enable = true;
     providers.opencode-go.enable = true;
   };
+
+  home-manager.users.w4cbe.modules.home.terminal.agents.mcpServers.rea = {
+    enable = true;
+    engines.enable = true;
+  };
 }

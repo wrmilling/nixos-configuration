@@ -1,49 +1,13 @@
-# Single source of truth for the MCP servers wired into every agent harness.
-# Each terminal module imports this and projects the canonical definitions
-# into its tool's config shape.
+# Projects modules.home.terminal.agents.mcpServers (defined in
+# modules/home/components/terminal.agents.nix) into each harness's config
+# shape. Only enabled servers are projected.
 #
 # Canonical server shape:
 #   { command = "<store path>"; args = [ "<arg>" … ]; env = { NAME = "value"; }; }
-{
-  pkgs,
-  lib,
-  homeDir,
-}:
+{ lib }:
+mcpServers:
 let
-  servers = {
-    "mcp-nixos" = {
-      command = "${pkgs.mcp-nixos}/bin/mcp-nixos";
-      args = [ ];
-      env = { };
-    };
-    "kubernetes" = {
-      command = "${pkgs.kubernetes-mcp-server}/bin/kubernetes-mcp-server";
-      args = [ "--read-only" ];
-      env = {
-        KUBECONFIG = "${homeDir}/.kube/config";
-      };
-    };
-    "flux" = {
-      command = "${pkgs.flux-operator-mcp}/bin/flux-operator-mcp";
-      args = [
-        "serve"
-        "--read-only"
-      ];
-      env = {
-        KUBECONFIG = "${homeDir}/.kube/config";
-      };
-    };
-    "codegraph" = {
-      command = "${pkgs.codegraph}/bin/codegraph";
-      args = [
-        "serve"
-        "--mcp"
-      ];
-      env = {
-        CODEGRAPH_TELEMETRY = "0";
-      };
-    };
-  };
+  servers = lib.filterAttrs (_: s: s.enable) mcpServers;
 in
 {
   inherit servers;

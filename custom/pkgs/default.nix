@@ -10,6 +10,7 @@ rec {
   flux-operator-mcp = pkgs.callPackage ./flux-operator-mcp { };
   gomuks-desktop = pkgs.callPackage ./gomuks-desktop { };
   codegraph = pkgs.callPackage ./codegraph { };
+  rea = pkgs.callPackage ./rea { };
   shiftleft-sl = pkgs.callPackage ./shiftleft-sl { };
   wizcli = pkgs.callPackage ./wizcli { };
   m5burner = pkgs.callPackage ./m5burner { };

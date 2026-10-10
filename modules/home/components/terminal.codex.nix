@@ -11,9 +11,8 @@ let
   opencodeGoEnable = cfg.providers.opencode-go.apiKeyFile != null;
 
   mcpHelper = import ../../../lib/mcp-servers.nix {
-    inherit pkgs lib;
-    homeDir = config.home.homeDirectory;
-  };
+    inherit lib;
+  } config.modules.home.terminal.agents.mcpServers;
 
   # Seeded into ~/.codex/config.toml by the wrapper. `_seed_hash` is a
   # fingerprint of the body so the wrapper can refresh when MCP defaults
@@ -216,8 +215,8 @@ in
   options.modules.home.terminal.codex = {
     enable = lib.mkEnableOption ''
       Codex CLI configuration. The wrapper owns ~/.codex/config.toml and
-      re-seeds it whenever the default MCP set changes -- add new MCPs to
-      lib/mcp-servers.nix rather than editing that file directly.
+      re-seeds it whenever the MCP set changes -- add new MCPs to
+      modules.home.terminal.agents.mcpServers rather than editing that file directly.
     '';
 
     providers = {

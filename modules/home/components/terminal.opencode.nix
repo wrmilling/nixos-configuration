@@ -11,9 +11,8 @@ let
   opencodeGoEnable = cfg.providers.opencode-go.apiKeyFile != null;
 
   mcpHelper = import ../../../lib/mcp-servers.nix {
-    inherit pkgs lib;
-    homeDir = config.home.homeDirectory;
-  };
+    inherit lib;
+  } config.modules.home.terminal.agents.mcpServers;
 
   # Keys are read by opencode from the file at startup, so they never enter
   # the Nix store or the shell environment.

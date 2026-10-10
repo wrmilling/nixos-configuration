@@ -1,0 +1,22 @@
+{
+  "version": "6.3.0",
+  "hashes": {
+    "src": "sha256-sWn8Y8BxDUTFxExZwvhx8iR530RHfN+qny5cN8RWOoQ=",
+    "lockfile": "sha256-kZ+mKVL0SR+LhgKdpzuH4aDe32MfQZXp+7fnDw4gGsw="
+  },
+  "npmDepsHash": "sha256-wVk6vZ41FdtneliVtZ1oTo5fSL4lYKrp86xBvYNGo7E=",
+  "jadxMcp": {
+    "version": "0.7.1",
+    "hash": "sha256-bl6s9QC2QpK/tzxJeXwZWPbuRGRuQ+hoA5rn/rVz/3U="
+  },
+  "pwntools": {
+    "pyelftools": {
+      "version": "0.33",
+      "hash": "sha256-NqF5A6PRl4uncwNS9j44fIV7ovlljiucvV2Msv0LK/w="
+    },
+    "unicorn": {
+      "version": "2.1.2",
+      "hash": "sha256-qA84xBztyWmt/rUExhhZMkQzvDPx0UE9MAIPG/Su3iE="
+    }
+  }
+}

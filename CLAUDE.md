@@ -21,7 +21,8 @@ Nix flake managing NixOS, nix-darwin, and Home Manager configurations.
 - Never commit plaintext secrets.
 
 ## Claude Code module
-- `modules/home/components/terminal.claude-code.nix` holds settings, MCP servers, permissions. Add new MCP servers/permissions to the default sets (not new options). Permission rules use the wildcard matching format.
+- `modules/home/components/terminal.claude-code.nix` holds settings and permissions. Add new permissions to the default sets (not new options). Permission rules use the wildcard matching format.
+- Local MCP servers (and their Claude allow rules, CLIs, skills) live in `modules.home.terminal.agents.mcpServers` (`modules/home/components/terminal.agents.nix`), shared by Claude Code, Codex, OpenCode and maki. Define every server there, even host-specific ones; a non-default server sets `enable = lib.mkDefault false` in its definition, and hosts toggle any server with `<name>.enable`. Remote (http) servers stay in `terminal.claude-code`'s `extraMcpServers`.
 
 ## Conventions
 - Minimal, localized edits; mirror nearby patterns and naming.

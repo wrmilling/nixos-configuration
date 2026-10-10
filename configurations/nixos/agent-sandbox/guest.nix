@@ -169,7 +169,9 @@ in
     pkgs.skopeo
     pkgs.crane
     pkgs.ssh-to-age
-    pkgs.google-cloud-sdk
+    (pkgs.google-cloud-sdk.withExtraComponents [
+      pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin
+    ])
   ];
 
   home-manager = {

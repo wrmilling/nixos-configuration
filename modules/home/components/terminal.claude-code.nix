@@ -8,9 +8,8 @@ let
   cfg = config.modules.home.terminal.claude-code;
 
   mcpHelper = import ../../../lib/mcp-servers.nix {
-    inherit pkgs lib;
-    homeDir = config.home.homeDirectory;
-  };
+    inherit lib;
+  } config.modules.home.terminal.agents.mcpServers;
   defaultMcpServers = mcpHelper.claudeCode;
 
   defaultPermissions = {
@@ -75,32 +74,6 @@ let
       # Web
       "WebSearch"
       "WebFetch"
-
-      # MCP — mcp-nixos read-only tools
-      "mcp__mcp-nixos"
-      "mcp__plugin_claude-code-home-manager_mcp-nixos__nix"
-
-      # MCP — kubernetes read-only tools only
-      "mcp__kubernetes__configuration_contexts_list"
-      "mcp__kubernetes__configuration_view"
-      "mcp__kubernetes__events_list"
-      "mcp__kubernetes__namespaces_list"
-      "mcp__kubernetes__nodes_log"
-      "mcp__kubernetes__nodes_stats_summary"
-      "mcp__kubernetes__nodes_top"
-      "mcp__kubernetes__pods_get"
-      "mcp__kubernetes__pods_list"
-      "mcp__kubernetes__pods_list_in_namespace"
-      "mcp__kubernetes__pods_log"
-      "mcp__kubernetes__pods_top"
-      "mcp__kubernetes__resources_get"
-      "mcp__kubernetes__resources_list"
-
-      # MCP — flux read-only (--read-only flag enforced at server level)
-      "mcp__flux"
-
-      # MCP — codegraph (local, read-only code knowledge graph)
-      "mcp__codegraph"
     ];
     deny = [
       "Read(**/.git/git-crypt/**)"
@@ -529,8 +502,9 @@ in
       type = lib.types.attrsOf lib.types.attrs;
       default = { };
       description = ''
-        Per-host MCP servers merged on top of the defaults.
-        Use this to add servers without redefining the shared set.
+        Per-host Claude Code-only MCP servers, e.g. remote http servers.
+        Local servers for every harness belong in
+        modules.home.terminal.agents.mcpServers.
       '';
     };
 
@@ -598,10 +572,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # Provide the `zclaude` wrapper when a z.ai API key file is configured.
-    # codegraph is also put on PATH directly so its CLI (e.g. `codegraph init`,
-    # `codegraph status`) is usable outside of the MCP server Claude Code launches.
     home.packages = [
-      pkgs.codegraph
       pkgs.cc9s
       pkgs.fast-resume
       pkgs.herdr
@@ -611,12 +582,6 @@ in
 
     modules.home.scripts.zfr.enable = lib.mkIf zclaudeEnable true;
     modules.home.scripts.ofr.enable = lib.mkIf oclaudeEnable true;
-
-    # Disable codegraph's telemetry universally -- the MCP server entry below
-    # also sets this explicitly (belt-and-suspenders in case a subprocess
-    # doesn't inherit session vars), but this covers manual CLI use
-    # (`codegraph init`/`index`/`sync`/etc.) which never goes through that env.
-    home.sessionVariables.CODEGRAPH_TELEMETRY = "0";
 
     programs.claude-code = {
       enable = true;
@@ -633,7 +598,10 @@ in
           env.CLAUDE_CODE_SUBAGENT_MODEL = cfg.subagentModel;
           permissions = {
             defaultMode = cfg.extraPermissions.defaultMode;
-            allow = defaultPermissions.allow ++ cfg.extraPermissions.allow;
+            allow =
+              defaultPermissions.allow
+              ++ lib.concatMap (s: s.claudePermissions) (lib.attrValues mcpHelper.servers)
+              ++ cfg.extraPermissions.allow;
             deny = defaultPermissions.deny ++ cfg.extraPermissions.deny;
           };
         }
