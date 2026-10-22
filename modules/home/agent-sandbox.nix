@@ -257,10 +257,7 @@ in
             ]
             [
               "agent"
-              {
-                token = "$done_at";
-                dim = true;
-              }
+              "$done_at"
             ]
           ];
         };
