@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
   dontBuild = true;
+  # autoPatchelf sets the interpreter before the rpath, which corrupts the node SEA binary.
+  dontAutoPatchelf = true;
 
   installPhase = ''
     runHook preInstall
@@ -70,11 +72,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' $out/lib/codegraph/node \
-      -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
-    '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/lib/codegraph/node
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --set-rpath '${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}' $out/lib/codegraph/node
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/codegraph/node
+      autoPatchelf $out/lib/codegraph/lib
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' $out/lib/codegraph/node \
+        -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
+      '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/lib/codegraph/node
+    '';
 
   passthru = {
     sources = {

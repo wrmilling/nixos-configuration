@@ -83,6 +83,50 @@ let
   stopIfRunning = mkStopIfRunning "Stop";
   stopIfRunningForce = mkStopIfRunning "HardStop";
 
+  # Waits for the guest's DHCP lease and SSH, then sets `address`; shared by
+  # `enter` and `forward`.
+  findGuest = ''
+    mkdir -p "${cfg.stateDir}"
+
+    guest_ip() {
+      awk -F= '
+        $1 ~ /^[ \t]*name$/       { name = $2 }
+        $1 ~ /^[ \t]*ip_address$/ { addr = $2 }
+        /^}/ {
+          if (name == "${guestHostName}") found = addr
+          name = ""; addr = ""
+        }
+        END { if (found != "") print found }
+      ' ${leaseFile} 2>/dev/null
+    }
+
+    address=""
+    for _ in $(seq 1 60); do
+      candidate=$(guest_ip)
+      if [ -n "$candidate" ] &&
+         ssh ${sshBaseArgs} -o ConnectTimeout=1 -o BatchMode=yes "w4cbe@$candidate" true 2>/dev/null; then
+        address="$candidate"
+        break
+      fi
+      sleep 1
+    done
+
+    if [ -z "$address" ]; then
+      echo "agent-sandbox: no SSH route to the guest." >&2
+      echo "  It may still be booting, or it never took a DHCP lease." >&2
+      echo "  Watch the console with: dtach -a ${dtachSocket} -r winch" >&2
+      exit 1
+    fi
+  '';
+
+  browserDir = "${cfg.stateDir}/browser";
+  browseScript = pkgs.writeShellScript "agent-sandbox-browse" (
+    sandboxLib.mkBrowseScript {
+      launch = "/usr/bin/open -na ${lib.escapeShellArg cfg.forward.chromeApp} --args";
+      profileDir = browserDir;
+    }
+  );
+
   # dtach copies the invoking terminal's termios, so without raw mode ISIG
   # stays on and Ctrl+C SIGINTs vfkit instead of reaching the guest.
   consoleScript = pkgs.writeShellScript "agent-sandbox-console" ''
@@ -198,6 +242,20 @@ in
 
         vfkit does not enforce readOnly on virtiofs shares.
       '';
+    };
+
+    forward = {
+      socksPort = lib.mkOption {
+        type = lib.types.port;
+        default = 1081;
+        description = "Host loopback port for `agent-sandbox forward socks`.";
+      };
+
+      chromeApp = lib.mkOption {
+        type = lib.types.str;
+        default = "Google Chrome";
+        description = "macOS app `agent-sandbox forward --browse` opens with `open -na`.";
+      };
     };
 
     guestHost = lib.mkOption {
@@ -387,46 +445,24 @@ in
                 sleep 1
               done
 
-              mkdir -p "${cfg.stateDir}"
-
-              guest_ip() {
-                awk -F= '
-                  $1 ~ /^[ \t]*name$/       { name = $2 }
-                  $1 ~ /^[ \t]*ip_address$/ { addr = $2 }
-                  /^}/ {
-                    if (name == "${guestHostName}") found = addr
-                    name = ""; addr = ""
-                  }
-                  END { if (found != "") print found }
-                ' ${leaseFile} 2>/dev/null
-              }
-
-              address=""
-              for _ in $(seq 1 60); do
-                candidate=$(guest_ip)
-                if [ -n "$candidate" ] &&
-                   ssh ${sshBaseArgs} -o ConnectTimeout=1 -o BatchMode=yes "w4cbe@$candidate" true 2>/dev/null; then
-                  address="$candidate"
-                  break
-                fi
-                sleep 1
-              done
-
-              if [ -z "$address" ]; then
-                echo "agent-sandbox: no SSH route to the guest." >&2
-                echo "  It may still be booting, or it never took a DHCP lease." >&2
-                echo "  Watch the console with: dtach -a ${dtachSocket} -r winch" >&2
-                exit 1
-              fi
-
+              ${findGuest}
               exec ssh ${sshBaseArgs} ${sshForwardArgs} -t "w4cbe@$address" herdr
             '';
             # known_hosts goes too: a new image means a new guest host key.
             reset = ''
               ${stopIfRunning}
               rm -f "${cfg.stateDir}/${sandboxLib.imageName}" "${cfg.stateDir}/known_hosts"
+              rm -rf "${browserDir}"
               echo "agent-sandbox reset; the disk image is recreated on next start."
             '';
+            isRunning = ''[ -S "${dtachSocket}" ]'';
+            # No sshForwardArgs: the tunnel carries no agent sockets.
+            forwardSsh = ''
+              ${findGuest}
+              ssh ${sshBaseArgs} "$@" "w4cbe@$address"
+            '';
+            inherit browseScript;
+            inherit (cfg.forward) socksPort;
           };
         })
       ];

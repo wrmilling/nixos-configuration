@@ -13,6 +13,149 @@ let
   # which the host shares into the guest through extraShares.
   zAiKey = "/home/w4cbe/.config/agent-sandbox/z-ai/api-key";
   opencodeGoKey = "/home/w4cbe/.config/agent-sandbox/opencode-go/api-key";
+
+  # herdr keeps no state-change timestamps, so this plugin hook reports $done_at
+  # when a pane's agent goes from working/blocked to idle/done.
+  herdrDoneAtHook = pkgs.writeShellApplication {
+    name = "herdr-done-at-hook";
+    runtimeInputs = [
+      pkgs.herdr
+      pkgs.coreutils
+    ];
+    # Runs on every agent status change, so it sticks to bash builtins; herdr is
+    # forked only when a token changes.
+    text = ''
+      # rm loads as a bash builtin on first use, since most runs remove nothing.
+      # (bash's loadable mkdir -p chmods existing parents, so mkdir stays external.)
+      rm() {
+        enable -f ${pkgs.runtimeShellPackage}/lib/bash/rm rm
+        unset -f rm
+        rm "$@"
+      }
+      shopt -s nullglob
+      state=$HERDR_PLUGIN_STATE_DIR
+      json=$HERDR_PLUGIN_EVENT_JSON
+      pane_re='"pane_id":"([^"]*)"'
+      status_re='"agent_status":"([^"]*)"'
+      pane="" status=""
+      [[ $json =~ $pane_re ]] && pane=''${BASH_REMATCH[1]}
+      [[ $json =~ $status_re ]] && status=''${BASH_REMATCH[1]}
+      working=$state/working/''${pane//:/_}
+      done_file=$state/done/''${pane//:/_}
+
+      report() {
+        herdr pane report-metadata "$1" --source agent-done-at "''${@:2}" >/dev/null
+      }
+
+      case $HERDR_PLUGIN_EVENT in
+        pane.closed)
+          if [[ -e $working || -e $done_file ]]; then
+            rm -f "$working" "$done_file"
+          fi
+          ;;
+        # Closing a tab or workspace emits no pane.closed, so drop markers of panes that are gone.
+        tab.closed | workspace.closed)
+          files=("$state"/working/* "$state"/done/*)
+          if ((''${#files[@]})); then
+            list=$(herdr pane list)
+            declare -A live=()
+            while [[ $list =~ $pane_re ]]; do
+              live[''${BASH_REMATCH[1]//:/_}]=1
+              list=''${list#*"''${BASH_REMATCH[0]}"}
+            done
+            for f in "''${files[@]}"; do
+              if [[ -z ''${live[''${f##*/}]:-} ]]; then
+                rm -f "$f"
+              fi
+            done
+          fi
+          ;;
+        pane.agent_status_changed)
+          case $status in
+            working | blocked)
+              [[ -e $done_file ]] && rm -f "$done_file"
+              if [[ ! -e $working ]]; then
+                [[ -d $state/working ]] || mkdir -p "$state/working"
+                : >"$working"
+                report "$pane" --clear-token done_at
+              fi
+              ;;
+            # rm succeeds for only one of any overlapping hook runs.
+            idle | done)
+              if [[ -e $working ]] && rm "$working" 2>/dev/null; then
+                printf -v shown '%(%a %H:%M)T' "$EPOCHSECONDS"
+                report "$pane" --token done_at="$shown"
+                # From midnight 7 days on the weekday could be mistaken for this week's.
+                printf -v hms '%(%H %M %S)T' "$EPOCHSECONDS"
+                read -r h m s <<<"$hms"
+                switch_at=$((EPOCHSECONDS - 10#$h * 3600 - 10#$m * 60 - 10#$s + 7 * 86400))
+                [[ -d $state/done ]] || mkdir -p "$state/done"
+                printf '%s %s %s\n' "$switch_at" "$EPOCHSECONDS" "$pane" >"$done_file"
+              fi
+              ;;
+          esac
+          ;;
+      esac
+
+      # No event fires on a schedule, so any hook run switches week-old times to a date.
+      for f in "$state"/done/*; do
+        # Another hook run may have removed it since the glob.
+        read -r switch_at finished done_pane <"$f" 2>/dev/null || continue
+        if ((EPOCHSECONDS >= switch_at)); then
+          printf -v shown '%(%m/%d %H:%M)T' "$finished"
+          report "$done_pane" --token done_at="$shown" || true
+          rm -f "$f"
+        fi
+      done
+    '';
+  };
+
+  # A real file, not a symlink: herdr resolves the manifest path and would
+  # otherwise take /nix/store as the plugin root.
+  herdrDoneAtPlugin = pkgs.runCommand "herdr-done-at-plugin" { } ''
+    mkdir $out
+    cp ${
+      (pkgs.formats.toml { }).generate "herdr-plugin.toml" {
+        id = "local.done-at";
+        name = "Done at";
+        version = "1.0.0";
+        min_herdr_version = "0.9.5";
+        platforms = [ "linux" ];
+        events =
+          map
+            (on: {
+              inherit on;
+              command = [ (lib.getExe herdrDoneAtHook) ];
+            })
+            [
+              "pane.agent_status_changed"
+              "pane.closed"
+              "tab.closed"
+              "workspace.closed"
+            ];
+      }
+    } $out/herdr-plugin.toml
+  '';
+
+  # plugin link exits 0 even when the server is not up yet, so check its reply.
+  herdrDoneAtLink = pkgs.writeShellApplication {
+    name = "herdr-done-at-link";
+    runtimeInputs = [
+      pkgs.herdr
+      pkgs.gnugrep
+      pkgs.coreutils
+    ];
+    text = ''
+      for _ in $(seq 30); do
+        if herdr plugin link ${herdrDoneAtPlugin} 2>/dev/null | grep -q '"type":"plugin_linked"'; then
+          exit 0
+        fi
+        sleep 1
+      done
+      echo "herdr-done-at-link: herdr server did not accept the plugin link" >&2
+      exit 1
+    '';
+  };
 in
 {
   options.modules.homeType.agentSandbox = {
@@ -82,6 +225,44 @@ in
           ExecStop = "${pkgs.herdr}/bin/herdr server stop";
           WorkingDirectory = "/home/w4cbe/workspace";
           Restart = "on-failure";
+        };
+      };
+
+      # plugins.json is herdr's own registry, so the plugin is linked through its CLI.
+      systemd.user.services.herdr-done-at = {
+        Unit = {
+          Description = "Link the herdr plugin that reports when each agent finished";
+          After = [ "herdr.service" ];
+          PartOf = [ "herdr.service" ];
+        };
+        Install.WantedBy = [ "herdr.service" ];
+        Service = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = lib.getExe herdrDoneAtLink;
+        };
+      };
+
+      # The sidebar layout is read from the client's config, which runs here over ssh.
+      xdg.configFile."herdr/config.toml" = {
+        force = true;
+        source = (pkgs.formats.toml { }).generate "herdr-config.toml" {
+          onboarding = false;
+          ui.sidebar.agents.rows = [
+            [
+              "state_icon"
+              "machine"
+              "workspace"
+              "tab"
+            ]
+            [
+              "agent"
+              {
+                token = "$done_at";
+                dim = true;
+              }
+            ]
+          ];
         };
       };
     })

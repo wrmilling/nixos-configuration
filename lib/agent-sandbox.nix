@@ -200,8 +200,31 @@ rec {
       };
     };
 
+  # Body of the script `forward --browse` runs as ssh's LocalCommand, i.e. once
+  # the forwards are bound. `launch` is the Chromium command prefix; it must
+  # return immediately and outlive the tunnel. One profile per mode, so a
+  # profile already running without the proxy is never reused for `socks`.
+  mkBrowseScript =
+    { launch, profileDir }:
+    ''
+      url="$1"
+      socks_port="''${2:-}"
+
+      if [ -n "$socks_port" ]; then
+        profile="${profileDir}/socks"
+        set -- --proxy-server="socks5://127.0.0.1:$socks_port" --proxy-bypass-list="<-loopback>"
+      else
+        profile="${profileDir}/direct"
+        set --
+      fi
+
+      mkdir -p "$profile"
+      ${launch} --user-data-dir="$profile" --no-first-run --no-default-browser-check "$@" "$url" >/dev/null 2>&1 &
+    '';
+
   # Shared CLI shape only; each platform supplies its own snippets, because
-  # systemd+ssh and dtach+vfkit mechanics do not unify.
+  # systemd+ssh and dtach+vfkit mechanics do not unify. `forwardSsh` runs ssh
+  # to the guest with "$@" as options, carrying no agent-socket forwards.
   mkCommandScript =
     {
       name,
@@ -211,11 +234,15 @@ rec {
       status,
       enter,
       reset,
+      isRunning,
+      forwardSsh,
+      browseScript,
+      socksPort,
     }:
     ''
       usage() {
         cat <<USAGE
-      Usage: ${name} [start|stop [-f|--force]|restart [-f|--force] [-j|--join]|status|reset|help]
+      Usage: ${name} [start|stop [-f|--force]|restart [-f|--force] [-j|--join]|status|forward SPEC... [--browse]|reset|help]
 
         (no args)  Start the sandbox if needed, then enter it.
         start      Start the sandbox without entering it.
@@ -224,10 +251,103 @@ rec {
         restart    Stop the sandbox, then start it again. Pass -f/--force to
                    force-kill it first, and -j/--join to enter it afterward.
         status     Report whether the sandbox is running.
+        forward    Forward ports from host loopback into the running sandbox
+                   over SSH, in the foreground until Ctrl+C. See '${name} forward -h'.
         reset      Stop the sandbox and delete its disk image. Guest home,
                    credentials and history are lost. Pass -f to skip the prompt.
         help       Show this help.
       USAGE
+      }
+
+      forward_usage() {
+        cat <<USAGE
+      Usage: ${name} forward SPEC... [--browse]
+
+      Forward host loopback ports into the running sandbox over SSH. Runs in the
+      foreground until Ctrl+C. Guest services may stay bound to localhost.
+
+        PORT        Forward host 127.0.0.1:PORT to guest localhost:PORT.
+        HOST:GUEST  Forward host 127.0.0.1:HOST to guest localhost:GUEST.
+        socks       Open a SOCKS proxy on host 127.0.0.1:${toString socksPort} that
+                    connects from inside the guest.
+        --browse    Open a dedicated Chromium profile once the tunnel is up, at
+                    the first forwarded port. With socks, the profile sends every
+                    request through the guest, localhost included, so it cannot
+                    reach host loopback services; without socks it can.
+
+      Example: ${name} forward 3000 5173 socks --browse
+      USAGE
+      }
+
+      forward() {
+        browse=0
+        socks=0
+        first_host=""
+        first_guest=""
+        ssh_args=()
+
+        for spec in "$@"; do
+          case "$spec" in
+            -h | --help)
+              forward_usage
+              exit 0
+              ;;
+            --browse) browse=1 ;;
+            socks)
+              socks=1
+              ssh_args+=(-D "127.0.0.1:${toString socksPort}")
+              ;;
+            *)
+              if [[ ! "$spec" =~ ^([0-9]+)(:([0-9]+))?$ ]]; then
+                echo "forward: invalid SPEC: $spec" >&2
+                forward_usage >&2
+                exit 1
+              fi
+              host_port=$((10#''${BASH_REMATCH[1]}))
+              guest_port=$((10#''${BASH_REMATCH[3]:-''${BASH_REMATCH[1]}}))
+              if [ "$host_port" -lt 1024 ] || [ "$host_port" -gt 65535 ] ||
+                 [ "$guest_port" -lt 1 ] || [ "$guest_port" -gt 65535 ]; then
+                echo "forward: out of range: $spec (host 1024-65535, guest 1-65535)" >&2
+                exit 1
+              fi
+              ssh_args+=(-L "127.0.0.1:$host_port:127.0.0.1:$guest_port")
+              first_host=''${first_host:-$host_port}
+              first_guest=''${first_guest:-$guest_port}
+              ;;
+          esac
+        done
+
+        if [ "''${#ssh_args[@]}" -eq 0 ]; then
+          forward_usage >&2
+          exit 1
+        fi
+
+        if ! ${isRunning}; then
+          echo "${name} is not running; start it first." >&2
+          exit 1
+        fi
+
+        if [ "$browse" -eq 1 ]; then
+          # Through the proxy, localhost is the guest's, so use the guest port.
+          if [ "$socks" -eq 1 ]; then
+            url=''${first_guest:+http://localhost:$first_guest}
+            browse_socks=${toString socksPort}
+          else
+            url="http://localhost:$first_host"
+            browse_socks=""
+          fi
+          ssh_args+=(
+            -o PermitLocalCommand=yes
+            -o "LocalCommand=${browseScript} ''${url:-about:blank} $browse_socks"
+          )
+        fi
+
+        echo "Forwarding; press Ctrl+C to stop."
+        forward_ssh -N -a -o ExitOnForwardFailure=yes "''${ssh_args[@]}"
+      }
+
+      forward_ssh() {
+        ${forwardSsh}
       }
 
       # Scans the remaining args (not just a fixed position) so stop/restart
@@ -282,6 +402,10 @@ rec {
             esac
           fi
           ${reset}
+          ;;
+        forward)
+          shift
+          forward "$@"
           ;;
         help | -h | --help)
           usage

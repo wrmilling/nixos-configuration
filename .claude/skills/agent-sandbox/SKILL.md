@@ -174,10 +174,19 @@ Two helpers take the platform difference as an argument:
   `flake.nix` entry to one line.
 - **The `agent-sandbox` command has one shape and two backends.**
   `sandboxLib.mkCommandScript` owns the dispatch and the help text. The
-  subcommands are `start`, `stop`, `status`, `reset`, and `help`. No argument
-  means start and then enter. Each platform module supplies its own `start`,
-  `stop`, `status`, `enter`, and `reset` shell snippets. Only the platform
-  module knows the mechanics.
+  subcommands are `start`, `stop`, `status`, `forward`, `reset`, and `help`.
+  No argument means start and then enter. Each platform module supplies its
+  own `start`, `stop`, `status`, `enter`, `reset`, `isRunning`, and
+  `forwardSsh` shell snippets. Only the platform module knows the mechanics.
+  - **`forward` is the only way to reach guest ports from the host.** It runs
+    `ssh -N` with `-L 127.0.0.1:…`/`-D 127.0.0.1:…` over a session that
+    carries no agent sockets (NixOS: the `agent-sandbox-forward` ssh alias).
+    Do not add qemu `forwardPorts` or guest firewall openings for dev ports.
+    `--browse` launches a dedicated Chromium (Google Chrome on Darwin) profile
+    from ssh's `LocalCommand`, which runs only after the forwards are bound.
+    `socks` mode uses `--proxy-bypass-list=<-loopback>` so that profile cannot
+    reach host loopback; each mode has its own profile directory, because
+    Chromium ignores proxy flags when it reuses an already running profile.
   - **NixOS/qemu.** Use `systemctl start`, `systemctl stop`, and
     `systemctl is-active` on `microvm@agent-sandbox.service`. `enter` polls
     SSH and then execs into it.

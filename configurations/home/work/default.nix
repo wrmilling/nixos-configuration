@@ -16,6 +16,10 @@
         url = "https://mcp.atlassian.com/v1/mcp";
       };
     };
+    home.terminal.claude-code.extraSettings = {
+      extraKnownMarketplaces = secrets.hosts.work-mac.agents.marketplaces;
+      inherit (secrets.hosts.work-mac.agents) enabledPlugins;
+    };
     home.terminal.claude-code.extraPermissions.allow = [
       "mcp__atlassian-mcp"
     ];

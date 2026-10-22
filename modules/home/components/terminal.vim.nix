@@ -15,6 +15,10 @@ in
   config = lib.mkIf cfg.enable {
     programs.vim = {
       enable = true;
+      # Darwin's default GTK2 GUI fails to build (image.c uses gui.scale, which is GTK3-only).
+      packageConfigurable = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (
+        pkgs.vim-full.override { guiSupport = "none"; }
+      );
       plugins = with pkgs.vimPlugins; [
         # Theme
         vim-monokai

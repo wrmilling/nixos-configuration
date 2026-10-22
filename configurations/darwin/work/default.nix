@@ -65,6 +65,8 @@
       ];
       ssl-cert-file = "/usr/local/munki/thd_certs.pem";
       warn-dirty = false;
+      # TODO: Nix >= 2.34.9 can't sandbox large closures (NixOS/nix#16613); until it's
+      # fixed, switch with `nh darwin switch . -- --option sandbox false` (same for home).
       sandbox = "relaxed";
       trusted-users = [
         "${secrets.hosts.work-mac.username}"

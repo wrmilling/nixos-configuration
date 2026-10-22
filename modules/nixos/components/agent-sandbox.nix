@@ -15,6 +15,23 @@ let
 
   vmName = "agent-sandbox";
   unit = "microvm@${vmName}.service";
+
+  browserDir = "\${XDG_STATE_HOME:-$HOME/.local/state}/${vmName}/browser";
+  browseScript = pkgs.writeShellScript "${vmName}-browse" (
+    sandboxLib.mkBrowseScript {
+      launch = "${pkgs.util-linux}/bin/setsid -f ${lib.getExe cfg.forward.chromium.package}";
+      profileDir = browserDir;
+    }
+  );
+
+  sshHostConfig = lib.concatMapStrings (line: "  ${line}\n") [
+    "HostName localhost"
+    "Port ${toString cfg.sshForwardPort}"
+    "User w4cbe"
+    "IdentityFile ${sandboxLib.sshIdentityFile}"
+    "IdentitiesOnly yes"
+    "StrictHostKeyChecking accept-new"
+  ];
 in
 {
   imports = [ inputs.microvm.nixosModules.host ];
@@ -106,6 +123,16 @@ in
     sshForwardPort = lib.mkOption {
       type = lib.types.port;
       default = 2222;
+    };
+
+    forward = {
+      socksPort = lib.mkOption {
+        type = lib.types.port;
+        default = 1081;
+        description = "Host loopback port for `agent-sandbox forward socks`.";
+      };
+
+      chromium.package = lib.mkPackageOption pkgs "chromium" { };
     };
 
     guestHost = lib.mkOption {
@@ -202,15 +229,11 @@ in
         };
       };
 
+      # The -forward alias carries no agent sockets; `agent-sandbox forward` uses it.
       programs.ssh.extraConfig = ''
-        Host ${vmName}
-          HostName localhost
-          Port ${toString cfg.sshForwardPort}
-          User w4cbe
-          IdentityFile ${sandboxLib.sshIdentityFile}
-          IdentitiesOnly yes
-          StrictHostKeyChecking accept-new
-          RemoteForward ${sandboxLib.gpgAgentSocket sandboxLib.guestUid} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.extra
+        Host ${vmName}-forward
+        ${sshHostConfig}Host ${vmName}
+        ${sshHostConfig}  RemoteForward ${sandboxLib.gpgAgentSocket sandboxLib.guestUid} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.extra
           RemoteForward ${sandboxLib.sshAgentSocket sandboxLib.guestUid} ''${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
       '';
 
@@ -269,8 +292,13 @@ in
               systemctl stop "${unit}" || true
               ${config.security.wrapperDir}/sudo rm -f "${config.microvm.stateDir}/${vmName}/${sandboxLib.imageName}"
               ssh-keygen -R "[localhost]:${toString cfg.sshForwardPort}" >/dev/null 2>&1 || true
+              rm -rf "${browserDir}"
               echo "${vmName} reset; the disk image is recreated on next start."
             '';
+            isRunning = ''systemctl is-active --quiet "${unit}"'';
+            forwardSsh = ''ssh "$@" ${vmName}-forward'';
+            inherit browseScript;
+            inherit (cfg.forward) socksPort;
           };
         })
       ];

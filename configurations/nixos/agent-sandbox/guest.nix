@@ -169,10 +169,12 @@ in
     pkgs.skopeo
     pkgs.crane
     pkgs.ssh-to-age
+    pkgs.openspec
     (pkgs.google-cloud-sdk.withExtraComponents [
       pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin
     ])
   ];
+  environment.variables.OPENSPEC_TELEMETRY = "0";
 
   home-manager = {
     useUserPackages = true;
