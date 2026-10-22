@@ -142,6 +142,10 @@ jobs:
           if [[ -n "$pr_id" ]]; then
             curl -sf -X PATCH -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
               "$api/pulls/$pr_id" -d "$payload"
+            # Force-pushes to an open PR don't fire pull_request:synchronize here, so request the re-review explicitly.
+            dispatch=$(jq -n --arg ref "$base" --arg pr "$pr_id" '{ref: $ref, inputs: {pr_number: $pr}}')
+            curl -sf -X POST -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/json" \
+              "$api/actions/workflows/pkg-update-review.yml/dispatches" -d "$dispatch"
           else
             create_payload=$(jq -n --arg t "$title" --arg b "$body" --arg h "$branch" --arg base "$base" \
               '{title: $t, body: $b, head: $h, base: $base}')

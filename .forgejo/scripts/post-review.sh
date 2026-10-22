@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-# Post a PR review to the Forgejo API. Claude invokes this as a single tool call
-# instead of composing a jq+curl payload inline -- embedding a long markdown
-# review body (backticks, code fences, $-signs) in a shell variable/heredoc is
-# fragile and a common source of wasted retry turns.
+# Post a PR review to the Forgejo API.
 #
 # Usage: post-review.sh <APPROVED|REQUEST_CHANGES> <body-file>
 #
