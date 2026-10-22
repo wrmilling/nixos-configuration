@@ -321,6 +321,13 @@ in
                 iptables -D nixos-fw -p tcp --dport 22 ! -s 192.168.64.1 -j DROP 2>/dev/null || true
               '';
 
+              # Fit the host VPN's 1350 MTU; vmnet doesn't clamp MSS, so SSH to GitHub stalls.
+              systemd.network.links."10-vm-nat" = {
+                matchConfig.MACAddress = sandboxLib.userInterface.mac;
+                linkConfig.MTUBytes = "1300";
+                linkConfig.NamePolicy = "path";
+              };
+
               microvm = {
                 hypervisor = "vfkit";
                 vmHostPackages = pkgs;
