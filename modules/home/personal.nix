@@ -114,6 +114,7 @@ in
         pkgs.claude-desktop
         pkgs.element-desktop
         pkgs.signal-desktop
+        pkgs.sable
         # pkgs.gomuks-desktop
         pkgs.gparted
         pkgs.keepassxc
