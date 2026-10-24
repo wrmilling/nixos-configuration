@@ -105,6 +105,8 @@ in
     {
       modules.home.terminal.agents.mcpServers = {
         "mcp-nixos" = {
+          # fastmcp-slim is broken against mcp 2 until nixpkgs PR #563493 lands
+          enable = lib.mkDefault false;
           command = lib.getExe pkgs.mcp-nixos;
           claudePermissions = [
             "mcp__mcp-nixos"

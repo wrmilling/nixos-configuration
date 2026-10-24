@@ -61,9 +61,6 @@ in
     trusted-users = lib.mkForce [ "root" ];
   };
 
-  # microvm leaves vfkit off its allowlist, which would split stage 1 per platform.
-  boot.initrd.systemd.enable = true;
-
   # A lower-layer delete frees nothing but leaves a whiteout that persists on the
   # image and masks that path in any later boot whose closure contains it.
   boot.initrd.systemd.services.sweep-store-whiteouts = {

@@ -16,10 +16,10 @@ if [[ "$new_version" == "$current_version" ]]; then
 fi
 
 prefetch_file() {
-  nix --extra-experimental-features nix-command store prefetch-file --hash-type sha256 --json "$1"
+  nix --extra-experimental-features nix-command store prefetch-file --hash-type sha256 --json "$@"
 }
 prefetch_github() {
-  nix shell nixpkgs#nix-prefetch-github -c nix-prefetch-github "$1" "$2" --rev "$3" | jq -r '.hash'
+  prefetch_file --unpack "https://github.com/$1/$2/archive/$3.tar.gz" | jq -r '.hash'
 }
 
 src_json=$(prefetch_file "https://registry.npmjs.org/rea-agents/-/rea-agents-${new_version}.tgz")
