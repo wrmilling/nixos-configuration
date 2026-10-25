@@ -268,11 +268,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792818371,
-        "narHash": "sha256-yhEZAzZRNvzYpoAlyFY3wM75V9BmkIXJIueof8S5gOg=",
+        "lastModified": 1792896866,
+        "narHash": "sha256-/0tELNnhdSnP+bHSdWiEe6KpfSwi6WrTnT9cm/jNkjA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "2cd3234928f60bbff695a7ee56115ef7799c47cd",
+        "rev": "c216bf5a1f173b0481bd5c8c489ebe5595ecc68c",
         "type": "github"
       },
       "original": {
@@ -517,11 +517,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1792615934,
-        "narHash": "sha256-q1ku4ygV7tdmv5Q9QYwhVDsNMZRJcRYjVczoX5+XWBo=",
-        "rev": "da6dc0e7b26060f2f71ce3ef7088fb56ee44fa36",
+        "lastModified": 1792898606,
+        "narHash": "sha256-v+CWvNPgAsxoqWDWmkjhh3qwZiE/oGkhXT+QH79yg2o=",
+        "rev": "1f607aa79b6356ed45d3cd3c8079c196e79efa2c",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12400.da6dc0e7b260/nixexprs.tar.zst"
+        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.12658.1f607aa79b63/nixexprs.tar.zst"
       },
       "original": {
         "type": "tarball",
@@ -530,11 +530,11 @@
     },
     "nixpkgs-unstable-small": {
       "locked": {
-        "lastModified": 1792839268,
-        "narHash": "sha256-l/pvZV6u92DmCh8oM6LJvvY5fpZzwAIuKsYTTIVoQA8=",
-        "rev": "21f9767ba1ac8b3ab8e7a7d469dff3fa47b684a6",
+        "lastModified": 1792925778,
+        "narHash": "sha256-7nfXedCgDoTmau/ZpEWR0H8/pGepHlVL2KhDG4LjiEs=",
+        "rev": "acc2ec71996e90e6e011fa14979b13cdc070ec79",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1100859.21f9767ba1ac/nixexprs.tar.zst"
+        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1101780.acc2ec71996e/nixexprs.tar.zst"
       },
       "original": {
         "type": "tarball",
@@ -699,11 +699,11 @@
         "std": "std"
       },
       "locked": {
-        "lastModified": 1792771741,
-        "narHash": "sha256-4rtdcBixqaLP3W23y2w9VWANkvhubHXqZihhDo04ABQ=",
+        "lastModified": 1792919450,
+        "narHash": "sha256-gIQYujSNBaPsJGw3Kj/sqa9ODWVaiZrsKf8ArXKdSJE=",
         "owner": "Daaboulex",
         "repo": "steam-arm64-nix",
-        "rev": "dbeb3fd7ac6b539be0412700f5567cc94af59503",
+        "rev": "aa553ea8dd094e9462639b5b77c32cf212bc7a83",
         "type": "github"
       },
       "original": {
