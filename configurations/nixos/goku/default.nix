@@ -17,7 +17,8 @@
     nixos.forgejoRunner = {
       enable = true;
       domain = secrets.forgejo.domain;
-      runnerTokenFile = config.sops.secrets."forgejo/runnerToken".path;
+      runnerUuid = secrets.hosts.goku.forgejoRunnerUuid;
+      runnerTokenFile = config.sops.secrets."forgejo/runners/goku".path;
     };
   };
 
@@ -45,7 +46,7 @@
     };
   };
 
-  sops.secrets."forgejo/runnerToken" = {
+  sops.secrets."forgejo/runners/goku" = {
     sopsFile = ../../../secrets/forgejo.yaml;
   };
 

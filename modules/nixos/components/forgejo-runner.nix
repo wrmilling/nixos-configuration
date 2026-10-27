@@ -17,9 +17,14 @@ in
       description = "Domain of the Forgejo instance this runner registers against.";
     };
 
+    runnerUuid = lib.mkOption {
+      type = lib.types.str;
+      description = "UUID of this registered runner (from its `.runner` file or the Forgejo runner admin page).";
+    };
+
     runnerTokenFile = lib.mkOption {
       type = lib.types.path;
-      description = "Path to the file containing the forgejo runner registration token.";
+      description = "Path to the file containing this runner's token (not the registration token).";
     };
   };
 
@@ -36,31 +41,32 @@ in
       iptables -D nixos-fw -i br-+    -p tcp --dport 41230 -j nixos-fw-accept || true
     '';
 
-    services.gitea-actions-runner = {
-      package = pkgs.forgejo-runner;
-      instances.${config.networking.hostName} = {
-        enable = true;
-        name = config.networking.hostName;
-        settings = {
-          runner.fetch_interval = "15s";
-          container.docker_host = "automount";
-          cache = {
-            enabled = true;
-            proxy_port = 41230;
-          };
+    services.forgejo-runner.instances.${config.networking.hostName} = {
+      enable = true;
+      settings = {
+        runner = {
+          fetch_interval = "15s";
+          labels = [
+            "alpine:docker://alpine:3.23.4"
+            "alpine-latest:docker://alpine:latest"
+            "ubuntu-latest:docker://node:18-bullseye"
+            "alpine-tokyo:docker://${cfg.domain}/wrmilling/alpine-tokyo:${alpineTokyoVersion}"
+            "${pkgs.stdenv.hostPlatform.system}:docker://${cfg.domain}/wrmilling/alpine-tokyo:${alpineTokyoVersion}"
+            "alpine-tokyo-latest:docker://${cfg.domain}/wrmilling/alpine-tokyo:latest"
+            "${pkgs.stdenv.hostPlatform.system}-latest:docker://${cfg.domain}/wrmilling/alpine-tokyo:latest"
+          ];
         };
-        labels = [
-          "alpine:docker://alpine:3.23.4"
-          "alpine-latest:docker://alpine:latest"
-          "ubuntu-latest:docker://node:18-bullseye"
-          "alpine-tokyo:docker://${cfg.domain}/wrmilling/alpine-tokyo:${alpineTokyoVersion}"
-          "${pkgs.stdenv.hostPlatform.system}:docker://${cfg.domain}/wrmilling/alpine-tokyo:${alpineTokyoVersion}"
-          "alpine-tokyo-latest:docker://${cfg.domain}/wrmilling/alpine-tokyo:latest"
-          "${pkgs.stdenv.hostPlatform.system}-latest:docker://${cfg.domain}/wrmilling/alpine-tokyo:latest"
-        ];
-        url = "https://${cfg.domain}";
-        tokenFile = cfg.runnerTokenFile;
+        container.docker_host = "automount";
+        cache = {
+          enabled = true;
+          proxy_port = 41230;
+        };
+        server.connections.default = {
+          url = "https://${cfg.domain}";
+          uuid = cfg.runnerUuid;
+        };
       };
+      secrets.server.connections.default.token_url = cfg.runnerTokenFile;
     };
   };
 }

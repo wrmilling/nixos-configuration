@@ -58,11 +58,12 @@ in
     nixos.forgejoRunner = {
       enable = true;
       domain = secrets.forgejo.domain;
-      runnerTokenFile = config.sops.secrets."forgejo/runnerToken".path;
+      runnerUuid = secrets.hosts.bob.forgejoRunnerUuid;
+      runnerTokenFile = config.sops.secrets."forgejo/runners/bob".path;
     };
   };
 
-  sops.secrets."forgejo/runnerToken" = {
+  sops.secrets."forgejo/runners/bob" = {
     sopsFile = ../../../secrets/forgejo.yaml;
   };
 
