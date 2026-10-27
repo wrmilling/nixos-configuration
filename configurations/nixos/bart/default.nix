@@ -30,6 +30,7 @@
     hostName = "bart"; # Define your hostname.
     domain = secrets.hosts.common.domain;
     nameservers = secrets.hosts.common.nameservers;
+    enableIPv6 = false;
     interfaces.eth0 = {
       useDHCP = false;
       ipv4.addresses = [
