@@ -1,10 +1,10 @@
 {
-  "version": "6.3.0",
+  "version": "6.8.0",
   "hashes": {
-    "src": "sha256-sWn8Y8BxDUTFxExZwvhx8iR530RHfN+qny5cN8RWOoQ=",
-    "lockfile": "sha256-kZ+mKVL0SR+LhgKdpzuH4aDe32MfQZXp+7fnDw4gGsw="
+    "src": "sha256-jVQux2qcs1BYS2CmycCIcG/4EtW7WwlMIMlbbcJWmLs=",
+    "lockfile": "sha256-HY+g8zsxJdPmAeyDKxjZ01s3RT82NA3AUH8GWo3hWK0="
   },
-  "npmDepsHash": "sha256-wVk6vZ41FdtneliVtZ1oTo5fSL4lYKrp86xBvYNGo7E=",
+  "npmDepsHash": "sha256-3WPXD+qm5WVfrTEvepKwX5RZBfbLBcPB0uDmKIx4MR8=",
   "jadxMcp": {
     "version": "0.7.1",
     "hash": "sha256-bl6s9QC2QpK/tzxJeXwZWPbuRGRuQ+hoA5rn/rVz/3U="
