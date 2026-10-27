@@ -31,30 +31,6 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
-
-    openldap = prev.openldap.overrideAttrs {
-      doCheck = !prev.stdenv.hostPlatform.isi686;
-    };
-
-    # Go test suite tries to bind a TCP listener, wish the build sandbox blocks
-    rancher = prev.rancher.overrideAttrs {
-      doCheck = false;
-    };
-
-    # nixpkgs PR #510918: linuxPackages.facetimehd 0.6.13 -> 0.7.0.1
-    linuxPackagesFor =
-      kernel:
-      (prev.linuxPackagesFor kernel).extend (
-        _lpFinal: lpPrev: {
-          facetimehd = lpPrev.facetimehd.overrideAttrs (oldAttrs: {
-            version = "0.7.0.1";
-            src = oldAttrs.src.override {
-              rev = "0.7.0.1";
-              sha256 = "sha256-VDEG0EsmkNLxXoQDGQV1HMX8Yg8YjoGLJ8NSerGms0I=";
-            };
-          });
-        }
-      );
   };
 
   # When applied, the stable nixpkgs set (declared in the flake inputs) will

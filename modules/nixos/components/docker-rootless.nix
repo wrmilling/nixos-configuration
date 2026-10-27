@@ -18,11 +18,7 @@ in
       rootless = {
         enable = true;
         setSocketVariable = true;
-        package = (
-          pkgs.docker.override (_args: {
-            buildxSupport = true;
-          })
-        );
+        package = pkgs.docker;
       };
     };
   };
