@@ -2,7 +2,7 @@
 
 ![neofetch screenshot](https://i.imgur.com/Hh16z3T.png)
 
-Donnager is my Lenovo Legion Y530 with the 1050ti, these are the steps that I initially took to install NixOS, though once the config is setup it can just be re-used for future re-installs if needed. This assumes you have booted into a NixOS install image from a USB stick, that we are installing with Full Disk Encryption, and that we will be using systemd-boot.
+Donnager is my Lenovo Legion Y530 with the 1050ti, these are the steps that I initially took to install NixOS, though once the config is setup it can just be reused for future re-installs if needed. This assumes you have booted into a NixOS install image from a USB stick, that we are installing with Full Disk Encryption, and that we will be using systemd-boot.
 
 ## Installation
 
@@ -45,9 +45,9 @@ Generate a config based on the currently detected hardware and disks.
 $ sudo nixos-generate-config --root /mnt
 ```
 
-Next I will normally open the hardware and configuration nix files to clean out comments and set basic information like hostname. Most of my other items are set by my profiles or modules so I will take care of those later.
+Next I will normally open the hardware and configuration nix files to clean out comments and set basic information like hostname. Most of my other items are set by my modules so I will take care of those later.
 
-Now, lets install:
+Now, let's install:
 
 ```
 $ cd /mnt
@@ -58,7 +58,7 @@ $ sudo reboot
 
 ### First Run
 
-Here is where I will normally try and setup all the hardware and import the profiles/modules I want from this repo. Since I use the minimal install, I will kick things off like so:
+Here is where I will normally try and setup all the hardware and enable the modules I want from this repo. Since I use the minimal install, I will kick things off like so:
 
 ```
 $ nix-shell -p git vim
@@ -66,23 +66,32 @@ $ cd /etc/nixos
 $ git clone https://github.com/wrmilling/nixos-configuration.git .
 ```
 
-I will then copy in the new machine basic config into a new machine folder and setup the configuration.nix in root. I will then replace the generated config with the new setup.
+I will then move the generated config into a new host folder under `configurations/nixos/`, where the flake picks it up automatically as `nixosConfigurations.donnager`.
 
 ```
-$ mkdir -p hosts/donnager
-$ mv ../configuration.nix hosts/donnager/default.nix
-$ mv ../hardware-configuration.nix hosts/donnager/hardware.nix
-$ vim hosts/donnager/default.nix
-# Update the link to hardware.nix and add all modules/profiles as required.
+$ mkdir -p configurations/nixos/donnager
+$ mv ../configuration.nix configurations/nixos/donnager/default.nix
+$ mv ../hardware-configuration.nix configurations/nixos/donnager/hardware.nix
+$ vim configurations/nixos/donnager/default.nix
+# Import ./hardware.nix and enable the machineType/component modules as required.
 ```
 
 I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine.
 
 ```
-$ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
+$ sudo nixos-rebuild switch --flake .#donnager
 ```
 
-The above is aliased to `nrs` on my machines.
+After the first switch, I keep the repo at `~/.nixos-configuration` and rebuild with [nh](https://github.com/nix-community/nh):
+
+```
+$ cd ~/.nixos-configuration
+$ git pull
+$ nh os switch .
+$ nh home switch .
+```
+
+The above is aliased to `nhs` on my machines.
 
 ## Outro
 

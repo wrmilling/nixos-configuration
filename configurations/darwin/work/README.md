@@ -36,7 +36,7 @@ nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
 git clone https://github.com/wrmilling/nixos-configuration.git ~/.nixos-configuration
 ```
 
-Note: `~/.nixos-configuration` is where I put it, you can chose your own as you see fit, just be sure to update the fish shell references.
+Note: `~/.nixos-configuration` is where I put it, you can choose your own as you see fit, just be sure to update the fish shell references.
 
 You will also need to define your own secrets file which includes the following in it (or just eliminate the secrets file and update your machine and usernames in the configuration):
 
@@ -62,6 +62,13 @@ Finally you can build/install the flake:
 darwin-rebuild switch --flake ~/.nixos-configuration/
 ```
 
+After that, rebuild with [nh](https://github.com/nix-community/nh) from the repo (aliased to `dhs`):
+
+```
+nh darwin switch .
+nh home switch .
+```
+
 ## Other Things
 
 Post install cleanup items (lest your shell yell at you).
@@ -69,7 +76,7 @@ Post install cleanup items (lest your shell yell at you).
 ### atuin login
 
 ```shell
-atuin login --username "<YOUR_USERNAME>" --key "<YOUR_KEY"
+atuin login --username "<YOUR_USERNAME>" --key "<YOUR_KEY>"
 atuin import auto
 atuin sync
 ```

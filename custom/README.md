@@ -1,6 +1,6 @@
 # Custom Packages
 
-Definition of custom packages which are generally not yet available in upstream nixpkgs or deired to have faster version bumps than upstream can support.
+Definition of custom packages which are generally not yet available in upstream nixpkgs or desired to have faster version bumps than upstream can support.
 
 ## Current Packages
 
@@ -16,7 +16,7 @@ Definition of custom packages which are generally not yet available in upstream 
 - [m5burner](pkgs/m5burner) — M5Stack firmware burning tool.
 - [maki](pkgs/maki) — AI coding agent extendable by neovim-like Lua plugins (tontinton/maki).
 - [xr-video-player](pkgs/xr-video-player) — OpenXR/Wayland VR video player, built from git (no upstream releases yet).
-- [fusion360](pkgs/fusion360) — Launcher that sets up a Wine/DXVK prefix and installs Autodesk Fusion 360 (proprietary, Windows-only) from Autodesk's own installer on first run; no upstream binary is fetched or pinned by Nix.
+- [fusion360](pkgs/fusion360) — Launcher that sets up a Wine/DXVK prefix and installs Autodesk Fusion 360 (proprietary, Windows-only) from Autodesk's own installer on first run; no upstream binary is fetched or pinned by Nix, so there is no `update.sh`.
 - [linux-pinebook-pro](pkgs/linux-pinebook-pro) — nixpkgs' latest kernel plus out-of-tree RK3399 Type-C DP patches for USB-C DisplayPort alt mode on the Pinebook Pro; version follows nixpkgs (no `update.sh`), built and cached by `.github/workflows/build-kernel.yml`.
 - [obsidianPlugins](pkgs/obsidianPlugins) — Obsidian community plugins, namespaced under `pkgs.obsidianPlugins.<name>` since none are packaged in nixpkgs:
   - `pandoc` — Export notes via Pandoc (DOCX, ePub, PDF, ...).
@@ -44,9 +44,6 @@ The `custom/overlays` directory provides Nix overlays that are applied to the fl
 - `claude-code` — Exposes `pkgs.claude-code` from the `claude-code-nix` flake input. Kept separate from `additions` so it can be selectively applied to home-manager configs without touching NixOS hosts.
 - `claude-desktop` — Exposes `pkgs.claude-desktop` from the `nixpkgs-claude-desktop` flake input (allowUnfree).
 - `fast-resume` — Exposes `pkgs.fast-resume` from the `fast-resume` flake's own `packages.<system>.default` (no overlays output upstream).
-- `modifications` — Patches and overrides existing packages:
-  - `openldap` — disable its test suite on i686.
-  - `rancher` — disable its Go test suite (it tries to bind a TCP listener).
-  - `linuxPackagesFor` — bump `linuxPackages.facetimehd` to 0.7.0.1 (nixpkgs PR #510918).
+- `modifications` — Patches and overrides of existing packages (currently empty).
 - `stable-packages` — Makes a stable `nixpkgs` set available as `pkgs.stable` (configured with `allowUnfree = true`).
 - `unstable-small-packages` — Makes the `nixpkgs-unstable-small` set available as `pkgs.unstable-small` (configured with `allowUnfree = true`).

@@ -166,7 +166,7 @@
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
 
       # Devshell for bootstrapping
-      # Acessible through 'nix develop' or 'nix-shell' (legacy)
+      # Accessible through 'nix develop' or 'nix-shell' (legacy)
       devShells = forAllSystems (
         system:
         let

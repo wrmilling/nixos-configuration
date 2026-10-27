@@ -102,9 +102,10 @@ can't use `nix store prefetch-file` directly.
 examples: `custom/pkgs/slides-git`, `custom/pkgs/cc9s`. `versions.json`
 carries `version`, `rev`, and `vendorHash`.
 
-Every archetype ends with `passthru.updateScript = ./update.sh;` and a
-`meta` block (`description`, `homepage`, `changelog` when there's a
-releases page, `license`, `platforms` or `mainProgram`, plus
+Every archetype ends with `passthru.updateScript = ./update.sh;` (unless
+there's no upstream version to pin, like `fusion360`, or it follows
+nixpkgs, like `linux-pinebook-pro`) and a `meta` block (`description`,
+`homepage`, `changelog` when there's a releases page, `license`, `platforms` or `mainProgram`, plus
 `sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];` for
 anything shipped as a prebuilt binary blob). Set `platforms`/`badPlatforms`
 accurately for anything that isn't portable (e.g. a prebuilt x86_64 binary,

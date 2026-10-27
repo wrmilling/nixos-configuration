@@ -2,12 +2,12 @@
 
 Main system level NixOS configuration for my hosts, still in progress for sifting through the config to separate machine-level concerns from user-level concerns (latter being moved to home manager).
 
-Each machine has its own directory where main config and hardware specific to it can be defined. These configurations generally reference a [home-manager](../home-manager) config to add in user-level packages and dotfiles configuration.
+Each machine has its own directory where main config and hardware specific to it can be defined. These configurations generally reference a [home-manager](../home) config to add in user-level packages and dotfiles configuration.
 
 ##  Configurations
 
 - [agent-sandbox](agent-sandbox) (MicroVM sandbox host; `agent-sandbox-aarch64` reuses its guest config for aarch64)
-- [bart](bart) (Server, KVM 2GB Instance)
+- [bart](bart) (Server, KVM 4GB Instance)
 - [bender](bender) (Laptop, Apple Macbook Pro)
 - [bob](bob) (Server, Oracle Free-tier ARM64)
 - [donnager](donnager) (Laptop, Lenovo Legion Y530)
@@ -26,5 +26,5 @@ Each machine has its own directory where main config and hardware specific to it
 - [nk3s-amd64-d](nk3s-amd64-d) (Server, BMAX B4 Plus)
 - [owen](owen) (Server, rPi4 8GB)
 - [retired](retired) (Retired Configurations)
-- [riker](riker) (Laptop, Pinebook Pro)
-- [serenity](serenity) (Laptop, Pinebook Pro)
+- [riker](riker) (Laptop, Pinebook Pro, Primary)
+- [serenity](serenity) (Laptop, Pinebook Pro, Broken Screen)

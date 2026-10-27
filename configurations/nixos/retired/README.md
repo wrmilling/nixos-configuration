@@ -1,6 +1,6 @@
 # retired
 
-These hosts are no longer being used but saved for future reference or re-use. May be deleted completely in the future.
+These hosts are no longer being used but saved for future reference or reuse. May be deleted completely in the future.
 
 - [bill](bill) (NixOS Server, Cheap 1GB KVM Box)
 - [cousteau](cousteau) (WSL, Windows 11)

@@ -9,7 +9,7 @@ nk3s-amd64-0 is a QEMU virtual machine on my NAS host running TrueNAS. It is ope
 Creates 2 partitions on the virtio drive, one for EFI Boot and one for the root.
 
 ```
-$ sudo fdisk /dev/vma
+$ sudo fdisk /dev/vda
 > g (GPT Table)
 > n (New Partition)
 > <enter> (Default 1)
@@ -22,9 +22,9 @@ $ sudo fdisk /dev/vma
 > <enter> (Default End of EFI)
 > <enter> (Default End of Disk)
 > w (Write)
-$ sudo mkfs.fat -F 32 /dev/vma1
-$ sudo fatlabel /dev/vma1 BOOTEFI
-$ sudo mkfs.ext4 -L nixos /dev/mapper/vma2
+$ sudo mkfs.fat -F 32 /dev/vda1
+$ sudo fatlabel /dev/vda1 BOOTEFI
+$ sudo mkfs.ext4 -L nixos /dev/vda2
 $ sudo mount /dev/disk/by-label/nixos /mnt
 $ sudo mkdir -p /mnt/boot
 $ sudo mount /dev/disk/by-label/BOOTEFI /mnt/boot

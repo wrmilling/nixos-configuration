@@ -13,7 +13,7 @@ $ logout
 $ ssh w4cbe@linus
 $ wget https://nixos.org/nix/install && sh install
 $ . $HOME/.nix-profile/etc/profile.d/nix.sh
-$ nix-channel --add https://nixos.org/channels/nixos-25.05 nixpkgs && nix-channel --update
+$ nix-channel --add https://nixos.org/channels/nixos-26.05 nixpkgs && nix-channel --update
 $ nix-env -f '<nixpkgs>' -iA nixos-install-tools
 $ sudo `which nixos-generate-config`
 # Update /etc/nixos/configuration.nix and hardware-configuration.nix
@@ -35,7 +35,7 @@ $ sudo shutdown -r now
 ```
   boot.loader.grub.device = "/dev/vda";
   networking.hostName = "linus";
-  time.timeZone = "Europe/Chicago";
+  time.timeZone = "America/Chicago";
   services.openssh.enable = true;
   users.users.w4cbe = {
     uid = 1000;

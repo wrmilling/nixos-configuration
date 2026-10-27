@@ -43,9 +43,9 @@ Generate a config based on the currently detected hardware and disks.
 $ sudo nixos-generate-config --root /mnt
 ```
 
-Next I will normally open the hardware and configuration nix files to clean out comments and set basic information like hostname. Most of my other items are set by my profiles or modules so I will take care of those later.
+Next I will normally open the hardware and configuration nix files to clean out comments and set basic information like hostname. Most of my other items are set by my modules so I will take care of those later.
 
-Now, lets install:
+Now, let's install:
 
 ```
 $ cd /mnt
@@ -56,7 +56,7 @@ $ sudo reboot
 
 ### First Run
 
-Here is where I will normally try and setup all the hardware and import the profiles/modules I want from this repo. Since I use the minimal install, I will kick things off like so:
+Here is where I will normally try and setup all the hardware and enable the modules I want from this repo. Since I use the minimal install, I will kick things off like so:
 
 ```
 $ nix-shell -p git vim
@@ -64,43 +64,52 @@ $ cd /etc/nixos
 $ git clone https://github.com/wrmilling/nixos-configuration.git .
 ```
 
-I will then copy in the new machine basic config into a new machine folder and setup the configuration.nix in root. I will then replace the generated config with the new setup.
+I will then move the generated config into a new host folder under `configurations/nixos/`, where the flake picks it up automatically as `nixosConfigurations.enterprise`.
 
 ```
-$ mkdir -p hosts/enterprise
-$ mv ../configuration.nix hosts/enterprise/default.nix
-$ mv ../hardware-configuration.nix hosts/enterprise/hardware.nix
-$ vim hosts/enterprise/default.nix
-# Update the link to hardware.nix and add all modules/profiles as required.
+$ mkdir -p configurations/nixos/enterprise
+$ mv ../configuration.nix configurations/nixos/enterprise/default.nix
+$ mv ../hardware-configuration.nix configurations/nixos/enterprise/hardware.nix
+$ vim configurations/nixos/enterprise/default.nix
+# Import ./hardware.nix and enable the machineType/component modules as required.
 ```
 
-I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine. You will need to comment out lanzaboote module in the flake definition for this machine and comment out the secure boot optional import in the hosts/<machine>/default.nix to have this run successfully prior to onboarding Secure Boot and TPM2 for LUKS.
+I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine. Until Secure Boot and TPM2 for LUKS are onboarded, set `modules.nixos.secureboot.enable = false;` in `configurations/nixos/enterprise/default.nix` so this first rebuild uses plain systemd-boot.
 
 ```
-$ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
+$ sudo nixos-rebuild switch --flake .#enterprise
 ```
 
-The above is aliased to `nrs` on my machines.
+After the first switch, I keep the repo at `~/.nixos-configuration` and rebuild with [nh](https://github.com/nix-community/nh):
+
+```
+$ cd ~/.nixos-configuration
+$ git pull
+$ nh os switch .
+$ nh home switch .
+```
+
+The above is aliased to `nhs` on my machines.
 
 ### Secure Boot
 
-I also enabled secure boot on this machine using [lanzaboote](https://github.com/nix-community/lanzaboote) which followed their [guide](https://github.com/nix-community/lanzaboote/blob/d32b80889700ec1479d19d08ebfdb9880a4e76d7/docs/QUICK_START.md) for setup. For the ELitebook, disabling Secure Boot in bios will put it into setup mode and by inporting your keys it will enable Secure Boot. The shortlist of commands are below, but read the guide for the latest:
+I also enabled secure boot on this machine using [lanzaboote](https://github.com/nix-community/lanzaboote) which followed their [guide](https://github.com/nix-community/lanzaboote/blob/d32b80889700ec1479d19d08ebfdb9880a4e76d7/docs/QUICK_START.md) for setup. Disabling Secure Boot in the firmware setup puts it into setup mode, and enrolling your keys turns Secure Boot back on. The shortlist of commands is below, but read the guide for the latest:
 
 ```
-# Disable Secure Boot in BIOS, F10 at startup to get into BIOS
+# Disable Secure Boot in the firmware setup
 # Ensure you see disabled in NixOS, e.g. "Secure Boot: disabled (disabled)"
 $ bootctl status
 
 # Create Keys for Secure Boot
 $ sudo sbctl create-keys
 
-# Import Lanzaboote and generate new signed EFI blobs, already done for Enterprise
-$ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
+# Set modules.nixos.secureboot.enable = true again and rebuild to generate signed EFI blobs
+$ nh os switch .
 
-# Verify generations and BOOTX64.EFI and systemd-bootx84.efi are signed.
+# Verify generations and BOOTX64.EFI and systemd-bootx64.efi are signed.
 $ sudo sbctl verify
 
-# Encroll keys onto machine for Secure Boot
+# Enroll keys onto machine for Secure Boot
 $ sudo sbctl enroll-keys --microsoft
 
 # Reboot the machine

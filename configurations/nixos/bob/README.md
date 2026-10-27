@@ -2,17 +2,17 @@
 
 ![neofetch screenshot](https://i.imgur.com/Mrwx9pL.png)
 
-This is a Oracle Free Tier AM1 ARM64 system. I am generally following [this guide](https://blog.korfuri.fr/posts/2022/08/nixos-on-an-oracle-free-tier-ampere-machine/) for the initial setup steps, copied/paraphrased below in case of link rot.
+This is a Oracle Free Tier A1 ARM64 system. I am generally following [this guide](https://blog.korfuri.fr/posts/2022/08/nixos-on-an-oracle-free-tier-ampere-machine/) for the initial setup steps, copied/paraphrased below in case of link rot.
 
 ## Installation
 
 ### Create Your Machine
 
-Register for Oracle Free tier and create an instance in your desired size running the latest LTS of Ubuntu available as a free-tier image. This may also require setting up an Oracle [VCN](https://www.oracle.com/cloud/networking/virtual-cloud-network/) (its been a minute since I did initial setup) with your desired ports open for the instance, google is a friend here.
+Register for Oracle Free tier and create an instance in your desired size running the latest LTS of Ubuntu available as a free-tier image. This may also require setting up an Oracle [VCN](https://www.oracle.com/cloud/networking/virtual-cloud-network/) (it's been a minute since I did initial setup) with your desired ports open for the instance, google is a friend here.
 
 For my instance, I built the VM.Standard.A1.Flex with 4 OCPU and 24GB of memory (just like the article linked above). For my block storage, I chose 150GB to be allocated to this instance, the other 50GB in the free tier being allocated to the also-free x86_64 instance available at Oracle.
 
-Once your machine is created, its time to...
+Once your machine is created, it's time to...
 
 ### Install Nix
 
@@ -56,7 +56,7 @@ Config being edited looking something like this (don't forget to add SSH key to 
 }
 ```
 
-Once save, you can build the system:
+Once saved, you can build the system:
 
 ```
 $ nix-build '<nixpkgs/nixos>' -A config.system.build.kexec_tarball -I nixos-config=./myconfig.nix
@@ -145,20 +145,10 @@ Once logged back into the fresh system as root, I will normally do the following
 
 ```
 $ cd /etc/nixos/
-$ nix-shell -p git --run "git clone https://github.com/wrmilling/nixos-configuration.git .
+$ nix-shell -p git --run "git clone https://github.com/wrmilling/nixos-configuration.git ."
 ```
 
-Make sure the disk UUIDs are correct in `hardware.nix` from the machine generated `configuration.nix` before proceeding, they will change after a rebuild. Also, my config currently assumes a secrets file in `/etc/nixos` with the following contents for this machine:
-
-```
-{
-  hosts: {
-    bob: {
-      domain: <DOMAIN_NAME>;
-    };
-  };
-}
-```
+Make sure the disk UUIDs are correct in `hardware.nix` from the machine generated `configuration.nix` before proceeding, they will change after a rebuild. Also unlock git-crypt so `secrets/secrets.nix` is readable; the config reads this host's values from its `hosts.bob` attribute set.
 
 Finally:
 

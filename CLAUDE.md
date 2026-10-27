@@ -5,7 +5,7 @@ Nix flake managing NixOS, nix-darwin, and Home Manager configurations.
 ## Layout & autowiring
 - `flake.nix` — exports nixosConfigurations, darwinConfigurations, homeConfigurations, `packages`, `overlays`, formatter.
 - Hosts: `configurations/nixos/<host>/` — auto-discovered as nixosConfigurations (except `retired/`). Home: `configurations/home/{personal,server,pinebook,work}`. Darwin: `configurations/darwin/work`.
-- Modules in `modules/{nixos,home,darwin}` are auto-discovered by `lib/autowire.nix` and imported everywhere — no manual wiring. Everything is gated by enable options:
+- Top-level modules in `modules/{nixos,home,darwin}` are auto-discovered by `lib/autowire.nix` and imported everywhere; `modules/{nixos,home}/base.nix` recursively imports every file under `components/` — no manual wiring. Everything is gated by enable options:
   - Components: `modules/nixos/components/*.nix` → `modules.nixos.<name>.enable`; `modules/home/components/*.nix` → `modules.home.<name>.enable` (named `terminal.*.nix`, `graphical.*.nix`, `scripts.*.nix`).
   - Groupings: `modules/nixos/{server,desktop,laptop}.nix` → `modules.machineType.<type>`; `modules/home/{personal,server,...}.nix` → `modules.homeType.<type>`. These enable sets of components.
   - New reusable component: add the file with an enable option, then enable it in the relevant machineType/homeType module (default) or a single host's config if host-specific. Users live in `modules/nixos/users/`.
@@ -32,7 +32,7 @@ Nix flake managing NixOS, nix-darwin, and Home Manager configurations.
 - Format with `nix fmt` (nixfmt) before finishing.
 - Verify: `nix eval` the affected config, e.g. `nix eval .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath` or `.#homeConfigurations."w4cbe@<host>".activationPackage.drvPath`. For a simple, localized change to a shared module that reaches many hosts (e.g. swapping one home-manager program for another), it's enough to eval the current machine's own config plus the darwin config if the change touches darwin-relevant code — no need to eval every host the change happens to reach. Still call out the full blast radius (which homeTypes/hosts are affected) when describing the change. Eval more broadly for larger or cross-cutting changes.
 - Rebuilds (user runs): `nh os switch .`, `nh darwin switch .`, `nh home switch .`.
-- CI: Forgejo workflows in `.forgejo/workflows/`; reference actions as plain `actions/<name>` (no `${{ github.server_url }}`).
+- CI: Forgejo workflows in `.forgejo/workflows/` (reference actions as plain `actions/<name>`, no `${{ github.server_url }}`); GitHub Actions in `.github/workflows/` handle build-and-cache and the Pinebook Pro kernel.
 
 ## Shell commands (user runs fish)
 - Interactive commands must be fish-compatible: `(…)` not `$(…)`; `and`/`or` not `&&`/`||`; `set -gx NAME VALUE` not `export`; no `[[ ]]` or `<(…)`. Script files may be bash/POSIX sh.

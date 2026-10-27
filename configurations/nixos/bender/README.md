@@ -43,9 +43,9 @@ Generate a config based on the currently detected hardware and disks.
 $ sudo nixos-generate-config --root /mnt
 ```
 
-Next I will normally open the hardware and configuration nix files to clean out comments and set basic information like hostname. Most of my other items are set by my profiles or modules so I will take care of those later.
+Next I will normally open the hardware and configuration nix files to clean out comments and set basic information like hostname. Most of my other items are set by my modules so I will take care of those later.
 
-Now, lets install:
+Now, let's install:
 
 ```
 $ cd /mnt
@@ -56,7 +56,7 @@ $ sudo reboot
 
 ### First Run
 
-Here is where I will normally try and setup all the hardware and import the profiles/modules I want from this repo. Since I use the minimal install, I will kick things off like so:
+Here is where I will normally try and setup all the hardware and enable the modules I want from this repo. Since I use the minimal install, I will kick things off like so:
 
 ```
 $ nix-shell -p git vim
@@ -64,23 +64,32 @@ $ cd /etc/nixos
 $ git clone https://github.com/wrmilling/nixos-configuration.git .
 ```
 
-I will then copy in the new machine basic config into a new machine folder and setup the configuration.nix in root. I will then replace the generated config with the new setup.
+I will then move the generated config into a new host folder under `configurations/nixos/`, where the flake picks it up automatically as `nixosConfigurations.bender`.
 
 ```
-$ mkdir -p hosts/bender
-$ mv ../configuration.nix hosts/bender/default.nix
-$ mv ../hardware-configuration.nix hosts/bender/hardware.nix
-$ vim hosts/bender/default.nix
-# Update the link to hardware.nix and add all modules/profiles as required.
+$ mkdir -p configurations/nixos/bender
+$ mv ../configuration.nix configurations/nixos/bender/default.nix
+$ mv ../hardware-configuration.nix configurations/nixos/bender/hardware.nix
+$ vim configurations/nixos/bender/default.nix
+# Import ./hardware.nix and enable the machineType/component modules as required.
 ```
 
 I will then be able to update the nixos-configuration repo in github and just pull/rebuild as needed on the machine.
 
 ```
-$ sudo sh -c "cd /etc/nixos && git pull && nixos-rebuild switch --flake ."
+$ sudo nixos-rebuild switch --flake .#bender
 ```
 
-The above is aliased to `nrs` on my machines.
+After the first switch, I keep the repo at `~/.nixos-configuration` and rebuild with [nh](https://github.com/nix-community/nh):
+
+```
+$ cd ~/.nixos-configuration
+$ git pull
+$ nh os switch .
+$ nh home switch .
+```
+
+The above is aliased to `nhs` on my machines.
 
 ## Outro
 

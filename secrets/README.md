@@ -12,7 +12,7 @@ The NixOS layer decrypts secrets with the root-owned host SSH keys. Standalone
 Home-Manager runs as your unprivileged user and cannot read those keys, so it uses a
 dedicated **per-user age key** instead. The reusable module lives at
 `modules/home/components/sops.nix` and exposes `modules.home.sops.enable` (off by
-default). It sets `sops.age.keyFile` to `~/.config/sops/age/keys.txt` and intentionally
+default; the personal, pinebook and darwin homeTypes turn it on). It sets `sops.age.keyFile` to `~/.config/sops/age/keys.txt` and intentionally
 leaves `defaultSopsFile` unset — every secret declares its own `sopsFile`.
 
 ### 1. Generate the user age key (once per user/machine)

@@ -66,7 +66,6 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Enabled lanzaboote through secureboot.nix optional import.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 

@@ -4,7 +4,7 @@
 
 `luke` is part of a new series of machine names, reserved for servers and based on the [Bobiverse](https://bobiverse.fandom.com/wiki/We_Are_Legion_\(We_Are_Bob\)_Wiki) series of characters, because I am bad at naming.
 
-First iteration is based on an OpenVZ server because I have it laying around, `luke` as a name will probably be re-used for other servers in the future.
+First iteration is based on an OpenVZ server because I have it laying around, `luke` as a name will probably be reused for other servers in the future.
 
 `luke` is currently not 100% happy due to a systemd bug impacting resolved.
 
@@ -15,7 +15,7 @@ Utilizing [this project](https://github.com/zhaofengli/nixos-openvz/) to get Nix
 
 ```
 $ git clone https://github.com/zhaofengli/nixos-openvz.git
-$ cd nixos-openvz.git
+$ cd nixos-openvz
 $ vim configuration.nix
 ```
 

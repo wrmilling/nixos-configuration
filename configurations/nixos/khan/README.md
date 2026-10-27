@@ -6,18 +6,18 @@ This is a Oracle Free Tier VM.Standard.E2.1.Micro system.
 
 ### Create Your Machine
 
-Register for Oracle Free tier and create an instance in your desired size running the latest LTS of Ubuntu available as a free-tier image. This may also require setting up an Oracle [VCN](https://www.oracle.com/cloud/networking/virtual-cloud-network/) (its been a minute since I did initial setup) with your desired ports open for the instance, google is a friend here.
+Register for Oracle Free tier and create an instance in your desired size running the latest LTS of Ubuntu available as a free-tier image. This may also require setting up an Oracle [VCN](https://www.oracle.com/cloud/networking/virtual-cloud-network/) (it's been a minute since I did initial setup) with your desired ports open for the instance, google is a friend here.
 
 For my instance, I built the VM.Standard.E2.1.Micro with 1 OCPU and 1GB of memory. For my block storage, I chose 50GB to be allocated to this instance, the other 150GB in the free tier being allocated to the also-free ARM64 instance available at Oracle.
 
-Once your machine is created, its time to...
+Once your machine is created, it's time to...
 
 ### Install Nix
 
 ```
 $ sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --no-daemon
 $ . $HOME/.nix-profile/etc/profile.d/nix.sh
-$ nix-channel --add https://nixos.org/channels/nixos-25.05 nixpkgs
+$ nix-channel --add https://nixos.org/channels/nixos-26.05 nixpkgs
 $ nix-channel --update
 $ nix-env -iE "_: with import <nixpkgs/nixos> { configuration = {}; }; with config.system.build; [ nixos-generate-config nixos-install nixos-enter ]"
 $ sudo `which nixos-generate-config` --root /
@@ -41,7 +41,7 @@ $ sudo shutdown -r now
 Config additions which I may need for rebuilds in the future:
 
 ```
-  time.timeZone = "Europe/Chicago";
+  time.timeZone = "America/Chicago";
   services.openssh.enable = true;
   users.users.w4cbe = {
     uid = 1000;
