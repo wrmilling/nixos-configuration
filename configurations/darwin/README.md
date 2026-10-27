@@ -6,4 +6,4 @@ Each machine has its own directory where main config and hardware specific to it
 
 ##  Configurations
 
-- [work](work) (Laptop, M1 Macbook Pro via nix-darwin)
+- [work](work) (Laptop, Apple M5 MacBook Pro 16")

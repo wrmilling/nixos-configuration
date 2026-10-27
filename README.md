@@ -9,7 +9,7 @@
 - [flake.nix](flake.nix) (Entrypoint for rebuilding via `nh os|darwin|home switch .`)
 - [flake.lock](flake.lock) (Lockfile for current nix flake state)
 - [configurations/darwin](configurations/darwin/README.md) - (Definition of mac-based hosts)
-  - [work](configurations/darwin/work) (Laptop, Apple M1 Macbook Pro 16")
+  - [work](configurations/darwin/work) (Laptop, Apple M5 MacBook Pro 16")
 - [configurations/home](configurations/home/README.md) (User level configuration per machine via home-manager)
   - [personal](configurations/home/personal) (Personal/home-specific configuration)
   - [pinebook](configurations/home/pinebook) (Pinebook-specific configuration)

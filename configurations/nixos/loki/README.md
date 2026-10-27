@@ -59,10 +59,14 @@ $ sudo reboot
 Here is where I will normally try and setup all the hardware and enable the modules I want from this repo. Since I use the minimal install, I will kick things off like so:
 
 ```
-$ nix-shell -p git vim
+$ nix-shell -p git git-crypt vim wormhole-rs
 $ cd /etc/nixos
 $ git clone https://github.com/wrmilling/nixos-configuration.git .
+$ wormhole-rs receive <CODE>
+$ mv KEY ../ && git crypt unlock ../KEY && rm ../KEY
 ```
+
+The git-crypt key is sent from an existing machine with `wormhole-rs send`; `secrets/secrets.nix` must be unlocked for the flake to evaluate.
 
 I will then move the generated config into a new host folder under `configurations/nixos/`, where the flake picks it up automatically as `nixosConfigurations.loki`.
 
@@ -80,7 +84,16 @@ I will then be able to update the nixos-configuration repo in github and just pu
 $ sudo nixos-rebuild switch --flake .#loki
 ```
 
-After the first switch, I keep the repo at `~/.nixos-configuration` and rebuild with [nh](https://github.com/nix-community/nh):
+After the first switch, I clone the repo into my user's home, unlock git-crypt there the same way, and rebuild from it with [nh](https://github.com/nix-community/nh) from then on:
+
+```
+$ git clone https://github.com/wrmilling/nixos-configuration.git ~/.nixos-configuration
+$ cd ~/.nixos-configuration
+$ nix-shell -p wormhole-rs --run "wormhole-rs receive <CODE>"
+$ mv KEY ../ && git crypt unlock ../KEY && rm ../KEY
+```
+
+Future rebuilds:
 
 ```
 $ cd ~/.nixos-configuration
