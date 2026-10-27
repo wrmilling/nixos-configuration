@@ -99,6 +99,13 @@
           concurrentRequestLimit = 2;
           maxRequestsPerSecond = 5;
         }
+        {
+          # codeberg.org registry lookups intermittently fail, and Renovate treats the
+          # empty result as "no update" and autocloses the PR (forgejo/forgejo flaps).
+          # Abort the repo run on any error instead so existing PRs are left alone.
+          matchHost = "codeberg.org";
+          abortOnError = true;
+        }
       ];
       packageRules = [
         {
