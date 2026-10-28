@@ -15,6 +15,8 @@ in
       personal.enable = lib.mkEnableOption "personal obsidian vault at ~/.obsidian/personal";
       work.enable = lib.mkEnableOption "work obsidian vault at ~/.obsidian/work";
     };
+
+    plugins.localRestApi.enable = lib.mkEnableOption "Local REST API with MCP community plugin";
   };
 
   config = lib.mkIf cfg.enable {
@@ -31,7 +33,8 @@ in
         { pkg = pkgs.obsidianPlugins.advanced-tables; }
         { pkg = pkgs.obsidianPlugins.tasks; }
         { pkg = pkgs.obsidianPlugins.tasknotes; }
-      ];
+      ]
+      ++ lib.optional cfg.plugins.localRestApi.enable { pkg = pkgs.obsidianPlugins.local-rest-api; };
 
       # defaultSettings.cssSnippets = [
       #   { source = ./assets/tasknotes-kanban.css; }

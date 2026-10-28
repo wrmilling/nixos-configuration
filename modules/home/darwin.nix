@@ -53,6 +53,7 @@ in
       home.graphical.alacritty.enable = true;
       home.graphical.obsidian.enable = true;
       home.graphical.obsidian.vaults.work.enable = true;
+      home.graphical.obsidian.plugins.localRestApi.enable = true;
       home.graphical.xresources.enable = true;
       home.terminal.atuin.enable = true;
       home.terminal.claude-code.enable = true;

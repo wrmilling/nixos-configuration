@@ -7,4 +7,5 @@
   advanced-tables = pkgs.callPackage ./advanced-tables { };
   tasks = pkgs.callPackage ./tasks { };
   tasknotes = pkgs.callPackage ./tasknotes { };
+  local-rest-api = pkgs.callPackage ./local-rest-api { };
 }
