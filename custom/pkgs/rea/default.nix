@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchurl,
   fetchFromGitHub,
@@ -16,6 +17,23 @@ let
     url = "https://raw.githubusercontent.com/morluto/rea/rea-agents-${version}/package-lock.json";
     hash = versions.hashes.lockfile;
   };
+
+  # frida's install script downloads its prebuilt N-API binding at build time; fetch it here instead.
+  fridaBinding =
+    let
+      plat =
+        {
+          x86_64-linux = "linux-x64";
+          aarch64-linux = "linux-arm64";
+          x86_64-darwin = "darwin-x64";
+          aarch64-darwin = "darwin-arm64";
+        }
+        .${stdenv.hostPlatform.system};
+    in
+    fetchurl {
+      url = "https://github.com/frida/frida/releases/download/${versions.frida.version}/frida-v${versions.frida.version}-napi-v8-${plat}.tar.gz";
+      hash = versions.frida.hashes.${stdenv.hostPlatform.system};
+    };
 
   # rea's ELF and core bridges refuse any pyelftools/unicorn other than the exact versions they audited.
   unicornPinned = unicorn.overrideAttrs {
@@ -66,6 +84,11 @@ buildNpmPackage {
 
   postPatch = ''
     cp ${lockfile} package-lock.json
+  '';
+
+  npmRebuildFlags = [ "--ignore-scripts" ];
+  postConfigure = ''
+    tar -xzf ${fridaBinding} -C node_modules/frida
   '';
 
   dontNpmBuild = true;

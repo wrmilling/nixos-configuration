@@ -18,5 +18,14 @@
       "version": "2.1.2",
       "hash": "sha256-qA84xBztyWmt/rUExhhZMkQzvDPx0UE9MAIPG/Su3iE="
     }
+  },
+  "frida": {
+    "version": "17.23.2",
+    "hashes": {
+      "x86_64-linux": "sha256-n6j2aM6R6wNxPoVk3k+PveIyIz7pHXKcFnc/3hHbrpU=",
+      "aarch64-linux": "sha256-EQg/AWpCnodQbNaBZr0URdqP69UGok7fP2xKmno+qf4=",
+      "x86_64-darwin": "sha256-+JU7CXIMvczSccHWyqT/8IVHSp8k3vP+RhYFJqrNtAs=",
+      "aarch64-darwin": "sha256-hQ+6Igotm2quKCrG3eN/SIR+c1l7egbWSHN/+a3cM0A="
+    }
   }
 }

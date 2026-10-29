@@ -25,7 +25,18 @@ prefetch_github() {
 src_json=$(prefetch_file "https://registry.npmjs.org/rea-agents/-/rea-agents-${new_version}.tgz")
 src_hash=$(printf '%s' "$src_json" | jq -r '.hash')
 src_path=$(printf '%s' "$src_json" | jq -r '.storePath')
-lockfile_hash=$(prefetch_file "https://raw.githubusercontent.com/morluto/rea/rea-agents-${new_version}/package-lock.json" | jq -r '.hash')
+lockfile_json=$(prefetch_file "https://raw.githubusercontent.com/morluto/rea/rea-agents-${new_version}/package-lock.json")
+lockfile_hash=$(printf '%s' "$lockfile_json" | jq -r '.hash')
+lockfile_path=$(printf '%s' "$lockfile_json" | jq -r '.storePath')
+
+frida_version=$(jq -r '.packages["node_modules/frida"].version' "$lockfile_path")
+frida_hashes='{}'
+for pair in x86_64-linux:linux-x64 aarch64-linux:linux-arm64 x86_64-darwin:darwin-x64 aarch64-darwin:darwin-arm64; do
+  system=${pair%%:*}
+  plat=${pair#*:}
+  hash=$(prefetch_file "https://github.com/frida/frida/releases/download/${frida_version}/frida-v${frida_version}-napi-v8-${plat}.tar.gz" | jq -r '.hash')
+  frida_hashes=$(printf '%s' "$frida_hashes" | jq --arg system "$system" --arg hash "$hash" '.[$system] = $hash')
+done
 
 # The external engine versions rea audits are pinned in its compiled sources.
 jadx_release=$(tar -xzOf "$src_path" package/dist/android/JadxRelease.js)
@@ -57,6 +68,8 @@ write_versions() {
     --arg pyelftoolsHash "$pyelftools_hash" \
     --arg unicornVersion "$unicorn_version" \
     --arg unicornHash "$unicorn_hash" \
+    --arg fridaVersion "$frida_version" \
+    --argjson fridaHashes "$frida_hashes" \
     '.version = $version
     | .hashes = { src: $src, lockfile: $lockfile }
     | .npmDepsHash = $npmDepsHash
@@ -64,7 +77,8 @@ write_versions() {
     | .pwntools = {
         pyelftools: { version: $pyelftoolsVersion, hash: $pyelftoolsHash },
         unicorn: { version: $unicornVersion, hash: $unicornHash }
-      }' \
+      }
+    | .frida = { version: $fridaVersion, hashes: $fridaHashes }' \
     "$versions_file" > "$versions_file.tmp"
   mv "$versions_file.tmp" "$versions_file"
 }
