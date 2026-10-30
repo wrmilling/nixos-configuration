@@ -123,6 +123,13 @@ creation_rules:
         age:
           - *w4cbe
           - *work
+  - path_regex: secrets/obsidian.yaml$
+    key_groups:
+      - pgp:
+          - *primary
+        age:
+          - *w4cbe
+          - *work
   - path_regex: secrets/work.yaml$
     key_groups:
       - pgp:
