@@ -9,6 +9,7 @@ Definition of custom packages which are generally not yet available in upstream 
 - [kubernetes-mcp-server](pkgs/kubernetes-mcp-server) — MCP server for Kubernetes cluster interaction.
 - [flux-operator-mcp](pkgs/flux-operator-mcp) — MCP server for FluxCD GitOps cluster management.
 - [gomuks-desktop](pkgs/gomuks-desktop) — Electron wrapper for gomuks (Matrix client), built from upstream's prebuilt .deb.
+- [herdr-core](pkgs/herdr-core) — Server and CLI (`hc`) behind the Herdr desktop app; on the agent-sandbox guest so a host app can add it as a machine.
 - [codegraph](pkgs/codegraph) — Local code knowledge graph MCP server for AI coding agents (tracked ahead of the nixpkgs-provided version).
 - [rea](pkgs/rea) — Reverse-engineering MCP server and CLI for coding agents; passthru carries the JADX jar and pinned pwntools Python it expects.
 - [shiftleft-sl](pkgs/shiftleft-sl) — ShiftLeft CLI for code security analysis.

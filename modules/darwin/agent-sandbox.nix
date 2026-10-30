@@ -468,6 +468,11 @@ in
               ${findGuest}
               ssh ${sshBaseArgs} "$@" "w4cbe@$address"
             '';
+            # findGuest writes only to stderr, so stdout stays a clean pipe.
+            viaSsh = ''
+              ${findGuest}
+              exec ssh ${sshBaseArgs} -a -o BatchMode=yes "w4cbe@$address" "$@"
+            '';
             inherit browseScript;
             inherit (cfg.forward) socksPort;
           };

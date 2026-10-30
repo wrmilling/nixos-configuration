@@ -204,6 +204,9 @@ in
         home.terminal.maki.enable = true;
       };
 
+      # The remote end of a host Herdr app's `hc machine add --via 'agent-sandbox via'`.
+      home.packages = [ pkgs.herdr-core ];
+
       # gpg uses the agent socket forwarded from the host, which holds the
       # smartcard. A local agent would bind that path first.
       services.gpg-agent.enable = lib.mkForce false;

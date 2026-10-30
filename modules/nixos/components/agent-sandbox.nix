@@ -297,6 +297,7 @@ in
             '';
             isRunning = ''systemctl is-active --quiet "${unit}"'';
             forwardSsh = ''ssh "$@" ${vmName}-forward'';
+            viaSsh = ''exec ssh -a -o BatchMode=yes ${vmName}-forward "$@"'';
             inherit browseScript;
             inherit (cfg.forward) socksPort;
           };

@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  outputs,
   secrets,
   ...
 }:
@@ -86,6 +87,10 @@
       pkgs.jdk11
       pkgs.jdk17
       pkgs.jdk21
+      # Here, not in home.packages: the Herdr app's fixed core search covers
+      # /run/current-system/sw/bin, and a /nix/store core is never self-updated.
+      # Darwin's system pkgs carries no overlays, so take the flake's own output.
+      outputs.packages.${pkgs.stdenv.hostPlatform.system}.herdr-core
     ];
     shells = [
       pkgs.bashInteractive

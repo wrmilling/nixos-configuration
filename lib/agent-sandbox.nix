@@ -236,13 +236,14 @@ rec {
       reset,
       isRunning,
       forwardSsh,
+      viaSsh,
       browseScript,
       socksPort,
     }:
     ''
       usage() {
         cat <<USAGE
-      Usage: ${name} [start|stop [-f|--force]|restart [-f|--force] [-j|--join]|status|forward SPEC... [--browse]|reset|help]
+      Usage: ${name} [start|stop [-f|--force]|restart [-f|--force] [-j|--join]|status|forward SPEC... [--browse]|via COMMAND...|reset|help]
 
         (no args)  Start the sandbox if needed, then enter it.
         start      Start the sandbox without entering it.
@@ -253,6 +254,9 @@ rec {
         status     Report whether the sandbox is running.
         forward    Forward ports from host loopback into the running sandbox
                    over SSH, in the foreground until Ctrl+C. See '${name} forward -h'.
+        via        Run COMMAND in the running sandbox over SSH, with no agent
+                   sockets and no prompts. For a Herdr app on this host:
+                   hc machine add --name sandbox --via '${name} via'
         reset      Stop the sandbox and delete its disk image. Guest home,
                    credentials and history are lost. Pass -f to skip the prompt.
         help       Show this help.
@@ -406,6 +410,14 @@ rec {
         forward)
           shift
           forward "$@"
+          ;;
+        via)
+          shift
+          if ! ${isRunning}; then
+            echo "${name} is not running; start it first." >&2
+            exit 1
+          fi
+          ${viaSsh}
           ;;
         help | -h | --help)
           usage

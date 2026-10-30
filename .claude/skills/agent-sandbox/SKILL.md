@@ -174,10 +174,10 @@ Two helpers take the platform difference as an argument:
   `flake.nix` entry to one line.
 - **The `agent-sandbox` command has one shape and two backends.**
   `sandboxLib.mkCommandScript` owns the dispatch and the help text. The
-  subcommands are `start`, `stop`, `status`, `forward`, `reset`, and `help`.
-  No argument means start and then enter. Each platform module supplies its
-  own `start`, `stop`, `status`, `enter`, `reset`, `isRunning`, and
-  `forwardSsh` shell snippets. Only the platform module knows the mechanics.
+  subcommands are `start`, `stop`, `status`, `forward`, `via`, `reset`, and
+  `help`. No argument means start and then enter. Each platform module
+  supplies its own `start`, `stop`, `status`, `enter`, `reset`, `isRunning`,
+  `forwardSsh`, and `viaSsh` shell snippets. Only the platform module knows the mechanics.
   - **`forward` is the only way to reach guest ports from the host.** It runs
     `ssh -N` with `-L 127.0.0.1:…`/`-D 127.0.0.1:…` over a session that
     carries no agent sockets (NixOS: the `agent-sandbox-forward` ssh alias).
@@ -187,6 +187,15 @@ Two helpers take the platform difference as an argument:
     `socks` mode uses `--proxy-bypass-list=<-loopback>` so that profile cannot
     reach host loopback; each mode has its own profile directory, because
     Chromium ignores proxy flags when it reuses an already running profile.
+  - **`via` is a pipe for herdr-core's `hc machine add --via`.** It runs its
+    arguments as a remote command over the same no-agent session as
+    `forward`, with `BatchMode`, and must write nothing to stdout itself.
+    `forwardSsh` cannot serve here, because it puts the destination after
+    `"$@"`. Do not add the agent sockets: the connection is long-lived.
+    The guest gets `herdr-core` from `homeType.agentSandbox`. A guest agent
+    that a host agent launched may `terminal.send`/`read` its host parent
+    (herdr-core `remote.rs`, `CALLS_BACK`), so the safe use is guest agents
+    started from the app or a plain shell.
   - **NixOS/qemu.** Use `systemctl start`, `systemctl stop`, and
     `systemctl is-active` on `microvm@agent-sandbox.service`. `enter` polls
     SSH and then execs into it.
