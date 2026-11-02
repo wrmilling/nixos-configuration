@@ -126,6 +126,7 @@ in
         pkgs.calibre
         pkgs.deskflow
         pkgs.herdr-core
+        pkgs.herdr-app
       ]
     ];
   };

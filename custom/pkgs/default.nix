@@ -10,6 +10,7 @@ rec {
   flux-operator-mcp = pkgs.callPackage ./flux-operator-mcp { };
   gomuks-desktop = pkgs.callPackage ./gomuks-desktop { };
   herdr-core = pkgs.callPackage ./herdr-core { };
+  herdr-app = pkgs.callPackage ./herdr-app { };
   codegraph = pkgs.callPackage ./codegraph { };
   rea = pkgs.callPackage ./rea { };
   shiftleft-sl = pkgs.callPackage ./shiftleft-sl { };
