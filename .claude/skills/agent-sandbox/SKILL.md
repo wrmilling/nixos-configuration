@@ -191,7 +191,10 @@ Two helpers take the platform difference as an argument:
     arguments as a remote command over the same no-agent session as
     `forward`, with `BatchMode`, and must write nothing to stdout itself.
     `forwardSsh` cannot serve here, because it puts the destination after
-    `"$@"`. Do not add the agent sockets: the connection is long-lived.
+    `"$@"`. `--forward-agents` adds the gpg and ssh agent sockets, as
+    `enter` does; a Herdr app session has no other source for them. This
+    adds no risk over `enter`, because the YubiKey requires a touch for
+    every operation. The default stays agent-free for other `via` uses.
     The guest gets `herdr-core` from `homeType.agentSandbox`. A guest agent
     that a host agent launched may `terminal.send`/`read` its host parent
     (herdr-core `remote.rs`, `CALLS_BACK`), so the safe use is guest agents

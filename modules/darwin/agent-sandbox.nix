@@ -471,7 +471,11 @@ in
             # findGuest writes only to stderr, so stdout stays a clean pipe.
             viaSsh = ''
               ${findGuest}
-              exec ssh ${sshBaseArgs} -a -o BatchMode=yes "w4cbe@$address" "$@"
+              agent_args=()
+              if [ -n "$forward_agents" ]; then
+                agent_args=(${sshForwardArgs})
+              fi
+              exec ssh ${sshBaseArgs} "''${agent_args[@]}" -a -o BatchMode=yes "w4cbe@$address" "$@"
             '';
             inherit browseScript;
             inherit (cfg.forward) socksPort;

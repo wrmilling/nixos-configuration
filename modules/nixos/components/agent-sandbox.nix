@@ -297,7 +297,13 @@ in
             '';
             isRunning = ''systemctl is-active --quiet "${unit}"'';
             forwardSsh = ''ssh "$@" ${vmName}-forward'';
-            viaSsh = ''exec ssh -a -o BatchMode=yes ${vmName}-forward "$@"'';
+            viaSsh = ''
+              host=${vmName}-forward
+              if [ -n "$forward_agents" ]; then
+                host=${vmName}
+              fi
+              exec ssh -a -o BatchMode=yes "$host" "$@"
+            '';
             inherit browseScript;
             inherit (cfg.forward) socksPort;
           };
