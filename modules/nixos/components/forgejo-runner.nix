@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.modules.nixos.forgejoRunner;
-  alpineTokyoVersion = "3.23.4-5";
+  alpineTokyoVersion = "3.24.4-1";
 in
 {
   options.modules.nixos.forgejoRunner = {
