@@ -13,8 +13,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.pw-volume ];
-
     security.rtkit.enable = true;
     services.pipewire = {
       enable = true;

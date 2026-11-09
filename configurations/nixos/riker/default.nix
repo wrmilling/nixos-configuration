@@ -49,7 +49,6 @@
     cryptroot = {
       device = "/dev/disk/by-uuid/ddce2ffe-beb7-4e54-a2ff-f0759d15d55d";
       allowDiscards = true;
-      preLVM = true;
     };
   };
 

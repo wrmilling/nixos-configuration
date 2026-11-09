@@ -53,8 +53,8 @@ OPP_TABLES = {
 }
 
 
-def build_block(name, table, phandle_line):
-    lines = [f"\t{name} {{", '\t\tcompatible = "operating-points-v2";']
+def build_block(name, label, table, phandle_line):
+    lines = [f"\t{label}{name} {{", '\t\tcompatible = "operating-points-v2";']
     if table["opp-shared"]:
         lines.append("\t\topp-shared;")
     if phandle_line:
@@ -74,7 +74,10 @@ def build_block(name, table, phandle_line):
 
 def patch(text):
     for name, table in OPP_TABLES.items():
-        pattern = re.compile(r"\t" + re.escape(name) + r" \{.*?\n\t\};\n", re.S)
+        # dtbs built with symbols (-@) decompile with labels, e.g. "cluster0_opp: opp-table-0 {".
+        pattern = re.compile(
+            r"\t((?:[\w-]+: )*)" + re.escape(name) + r" \{.*?\n\t\};\n", re.S
+        )
         m = pattern.search(text)
         if not m:
             sys.exit(f"error: could not find {name} in input dts")
@@ -84,7 +87,7 @@ def patch(text):
             sys.exit(f"error: {name} has no phandle to preserve")
         phandle_line = f"phandle = <{phandle_match.group(1)}>;"
 
-        block = build_block(name, table, phandle_line)
+        block = build_block(name, m.group(1), table, phandle_line)
         text = text[: m.start()] + block + text[m.end() :]
     return text
 
