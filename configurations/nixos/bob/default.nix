@@ -39,7 +39,11 @@ in
     nixos.sshd.banner = "${secrets.sshd.banner}";
     nixos.nixbuildHost.enable = true;
     nixos.webhost.enable = true;
-    nixos.atuin.enable = true;
+    nixos.atuin = {
+      enable = true;
+      # e2e_ai_sessions tests time out on aarch64 (Hydra too), so it's never cached.
+      package = pkgs.atuin.overrideAttrs { doCheck = false; };
+    };
     nixos.syncthingHub = {
       enable = true;
       certFile = config.sops.secrets."syncthing/cert".path;
