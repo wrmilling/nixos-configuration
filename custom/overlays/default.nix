@@ -16,7 +16,10 @@
   # Provides pkgs.fast-resume from the angristan/fast-resume flake's own
   # package output (no overlays output upstream, unlike claude-code-nix).
   fast-resume = final: _prev: {
-    fast-resume = inputs.fast-resume.packages.${final.stdenv.hostPlatform.system}.default;
+    # Upstream package lacks the system libs cargoSetupHook now forces; drop once fixed.
+    fast-resume =
+      inputs.fast-resume.packages.${final.stdenv.hostPlatform.system}.default.overrideAttrs
+        { dontCargoUseSystemLibs = true; };
   };
 
   claude-desktop = final: _prev: {
@@ -28,11 +31,10 @@
   };
 
   modifications = final: prev: {
-    # Stale upstream node_modules hash for 2.2.5; drop once nixpkgs fixes it.
-    opencode = prev.opencode.overrideAttrs (old: {
-      node_modules = old.node_modules.overrideAttrs {
-        outputHash = "sha256-prx9dX7kUvs/E3zopkaPk5LXh3xJAy5sZeum/W8L7cA=";
-      };
+    # Broken by cargoSetupHook forcing system libs; drop once nixos-unstable has the fixes.
+    codex = final.unstable-small.codex;
+    viddy = prev.viddy.overrideAttrs (old: {
+      buildInputs = (old.buildInputs or [ ]) ++ [ final.sqlite ];
     });
   };
 
