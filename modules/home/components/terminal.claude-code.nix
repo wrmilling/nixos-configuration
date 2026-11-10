@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  secrets,
   ...
 }:
 let
@@ -597,6 +598,13 @@ in
           outputStyle = "concise";
           cleanupPeriodDays = 36500;
           env.CLAUDE_CODE_SUBAGENT_MODEL = cfg.subagentModel;
+          extraKnownMarketplaces = {
+            merry-band-of-pirates.source = {
+              source = "git";
+              url = "https://${secrets.forgejo.domain}/wrmilling/merry-band-of-pirates.git";
+            };
+          }
+          // (cfg.extraSettings.extraKnownMarketplaces or { });
           permissions = {
             defaultMode = cfg.extraPermissions.defaultMode;
             allow =
