@@ -131,6 +131,7 @@ in
 
   # The forwarded host agent, so git authenticates with the host's YubiKey. Uses
   # the actual uid, not sandboxLib's, because Darwin renumbers the guest user.
+  # modules/home/agent-sandbox.nix sets the same socket for the systemd user manager.
   environment.variables.SSH_AUTH_SOCK = "/run/user/${toString config.users.users.w4cbe.uid}/gnupg/S.gpg-agent.ssh";
 
   # microvm.nix registers from postBootCommands, unordered against home-manager,
