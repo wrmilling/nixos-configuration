@@ -10,6 +10,7 @@
 }:
 let
   sandboxLib = import ../../../lib/agent-sandbox.nix { inherit lib; };
+  sshAuthSock = "/run/user/${toString config.users.users.w4cbe.uid}/gnupg/S.gpg-agent.ssh";
 
   # overlayfs forbids changing a layer under a live mount, hence the guard.
   # Flags rather than exits: inlined into stage 1, where exit would end it.
@@ -131,8 +132,10 @@ in
 
   # The forwarded host agent, so git authenticates with the host's YubiKey. Uses
   # the actual uid, not sandboxLib's, because Darwin renumbers the guest user.
-  # modules/home/agent-sandbox.nix sets the same socket for the systemd user manager.
-  environment.variables.SSH_AUTH_SOCK = "/run/user/${toString config.users.users.w4cbe.uid}/gnupg/S.gpg-agent.ssh";
+  environment.variables.SSH_AUTH_SOCK = sshAuthSock;
+  # user.conf, unlike home-manager's environment.d, exists before the user manager
+  # starts, so units like herdr-core's hold inherit it.
+  systemd.user.settings.Manager.DefaultEnvironment = "SSH_AUTH_SOCK=${sshAuthSock}";
 
   # microvm.nix registers from postBootCommands, unordered against home-manager,
   # and without --store local, where nix picks the daemon and refuses.

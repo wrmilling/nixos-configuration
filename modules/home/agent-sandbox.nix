@@ -211,10 +211,6 @@ in
       # smartcard. A local agent would bind that path first.
       services.gpg-agent.enable = lib.mkForce false;
 
-      # herdr-core strips SSH_AUTH_SOCK from its hold snapshot unless the user
-      # manager provides it. Same socket as guest.nix's environment.variables.
-      systemd.user.sessionVariables.SSH_AUTH_SOCK = "\${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh";
-
       # An unexpired generation is a GC root, so the guest's nix.gc cannot
       # collect it.
       services.home-manager.autoExpire = {
