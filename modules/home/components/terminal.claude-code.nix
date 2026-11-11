@@ -605,6 +605,12 @@ in
             };
           }
           // (cfg.extraSettings.extraKnownMarketplaces or { });
+          enabledPlugins = {
+            "skippy@merry-band-of-pirates" = true;
+            "nagatha@merry-band-of-pirates" = true;
+            "bilby@merry-band-of-pirates" = true;
+          }
+          // (cfg.extraSettings.enabledPlugins or { });
           permissions = {
             defaultMode = cfg.extraPermissions.defaultMode;
             allow =
