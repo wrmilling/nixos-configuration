@@ -104,7 +104,7 @@ let
     for _ in $(seq 1 60); do
       candidate=$(guest_ip)
       if [ -n "$candidate" ] &&
-         ssh ${sshBaseArgs} -o ConnectTimeout=1 -o BatchMode=yes "w4cbe@$candidate" true 2>/dev/null; then
+         ssh -n ${sshBaseArgs} -o ConnectTimeout=1 -o BatchMode=yes "w4cbe@$candidate" true 2>/dev/null; then
         address="$candidate"
         break
       fi
