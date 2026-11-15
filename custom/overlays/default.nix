@@ -30,13 +30,7 @@
       }).claude-desktop;
   };
 
-  modifications = final: prev: {
-    # Broken by cargoSetupHook forcing system libs; drop once nixos-unstable has the fixes.
-    codex = final.unstable-small.codex;
-    viddy = prev.viddy.overrideAttrs (old: {
-      buildInputs = (old.buildInputs or [ ]) ++ [ final.sqlite ];
-    });
-  };
+  modifications = final: prev: { };
 
   # When applied, the stable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.stable'
