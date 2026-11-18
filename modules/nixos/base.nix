@@ -61,6 +61,8 @@ in
       };
     };
 
+    services.nginx.package = lib.mkIf config.services.nginx.enable pkgs.unstable-small.nginxStable;
+
     # Misc Settings
     environment.pathsToLink = [ "/libexec" ];
 
