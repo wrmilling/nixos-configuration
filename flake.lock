@@ -447,7 +447,7 @@
         "narHash": "sha256-vJoAj1xon3Mhfc8FZ5uBrPyZee9Eqa05gG/taXv6iZ8=",
         "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1122823.04906337b6d5/nixexprs.tar.zst?lastModified=1794890597&rev=04906337b6d53e8bb0eaf0470ae9f070a4d4eb55"
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1122823.04906337b6d5/nixexprs.tar.zst"
       },
       "original": {
         "type": "tarball",
@@ -521,7 +521,7 @@
         "narHash": "sha256-brwp4mLw1LUBC4FDrBluV5II+2lJRLl+qnpNd1wjPoo=",
         "rev": "f68407657ad294471eb4b2e65d193df26edf729f",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.14630.f68407657ad2/nixexprs.tar.zst?lastModified=1794872590&rev=f68407657ad294471eb4b2e65d193df26edf729f"
+        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.14630.f68407657ad2/nixexprs.tar.zst"
       },
       "original": {
         "type": "tarball",
@@ -534,7 +534,7 @@
         "narHash": "sha256-7IE+fF5daCHEfuafI9rbeR2er1kII2qLGedd8QrODHI=",
         "rev": "d00708e733dc47417b440d7537b0349f1ee66e22",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1123956.d00708e733dc/nixexprs.tar.zst?lastModified=1795016832&rev=d00708e733dc47417b440d7537b0349f1ee66e22"
+        "url": "https://releases.nixos.org/nixos/unstable-small/nixos-26.11pre1123956.d00708e733dc/nixexprs.tar.zst"
       },
       "original": {
         "type": "tarball",
