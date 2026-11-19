@@ -8,6 +8,7 @@
   imports = [
     inputs.hardware.nixosModules.hp-elitebook-845g8
     inputs.home-manager.nixosModules.home-manager
+    inputs.nixpkgs-xr.nixosModules.nixpkgs-xr
     ./hardware.nix
   ];
 

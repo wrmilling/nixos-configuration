@@ -48,6 +48,10 @@
     nix-citizen.url = "github:LovingMelody/nix-citizen";
     nix-citizen.inputs.nixpkgs.follows = "nixpkgs";
 
+    # XR/VR nightlies (Monado, wayvr, xrizer, libsurvive)
+    nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
+    nixpkgs-xr.inputs.nixpkgs.follows = "nixpkgs";
+
     # Steam (native aarch64 client in a muvm microVM)
     steam-arm64-nix.url = "github:Daaboulex/steam-arm64-nix";
     steam-arm64-nix.inputs.nixpkgs.follows = "nixpkgs";
