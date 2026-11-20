@@ -39,7 +39,14 @@ in
     systemd.user.services.monado.environment = {
       LH_HANDTRACKING = "OFF";
       XRT_COMPOSITOR_SCALE_PERCENTAGE = "90";
+      # Fail instead of falling back to a desktop window when the headset isn't ready.
+      XRT_COMPOSITOR_FORCE_WAYLAND_DIRECT = "1";
     };
+
+    # USB autosuspend on Valve (Index) devices can drop tracking mid-session.
+    services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="28de", TEST=="power/control", ATTR{power/control}="on"
+    '';
 
     # Let OpenXR-native games launched through Steam's sandbox see the
     # host's active runtime (Monado) instead of requiring SteamVR's own.
