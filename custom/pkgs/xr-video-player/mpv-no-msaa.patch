@@ -1,0 +1,11 @@
+--- a/src/mpv.cpp
++++ b/src/mpv.cpp
+@@ -367,7 +367,7 @@ void Mpv::run(bool use_system_mpv_config, const char *path, const char *profile, GLuint *vao, GLuint *program_id) {
+ 			}
+ 			if(take_render_update()) {
+ 				gl_egl_device_enter_context(&egl_data);
+-#if 1
++#if 0
+ 				glBindFramebuffer( GL_FRAMEBUFFER, framebuffer_id_render );
+ 				glViewport(0, 0, video_width, video_height);
+ 				glDisable(GL_DEPTH_TEST);

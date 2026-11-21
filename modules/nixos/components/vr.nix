@@ -46,6 +46,8 @@ in
     # USB autosuspend on Valve (Index) devices can drop tracking mid-session.
     services.udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="28de", TEST=="power/control", ATTR{power/control}="on"
+      # Let the video group pin amdgpu clocks while Monado runs (iGPU memory-clock switches stall frames).
+      ACTION=="add", SUBSYSTEM=="drm", KERNEL=="card[0-9]", DRIVERS=="amdgpu", TEST=="device/power_dpm_force_performance_level", RUN+="${pkgs.coreutils}/bin/chgrp video /sys%p/device/power_dpm_force_performance_level", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys%p/device/power_dpm_force_performance_level"
     '';
 
     # Let OpenXR-native games launched through Steam's sandbox see the

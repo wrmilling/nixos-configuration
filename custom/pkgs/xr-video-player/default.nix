@@ -31,9 +31,15 @@ stdenv.mkDerivation {
     hash = versions.hash;
   };
 
-  # Upstream never reports real vsyncs to mpv, so its frame pacing can't
-  # calibrate to the XR compositor's actual cadence, causing missed frames.
-  patches = [ ./report-swap-sync.patch ];
+  patches = [
+    # Upstream never reports real vsyncs to mpv, so its frame pacing can't
+    # calibrate to the XR compositor's actual cadence, causing missed frames.
+    ./report-swap-sync.patch
+    # Render mpv straight to the texture; the 4x MSAA pass only added memory traffic.
+    ./mpv-no-msaa.patch
+    # Give mpv a DRM render node so VA-API decodes zero-copy (dmabuf), not via vaapi-copy.
+    ./mpv-vaapi-zero-copy.patch
+  ];
 
   nativeBuildInputs = [
     cmake

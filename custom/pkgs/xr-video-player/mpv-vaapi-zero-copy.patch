@@ -1,0 +1,26 @@
+--- a/src/mpv.cpp
++++ b/src/mpv.cpp
+@@ -1,3 +1,4 @@
++#include <fcntl.h>
+ #include "mpv.hpp"
+ #include <mpv/client.h>
+ #include <mpv/render_gl.h>
+@@ -133,10 +134,18 @@
+ 
+ 	int advanced_control = 1;
+ 
++	// Without a native display mpv's VA-API interop fails and falls back to vaapi-copy
++	// (a GPU->RAM->GPU round trip per frame); a DRM render node enables zero-copy dmabuf.
++	mpv_opengl_drm_params_v2 drm_params;
++	memset(&drm_params, 0, sizeof(drm_params));
++	drm_params.fd = -1;
++	drm_params.render_fd = open(getenv("XRVP_RENDER_NODE") ? getenv("XRVP_RENDER_NODE") : "/dev/dri/renderD128", O_RDWR | O_CLOEXEC);
++
+ 	mpv_render_param params[] = {
+ 		{ MPV_RENDER_PARAM_API_TYPE, (void*) MPV_RENDER_API_TYPE_OPENGL },
+ 		{ MPV_RENDER_PARAM_ADVANCED_CONTROL, &advanced_control },
+ 		{ MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, &gl_init_params },
++		{ drm_params.render_fd >= 0 ? MPV_RENDER_PARAM_DRM_DISPLAY_V2 : MPV_RENDER_PARAM_INVALID, &drm_params },
+ 		//{ MPV_RENDER_PARAM_BLOCK_FOR_TARGET_TIME, 0 }, // TODO: Manually sync after this
+ 		{ MPV_RENDER_PARAM_INVALID, 0 }
+ 	};
