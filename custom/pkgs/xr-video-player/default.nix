@@ -39,6 +39,8 @@ stdenv.mkDerivation {
     ./mpv-no-msaa.patch
     # Give mpv a DRM render node so VA-API decodes zero-copy (dmabuf), not via vaapi-copy.
     ./mpv-vaapi-zero-copy.patch
+    # Inset each cube face (not just the atlas border) so edges don't bleed in the neighbouring face.
+    ./cube-face-seams.patch
   ];
 
   nativeBuildInputs = [

@@ -1,0 +1,38 @@
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -2240,21 +2240,19 @@
+ 		if(stretch)
+ 			arrow_ratio = width_ratio * 2.0;
+ 	} else if (projection_mode == ProjectionMode::SPHERE360) {
+-		border_width_return += 2; // Meh, hac k to deal with seams a bit
++		// Inset every face, not just the atlas border, so linear filtering never samples a neighbouring face.
++		border_width_return += 2;
+ 		double px = (double)border_width_return / (double)pixmap_texture_width;
+ 		double py = (double)border_width_return / (double)pixmap_texture_height;
+ 
+-		double width = 1.0 - px * 2.0;
+-		double height = 1.0 - py * 2.0;
+-
+ 		double hz = zoom / (double)pixmap_texture_height;
+ 
+-		double texture_width = width / 3.0;
+-		double texture_height = height * 0.5;
++		double texture_width = 1.0 / 3.0 - px * 2.0;
++		double texture_height = 0.5 - py * 2.0;
+ 
+ 		for(int i = 0; i < 3; ++i) {
+ 			size_t plane_vertices_start = vertdata.size();
+-			CreateSegmentedPlane(vertdata, 1.0f, 1.0f, 1.0f, texture_width, texture_height - hz, texture_width * (2 - i) + px, py + hz, 32, 32);
++			CreateSegmentedPlane(vertdata, 1.0f, 1.0f, 1.0f, texture_width, texture_height - hz, (2 - i) / 3.0 + px, py + hz, 32, 32);
+ 			size_t plane_vertices_end = vertdata.size();
+ 			size_t num_vertex_data = (plane_vertices_end - plane_vertices_start) / 5;
+ 
+@@ -2264,7 +2262,7 @@
+ 
+ 		for(int i = 0; i < 3; ++i) {
+ 			size_t plane_vertices_start = vertdata.size();
+-			CreateSegmentedPlane(vertdata, 1.0f, 1.0f, 1.0f, texture_width, texture_height - hz, px + texture_width * i, 0.5f, 32, 32);
++			CreateSegmentedPlane(vertdata, 1.0f, 1.0f, 1.0f, texture_width, texture_height - hz, i / 3.0 + px, 0.5 + py, 32, 32);
+ 			size_t plane_vertices_end = vertdata.size();
+ 			size_t num_vertex_data = (plane_vertices_end - plane_vertices_start) / 5;
+ 
