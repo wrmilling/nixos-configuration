@@ -1,4 +1,4 @@
-diff -ruN a/src/main.cpp b/src/main.cpp
+diff -ruN s3/src/main.cpp s4/src/main.cpp
 --- a/src/main.cpp
 +++ b/src/main.cpp
 @@ -33,6 +33,7 @@
@@ -19,14 +19,13 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  };
  
  //-----------------------------------------------------------------------------
-@@ -349,6 +351,14 @@
+@@ -349,6 +351,13 @@
  	const char *mpv_file = nullptr;
  	Mpv mpv;
  	std::thread mpv_thread;
 +
 +	// Hand the video to the compositor as an equirect layer, so the player renders no eye views.
 +	bool equirect_layer = false;
-+	bool no_layer = false;
 +	bool top_bottom = false;
 +	int64_t m_colorFormat = 0;
 +	XrSwapchain video_swapchain = XR_NULL_HANDLE;
@@ -34,23 +33,22 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  	
  private: // gl context mutex
  	pthread_mutex_t context_mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
-@@ -486,11 +496,14 @@
+@@ -486,11 +495,13 @@
  }
  
  static void usage() {
 -	fprintf(stderr, "usage: xr-video-player [--sphere|--sphere360|--flat|--plane] [--left-right|--right-left] [--stretch|--no-stretch] [--zoom zoom-level] [--cursor-scale scale] [--cursor-wrap|--no-cursor-wrap] [--video video] [--use-system-mpv-config] [--mpv-profile <profile>]\n");
-+	fprintf(stderr, "usage: xr-video-player [--sphere|--sphere360|--equirect360 [--top-bottom]|--flat|--plane] [--no-layer] [--left-right|--right-left] [--stretch|--no-stretch] [--zoom zoom-level] [--cursor-scale scale] [--cursor-wrap|--no-cursor-wrap] [--video video] [--use-system-mpv-config] [--mpv-profile <profile>]\n");
++	fprintf(stderr, "usage: xr-video-player [--sphere|--sphere360|--equirect360 [--top-bottom]|--flat|--plane] [--left-right|--right-left] [--stretch|--no-stretch] [--zoom zoom-level] [--cursor-scale scale] [--cursor-wrap|--no-cursor-wrap] [--video video] [--use-system-mpv-config] [--mpv-profile <profile>]\n");
      fprintf(stderr, "\n");
  	fprintf(stderr, "OPTIONS\n");
      fprintf(stderr, "  --sphere          View the window as a stereoscopic 180 degrees screen (half sphere). The view will be attached to your head in vr. This is recommended for 180 degrees videos. This is the default value\n");
  	fprintf(stderr, "  --sphere360       View the window as an equirectangular cube map. This is what is mostly used on youtube, where the video is split into top and bottom as a cubemap. The view will be attached to your head in vr\n");
 +	fprintf(stderr, "  --equirect360     View a 360 degrees equirectangular video (mono, or stereo with --top-bottom). Needs --video and XR_KHR_composition_layer_equirect2\n");
 +	fprintf(stderr, "  --top-bottom      With --equirect360: the top half is the left eye, the bottom half the right eye\n");
-+	fprintf(stderr, "  --no-layer        Render --sphere videos into the eye views instead of handing them to the compositor as an equirect layer\n");
  	fprintf(stderr, "  --flat            View the window as a stereoscopic flat screen. This is recommended for stereoscopic videos and games\n");
      fprintf(stderr, "  --left-right      This option is used together with --flat, to specify if the left side of the window is meant to be viewed with the left eye and the right side is meant to be viewed by the right eye. This is the default value\n");
      fprintf(stderr, "  --right-left      This option is used together with --flat, to specify if the left side of the window is meant to be viewed with the right eye and the right side is meant to be viewed by the left eye\n");
-@@ -589,6 +602,18 @@
+@@ -589,6 +600,16 @@
  			projection_mode = ProjectionMode::SPHERE360;
  			projection_arg = argv[i];
  			view_mode_arg = argv[i];
@@ -64,12 +62,10 @@ diff -ruN a/src/main.cpp b/src/main.cpp
 +			projection_arg = argv[i];
 +		} else if(strcmp(argv[i], "--top-bottom") == 0) {
 +			top_bottom = true;
-+		} else if(strcmp(argv[i], "--no-layer") == 0) {
-+			no_layer = true;
  		} else if(strcmp(argv[i], "--stretch") == 0) {
  			stretch = true;
  		} else if(strcmp(argv[i], "--no-stretch") == 0) {
-@@ -630,7 +655,12 @@
+@@ -630,7 +651,12 @@
  		cursor_wrap = false;
  	}
  
@@ -83,7 +79,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  		zoom = 0.0f;
  		cursor_scale = 0.001f;
  	}
-@@ -668,10 +698,29 @@
+@@ -668,10 +694,28 @@
  
  	// --- Create XrInstance
  	uint32_t enabled_ext_count = 2;
@@ -93,8 +89,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  		XR_MNDX_EGL_ENABLE_EXTENSION_NAME,
 +		XR_KHR_COMPOSITION_LAYER_EQUIRECT2_EXTENSION_NAME,
  	};
-+	bool want_layer = content_mode == ContentMode::MPV && !no_layer
-+		&& (projection_mode == ProjectionMode::SPHERE || projection_mode == ProjectionMode::EQUIRECT360);
++	bool want_layer = content_mode == ContentMode::MPV && projection_mode == ProjectionMode::EQUIRECT360;
 +	if (want_layer) {
 +		uint32_t ext_count = 0;
 +		xrEnumerateInstanceExtensionProperties(NULL, 0, &ext_count, NULL);
@@ -108,13 +103,13 @@ diff -ruN a/src/main.cpp b/src/main.cpp
 +		printf("equirect2 layer: %s\n", equirect_layer ? "yes" : "not supported by the runtime");
 +	}
 +	if (projection_mode == ProjectionMode::EQUIRECT360 && !equirect_layer) {
-+		fprintf(stderr, "Error: --equirect360 needs XR_KHR_composition_layer_equirect2 (and no --no-layer)\n");
++		fprintf(stderr, "Error: --equirect360 needs XR_KHR_composition_layer_equirect2\n");
 +		return 1;
 +	}
  	// same can be done for API layers, but API layers can also be enabled by env var
  
  	XrInstanceCreateInfo instance_create_info = {
-@@ -877,6 +926,7 @@
+@@ -877,6 +921,7 @@
  	// SRGB is usually a better choice than linear
  	// a more sophisticated approach would iterate supported swapchain formats and choose from them
  	int64_t color_format = get_swapchain_format(instance, session, GL_SRGB8_ALPHA8_EXT, true);
@@ -122,7 +117,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  
  	// GL_DEPTH_COMPONENT16 is a good bet
  	// SteamVR 1.16.4 supports GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT32
-@@ -1016,6 +1066,7 @@
+@@ -1016,6 +1061,7 @@
  	};
  	
  	if (content_mode == ContentMode::MPV) {
@@ -130,7 +125,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  		mpv.init(&egl_data);
  		mpv_thread = std::thread([&]{
  			mpv.run(use_system_mpv_config, mpv_file, mpv_profile, &m_unCompanionWindowVAO, &m_unCompanionWindowProgramID);
-@@ -1264,6 +1315,8 @@
+@@ -1264,6 +1310,8 @@
  				pixmap_texture_height = window_height;
  				got_texture = true;
  				SetupScene();
@@ -139,7 +134,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  			}
  		}
  	}
-@@ -1323,6 +1376,40 @@
+@@ -1323,6 +1371,40 @@
  	return bRet;
  }
  
@@ -180,7 +175,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  //-----------------------------------------------------------------------------
  // Purpose:
  //-----------------------------------------------------------------------------
-@@ -1560,6 +1647,9 @@
+@@ -1559,6 +1641,9 @@
  			position *= glm::inverse(m_mat4LastViewPositionReset[i]);
  			
  			glm::mat4 view_matrix = projection_matrix * position * orientation;
@@ -190,7 +185,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  
  			XrSwapchainImageAcquireInfo acquire_info = {.type = XR_TYPE_SWAPCHAIN_IMAGE_ACQUIRE_INFO,
  			                                            .next = NULL};
-@@ -1634,7 +1724,8 @@
+@@ -1633,7 +1718,8 @@
  					break;
  			}
  		}
@@ -200,7 +195,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  
  		XrCompositionLayerProjection projection_layer = {
  		    .type = XR_TYPE_COMPOSITION_LAYER_PROJECTION,
-@@ -1646,8 +1737,44 @@
+@@ -1645,8 +1731,37 @@
  		};
  
  		uint32_t submitted_layer_count = 1;
@@ -215,18 +210,11 @@ diff -ruN a/src/main.cpp b/src/main.cpp
 +			if (mpv.layer_frames > 0) {
 +				// Same orientation the projection path applies on view reset; radius 0 is an infinite sphere.
 +				glm::quat q = glm::conjugate(glm::quat_cast(m_mat4LastViewRotationReset[0]));
-+				const bool sphere360 = projection_mode == ProjectionMode::EQUIRECT360;
-+				const bool stereo = !sphere360 || top_bottom;
++				const bool stereo = top_bottom;
 +				const int32_t w = (int32_t)mpv.video_width, h = (int32_t)mpv.video_height;
 +				for (uint32_t i = 0; i < (stereo ? 2u : 1u); i++) {
-+					XrRect2Di rect = {{0, 0}, {w, h}};
-+					if (!sphere360) {
-+						bool left_half = (i == 0) == (view_mode != ViewMode::RIGHT_LEFT);
-+						rect = {{left_half ? 0 : w / 2, 0}, {w / 2, h}};
-+					} else if (stereo) {
-+						// GL rows run bottom-up, so the top (left-eye) half starts at h/2.
-+						rect = {{0, i == 0 ? h / 2 : 0}, {w, h / 2}};
-+					}
++					// GL rows run bottom-up, so the top (left-eye) half starts at h/2.
++					XrRect2Di rect = stereo ? XrRect2Di{{0, i == 0 ? h / 2 : 0}, {w, h / 2}} : XrRect2Di{{0, 0}, {w, h}};
 +					equirect_layers[i] = {
 +						.type = XR_TYPE_COMPOSITION_LAYER_EQUIRECT2_KHR,
 +						.next = NULL,
@@ -236,7 +224,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
 +						.subImage = {video_swapchain, rect, 0},
 +						.pose = {{q.x, q.y, q.z, q.w}, {0.0f, 0.0f, 0.0f}},
 +						.radius = 0.0f,
-+						.centralHorizontalAngle = (float)(sphere360 ? 2.0 * M_PI : M_PI),
++						.centralHorizontalAngle = (float)(2.0 * M_PI),
 +						.upperVerticalAngle = (float)(M_PI / 2.0),
 +						.lowerVerticalAngle = (float)(-M_PI / 2.0),
 +					};
@@ -247,7 +235,7 @@ diff -ruN a/src/main.cpp b/src/main.cpp
  
  		if ((view_state.viewStateFlags & XR_VIEW_STATE_ORIENTATION_VALID_BIT) == 0) {
  			printf("submitting 0 layers because orientation is invalid\n");
-diff -ruN a/src/mpv.cpp b/src/mpv.cpp
+diff -ruN s3/src/mpv.cpp s4/src/mpv.cpp
 --- a/src/mpv.cpp
 +++ b/src/mpv.cpp
 @@ -292,7 +292,7 @@
@@ -268,7 +256,7 @@ diff -ruN a/src/mpv.cpp b/src/mpv.cpp
      int shit = 1;
  
  	mpv_render_param params[] = {
-@@ -377,6 +377,59 @@
+@@ -370,6 +370,73 @@
  	glDeleteFramebuffers( 1, &framebuffer_id_resolved);
  }
  
@@ -281,10 +269,20 @@ diff -ruN a/src/mpv.cpp b/src/mpv.cpp
 +	layer_swapchain = swapchain;
 +}
 +
++// Looked up directly: epoxy resolves EGL extensions against the current display, and the wait runs with none current.
++static PFNEGLCREATESYNCKHRPROC create_sync;
++static PFNEGLCLIENTWAITSYNCKHRPROC client_wait_sync;
++static PFNEGLDESTROYSYNCKHRPROC destroy_sync;
++
 +// The EGL mutex is shared with the XR frame loop, which holds it through xrEndFrame,
 +// so swapchain acquire/release are serialised with frame submission.
 +void Mpv::draw_to_layer() {
 +	std::lock_guard<std::mutex> lock(layer_mutex);
++	if(!create_sync) {
++		create_sync = (PFNEGLCREATESYNCKHRPROC)eglGetProcAddress("eglCreateSyncKHR");
++		client_wait_sync = (PFNEGLCLIENTWAITSYNCKHRPROC)eglGetProcAddress("eglClientWaitSyncKHR");
++		destroy_sync = (PFNEGLDESTROYSYNCKHRPROC)eglGetProcAddress("eglDestroySyncKHR");
++	}
 +	XrSwapchainImageAcquireInfo acquire_info = {XR_TYPE_SWAPCHAIN_IMAGE_ACQUIRE_INFO, nullptr};
 +	uint32_t index = 0;
 +	pthread_mutex_lock(egl_data.mutex);
@@ -307,14 +305,18 @@ diff -ruN a/src/mpv.cpp b/src/mpv.cpp
 +	}
 +	// Swapchain images use GL's bottom-up row order.
 +	draw(layer_fbos[index], layer_width, layer_height, true);
-+	EGLSyncKHR sync = eglCreateSyncKHR(egl_data.display, EGL_SYNC_FENCE_KHR, nullptr);
-+	glFlush();
++	EGLSyncKHR sync = create_sync && client_wait_sync && destroy_sync
++		? create_sync(egl_data.display, EGL_SYNC_FENCE_KHR, nullptr) : EGL_NO_SYNC_KHR;
++	if(sync == EGL_NO_SYNC_KHR)
++		glFinish();
++	else
++		glFlush();
 +	gl_egl_device_leave_context(&egl_data);
 +
 +	// Wait outside the lock so the XR frame loop keeps running while mpv's GPU work finishes.
 +	if(sync != EGL_NO_SYNC_KHR) {
-+		eglClientWaitSyncKHR(egl_data.display, sync, 0, EGL_FOREVER_KHR);
-+		eglDestroySyncKHR(egl_data.display, sync);
++		client_wait_sync(egl_data.display, sync, 0, EGL_FOREVER_KHR);
++		destroy_sync(egl_data.display, sync);
 +	}
 +
 +	XrSwapchainImageReleaseInfo release_info = {XR_TYPE_SWAPCHAIN_IMAGE_RELEASE_INFO, nullptr};
@@ -328,7 +330,7 @@ diff -ruN a/src/mpv.cpp b/src/mpv.cpp
  void Mpv::set_running(bool value) {
  	running = value;
  }
-@@ -391,11 +444,18 @@
+@@ -384,11 +451,18 @@
  		if(video_loaded) {
  			if(!loaded_in_thread) {
  				loaded_in_thread = true;
@@ -351,7 +353,7 @@ diff -ruN a/src/mpv.cpp b/src/mpv.cpp
  				gl_egl_device_enter_context(&egl_data);
  #if 0
  				glBindFramebuffer( GL_FRAMEBUFFER, framebuffer_id_render );
-diff -ruN a/src/mpv.hpp b/src/mpv.hpp
+diff -ruN s3/src/mpv.hpp s4/src/mpv.hpp
 --- a/src/mpv.hpp
 +++ b/src/mpv.hpp
 @@ -5,6 +5,9 @@
@@ -364,14 +366,12 @@ diff -ruN a/src/mpv.hpp b/src/mpv.hpp
  #include "gl-egl-common.h"
  
  typedef struct mpv_handle mpv_handle;
-@@ -24,13 +27,18 @@
+@@ -24,11 +27,16 @@
  	void on_event(SDL_Event &event, bool *quit, int *error);
  	void seek(double seconds);
  	void toggle_pause();
 -	void draw(unsigned int framebuffer_id, int width, int height);
 +	void draw(unsigned int framebuffer_id, int width, int height, bool gl_orientation = false);
- 	// Call once per XR frame so mpv's frame-pacing can calibrate to the real compositor cadence.
- 	void report_swap();
  	bool take_render_update();
  	void set_render_update();
  	void set_running(bool value);
@@ -384,7 +384,7 @@ diff -ruN a/src/mpv.hpp b/src/mpv.hpp
  
  	bool created = false;
  	uint32_t wakeup_on_mpv_render_update = -1;
-@@ -48,6 +56,7 @@
+@@ -46,6 +54,7 @@
  	
  private:
  	bool create_frame_buffer();
@@ -392,7 +392,7 @@ diff -ruN a/src/mpv.hpp b/src/mpv.hpp
  	void destroy_frame_buffer();
  	
  	struct gl_egl_data egl_data;
-@@ -57,5 +66,12 @@
+@@ -55,5 +64,12 @@
  	
  	std::mutex render_update_mutex;
  	bool render_update = false;

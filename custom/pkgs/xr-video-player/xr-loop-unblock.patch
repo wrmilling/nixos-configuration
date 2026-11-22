@@ -1,0 +1,44 @@
+diff -ruN s4/src/main.cpp s5/src/main.cpp
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -926,11 +926,9 @@
+ 	// GL_DEPTH_COMPONENT16 is a good bet
+ 	// SteamVR 1.16.4 supports GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT32
+ 	// but NOT GL_DEPTH_COMPONENT32F
+-	int64_t depth_format = get_swapchain_format(instance, session, GL_DEPTH_COMPONENT16, false);
+-	if (depth_format < 0) {
+-		printf("Preferred depth format GL_DEPTH_COMPONENT16 not supported, disabling depth\n");
+-		depth.supported = false;
+-	}
++	// Depth images were acquired every frame but never attached to a framebuffer; skip them.
++	int64_t depth_format = -1;
++	depth.supported = false;
+ 
+ 
+ 	// --- Create swapchain for main VR rendering
+@@ -2467,6 +2465,8 @@
+  	glBindFramebuffer(GL_READ_FRAMEBUFFER, desc->m_nRenderFramebufferId);
+     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, desc->m_nResolveFramebufferId );
+ 
++    // The render and resolve framebuffers are the same one, so the blit only copied each eye onto itself.
++    if (desc->m_nRenderFramebufferId != desc->m_nResolveFramebufferId)
+     glBlitFramebuffer( 0, 0, m_nRenderWidth, m_nRenderHeight, 0, 0, m_nRenderWidth, m_nRenderHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR );
+ 
+  	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+diff -ruN s4/src/mpv.cpp s5/src/mpv.cpp
+--- a/src/mpv.cpp
++++ b/src/mpv.cpp
+@@ -305,9 +305,13 @@
+ 	int flip_y = gl_orientation ? 1 : 0;
+     int shit = 1;
+ 
++	// Don't sleep until the frame's display time: this runs under the EGL mutex the XR loop needs,
++	// and blocking here held the XR loop to 60 fps.
++	int block_for_target = 0;
+ 	mpv_render_param params[] = {
+ 		{ MPV_RENDER_PARAM_OPENGL_FBO, &fbo },
+ 		{ MPV_RENDER_PARAM_FLIP_Y, &flip_y },
++		{ MPV_RENDER_PARAM_BLOCK_FOR_TARGET_TIME, &block_for_target },
+ 		//{ MPV_RENDER_PARAM_SKIP_RENDERING, &shit },
+ 		{ MPV_RENDER_PARAM_INVALID, 0 }
+ 	};

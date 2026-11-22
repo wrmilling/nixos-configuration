@@ -1,0 +1,47 @@
+diff -ruN s5/src/main.cpp s6/src/main.cpp
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -462,6 +462,7 @@
+ 	bool use_joystick = false;
+ 	bool cursor_wrap = true;
+ 	bool free_camera = false;
++	bool preview = false;
+ 	bool use_system_mpv_config = false;
+ 	const char *mpv_profile = "gpu-hq";
+ 
+@@ -495,7 +496,7 @@
+ }
+ 
+ static void usage() {
+-	fprintf(stderr, "usage: xr-video-player [--sphere|--sphere360|--equirect360 [--top-bottom]|--flat|--plane] [--left-right|--right-left] [--stretch|--no-stretch] [--zoom zoom-level] [--cursor-scale scale] [--cursor-wrap|--no-cursor-wrap] [--video video] [--use-system-mpv-config] [--mpv-profile <profile>]\n");
++	fprintf(stderr, "usage: xr-video-player [--sphere|--sphere360|--equirect360 [--top-bottom]|--flat|--plane] [--preview] [--left-right|--right-left] [--stretch|--no-stretch] [--zoom zoom-level] [--cursor-scale scale] [--cursor-wrap|--no-cursor-wrap] [--video video] [--use-system-mpv-config] [--mpv-profile <profile>]\n");
+     fprintf(stderr, "\n");
+ 	fprintf(stderr, "OPTIONS\n");
+     fprintf(stderr, "  --sphere          View the window as a stereoscopic 180 degrees screen (half sphere). The view will be attached to your head in vr. This is recommended for 180 degrees videos. This is the default value\n");
+@@ -512,6 +513,7 @@
+     fprintf(stderr, "  --cursor-scale    Change the size of the cursor. This should be a positive value. If set to 0, then the cursor is hidden. The default value is 1 for all modes except sphere mode, where the default value is 0. The cursor is always hidden in sphere360 mode\n");
+     fprintf(stderr, "  --cursor-wrap     If this option is set, then the cursor position in the vr view will wrap around when it reached the center of the window (i.e when it reaches the edge of one side of the stereoscopic view). This option is only valid for stereoscopic view (flat and sphere modes)\n");
+     fprintf(stderr, "  --no-cursor-wrap  If this option is set, then the cursor position in the vr view will match the the real cursor position inside the window\n");
++	fprintf(stderr, "  --preview         Mirror the left eye into the desktop window every frame. Off by default: its swap runs under the GL lock and costs ~10%% of the decode limit\n");
+ 	fprintf(stderr, "  --free-camera     If this option is set, then the camera wont follow your position. This option is only applicable when not using --sphere or --sphere360\n");
+ 	fprintf(stderr, "  --video <video>   Select the video to play (using mpv).\n");
+ 	fprintf(stderr, "  --use-system-mpv-config   Use system (~/.config/mpv/mpv.conf) mpv config. Disabled by default\n");
+@@ -631,6 +633,8 @@
+ 		} else if(strcmp(argv[i], "--mpv-profile") == 0 && i < argc - 1) {
+ 			mpv_profile = argv[i + 1];
+ 			++i;
++		} else if(strcmp(argv[i], "--preview") == 0) {
++			preview = true;
+ 		} else if(strcmp(argv[i], "--free-camera") == 0) {
+ 			free_camera = true;
+ 		} else if(argv[i][0] == '-') {
+@@ -1716,7 +1720,8 @@
+ 					break;
+ 			}
+ 		}
+-		if (!equirect_layer)
++		// The desktop window stays open (it takes keyboard input) but is only redrawn with --preview.
++		if (preview && !equirect_layer)
+ 			RenderFrame();
+ 
+ 		XrCompositionLayerProjection projection_layer = {

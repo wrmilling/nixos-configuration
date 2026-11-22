@@ -32,17 +32,19 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    # Upstream never reports real vsyncs to mpv, so its frame pacing can't
-    # calibrate to the XR compositor's actual cadence, causing missed frames.
-    ./report-swap-sync.patch
     # Render mpv straight to the texture; the 4x MSAA pass only added memory traffic.
     ./mpv-no-msaa.patch
     # Give mpv a DRM render node so VA-API decodes zero-copy (dmabuf), not via vaapi-copy.
     ./mpv-vaapi-zero-copy.patch
     # Inset each cube face (not just the atlas border) so edges don't bleed in the neighbouring face.
     ./cube-face-seams.patch
-    # Hand --sphere/--equirect360 video to Monado as an equirect2 layer, sampled at its own (latest) head pose.
+    # --equirect360: play 360 equirect video as a Monado equirect2 layer (no cube conversion).
     ./equirect-layer.patch
+    # Keep the XR loop at full rate: mpv no longer sleeps under the shared EGL lock,
+    # and the per-eye self-blit and unused depth swapchains are gone.
+    ./xr-loop-unblock.patch
+    # Desktop preview window is opt-in (--preview); redrawing it every frame cost ~10% of the decode limit.
+    ./preview-opt-in.patch
   ];
 
   nativeBuildInputs = [
