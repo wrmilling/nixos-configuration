@@ -41,6 +41,8 @@ stdenv.mkDerivation {
     ./mpv-vaapi-zero-copy.patch
     # Inset each cube face (not just the atlas border) so edges don't bleed in the neighbouring face.
     ./cube-face-seams.patch
+    # Hand --sphere/--equirect360 video to Monado as an equirect2 layer, sampled at its own (latest) head pose.
+    ./equirect-layer.patch
   ];
 
   nativeBuildInputs = [
