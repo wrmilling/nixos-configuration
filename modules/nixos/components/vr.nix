@@ -38,7 +38,9 @@ in
     # still tries to run inference on the resulting invalid session.
     systemd.user.services.monado.environment = {
       LH_HANDTRACKING = "OFF";
-      XRT_COMPOSITOR_SCALE_PERCENTAGE = "90";
+      # Graphics compositor: draws overlay layers as geometry, so WayVR at 120% costs less than compute at 90%.
+      XRT_COMPOSITOR_COMPUTE = "0";
+      XRT_COMPOSITOR_SCALE_PERCENTAGE = "120";
       # Fail instead of falling back to a desktop window when the headset isn't ready.
       XRT_COMPOSITOR_FORCE_WAYLAND_DIRECT = "1";
     };
