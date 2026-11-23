@@ -16,8 +16,6 @@ in
     environment.systemPackages = [
       pkgs.xr-video-player
       pkgs.wayvr
-      # WebXR over OpenXR (Monado); nixpkgs' Chromium is built without the OpenXR backend.
-      (pkgs.google-chrome.override { commandLineArgs = "--enable-features=OpenXR"; })
     ];
 
     services.monado = {

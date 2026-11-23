@@ -1,0 +1,144 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 5fb6cc9..0b0485e 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -355,6 +355,8 @@ private: // MPV
+ 	// Hand the video to the compositor as an equirect layer, so the player renders no eye views.
+ 	bool equirect_layer = false;
+ 	bool top_bottom = false;
++	// --fisheye: lens field of view in radians, 0 = off.
++	float fisheye_fov = 0.0f;
+ 	int64_t m_colorFormat = 0;
+ 	XrSwapchain video_swapchain = XR_NULL_HANDLE;
+ 	bool CreateVideoSwapchain(int width, int height);
+@@ -408,6 +410,7 @@ private: // OpenGL bookkeeping
+ 	GLint m_nSceneTextureScaleXLocation = -1;
+ 	GLint m_nCursorLocation = -1;
+ 	GLint m_nArrowSizeLocation = -1;
++	GLint m_nFisheyeFovLocation = -1;
+ 	GLint m_myTextureLocation = -1;
+ 	GLint m_arrowTextureLocation = -1;
+ 
+@@ -496,10 +499,11 @@ void dprintf( const char *fmt, ... )
+ }
+ 
+ static void usage() {
+-	fprintf(stderr, "usage: xr-video-player [--sphere|--sphere360|--equirect360 [--top-bottom]|--flat|--plane] [--preview] [--left-right|--right-left] [--stretch|--no-stretch] [--zoom zoom-level] [--cursor-scale scale] [--cursor-wrap|--no-cursor-wrap] [--video video] [--use-system-mpv-config] [--mpv-profile <profile>]\n");
++	fprintf(stderr, "usage: xr-video-player [--sphere|--fisheye fov|--sphere360|--equirect360 [--top-bottom]|--flat|--plane] [--preview] [--left-right|--right-left] [--stretch|--no-stretch] [--zoom zoom-level] [--cursor-scale scale] [--cursor-wrap|--no-cursor-wrap] [--video video] [--use-system-mpv-config] [--mpv-profile <profile>]\n");
+     fprintf(stderr, "\n");
+ 	fprintf(stderr, "OPTIONS\n");
+     fprintf(stderr, "  --sphere          View the window as a stereoscopic 180 degrees screen (half sphere). The view will be attached to your head in vr. This is recommended for 180 degrees videos. This is the default value\n");
++	fprintf(stderr, "  --fisheye <fov>   Like --sphere, for side-by-side (or --right-left) equidistant fisheye video whose circles span <fov> degrees, e.g. 190. Remapped on the GPU, no conversion needed\n");
+ 	fprintf(stderr, "  --sphere360       View the window as an equirectangular cube map. This is what is mostly used on youtube, where the video is split into top and bottom as a cubemap. The view will be attached to your head in vr\n");
+ 	fprintf(stderr, "  --equirect360     View a 360 degrees equirectangular video (mono, or stereo with --top-bottom). Needs --video and XR_KHR_composition_layer_equirect2\n");
+ 	fprintf(stderr, "  --top-bottom      With --equirect360: the top half is the left eye, the bottom half the right eye\n");
+@@ -547,6 +551,20 @@ CMainApplication::CMainApplication( int argc, char *argv[] ) {
+ 			}
+ 			projection_mode = ProjectionMode::SPHERE;
+ 			projection_arg = argv[i];
++		} else if(strcmp(argv[i], "--fisheye") == 0 && i < argc - 1) {
++			if(projection_arg) {
++				fprintf(stderr, "Error: --fisheye option can't be used together with the %s option\n", projection_arg);
++				exit(1);
++			}
++			double deg = atof(argv[i + 1]);
++			if(deg < 90.0 || deg > 360.0) {
++				fprintf(stderr, "Error: --fisheye needs a field of view in degrees (90-360), got %s\n", argv[i + 1]);
++				exit(1);
++			}
++			fisheye_fov = (float)(deg * M_PI / 180.0);
++			projection_mode = ProjectionMode::SPHERE;
++			projection_arg = argv[i];
++			++i;
+ 		} else if(strcmp(argv[i], "--flat") == 0) {
+ 			if(projection_arg) {
+ 				fprintf(stderr, "Error: --flat option can't be used together with the %s option\n", projection_arg);
+@@ -660,7 +678,7 @@ CMainApplication::CMainApplication( int argc, char *argv[] ) {
+ 		exit(1);
+ 	}
+ 
+-	if(projection_mode == ProjectionMode::SPHERE360 || projection_mode == ProjectionMode::EQUIRECT360) {
++	if(projection_mode == ProjectionMode::SPHERE360 || projection_mode == ProjectionMode::EQUIRECT360 || fisheye_fov > 0.0f) {
+ 		zoom = 0.0f;
+ 		cursor_scale = 0.001f;
+ 	}
+@@ -1932,9 +1950,11 @@ bool CMainApplication::CreateAllShaders()
+ 		"out vec2 v2CursorLocation;\n"
+ 		"out vec2 arrow_size_frag;\n"
+ 		"out vec2 v2UVcoords;\n"
++		"out vec3 v3Dir;\n"
+ 		"void main()\n"
+ 		"{\n"
+ 		"	v2UVcoords = vec2(1.0 - v2UVcoordsIn.x, v2UVcoordsIn.y) * vec2(texture_scale_x, 1.0) + vec2(texture_offset_x, 0.0);\n"
++		"	v3Dir = position.xyz;\n"
+ 		"   vec4 inverse_pos = vec4(position.x, position.y, -position.z, position.w);\n"
+ 		"	v2CursorLocation = cursor_location;\n"
+ 		"	arrow_size_frag = arrow_size;\n"
+@@ -1945,12 +1965,26 @@ bool CMainApplication::CreateAllShaders()
+ 		"#version 410 core\n"
+ 		"uniform sampler2D mytexture;\n"
+ 		"uniform sampler2D arrow_texture;\n"
++		"uniform float fisheye_fov;\n"
++		"uniform float texture_offset_x;\n"
++		"uniform float texture_scale_x;\n"
+ 		"in vec2 v2UVcoords;\n"
+ 		"in vec2 v2CursorLocation;\n"
+ 		"in vec2 arrow_size_frag;\n"
++		"in vec3 v3Dir;\n"
+ 		"out vec4 outputColor;\n"
+ 		"void main()\n"
+ 		"{\n"
++		// Equidistant fisheye: image radius is proportional to the angle from straight ahead (+z here).
++		"	if(fisheye_fov > 0.0) {\n"
++		"		vec3 d = normalize(v3Dir);\n"
++		"		float r = acos(clamp(d.z, -1.0, 1.0)) / fisheye_fov;\n"
++		"		if(r > 0.5) { outputColor = vec4(0.0, 0.0, 0.0, 1.0); return; }\n"
++		"		float l = length(d.xy);\n"
++		"		vec2 p = l > 1e-6 ? d.xy / l * r : vec2(0.0);\n"
++		"		outputColor = texture(mytexture, vec2((0.5 + p.x) * texture_scale_x + texture_offset_x, 0.5 - p.y));\n"
++		"		return;\n"
++		"	}\n"
+ 		"	vec2 cursor_diff = (v2CursorLocation + arrow_size_frag) - v2UVcoords;\n"
+ 		"	vec2 arrow_coord = (arrow_size_frag - cursor_diff) / arrow_size_frag;\n"
+ 		"	vec4 arrow_col = texture(arrow_texture, arrow_coord);\n"
+@@ -1989,6 +2023,7 @@ bool CMainApplication::CreateAllShaders()
+ 		dprintf( "Unable to find arrow_size uniform in scene shader\n" );
+ 		return 1;
+ 	}
++	m_nFisheyeFovLocation = glGetUniformLocation(m_unSceneProgramID, "fisheye_fov");
+ 	m_myTextureLocation = glGetUniformLocation(m_unSceneProgramID, "mytexture");
+ 	if(m_myTextureLocation == -1) {
+ 		dprintf( "Unable to find mytexture uniform in scene shader\n" );
+@@ -2213,7 +2248,23 @@ void CMainApplication::AddCubeToScene( const glm::mat4 &mat, std::vector<float>
+ 	int x_return, y_return;
+ 	unsigned int width_return, height_return, border_width_return = 0, depth_return;
+ 	
+-	if(projection_mode == ProjectionMode::SPHERE)
++	if(projection_mode == ProjectionMode::SPHERE && fisheye_fov > 0.0f)
++	{
++		// Full unit sphere around the viewer; the fragment shader maps each view direction into the fisheye circle.
++		const int rows = 48, columns = 96;
++		auto add = [&](int row, int column) {
++			double pol = (double)row / rows * M_PI, az = (double)column / columns * 2.0 * M_PI;
++			glm::vec4 v = mat * glm::vec4(-cos(az) * sin(pol) * 0.5, cos(pol) * 0.5, sin(az) * sin(pol) * 0.5, 1.0);
++			AddCubeVertex(v.x, v.y, v.z, 0.0, 0.0, vertdata);
++		};
++		for(int row = 0; row < rows; ++row) {
++			for(int column = 0; column < columns; ++column) {
++				add(row, column); add(row, column + 1); add(row + 1, column);
++				add(row + 1, column); add(row + 1, column + 1); add(row, column + 1);
++			}
++		}
++	}
++	else if(projection_mode == ProjectionMode::SPHERE)
+ 	{
+ 		long columns = 32;
+ 		long rows = 32;
+@@ -2566,6 +2617,7 @@ void CMainApplication::RenderScene(
+ 
+ 	glUniform2fv(m_nCursorLocation, 1, &m[0]);
+ 	glUniform2fv(m_nArrowSizeLocation, 1, &cursor_scale_uniform[0]);
++	glUniform1f(m_nFisheyeFovLocation, fisheye_fov);
+ 
+ 	glBindVertexArray( m_unSceneVAO );
+ 	glActiveTexture(GL_TEXTURE0);

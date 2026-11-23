@@ -45,6 +45,10 @@ stdenv.mkDerivation {
     ./xr-loop-unblock.patch
     # Desktop preview window is opt-in (--preview); redrawing it every frame cost ~10% of the decode limit.
     ./preview-opt-in.patch
+    # --fisheye FOV: play side-by-side equidistant fisheye (e.g. 190°) by remapping in the shader, no re-encode.
+    ./fisheye.patch
+    # Controller playback controls on buttons WayVR leaves free (A/B, thumbsticks); see the usage text.
+    ./controller-input.patch
   ];
 
   nativeBuildInputs = [

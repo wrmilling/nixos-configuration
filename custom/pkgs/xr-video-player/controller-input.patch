@@ -1,0 +1,272 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 0b0485e..056930e 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -34,6 +34,7 @@
+ #include <cstdlib>
+ #include <vector>
+ #include <cmath>
++#include <chrono>
+ 
+ #include <unistd.h>
+ #include <signal.h>
+@@ -50,6 +51,8 @@
+ #endif
+ 
+ #define HAND_COUNT 2
++#define HAND_LEFT_INDEX 0
++#define HAND_RIGHT_INDEX 1
+ 
+ 
+ static bool g_bPrintf = true;
+@@ -235,6 +238,8 @@ public:
+ 
+ 	int RunMainLoop();
+ 	bool HandleInput();
++	void SetupXrInput();
++	void ProcessXrInput();
+     void zoom_in();
+     void zoom_out();
+ 	void RenderFrame();
+@@ -332,7 +337,18 @@ private:
+ 	XrResult result = XR_SUCCESS;
+ 	
+ 	XrPath hand_paths[HAND_COUNT];
+-	
++
++	// Controller playback controls (see SetupXrInput for the bindings).
++	XrActionSet input_set = XR_NULL_HANDLE;
++	XrAction act_pause = XR_NULL_HANDLE, act_recenter = XR_NULL_HANDLE, act_quit = XR_NULL_HANDLE;
++	XrAction act_stick_l = XR_NULL_HANDLE, act_stick_r = XR_NULL_HANDLE, act_haptic = XR_NULL_HANDLE;
++	struct StickState {
++		int dir = 0; // 0 none, 1 left, 2 right, 3 up, 4 down
++		std::chrono::steady_clock::time_point next_repeat;
++	} stick_l_state, stick_r_state;
++	bool quit_fired = false;
++	std::chrono::steady_clock::time_point quit_down_at;
++
+ 	GLuint** framebuffers = NULL;
+ 
+ 	struct
+@@ -524,6 +540,13 @@ static void usage() {
+ 	fprintf(stderr, "  --mpv-profile <profile>   Which mpv profile to use. Only applicable when using --video option. Optional, defaults to \"gpu-hq\"\n");
+     fprintf(stderr, "  --use-joystick         This option enables the use of a connected joystick as input for this application (their are currently no mappings added). If no controller is connected an error message gets logged.\n");
+     fprintf(stderr, "\n");
++	fprintf(stderr, "CONTROLLERS (Index; Touch uses X for quit)\n");
++	fprintf(stderr, "  right A           play/pause\n");
++	fprintf(stderr, "  right thumbstick  left/right seek -10/+10 s, up/down +60/-60 s (hold to repeat)\n");
++	fprintf(stderr, "  right B           recenter view\n");
++	fprintf(stderr, "  left thumbstick   up/down volume\n");
++	fprintf(stderr, "  left A (hold 1.5 s)  quit\n");
++	fprintf(stderr, "\n");
+     fprintf(stderr, "EXAMPLES\n");
+     fprintf(stderr, "  xr-video-player\n");
+     fprintf(stderr, "  xr-video-player --flat\n");
+@@ -911,6 +934,8 @@ bool CMainApplication::BInit()
+ 	result = xrCreateReferenceSpace(session, &play_space_create_info, &play_space);
+ 	if (!xr_check(instance, result, "Failed to create play space!"))
+ 		return 1;
++
++	SetupXrInput();
+ 	
+ 
+ 	// cube array
+@@ -1391,6 +1416,159 @@ bool CMainApplication::HandleInput()
+ 	return bRet;
+ }
+ 
++// Index bindings avoid what WayVR uses (trigger, grip, trackpad, system, left B); both apps get the same input.
++void CMainApplication::SetupXrInput()
++{
++	xrStringToPath(instance, "/user/hand/left", &hand_paths[HAND_LEFT_INDEX]);
++	xrStringToPath(instance, "/user/hand/right", &hand_paths[HAND_RIGHT_INDEX]);
++
++	XrActionSetCreateInfo set_info = {.type = XR_TYPE_ACTION_SET_CREATE_INFO};
++	strcpy(set_info.actionSetName, "playback");
++	strcpy(set_info.localizedActionSetName, "Playback");
++	if (!xr_check(instance, xrCreateActionSet(instance, &set_info, &input_set), "Failed to create action set"))
++		return;
++
++	auto make = [&](XrAction *out, XrActionType type, const char *name, const char *label, bool both_hands) {
++		XrActionCreateInfo info = {.type = XR_TYPE_ACTION_CREATE_INFO, .actionType = type};
++		strcpy(info.actionName, name);
++		strcpy(info.localizedActionName, label);
++		if (both_hands) {
++			info.countSubactionPaths = HAND_COUNT;
++			info.subactionPaths = hand_paths;
++		}
++		xr_check(instance, xrCreateAction(input_set, &info, out), "Failed to create action %s", name);
++	};
++	make(&act_pause, XR_ACTION_TYPE_BOOLEAN_INPUT, "play_pause", "Play/pause", false);
++	make(&act_recenter, XR_ACTION_TYPE_BOOLEAN_INPUT, "recenter", "Recenter view", false);
++	make(&act_quit, XR_ACTION_TYPE_BOOLEAN_INPUT, "quit", "Quit (hold)", false);
++	make(&act_stick_r, XR_ACTION_TYPE_VECTOR2F_INPUT, "seek", "Seek", false);
++	make(&act_stick_l, XR_ACTION_TYPE_VECTOR2F_INPUT, "volume", "Volume", false);
++	make(&act_haptic, XR_ACTION_TYPE_VIBRATION_OUTPUT, "haptic", "Feedback", true);
++
++	auto suggest = [&](const char *profile, const char *quit_path) {
++		const std::pair<XrAction, const char*> pairs[] = {
++			{act_pause, "/user/hand/right/input/a/click"},
++			{act_recenter, "/user/hand/right/input/b/click"},
++			{act_quit, quit_path},
++			{act_stick_r, "/user/hand/right/input/thumbstick"},
++			{act_stick_l, "/user/hand/left/input/thumbstick"},
++			{act_haptic, "/user/hand/left/output/haptic"},
++			{act_haptic, "/user/hand/right/output/haptic"},
++		};
++		std::vector<XrActionSuggestedBinding> bindings;
++		for (const auto &p : pairs) {
++			XrPath path;
++			xrStringToPath(instance, p.second, &path);
++			bindings.push_back({p.first, path});
++		}
++		XrPath profile_path;
++		xrStringToPath(instance, profile, &profile_path);
++		XrInteractionProfileSuggestedBinding suggested = {
++			.type = XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING,
++			.interactionProfile = profile_path,
++			.countSuggestedBindings = (uint32_t)bindings.size(),
++			.suggestedBindings = bindings.data()};
++		xr_check(instance, xrSuggestInteractionProfileBindings(instance, &suggested), "Failed to suggest bindings for %s", profile);
++	};
++	suggest("/interaction_profiles/valve/index_controller", "/user/hand/left/input/a/click");
++	suggest("/interaction_profiles/oculus/touch_controller", "/user/hand/left/input/x/click");
++
++	XrSessionActionSetsAttachInfo attach = {
++		.type = XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO, .countActionSets = 1, .actionSets = &input_set};
++	if (!xr_check(instance, xrAttachSessionActionSets(session, &attach), "Failed to attach action set"))
++		input_set = XR_NULL_HANDLE;
++}
++
++void CMainApplication::ProcessXrInput()
++{
++	if (input_set == XR_NULL_HANDLE)
++		return;
++	XrActiveActionSet active = {input_set, XR_NULL_PATH};
++	XrActionsSyncInfo sync = {.type = XR_TYPE_ACTIONS_SYNC_INFO, .countActiveActionSets = 1, .activeActionSets = &active};
++	if (xrSyncActions(session, &sync) != XR_SUCCESS) // XR_SESSION_NOT_FOCUSED while another app has focus
++		return;
++
++	using clock = std::chrono::steady_clock;
++	const auto now = clock::now();
++	const bool video = content_mode == ContentMode::MPV;
++
++	auto buzz = [&](int hand, float amplitude, int64_t ms) {
++		XrHapticVibration vib = {.type = XR_TYPE_HAPTIC_VIBRATION, .duration = ms * 1000000,
++		                         .frequency = XR_FREQUENCY_UNSPECIFIED, .amplitude = amplitude};
++		XrHapticActionInfo info = {.type = XR_TYPE_HAPTIC_ACTION_INFO, .action = act_haptic, .subactionPath = hand_paths[hand]};
++		xrApplyHapticFeedback(session, &info, (XrHapticBaseHeader*)&vib);
++	};
++	auto pressed = [&](XrAction action, bool *down) {
++		XrActionStateGetInfo get = {.type = XR_TYPE_ACTION_STATE_GET_INFO, .action = action};
++		XrActionStateBoolean st = {.type = XR_TYPE_ACTION_STATE_BOOLEAN};
++		if (xrGetActionStateBoolean(session, &get, &st) != XR_SUCCESS || !st.isActive)
++			return false;
++		if (down)
++			*down = st.currentState;
++		return st.changedSinceLastSync && st.currentState;
++	};
++	// Thumbstick: flick past 0.7 fires once, holding repeats; it re-arms below 0.3.
++	auto stick = [&](XrAction action, StickState &s, double first_ms, double repeat_ms) -> int {
++		XrActionStateGetInfo get = {.type = XR_TYPE_ACTION_STATE_GET_INFO, .action = action};
++		XrActionStateVector2f st = {.type = XR_TYPE_ACTION_STATE_VECTOR2F};
++		if (xrGetActionStateVector2f(session, &get, &st) != XR_SUCCESS || !st.isActive) {
++			s.dir = 0;
++			return 0;
++		}
++		const float x = st.currentState.x, y = st.currentState.y;
++		if (std::hypot(x, y) < 0.3f) {
++			s.dir = 0;
++			return 0;
++		}
++		int dir = std::fabs(x) > std::fabs(y) ? (x < 0 ? 1 : 2) : (y > 0 ? 3 : 4);
++		if (s.dir == 0) {
++			if (std::max(std::fabs(x), std::fabs(y)) < 0.7f)
++				return 0;
++			s.dir = dir;
++			s.next_repeat = now + std::chrono::milliseconds((int)first_ms);
++			return dir;
++		}
++		if (dir == s.dir && now >= s.next_repeat) {
++			s.next_repeat = now + std::chrono::milliseconds((int)repeat_ms);
++			return dir;
++		}
++		return 0;
++	};
++
++	if (pressed(act_pause, nullptr) && video) {
++		mpv.toggle_pause();
++		buzz(HAND_RIGHT_INDEX, 0.4f, 25);
++	}
++	if (pressed(act_recenter, nullptr)) {
++		m_bResetView = true;
++		buzz(HAND_RIGHT_INDEX, 0.4f, 25);
++	}
++
++	bool quit_down = false;
++	if (pressed(act_quit, &quit_down))
++		quit_down_at = now;
++	if (quit_down && !quit_fired && now - quit_down_at >= std::chrono::milliseconds(1500)) {
++		quit_fired = true;
++		buzz(HAND_LEFT_INDEX, 0.8f, 150);
++		quit_mainloop_request = true;
++	}
++	if (!quit_down)
++		quit_fired = false;
++
++	if (video) {
++		switch (stick(act_stick_r, stick_r_state, 500, 300)) {
++			case 1: mpv.seek(-10.0); buzz(HAND_RIGHT_INDEX, 0.25f, 15); break;
++			case 2: mpv.seek(10.0); buzz(HAND_RIGHT_INDEX, 0.25f, 15); break;
++			case 3: mpv.seek(60.0); buzz(HAND_RIGHT_INDEX, 0.5f, 30); break;
++			case 4: mpv.seek(-60.0); buzz(HAND_RIGHT_INDEX, 0.5f, 30); break;
++		}
++		switch (stick(act_stick_l, stick_l_state, 400, 150)) {
++			case 3: mpv.add_volume(5.0); buzz(HAND_LEFT_INDEX, 0.2f, 10); break;
++			case 4: mpv.add_volume(-5.0); buzz(HAND_LEFT_INDEX, 0.2f, 10); break;
++		}
++	}
++}
++
+ bool CMainApplication::CreateVideoSwapchain(int width, int height)
+ {
+ 	gl_egl_device_enter_context(&egl_data);
+@@ -1614,6 +1792,8 @@ int CMainApplication::RunMainLoop()
+ 		if (!xr_check(instance, result, "Could not locate views"))
+ 			break;
+ 		
++		ProcessXrInput();
++
+ 		XrSpaceLocation hand_locations[HAND_COUNT];
+ 
+ 		// --- Begin frame
+diff --git a/src/mpv.cpp b/src/mpv.cpp
+index 5986eb6..2292ee4 100644
+--- a/src/mpv.cpp
++++ b/src/mpv.cpp
+@@ -508,3 +508,13 @@ void Mpv::run(bool use_system_mpv_config, const char *path, const char *profile,
+ 	}
+ }
+ 
++
++void Mpv::add_volume(double delta) {
++	if(!created)
++		return;
++
++	char delta_str[64];
++	snprintf(delta_str, sizeof(delta_str), "%f", delta);
++	const char *cmd[] = { "add", "volume", delta_str, nullptr };
++	mpv_command_async(mpv, 0, cmd);
++}
+diff --git a/src/mpv.hpp b/src/mpv.hpp
+index 63b982d..3319227 100644
+--- a/src/mpv.hpp
++++ b/src/mpv.hpp
+@@ -27,6 +27,7 @@ public:
+ 	void on_event(SDL_Event &event, bool *quit, int *error);
+ 	void seek(double seconds);
+ 	void toggle_pause();
++	void add_volume(double delta);
+ 	void draw(unsigned int framebuffer_id, int width, int height, bool gl_orientation = false);
+ 	bool take_render_update();
+ 	void set_render_update();
